@@ -7,5 +7,9 @@
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "is-node": "^1.0.2",
+    "ramda": "^0.26.1"
+  }
 }

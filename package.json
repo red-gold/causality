@@ -1,0 +1,13 @@
+{
+  "name": "causality",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/red-gold/causality.git",
+  "author": "huynhnguyen <nguyenhuynh200188@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^0.1.21",
+    "fs-extra": "^7.0.1",
+    "save": "^2.3.3"
+  }
+}
