@@ -1,0 +1,7 @@
+{
+  "name": "causality-dataset",
+  "version": "1.0.0",
+  "description": "the dataset collection",
+  "main": "index.js",
+  "license": "MIT"
+}

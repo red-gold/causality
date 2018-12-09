@@ -1,0 +1,16 @@
+{
+  "name": "causality-core",
+  "version": "1.0.0",
+  "description": "the base class of computing oprators, tensors and base class",
+  "main": "index.js",
+  "author": "nguyenhuynh200188@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^0.1.21",
+    "fs-extra": "^7.0.1",
+    "immutable": "^4.0.0-rc.12",
+    "is-node": "^1.0.2",
+    "jest": "^23.6.0",
+    "ramda": "^0.26.1"
+  }
+}

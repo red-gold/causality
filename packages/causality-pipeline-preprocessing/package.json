@@ -1,0 +1,8 @@
+{
+  "name": "causality-pipeline-preprocessing",
+  "version": "1.0.0",
+  "description": "collection of preprocessing class",
+  "main": "index.js",
+  "author": "nguyenhuynh20018@gmail.com",
+  "license": "MIT"
+}

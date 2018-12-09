@@ -1,0 +1,13 @@
+{
+  "name": "causality-utils",
+  "version": "1.0.0",
+  "description": "this is utils function",
+  "main": "index.js",
+  "author": "nguyenhuynh200188@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "fs-extra": "^7.0.1",
+    "is-node": "^1.0.2",
+    "ramda": "^0.26.1"
+  }
+}
