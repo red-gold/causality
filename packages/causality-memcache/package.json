@@ -1,0 +1,8 @@
+{
+  "name": "causal-net-memcache",
+  "version": "0.0.3",
+  "description": "this is the collection of memcache",
+  "main": "index.js",
+  "author": "nguyenhuynh200188@gmail.com",
+  "license": "MIT"
+}
