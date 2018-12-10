@@ -1,6 +1,6 @@
 {
-  "name": "causality-dataset",
-  "version": "1.0.0",
+  "name": "causa-net-dataset",
+  "version": "0.0.2",
   "description": "the dataset collection",
   "main": "index.js",
   "license": "MIT"
