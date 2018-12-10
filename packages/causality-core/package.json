@@ -1,6 +1,6 @@
 {
   "name": "causal-net-core",
-  "version": "0.0.1-b",
+  "version": "0.0.3",
   "description": "the base class of computing oprators, tensors and base class",
   "main": "index.js",
   "author": "nguyenhuynh200188@gmail.com",
