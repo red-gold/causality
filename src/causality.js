@@ -44,10 +44,6 @@ class Causality{
             const epochIdx = (iter/numBatch)>>1<<1;
             const batchData = data.slice([batchIdx*batch], [batch]);
             const batchLabels = labels.slice([batchIdx*batch], [batch]);
-            // batchData.slice(0).mean().print();
-            // BufferToImg(batchData.slice(0).dataSync(), W, H, '01.png');
-            // BufferToImg(batchData.slice(1).dataSync(), W, H, '02.png');
-            // batchData.slice(1).mean().print();
             batchLabels.argMax(1).print();
             optimizer.minimize(()=>{
                 let l = this.loss(batchData, batchLabels, (msg)=>{console.log(msg)});
@@ -68,12 +64,7 @@ class Causality{
         return {corect: R.sum(corrects), total: testLabels.length};
     }
     async get_params(){
-        const w = await Promise
-                    .all(R.map((v)=>v.data())
-                        (R.values(this.params)));
-        return R.fromPairs(R.__)
-                    (R.addIndex(R.map)
-                        ((k,i)=>[k, w[i]])(R.keys(this.params)));
+        
     }
     async save_params(fileName){
         const w = await this.get_params();
