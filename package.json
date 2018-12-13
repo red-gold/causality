@@ -1,7 +1,7 @@
 {
   "private": true,
-  "name": "causality",
-  "version": "1.0.0",
+  "name": "causal-net",
+  "version": "0.0.2",
   "main": "index.js",
   "repository": "https://github.com/red-gold/causality.git",
   "author": "huynhnguyen <nguyenhuynh200188@gmail.com>",
@@ -10,7 +10,8 @@
     "@tensorflow/tfjs-node": "^0.1.21",
     "fetch": "^1.1.0",
     "fs-extra": "^7.0.1",
-    "pngjs": "^3.3.3"
+    "pngjs": "^3.3.3",
+    "ramda": "^0.26.1"
   },
   "scripts": {
     "test": "",

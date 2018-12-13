@@ -48,33 +48,33 @@ function test_pipeline(){
     const config = {
                         PipelineInput: 'input',
                         PipelineOuput: 'labelProb',
-                        Pipeline:{ 
-                            input: {  Type: 'tensor', Input: 'PipelineInput',  Output: 'batch', 
+                        Pipeline:[ 
+                            {Name:'input', Type: 'tensor', Input: 'PipelineInput',  Output: 'batch', 
                                         Flow:[
                                             {Op: 'tensor', Args: [] },
                                             {Op: 'reshape', Args: [[60000, 28, 28, 4]] }
                                         ] },
-                            batch: {  Type: 'model/subSampling', Input: 'input', Output: 'conv1', 
+                            {Name:'batch', Type: 'model/subSampling', Input: 'input', Output: 'conv1', 
                                         Flow:[
                                             {Op: 'reshape', Args: [[6, 10000, 28, 28, 4]] },
                                             {Op: 'slice', Args: [[0], [10000]] }
                                         ] },
-                            conv1: {  Type: 'tensor', Input: 'batch', Output: 'conv2',
+                            {Name:'conv1', Type: 'tensor', Input: 'batch', Output: 'conv2',
                                         HyperParameters: {Weigth: 3, Height: 3, Strides: 1, Depth: 32},
                                         Parameters: { Kernel: [3, 3, 32] },
                                         Flow: [{ Op: 'conv', Parameter: 'kernel', Args: [1] },
                                                { Op: 'tanh', Args: [] } 
                                         ] },
-                            conv2: {  Type: 'tensor', Input: 'conv1', Output: 'output', 
+                            {Name: 'conv2', Type: 'tensor', Input: 'conv1', Output: 'output', 
                                         Parameters: {'kernel': [3, 3, 32] },
                                         Flow: [{ Op: 'conv', Args: [[3, 3, 1, 32]] },
                                                { Op: 'reshape', Args: [[10000, -1]] },
                                                { Op: 'tanh', Args: [] } ] },
-                            dense: { Type: 'tensor', Input: 'conv2', Output: 'PipelineOuput', 
+                            {Name: 'dense', Type: 'tensor', Input: 'conv2', Output: 'PipelineOuput', 
                                         Parameters: {Weigth: [10000, 28*28*32], Bias: [10000] },
                                         Flow: [{ Op: 'mul', Parameter: 'Weight'  },
-                                               { Op: 'add', Parameter: 'Bias' }],
-                    }
+                                               { Op: 'add', Parameter: 'Bias' }] }
+                        ]   }
     // let val = R.range(0, 2*2*2*2);
     // let par = R.range(0, 2*2*2*2);
     console.log(PipelineLayer(config.Type, val, null, config.Flow, (msg)=>console.log(msg)));

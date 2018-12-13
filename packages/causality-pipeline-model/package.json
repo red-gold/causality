@@ -1,7 +1,7 @@
 {
-  "name": "causal-net-representation",
+  "name": "causal-net-model",
   "version": "0.0.2",
-  "description": "the collection of representating methods of data",
+  "description": "this is collection of model",
   "main": "index.js",
   "author": "nguyenhuynh200188@gmail.com",
   "license": "MIT"
