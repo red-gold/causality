@@ -1,13 +1,13 @@
 import {default as Function} from './function';
-import {IO} from 'causal-net-utils';
+
 const MnistConfigure = {
     ImgFileName: 'mnist_images.png',
     LabelFileName: 'mnist_labels_uint8',
-    LINK = 'https://storage.googleapis.com/learnjs-data/model-builder/',
-    ImgUrl: 'https://storage.googleapis.com/learnjs-data/model-builder/' + 'mnist_images.png',
-    LabelUrl = 'https://storage.googleapis.com/learnjs-data/model-builder/' + 'mnist_labels_uint8',
+    Link: 'https://storage.googleapis.com/learnjs-data/model-builder/',
+    ImgUrl: 'https://storage.googleapis.com/learnjs-data/model-builder/mnist_images.png',
+    LabelUrl: 'https://storage.googleapis.com/learnjs-data/model-builder/mnist_labels_uint8',
     SaveDir: './tmp_datasets/'
-}
+};
 
 export default class MnistDataset {
     
@@ -20,18 +20,21 @@ export default class MnistDataset {
         this.NumClasses = 10;
         
         this.configure = MnistConfigure;
-        this.R = (new Function)._;
+        this.f = new Function();
     }
 
-    async download_file(){
+    fetchDataset(saveDir=null){
+        if(saveDir){
+            this.saveDir = saveDir;
+        }
         let labelUrl = this.configure.labelUrl;
         let imgUrl = this.configure.imgUrl;
-        let dataFetch = new FetchStream(imgUrl).pipe(fs.createWriteStream(this.MNIST_IMAGE));
-        let labelFetch = new FetchStream(labelUrl).pipe(fs.createWriteStream(this.MNIST_LABEL));
+        let dataFetch = new FetchStream(imgUrl).pipe(fs.createWriteStream(this.saveDir +'/'+ this.MNIST_IMAGE));
+        let labelFetch = new FetchStream(labelUrl).pipe(fs.createWriteStream(this.saveDir +'/'+this.MNIST_LABEL));
         return Promise.all([dataFetch, labelFetch]);
     }
 
-    loadDataSync(saveSample=[]){
+    loadDataSync(){
         const SaveImgPath = this.configure.SaveDir + this.MNIST_IMAGE;
         var data = fs.readFileSync(SaveImgPath);
         var png = PNG.sync.read(data);
@@ -42,7 +45,25 @@ export default class MnistDataset {
     loadLabelSync(){
         const SaveLabelPath = this.configure.SaveDir + this.MNIST_IMAGE;
         const labels = new Uint8Array(fs.readFileSync(SaveLabelPath));
-        const encodedLabels = R.splitEvery(10)(labels);//onehot encode of 10 digt classes 
+        
         return labels;
-    }       
+    }    
+    
+    loadDatasetSync(memcache){
+        this.memcache = memcache;
+        const dataBuffer = this.loadDatasetSync();
+        const labelBuffer = this.loadLabelSync();
+        console.log({len: dataBuffer.lenght, labelLen: labelBuffer.lenght});
+        const data = f.splitBuffer(data, 28*28*4);
+        const encodedLabels = f.splitBuffer(labelBuffer, 10);
+        const datum = f.zip(data, encodedLabels);
+        let generator = thif.f.generatorWithIndex(datum);
+        for(let item of generator){
+            console.log(item);
+        }
+    }
+
+    getSampleGenerator(batchSize=10){
+        
+    }
 };
