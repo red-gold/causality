@@ -1,9 +1,9 @@
-import {default as TensorBackend} from './tensor';
-import {default as F} from './function';
-export default class Layer extends TensorBackend{
+import {default as Function} from './function';
+import {default as BaseTensor} from './tensor';
+export default class Layer extends BaseTensor{
     constructor(){
         super();
-        this.R = (new F())._;
+        this.R = (new Function()).Function;
     }   
     
     layer(value, layerConfigure, layerParameters, debug=()=>{}){

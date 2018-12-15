@@ -1,4 +1,4 @@
-import {F as BaseFunction} from 'causal-net-utils';
+import {Function as BaseFunction} from 'causal-net-utils';
 export default class Function extends BaseFunction{
     constructor(){
         super();
@@ -7,9 +7,21 @@ export default class Function extends BaseFunction{
         return this.R.splitEvery(sampleSize, data);
     }
     zip(data, label){
-        return R.zip(data, label);
+        return this.R.zip(data, label);
     }
     generatorWithIndex(items){
-        return R.addIndex(R.map((i,d)=>[i,d], items));
+        const R = this.R;
+        return R.addIndex(R.map)((d, idx)=>[idx, d], items);
     }
+    makeTrainTestSet(items, splitIndex){
+        const R = this.R;
+        return R.splitAt(splitIndex, items);
+    }
+    // generator(iterator){
+    //     function *Generator(iterator){
+    //         while()
+    //         yield iterator.next().value;
+    //     }
+    //     return Generator(iterator);
+    // }
 }

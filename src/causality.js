@@ -1,74 +1,75 @@
-import {default as function} from 
-class Causality{
-    constructor( NetConfig, NetParams ){
-        this.NetConfig = NetConfig;
-        this.HyperParameter = this.NetConfig.HyperParameter;
-        this.NetParams = NetParams;
+import {BaseTensor, Layer} from 'causal-net-core';
+import {default as Function} from './function';
+export default class CausalNet{
+    constructor( NetConfig, netParams ){
+        
+        this.HyperParameters = NetConfig.HyperParameters;
+        this.BasePipeline = NetConfig.Pipeline;
+        this.netParams = netParams;
+        const baseTensor = new BaseTensor();
+        this.T = baseTensor.Tensor;
+        this.l = new Layer();
+        this.f = new Function();
     }
 
-    make_predict(data= ){
-        let pipeValue = {PipeInput: data};
-        let traces = [];
-        
+    makePredict(samples, numSamples=1, log=null){
+        const T = this.T, f = this.f, l = this.l;
+        this.HyperParameters.Datasize = numSamples;
+        const Pipeline = f.parameterAcquisition(this.BasePipeline, this.HyperParameters);
+        console.log(JSON.stringify({Pipeline}));
+        let pipeValue = {PipeInput: samples}, traces = [], netParams = this.netParams;
         return T.tidy(()=>{
-            for(let layer of NetConfig.Pipeline){
-                let layerOutput = PipelineLayer(val[layer.Input], layer, pars[layer.Name], ()=>{});
+            for(let layer of Pipeline){
+                let layerOutput = l.layer(pipeValue[layer.Input], layer, netParams[layer.Name], ()=>{});
                 pipeValue[layer.Name] = layerOutput[layer.Name];
                 traces.push({[layer.Name]: layerOutput.trace});
-                console.log({traces});
+                console.log(JSON.stringify({traces}));
             }
-            let {pipeOutput} = pipeValue;
-            let logProb = pipeOutput.sub(tf.logSumExp(layerOuput, 1, true));
+            let pipeOutput = pipeValue['PipeOutput'];
+            let logProb = pipeOutput.sub(T.logSumExp(pipeOutput, 1, true));
             let predict = logProb.argMax(1);
             return {logProb, predict};
         });
     }
 
-    loss(data, encodeLabels, log=null){
-        const {logProb} = this.make_predict(data, log);
-        const likelihood = logProb.neg().mul(encodeLabels);
+    loss(sampleBatch, labelBatch, numSample, log=null){
+        const T = this.T;
+        let label = T.tensor(labelBatch).reshape([numSample, -1]);
+        const {logProb} = this.makePredict(sampleBatch, numSample, log);
+        const likelihood = logProb.neg().mul(label);
         const loss = likelihood.mean();
-        if(log){ log({shape: data.shape[0]}); };
+        // if(log){ log({shape: sampleBatch.shape[0]}); };
         return loss;
     };
 
-    train(data, labels, numEpoch=30, lr=0.01, batch=10000){
-        const [S, W, H, D] = data.shape;
-        const numBatch = S/batch;//mod
+    train(doSampleGenerator, batchSize, numEpochs = 2, lr=0.01){
+        const T = this.T, f = this.f;
         const start = new Date();
         let loss = [], averageLoss = [];
-        const numIters = numEpoch*numBatch;
-        const optimizer = tf.train.adam(lr);
-        for(let iter of R.range(0, numIters)){
-            const batchIdx = iter%numBatch;
-            const epochIdx = (iter/numBatch)>>1<<1;
-            const batchData = data.slice([batchIdx*batch], [batch]);
-            const batchLabels = labels.slice([batchIdx*batch], [batch]);
-            batchLabels.argMax(1).print();
-            optimizer.minimize(()=>{
-                let l = this.loss(batchData, batchLabels, (msg)=>{console.log(msg)});
-                [loss, averageLoss] = (batchIdx===0)?[[], [...averageLoss, R.mean(loss)]]:[[...loss, ...l.dataSync()], averageLoss];
-                console.log({[epochIdx+'/'+batchIdx]: loss, averageLoss, 
-                             time: new Date().toISOString(), start: start.toISOString(),
-                             numBatch, numEpoch, elapse: (new Date() - start)/1000});
-                return l;
-            });
+        const optimizer = T.train.adam(lr);
+        for(let epochIdx of f.range(numEpochs)){
+            console.log({epochIdx});
+            const sampleGenerator = doSampleGenerator(batchSize);
+            for(let [batchData, batchLabels] of sampleGenerator){
+                console.log({dlen: batchData.length, llen: batchLabels.length});
+                optimizer.minimize(()=>{
+                    let l = this.loss(batchData, batchLabels, batchSize, (msg)=>{console.log(msg);});
+                    // [loss, averageLoss] = (batchIdx===0)?[[], [...averageLoss, R.mean(loss)]]:[[...loss, ...l.dataSync()], averageLoss];
+                    // console.log({[epochIdx+'/'+batchIdx]: loss, averageLoss, 
+                    //              time: new Date().toISOString(), start: start.toISOString(),
+                    //              numBatch, numEpoch, elapse: (new Date() - start)/1000});
+                    return l;
+                });
+            }
         }
     };
+
     test(testData, testLabels){
-        let {predict} = this.make_predict(testData);
+        let {predict} = this.makePredict(testData);
         predict = predict.dataSync();
         let corrects = testLabels.map((testLabel,idx)=>{
             return testLabel === predict[idx];
         });
         return {corect: R.sum(corrects), total: testLabels.length};
-    }
-    async get_params(){
-        
-    }
-    async save_params(fileName){
-        const w = await this.get_params();
-        console.log(w);
-        return fs.writeJSON(fileName, w);
     }
 }

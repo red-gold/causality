@@ -20,8 +20,11 @@ export default class IO{
 
     PNGReadSync(filePath){
         var data = fs.readFileSync(filePath);
-        console.log({len: data.length});
         var img = PNG.sync.read(data);
         return img.data;
+    }
+
+    readSync(filePath){
+        return fs.readFileSync(filePath);
     }
 }

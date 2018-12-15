@@ -1,7 +1,7 @@
-var {F, L} = require('causal-net-core');
-const f = new F();
-var l = new L();
-var R = f._;
+var {Function, Layer} = require('causal-net-core');
+const f = new Function();
+var l = new Layer();
+var R = f.Function;
 var T = l.Tensor;
 const _NetConfig = {
     HyperParameters: {Datasize:10},
@@ -24,9 +24,7 @@ const _NetConfig = {
             Parameters: { Weight: [12*12*32, 10], Bias: [10]  },
             Flow: [ { Op: 'dot', Parameter: 'Weight', Args: [] },
                     { Op: 'add', Parameter: 'Bias',  Args: [] } ] 
-        }
-]
-}
+        } ] };
 const pipeline = f.parameterAcquisition(_NetConfig.Pipeline, _NetConfig.HyperParameters);
 console.log(pipeline);
 
@@ -40,5 +38,5 @@ for(let layer of pipeline){
     let layerOutput = l.layer(val[layer.Input], layer, pars[layer.Name], ()=>{});
     val[layer.Name] = layerOutput[layer.Name];
     traces.push({[layer.Name]: layerOutput.trace});
-    console.log({traces});
+    console.log(JSON.stringify({traces}));
 }

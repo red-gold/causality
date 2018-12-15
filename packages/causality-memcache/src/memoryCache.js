@@ -6,12 +6,15 @@ export default class MemoryCache extends BaseMemCache{
         this.cache = {};    
         this.assertor = assertor;
     }
-    getItem(key){
-        return this.cache[key];
+    getItem(key, zone='/'){
+        return this.cache[zone+key];
     }
-    setItem(key, data){
+    getItemBatch(keys, zone='/'){
+        return keys.map(key=>this.cache[zone+key]);
+    }
+    setItem(key, data, zone='/'){
         this.assertor(data);
-        this.cache[key] = data;
-        return {key: this.cache[key]};
+        this.cache[zone+key] = data;
+        return {key: this.cache[zone+key]};
     }
 }

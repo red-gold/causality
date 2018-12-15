@@ -1,2 +1,3 @@
-export {default as F} from './function';
-export {default as L} from './layer';
+export {default as BaseTensor} from './tensor';
+export {default as Function} from './function';
+export {default as Layer} from './layer';

@@ -4,7 +4,7 @@ require('@tensorflow/tfjs-node');
 const SuppportBackend = {'tf': tf};
 
 
-export default class TensorBackend{
+export default class BaseTensor{
 
     constructor(Config={Backend:'tf'}){
         console.log({tf});

@@ -1,10 +1,10 @@
 import * as R from 'ramda';
-export default class Function{
+export default class BaseFunction{
     constructor(){
         this.R = R;
     }
 
-    get _(){
+    get Function(){
         return this.R;
     }
     

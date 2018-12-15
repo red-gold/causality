@@ -7,11 +7,11 @@ export default class BaseMemCache{
         throw Error('need to implement');
     }
 
-    getItem(key){
+    getItem(zone, key){
         throw Error('need to implement');
     }
 
-    setItem(key, value){
+    setItem(zone, key, value){
         throw Error('need to implement');
     }
 }

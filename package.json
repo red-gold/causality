@@ -6,18 +6,40 @@
   "repository": "https://github.com/red-gold/causality.git",
   "author": "huynhnguyen <nguyenhuynh200188@gmail.com>",
   "license": "MIT",
-  "dependencies": {
-    "@tensorflow/tfjs-node": "^0.1.21",
-    "fetch": "^1.1.0",
-    "fs-extra": "^7.0.1",
-    "pngjs": "^3.3.3",
-    "ramda": "^0.26.1"
-  },
-  "scripts": {
-    "test": "",
-    "dev": ""
-  },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "scripts": {
+    "build": "webpack --configure webpack.config.js",
+    "test": "jest",
+    "build:watch": "webpack --watch --info-verbosity verbose",
+    "build:all": "yarn build-utils && yarn build-core && yarn build-memcache && yarn build-dataset", 
+    "build-utils": "cd packages/causality-utils; yarn build",
+    "build-core": "cd packages/causality-core; yarn build",
+    "build-dataset": "cd packages/causality-dataset; yarn build",
+    "build-memcache": "cd packages/causality-memcache; yarn build"
+  },
+  "dependencies": {
+    "@babel/core": "^7.2.0",
+    "babel-loader": "^8.0.4",
+    "brfs": "^2.0.1",
+    "eslint": "^5.10.0",
+    "is-node": "^1.0.2",
+    "pngjs": "^3.3.3",
+    "ramda": "^0.26.1",
+    "webpack": "^4.27.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "devDependencies": {
+    "@webpack-cli/init": "^0.1.2",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.4",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-preset-env": "^1.7.0",
+    "browserify": "^16.2.3",
+    "eslint-loader": "^2.1.1",
+    "jest": "^23.6.0",
+    "transform-loader": "^0.2.4"
+  }
 }
