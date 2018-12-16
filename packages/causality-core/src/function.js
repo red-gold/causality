@@ -6,10 +6,8 @@ export default class Function extends BaseFunction{
 
     }
     parameterAcquisition(pipelineItem, hyperParameters){
-        
         const R = this.R; 
         function replaceIfMatch(value, hyperParameters){
-            
             if(R.is(String, value) && R.startsWith('$', value)){
                 const key = R.slice(1, Infinity, value);
                 return R.prop(key, hyperParameters);

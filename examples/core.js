@@ -27,16 +27,16 @@ const _NetConfig = {
         } ] };
 const pipeline = f.parameterAcquisition(_NetConfig.Pipeline, _NetConfig.HyperParameters);
 console.log(pipeline);
-
+var par = l.setOrInitParams(_NetConfig.Pipeline, {});
 let val =  { PipelineInput: R.range(0, 10*12*12*2) };
 let pars = { conv1: { Kernel:T.variable(T.tensor(R.range(0, 3*3*2*32), [3, 3, 2, 32])) }, 
                 conv2: { Kernel:T.variable(T.tensor(R.range(0, 3*3*32*32), [3, 3, 32, 32])) },
                 dense: { Weight:T.variable(T.tensor(R.range(0, 12*12*32*10), [12*12*32, 10])),
                         Bias: T.variable(T.tensor(R.range(0, 10), [10])) } };
 let traces = [];
-for(let layer of pipeline){
-    let layerOutput = l.layer(val[layer.Input], layer, pars[layer.Name], ()=>{});
-    val[layer.Name] = layerOutput[layer.Name];
-    traces.push({[layer.Name]: layerOutput.trace});
-    console.log(JSON.stringify({traces}));
-}
+// for(let layer of pipeline){
+//     let layerOutput = l.layer(val[layer.Input], layer, pars[layer.Name], ()=>{});
+//     val[layer.Name] = layerOutput[layer.Name];
+//     traces.push({[layer.Name]: layerOutput.trace});
+//     console.log(JSON.stringify({traces}));
+// }

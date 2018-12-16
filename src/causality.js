@@ -2,14 +2,14 @@ import {BaseTensor, Layer} from 'causal-net-core';
 import {default as Function} from './function';
 export default class CausalNet{
     constructor( NetConfig, netParams ){
-        
-        this.HyperParameters = NetConfig.HyperParameters;
-        this.BasePipeline = NetConfig.Pipeline;
-        this.netParams = netParams;
-        const baseTensor = new BaseTensor();
-        this.T = baseTensor.Tensor;
         this.l = new Layer();
         this.f = new Function();
+        this.HyperParameters = this.f.getHyperParameter(NetConfig);
+        this.BasePipeline = this.f.getPipeline(NetConfig);
+        this.netParams = netParams;
+        this.netParams = this.l.setOrInitParams(this.BasePipeline, netParams);
+        const baseTensor = new BaseTensor();
+        this.T = baseTensor.Tensor;
     }
 
     makePredict(samples, numSamples=1, log=null){
@@ -23,8 +23,8 @@ export default class CausalNet{
                 let layerOutput = l.layer(pipeValue[layer.Input], layer, netParams[layer.Name], ()=>{});
                 pipeValue[layer.Name] = layerOutput[layer.Name];
                 traces.push({[layer.Name]: layerOutput.trace});
-                console.log(JSON.stringify({traces}));
             }
+            console.log(JSON.stringify({traces}));
             let pipeOutput = pipeValue['PipeOutput'];
             let logProb = pipeOutput.sub(T.logSumExp(pipeOutput, 1, true));
             let predict = logProb.argMax(1);
@@ -43,24 +43,25 @@ export default class CausalNet{
     };
 
     train(doSampleGenerator, batchSize, numEpochs = 2, lr=0.01){
-        const T = this.T, f = this.f;
+        const T = this.T, f = this.f, R = this.f.Function;
         const start = new Date();
         let loss = [], averageLoss = [];
         const optimizer = T.train.adam(lr);
         for(let epochIdx of f.range(numEpochs)){
-            console.log({epochIdx});
+            console.log({epochIdx, averageLoss, time: new Date().toISOString(), start: start.toISOString(),
+                         elapse: (new Date() - start)/1000});
             const sampleGenerator = doSampleGenerator(batchSize);
             for(let [batchData, batchLabels] of sampleGenerator){
                 console.log({dlen: batchData.length, llen: batchLabels.length});
                 optimizer.minimize(()=>{
                     let l = this.loss(batchData, batchLabels, batchSize, (msg)=>{console.log(msg);});
-                    // [loss, averageLoss] = (batchIdx===0)?[[], [...averageLoss, R.mean(loss)]]:[[...loss, ...l.dataSync()], averageLoss];
-                    // console.log({[epochIdx+'/'+batchIdx]: loss, averageLoss, 
-                    //              time: new Date().toISOString(), start: start.toISOString(),
-                    //              numBatch, numEpoch, elapse: (new Date() - start)/1000});
+                    loss = [...loss, ...l.dataSync()];
+                    console.log({loss});
                     return l;
                 });
             }
+            averageLoss = [...averageLoss, R.mean(loss)];
+            loss = [];
         }
     };
 

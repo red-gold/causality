@@ -7,4 +7,12 @@ export default class Function extends BaseFunction{
     range(len){
         return this.R.range(0, len);
     }
+    getPipeline(netConfig){
+        //TODO: make assertor
+        return this.R.prop('Pipeline', netConfig);
+    }
+    getHyperParameter(netConfig){
+        //TODO: make assertor
+        return this.R.prop('HyperParameters', netConfig);
+    }
 }
