@@ -2,7 +2,9 @@ class BasePipeline{
     constructor(NetConfig, NetParams){
 
     }
-
+    /**
+     * @param  {} data
+     */
     makePredict(data){
         throw Error('implment require');
     }

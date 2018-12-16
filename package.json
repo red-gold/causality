@@ -13,7 +13,8 @@
     "build": "webpack --configure webpack.config.js",
     "test": "jest",
     "build:watch": "webpack --watch --info-verbosity verbose",
-    "build:all": "yarn build-utils && yarn build-core && yarn build-memcache && yarn build-dataset", 
+    "doc":"jsdoc -c jsdoc.json",
+    "build:all": "yarn build-utils && yarn build-core && yarn build-memcache && yarn build-dataset",
     "build-utils": "cd packages/causality-utils; yarn build",
     "build-core": "cd packages/causality-core; yarn build",
     "build-dataset": "cd packages/causality-dataset; yarn build",
@@ -40,6 +41,7 @@
     "browserify": "^16.2.3",
     "eslint-loader": "^2.1.1",
     "jest": "^23.6.0",
+    "jsdoc-webpack-plugin-v2": "^2.0.2",
     "transform-loader": "^0.2.4"
   }
 }

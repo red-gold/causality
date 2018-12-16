@@ -1,17 +1,26 @@
 import {BaseTensor, Layer} from 'causal-net-core';
 import {default as Function} from './function';
+
 export default class CausalNet{
-    constructor( NetConfig, netParams ){
+    /**
+     * @param  {} netConfig
+     * @param  {} netParams
+     */
+    constructor( netConfig, netParams ){
         this.l = new Layer();
         this.f = new Function();
-        this.HyperParameters = this.f.getHyperParameter(NetConfig);
-        this.BasePipeline = this.f.getPipeline(NetConfig);
+        this.HyperParameters = this.f.getHyperParameter(netConfig);
+        this.BasePipeline = this.f.getPipeline(netConfig);
         this.netParams = netParams;
         this.netParams = this.l.setOrInitParams(this.BasePipeline, netParams);
         const baseTensor = new BaseTensor();
         this.T = baseTensor.Tensor;
     }
-
+    /**
+     * @param  {} samples
+     * @param  {} numSamples=1
+     * @param  {} log=null
+     */
     makePredict(samples, numSamples=1, log=null){
         const T = this.T, f = this.f, l = this.l;
         this.HyperParameters.Datasize = numSamples;
