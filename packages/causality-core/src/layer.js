@@ -28,28 +28,8 @@ export default class Layer extends BaseTensor{
 
     setOrInitParams(pipeline, netParams, debug=()=>{}){
         const R = this.R;
-        const _pipe = R.filter(p=>p,R.map(pipe=>({[pipe.Name]:pipe.Parameters}), pipeline));
-        const pipeParameters = R.pluck('Parameters', _pipe);
-        console.log({_pipe, pipeParameters});
-        const doSetOrInitParam = (pipeParams, netParams)=>{
-            const keyVar = R.map(R.__, R.toPairs(pipeParams))((key, value)=>{
-                if(R.type(Array, value)){
-                    console.log({obj:{key: value}});
-                    return [key, val];
-                    return doSetOrInitParam(par, R.propOr(key, value, {}));
-                }
-                else{
-                    const v = R.propOr(key, value, null);
-                    if(val){
-                        return [key, false];
-                    }
-                    else{
-                        return [key, true];
-                    }
-                }
-            });
-            return R.fromPairs(keyVar);
-        };
-        doSetOrInitParam(pipeParameters, netParams);
+        const pipeParameters = R.filter(v=>v!==undefined,R.map(pipe=>({[pipe.Name]:pipe.Parameters}), pipeline));
+        console.log({pipeParameters, netParams});
+        // return R.mergeDeepWith
     }
 }
