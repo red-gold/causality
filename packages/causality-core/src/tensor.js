@@ -1,16 +1,12 @@
-var tf = require('@tensorflow/tfjs');
-require('@tensorflow/tfjs-node');
-
-const SuppportBackend = {'tf': tf};
-
-
-export default class BaseTensor{
+console.log('request once');
+export default class CoreTensor{
 
     constructor(Config={Backend:'tf'}){
-        console.log({tf});
-        this.T = SuppportBackend[Config.Backend];
+        var tf = require('@tensorflow/tfjs');
+        require('@tensorflow/tfjs-node');
+        this.T = tf;
     }
-    get Tensor(){
+    get CoreTs(){
         return this.T;
     }
 }

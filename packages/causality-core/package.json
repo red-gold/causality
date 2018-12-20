@@ -9,13 +9,14 @@
   "scripts": {
     "build": "webpack",
     "test": "jest",
-    "build:watch": "webpack --watch --info-verbosity verbose"
+    "build:watch": "webpack --watch"
   },
   "dependencies": {
     "@babel/core": "^7.2.0",
     "@tensorflow/tfjs": "^0.14.1",
     "@tensorflow/tfjs-node": "^0.1.21",
     "babel-loader": "^8.0.4",
+    "encoding": "^0.1.12",
     "eslint": "^5.10.0",
     "is-node": "^1.0.2",
     "webpack": "^4.27.1",

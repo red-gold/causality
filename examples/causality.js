@@ -1,10 +1,10 @@
 var {CausalNet} = require('../dist/causal-net');
 var {Function, Layer} = require('causal-net-core');
-const f = new Function();
-var l = new Layer();
-var R = f.Function;
-var T = l.Tensor;
-// console.log({CausalNet});
+const F = new Function();
+const L = new Layer();
+const R = F.CoreFn;
+const T = L.CoreTs;
+
 const _NetConfig = {
     HyperParameters: {Datasize:10},
     Pipeline:[
@@ -31,17 +31,18 @@ const _NetConfig = {
             Flow: [ { Op: 'reshape', Args: [['$Datasize', -1]] } ] 
         } ] };
 
-let parameters = {  conv1: { Kernel:T.variable(T.tensor(R.range(0, 3*3*4*32), [3, 3, 4, 32])) }, 
-                    conv2: { Kernel:T.variable(T.tensor(R.range(0, 3*3*32*32), [3, 3, 32, 32])) },
-                    dense: { Weight:T.variable(T.tensor(R.range(0, 28*28*32*10), [28*28*32, 10])),
-                             Bias: T.variable(T.tensor(R.range(0, 10), [10])) } };
+let parameters = {};
 let causalNet = new CausalNet(_NetConfig, parameters);
+// console.log(causalNet.getParamsSync());
 let dummyData = R.range(0, 2*28*28*4);
 let dummylabel = [[0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
                   [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]];
 let sampleSize = 2;
-console.log({dataLen: dummyData.length});
+// console.log({dataLen: dummyData.length});
 causalNet.makePredict(dummyData, sampleSize=2);
+causalNet.loss(dummyData, dummylabel, sampleSize=2).print();
+causalNet.saveParamsSync('./save1.model');
+let params = causalNet.readParamsSync('./save1.model');
 causalNet.loss(dummyData, dummylabel, sampleSize=2).print();
 
 

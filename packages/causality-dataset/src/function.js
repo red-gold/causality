@@ -1,4 +1,4 @@
-import {Function as BaseFunction} from 'causal-net-utils';
+import {Function as BaseFunction} from 'causal-net-core';
 export default class Function extends BaseFunction{
     constructor(){
         super();
@@ -17,11 +17,4 @@ export default class Function extends BaseFunction{
         const R = this.R;
         return R.splitAt(splitIndex, items);
     }
-    // generator(iterator){
-    //     function *Generator(iterator){
-    //         while()
-    //         yield iterator.next().value;
-    //     }
-    //     return Generator(iterator);
-    // }
 }

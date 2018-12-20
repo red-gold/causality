@@ -1,8 +1,8 @@
 var {Function, Layer} = require('causal-net-core');
-const f = new Function();
-var l = new Layer();
-var R = f.Function;
-var T = l.Tensor;
+const F = new Function();
+const L = new Layer();
+const R = F.coreFn;
+const T = L.coreTs;
 const _NetConfig = {
     HyperParameters: {Datasize:10},
     Pipeline:[
@@ -25,18 +25,9 @@ const _NetConfig = {
             Flow: [ { Op: 'dot', Parameter: 'Weight', Args: [] },
                     { Op: 'add', Parameter: 'Bias',  Args: [] } ] 
         } ] };
-const pipeline = f.parameterAcquisition(_NetConfig.Pipeline, _NetConfig.HyperParameters);
+const pipeline = F.parameterAcquisition(_NetConfig.Pipeline, _NetConfig.HyperParameters);
 console.log(pipeline);
-var par = l.setOrInitParams(_NetConfig.Pipeline, {});
-let val =  { PipelineInput: R.range(0, 10*12*12*2) };
-let pars = { conv1: { Kernel:T.variable(T.tensor(R.range(0, 3*3*2*32), [3, 3, 2, 32])) }, 
-                conv2: { Kernel:T.variable(T.tensor(R.range(0, 3*3*32*32), [3, 3, 32, 32])) },
-                dense: { Weight:T.variable(T.tensor(R.range(0, 12*12*32*10), [12*12*32, 10])),
-                        Bias: T.variable(T.tensor(R.range(0, 10), [10])) } };
-let traces = [];
-// for(let layer of pipeline){
-//     let layerOutput = l.layer(val[layer.Input], layer, pars[layer.Name], ()=>{});
-//     val[layer.Name] = layerOutput[layer.Name];
-//     traces.push({[layer.Name]: layerOutput.trace});
-//     console.log(JSON.stringify({traces}));
-// }
+var par = L.setOrInitParams(_NetConfig.Pipeline, {});
+// console.log(par.conv1.Kernel);
+console.log('..........................');
+console.log(F.isTensor(par.conv1.Kernel));

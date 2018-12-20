@@ -1,4 +1,5 @@
-import {BaseTensor, Layer} from 'causal-net-core';
+import {Layer} from 'causal-net-core';
+import {IO} from 'causal-net-utils';
 import {default as Function} from './function';
 
 export default class CausalNet{
@@ -6,15 +7,15 @@ export default class CausalNet{
      * @param  {} netConfig
      * @param  {} netParams
      */
-    constructor( netConfig, netParams ){
-        this.l = new Layer();
-        this.f = new Function();
-        this.HyperParameters = this.f.getHyperParameter(netConfig);
-        this.BasePipeline = this.f.getPipeline(netConfig);
-        this.netParams = netParams;
-        this.netParams = this.l.setOrInitParams(this.BasePipeline, netParams);
-        const baseTensor = new BaseTensor();
-        this.T = baseTensor.Tensor;
+    constructor( netConfig, netParams=null ){
+        this.L = new Layer();
+        this.F = new Function();
+        this.T = this.L.CoreTs;
+        this.R = this.F.CoreFn;
+        this.IO = new IO();
+        this.HyperParameters = this.F.getHyperParameter(netConfig);
+        this.BasePipeline = this.F.getPipeline(netConfig);
+        this.netParams = this.L.setOrInitParams(this.BasePipeline, netParams);
     }
     /**
      * @param  {} samples
@@ -22,7 +23,7 @@ export default class CausalNet{
      * @param  {} log=null
      */
     makePredict(samples, numSamples=1, log=null){
-        const T = this.T, f = this.f, l = this.l;
+        const T = this.T, f = this.F, l = this.L;
         this.HyperParameters.Datasize = numSamples;
         const Pipeline = f.parameterAcquisition(this.BasePipeline, this.HyperParameters);
         console.log(JSON.stringify({Pipeline}));
@@ -40,7 +41,12 @@ export default class CausalNet{
             return {logProb, predict};
         });
     }
-
+    /**
+     * @param  {} sampleBatch
+     * @param  {} labelBatch
+     * @param  {} numSample
+     * @param  {} log=null
+     */
     loss(sampleBatch, labelBatch, numSample, log=null){
         const T = this.T;
         let label = T.tensor(labelBatch).reshape([numSample, -1]);
@@ -50,18 +56,23 @@ export default class CausalNet{
         // if(log){ log({shape: sampleBatch.shape[0]}); };
         return loss;
     };
-
+    /**
+     * @param  {} doSampleGenerator
+     * @param  {} batchSize
+     * @param  {} numEpochs=2
+     * @param  {} lr=0.01
+     */
     train(doSampleGenerator, batchSize, numEpochs = 2, lr=0.01){
-        const T = this.T, f = this.f, R = this.f.Function;
+        const T = this.T, F = this.F, R = this.R;
         const start = new Date();
         let loss = [], averageLoss = [];
         const optimizer = T.train.adam(lr);
-        for(let epochIdx of f.range(numEpochs)){
+        for(let epochIdx of F.range(numEpochs)){
             console.log({epochIdx, averageLoss, time: new Date().toISOString(), start: start.toISOString(),
                          elapse: (new Date() - start)/1000});
             const sampleGenerator = doSampleGenerator(batchSize);
             for(let [batchData, batchLabels] of sampleGenerator){
-                console.log({dlen: batchData.length, llen: batchLabels.length});
+                // console.log({dlen: batchData.length, llen: batchLabels.length});
                 optimizer.minimize(()=>{
                     let l = this.loss(batchData, batchLabels, batchSize, (msg)=>{console.log(msg);});
                     loss = [...loss, ...l.dataSync()];
@@ -81,5 +92,27 @@ export default class CausalNet{
             return testLabel === predict[idx];
         });
         return {corect: R.sum(corrects), total: testLabels.length};
+    }
+
+    getParamsSync(){
+        const F = this.F, R = this.R;
+        const getParams = (params)=>{
+            if(F.isTensor(params)){
+                return Array.from(params.dataSync());
+            }
+            else{
+                return R.map(getParams, params);
+            }
+        };
+        return getParams(this.netParams);
+    }
+    
+    saveParamsSync(fileName='./save.model'){
+        const params = this.getParamsSync();
+        return this.IO.writeSync(fileName, JSON.stringify(params));
+    }
+    readParamsSync(fileName){
+        const params = JSON.parse(this.IO.readSync(fileName));
+        this.netParams = this.L.setOrInitParams(this.BasePipeline, params);
     }
 }

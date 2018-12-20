@@ -1,11 +1,10 @@
 import {default as Function} from './function';
-import {default as BaseTensor} from './tensor';
-import { CallbackConstructorRegistry } from '@tensorflow/tfjs-layers/dist/base_callbacks';
-export default class Layer extends BaseTensor{
+import {default as Tensor} from './tensor';
+export default class Layer extends Tensor{
     constructor(){
         super();
-        this.f = new Function();
-        this.R = this.f.Function;
+        this.F = new Function();
+        this.R = this.F.CoreFn;
     }   
     
     layer(value, layerConfigure, layerParameters, debug=()=>{}){
@@ -27,9 +26,34 @@ export default class Layer extends BaseTensor{
     }
 
     setOrInitParams(pipeline, netParams, debug=()=>{}){
-        const R = this.R;
-        const pipeParameters = R.filter(v=>v!==undefined,R.map(pipe=>({[pipe.Name]:pipe.Parameters}), pipeline));
-        console.log({pipeParameters, netParams});
-        // return R.mergeDeepWith
+        const R = this.R, T = this.T, F = this.F;
+        let pipeParams = R.fromPairs(R.filter(([k,v])=>v !== undefined,
+                                R.map(R.__, pipeline)(p=>[p.Name, p.Parameters])));
+        // console.log({pipeParams});
+        const SetOrInit = (mainValue, subVal)=>{
+            let keys = R.keys(mainValue);
+            let keyMainValSubVal = R.map((k)=> [k, R.prop(k, mainValue), R.propOr(null, k, subVal)], keys);
+            // console.log({keyMainValSubVal});
+            const mapping = ([key, mainVal, subVal])=>{
+                // console.log({key, mainVal, subVal});
+
+                if(F.isParameter(mainVal)){
+                    const paramShape = mainVal;
+                    if(R.isNil(subVal)){
+                        // console.log('init new');
+                        
+                        return [key, T.variable(T.randomNormal(paramShape))];
+                    }
+                    else{
+                        return [key, T.variable(T.tensor(subVal).reshape(paramShape))];
+                    }
+                }
+                else{
+                    return [key, SetOrInit(mainVal, subVal)];
+                }
+            };
+            return R.fromPairs(R.map(mapping, keyMainValSubVal));
+        };
+        return SetOrInit(pipeParams, netParams);
     }
 }

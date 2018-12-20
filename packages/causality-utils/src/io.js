@@ -27,4 +27,12 @@ export default class IO{
     readSync(filePath){
         return fs.readFileSync(filePath);
     }
+    /**
+     * @param  {} filePath
+     * @param  {} data
+     * 
+     */
+    writeSync(filePath, data){
+        return fs.writeFileSync(filePath, data);
+    }
 }
