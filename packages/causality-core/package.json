@@ -14,7 +14,8 @@
   "dependencies": {
     "@babel/core": "^7.2.0",
     "@tensorflow/tfjs": "^0.14.1",
-    "@tensorflow/tfjs-node": "^0.1.21",
+    "@tensorflow/tfjs-node": "^0.2.1",
+    "@tensorflow/tfjs-node-gpu": "^0.2.1",
     "babel-loader": "^8.0.4",
     "encoding": "^0.1.12",
     "eslint": "^5.10.0",

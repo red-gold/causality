@@ -1,8 +1,15 @@
+import {FetchStream, fetchUrl} from './fetch';
+import {default as  fs} from './fs';
 import * as process from 'process';
-import * as fs from 'fs';
 import {PNG} from 'pngjs';
+
 export default class IO{
-    constructor(){
+    constructor(logger=null){
+        this.logger = logger;
+    }   
+
+    get CoreFs(){
+        return fs;
     }
     
     PIDExport(){
@@ -24,7 +31,17 @@ export default class IO{
         return img.data;
     }
 
-    readSync(filePath){
+    readFile(filePath){
+        console.log({filePath});
+        return fs.readFile(filePath);
+    }
+
+    writeFile(filePath, data){
+        console.log({filePath, data});
+        return fs.put(filePath, data);
+    }
+
+    readFileSync(filePath){
         return fs.readFileSync(filePath);
     }
     /**
@@ -32,7 +49,17 @@ export default class IO{
      * @param  {} data
      * 
      */
-    writeSync(filePath, data){
+    writeFileSync(filePath, data){
         return fs.writeFileSync(filePath, data);
+    }
+
+    fetch(url){
+        return fetchUrl(url);
+    }
+
+    fetchToFile(url, filePath){
+        console.log({url, filePath});
+        const out = fs.createWriteStream(filePath);
+        return new FetchStream(url).pipe(out);
     }
 }

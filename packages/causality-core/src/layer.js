@@ -29,19 +29,13 @@ export default class Layer extends Tensor{
         const R = this.R, T = this.T, F = this.F;
         let pipeParams = R.fromPairs(R.filter(([k,v])=>v !== undefined,
                                 R.map(R.__, pipeline)(p=>[p.Name, p.Parameters])));
-        // console.log({pipeParams});
         const SetOrInit = (mainValue, subVal)=>{
             let keys = R.keys(mainValue);
             let keyMainValSubVal = R.map((k)=> [k, R.prop(k, mainValue), R.propOr(null, k, subVal)], keys);
-            // console.log({keyMainValSubVal});
             const mapping = ([key, mainVal, subVal])=>{
-                // console.log({key, mainVal, subVal});
-
                 if(F.isParameter(mainVal)){
                     const paramShape = mainVal;
                     if(R.isNil(subVal)){
-                        // console.log('init new');
-                        
                         return [key, T.variable(T.randomNormal(paramShape))];
                     }
                     else{

@@ -1,6 +1,6 @@
-class BaseDataSet{
-    constructor(DataUrl, LabelUrl){
-
+export default class BaseDataSet{
+    constructor(configure){
+        this.configure = configure;
     }
     fetchDataset(saveDir=null){
         throw Error('implement required');

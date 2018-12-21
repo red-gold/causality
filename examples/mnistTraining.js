@@ -1,10 +1,8 @@
 var {CausalNet} = require('../dist/causal-net');
 var {Function, Layer} = require('causal-net-core');
-const f = new Function();
-var l = new Layer();
-var R = f.Function;
-var T = l.Tensor;
-// console.log({CausalNet});
+const Dataset = require('causal-net-dataset');
+const {MemoryCache} = require('causal-net-memcache');
+
 const _NetConfig = {
     HyperParameters: {Datasize:10},
     Pipeline:[
@@ -31,28 +29,15 @@ const _NetConfig = {
             Flow: [ { Op: 'reshape', Args: [['$Datasize', -1]] } ] 
         } ] };
 
-let parameters = {  conv1: { Kernel:T.variable(T.tensor(R.range(0, 3*3*4*32), [3, 3, 4, 32])) }, 
-                    conv2: { Kernel:T.variable(T.tensor(R.range(0, 3*3*32*32), [3, 3, 32, 32])) },
-                    dense: { Weight:T.variable(T.tensor(R.range(0, 28*28*32*10), [28*28*32, 10])),
-                             Bias: T.variable(T.tensor(R.range(0, 10), [10])) } };
+let parameters = {};
 let causalNet = new CausalNet(_NetConfig, parameters);
-let dummyData = R.range(0, 2*28*28*4);
-let dummylabel = [[0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-                  [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]];
-let sampleSize = 2;
-console.log({dataLen: dummyData.length});
-causalNet.makePredict(dummyData, sampleSize=2);
-causalNet.loss(dummyData, dummylabel, sampleSize=2).print();
 
-
-var Dataset = require('causal-net-dataset');
-const {MemoryCache} = require('causal-net-memcache');
-console.log({Dataset});
 let mnist = new Dataset.MnistDataset();
 let memoryCache = new MemoryCache();
-console.log({mnist});
+
 mnist.loadDatasetSync(memoryCache);
-const [trainIdxSet, testIdxSet] = mnist.getTrainTestSet(10);
+const [trainIdxSet, testIdxSet] = mnist.getTrainTestSet(6000);
 console.log({lenTrain: trainIdxSet.length, lenTest: testIdxSet.length});
+
 const doBatchSampleGenerator = (batchSize)=>{return mnist.getSampleGenerator(trainIdxSet, batchSize);};
-causalNet.train(doBatchSampleGenerator, 2);
+causalNet.train(doBatchSampleGenerator, 50);

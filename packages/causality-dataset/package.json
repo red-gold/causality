@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@babel/core": "^7.2.0",
+    "async-to-sync": "^1.0.7",
     "babel-loader": "^8.0.4",
-    "brfs": "^2.0.1",
     "eslint": "^5.10.0",
     "is-node": "^1.0.2",
     "ramda": "^0.26.1",

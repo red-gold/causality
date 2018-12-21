@@ -1,10 +1,12 @@
-var data = require('causal-net-dataset');
-const {MemoryCache} = require('causal-net-memcache');
-console.log({data});
-let mnist = new data.MnistDataset();
+const { MnistDataset } = require('causal-net-dataset');
+const { MemoryCache } = require('causal-net-memcache');
+
+let mnist = new MnistDataset();
 let memoryCache = new MemoryCache();
-console.log({mnist});
-mnist.loadDatasetSync(memoryCache);
+mnist.fetchDataset();
+console.log('this is the text');
+// mnist.makeSummary();
+// mnist.loadDatasetSync(memoryCache);
 
 const [trainIdxSet, testIdxSet] = mnist.getTrainTestSet(99);
 console.log({lenTrain: trainIdxSet.length, lenTest: testIdxSet.length});

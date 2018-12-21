@@ -68,8 +68,8 @@ export default class CausalNet{
         let loss = [], averageLoss = [];
         const optimizer = T.train.adam(lr);
         for(let epochIdx of F.range(numEpochs)){
-            console.log({epochIdx, averageLoss, time: new Date().toISOString(), start: start.toISOString(),
-                         elapse: (new Date() - start)/1000});
+            console.log({epochIdx, averageLoss, time: new Date().toISOString(), 
+                         start: start.toISOString(), elapse: (new Date() - start)/1000});
             const sampleGenerator = doSampleGenerator(batchSize);
             for(let [batchData, batchLabels] of sampleGenerator){
                 // console.log({dlen: batchData.length, llen: batchLabels.length});

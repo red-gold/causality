@@ -8,7 +8,6 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --configure webpack.config.js",
-    "test": "jest",
     "build:watch": "webpack --watch --info-verbosity verbose"
   },
   "dependencies": {
@@ -16,9 +15,14 @@
     "babel-loader": "^8.0.4",
     "brfs": "^2.0.1",
     "eslint": "^5.10.0",
+    "fetch": "^1.1.0",
     "is-node": "^1.0.2",
+    "level": "^4.0.0",
+    "level-browserify": "^2.0.0",
+    "level-fs": "^0.11.2",
     "pngjs": "^3.3.3",
     "ramda": "^0.26.1",
+    "transform-loader": "^0.2.4",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
     "webpack-node-externals": "^1.7.2"
@@ -32,6 +36,7 @@
     "browserify": "^16.2.3",
     "eslint-loader": "^2.1.1",
     "jest": "^23.6.0",
-    "transform-loader": "^0.2.4"
+    "transform-loader": "^0.2.4",
+    "webpack-merge": "^4.1.5"
   }
 }
