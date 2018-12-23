@@ -33,7 +33,7 @@ export default class IO{
 
     readFile(filePath){
         console.log({filePath});
-        return fs.readFile(filePath);
+        return fs.get(filePath);
     }
 
     writeFile(filePath, data){

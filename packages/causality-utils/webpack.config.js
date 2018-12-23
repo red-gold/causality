@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const webpackMerge = require('webpack-merge');
+// const S = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
 const path = require('path');
 const LibName = 'causal-net-utils';
@@ -24,7 +24,10 @@ const NodeConfig = {
 	},
 	resolve: {
 		modules: [path.resolve("./src"), 'node_modules']
-	},
+  },
+  optimization: {
+    minimize: false
+  },
 	module:{
     rules: [
       {
