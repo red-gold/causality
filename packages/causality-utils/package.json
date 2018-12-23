@@ -7,15 +7,31 @@
   "author": "nguyenhuynh200188@gmail.com",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --configure webpack.config.js",
+    "prebuild": "rimraf dist",
+    "start": "webpack-dev-server --open --config webpack.dev.babel.js",
+    "build": "webpack --config webpack.prod.babel.js",
     "build:watch": "webpack --watch --info-verbosity verbose"
   },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env"
+      ]
+    ],
+    "plugins": [
+      "@babel/plugin-transform-runtime",
+      "@babel/plugin-proposal-object-rest-spread",
+      "@babel/plugin-syntax-dynamic-import"
+    ]
+  },
   "dependencies": {
-    "@babel/core": "^7.2.0",
-    "babel-loader": "^8.0.4",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/runtime": "^7.2.0",
     "brfs": "^2.0.1",
-    "eslint": "^5.10.0",
+    "eslint": "^5.11.0",
+    "eslint-loader": "^2.1.1",
     "fetch": "^1.1.0",
+    "html-webpack-plugin": "^3.2.0",
     "is-node": "^1.0.2",
     "level": "^4.0.0",
     "level-browserify": "^2.0.0",
@@ -23,20 +39,25 @@
     "pngjs": "^3.3.3",
     "ramda": "^0.26.1",
     "transform-loader": "^0.2.4",
-    "webpack": "^4.27.1",
-    "webpack-cli": "^3.1.2",
-    "webpack-node-externals": "^1.7.2"
+    "uglifyjs-webpack-plugin": "^2.1.0",
+    "webpack": "^4.28.2",
+    "webpack-cli": "3.1.2",
+    "webpack-merge": "^4.1.5"
   },
   "devDependencies": {
-    "@webpack-cli/init": "^0.1.2",
-    "babel-core": "^6.26.3",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/register": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-loader": "^8.0.4",
-    "babel-plugin-syntax-dynamic-import": "^6.18.0",
-    "babel-preset-env": "^1.7.0",
     "browserify": "^16.2.3",
     "eslint-loader": "^2.1.1",
-    "jest": "^23.6.0",
+    "regenerator-runtime": "^0.13.1",
     "transform-loader": "^0.2.4",
+    "webpack-dev-server": "^3.1.13",
     "webpack-merge": "^4.1.5"
   }
 }
