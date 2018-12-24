@@ -1,11 +1,13 @@
-import {FetchStream, fetchUrl} from './fetch';
+import {default as fetch} from './fetch';
 import {default as  fs} from './fs';
+import ats from 'async-to-sync';
 import * as process from 'process';
-import {PNG} from 'pngjs';
+import { PNG } from 'pngjs3/browser';
 
 export default class IO{
     constructor(logger=null){
-        this.logger = logger;
+        // this.logger = logger.from(logger);
+        this.logger = console;
     }   
 
     get CoreFs(){
@@ -13,8 +15,8 @@ export default class IO{
     }
     
     PIDExport(){
-        if(process.pid) {
-            console.log('This process is your pid ' + process.pid);
+        if(process && process.pid) {
+            this.logger.log('This process is your pid ' + process.pid);
             fs.writeFileSync('./process.pid', process.pid);
         }
     }
@@ -32,15 +34,16 @@ export default class IO{
     }
 
     readFile(filePath){
+        this.logger.log({filePath});
         return fs.get(filePath);
+    }
+    
+    readFileSync(filePath){
+        return ats(this.readFile)(filePath);
     }
 
     writeFile(filePath, data){
-        return fs.put(filePath, data);
-    }
-
-    readFileSync(filePath){
-        return fs.readFileSync(filePath);
+        return ats(fs.put)(filePath, data);
     }
     /**
      * @param  {} filePath
@@ -48,16 +51,35 @@ export default class IO{
      * 
      */
     writeFileSync(filePath, data){
-        return fs.writeFileSync(filePath, data);
+        return ats(this.writeFile)(filePath, data);
+    }
+    /**
+     * @param  {} url
+     * @param  {} convertFn=(content)=>content
+     */
+    async fetchFile(url, convertFn=(content)=>content){
+        this.logger.log({url});
+        return await fetch(url).then(response=>{
+            if(response.status >= 400){
+                throw Error('bad response');
+            }
+            return response.arrayBuffer().then(text=>convertFn(text));
+        });
     }
 
-    fetch(url){
-        return fetchUrl(url);
+    async fetchPNGFile(url){
+        this.logger.log({url});
+        const ConvertFn = (text)=> {
+            console.log({text});
+            console.log({text: text.length, base64: Buffer.from(text).toString('base64').length});
+            return PNG.sync.read(text);
+        };
+        return await this.fetchFile(url, ConvertFn);
     }
 
     fetchToFile(url, filePath){
-        console.log({url, filePath});
+        this.logger.log({url, filePath});
         const out = fs.createWriteStream(filePath);
-        return new FetchStream(url).pipe(out);
+        return new fetch(url).pipe(out);
     }
 }

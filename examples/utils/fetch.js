@@ -1,16 +1,14 @@
-const {Pipe, IO} = require('causal-net-utils');
+const {Pipe, IO, Log} = require('causal-net-utils');
 const I = new IO();
 let url = 'https://avatars3.githubusercontent.com/u/43268620?s=200&v=4';
-// I.fetchFile(url)
-//     .then((content)=>{
-//         console.log({content});
-//     });
+I.fetchFile(url)
+    .then((content)=>{
+        console.log({clen: content.length});
+    });
 I.fetchPNGFile(url)
     .then((content)=>{
-        console.log({content});
+        console.log({len: content.length});
     })
     .catch(err=>{
         console.error(err);
     });
-
-
