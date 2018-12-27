@@ -5,10 +5,3 @@ I.fetchFile(url)
     .then((content)=>{
         console.log({clen: content.length});
     });
-I.fetchPNGFile(url)
-    .then((content)=>{
-        console.log({len: content.length});
-    })
-    .catch(err=>{
-        console.error(err);
-    });

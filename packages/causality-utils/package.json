@@ -2,8 +2,11 @@
   "name": "causal-net-utils",
   "version": "0.0.2",
   "description": "this is utils function",
-  "main": "dist/causal-net-utils.js",
+  "main": "dist/CausalNetUtils.node.js",
   "module": "src/index.js",
+  "browser": {
+    "dist/CausalNetUtils.node.js": "dist/CausalNetUtils.web.js"
+  },
   "author": "nguyenhuynh200188@gmail.com",
   "license": "MIT",
   "scripts": {
@@ -18,7 +21,8 @@
     "level-browserify": "^2.0.0",
     "platform": "^1.3.5",
     "pngjs3": "^4.0.0",
-    "ramda": "^0.26.1"
+    "ramda": "^0.26.1",
+    "string-arraybuffer": "^1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
