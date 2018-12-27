@@ -1,23 +1,14 @@
-
 import { join, resolve } from 'path';
-
+import Bundle from './bundle.json';
 const include = join(__dirname, 'src');
 
 export default {
-  entry: ['babel-polyfill', './src/index.js'],
-  output: {
-    path: resolve(__dirname, 'dist'),
-    publicPath: '/',
-    libraryTarget: 'umd',
-    filename: 'causal-net-utils.js',
-    library: 'causalNetUtils',
-    globalObject: 'this'
+  entry: {
+    [Bundle.main]: './src/index.js',
+    [Bundle.min]: './src/index.js',
   },
   mode: 'development',
   devtool: 'inline-source-map',
-  optimization: {
-		minimize: false
-  },
   module: {
     rules: [
       {
@@ -28,10 +19,9 @@ export default {
       },
       {
         test: /\.js$/,
+        exclude: /node_modules/,
         loader: 'babel-loader',
-        include,
-      },
+      }
     ],
-  },
-  externals: ['cross-fetch', 'level-browserify']
+  }
 };

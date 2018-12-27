@@ -32,7 +32,7 @@ export default class Layer extends Tensor{
         const SetOrInit = (mainValue, subVal)=>{
             let keys = R.keys(mainValue);
             let keyMainValSubVal = R.map((k)=> [k, R.prop(k, mainValue), R.propOr(null, k, subVal)], keys);
-            const mapping = ([key, mainVal, subVal])=>{
+            const ValMapping = ([key, mainVal, subVal])=>{
                 if(F.isParameter(mainVal)){
                     const paramShape = mainVal;
                     if(R.isNil(subVal)){
@@ -46,7 +46,7 @@ export default class Layer extends Tensor{
                     return [key, SetOrInit(mainVal, subVal)];
                 }
             };
-            return R.fromPairs(R.map(mapping, keyMainValSubVal));
+            return R.fromPairs(R.map(ValMapping, keyMainValSubVal));
         };
         return SetOrInit(pipeParams, netParams);
     }

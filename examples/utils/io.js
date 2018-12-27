@@ -1,16 +1,14 @@
-const {Pipe, IO} = require('causal-net-utils');
+const {Pipe, IO, Log} = require('causal-net-utils');
 const I = new IO();
-let url = 'https://avatars3.githubusercontent.com/u/43268620?s=200&v=4';
-// I.fetchFile(url)
-//     .then((content)=>{
-//         console.log({content});
-//     });
-I.fetchPNGFile(url)
-    .then((content)=>{
-        console.log({content});
-    })
-    .catch(err=>{
-        console.error(err);
-    });
+const asyncTest = async ()=>{
+    const rres = await I.writeFile('temp','12345');
+    const wres = await I.readFile('temp');
+    console.log(wres);
+}
+asyncTest().then(res=>{
+    const rres = I.writeFileSync('temp','12345678');
+    const wres = I.readFileSync('temp');
+    console.log({rres, wres});
+})
 
 

@@ -1,4 +1,4 @@
-import {fetch as ft} from 'cross-fetch';
+import fetch from 'cross-fetch';
 // const ReadableStream = (responseBody) => {
 //     const reader = responseBody.getReader();
 //     const rs = new Readable();
@@ -19,4 +19,4 @@ import {fetch as ft} from 'cross-fetch';
 //     return body;
 //     // return ReadableStream(body);
 // }
-export default ft;
+export default fetch;

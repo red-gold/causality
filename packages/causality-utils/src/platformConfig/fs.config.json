@@ -1,0 +1,4 @@
+{
+    "web":{"root":"db"},
+    "node":{"root":"db"}
+}

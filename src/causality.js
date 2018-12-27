@@ -7,12 +7,12 @@ export default class CausalNet{
      * @param  {} netConfig
      * @param  {} netParams
      */
-    constructor( netConfig, netParams=null ){
+    constructor( netConfig, netParams=null, logger=null ){
         this.L = new Layer();
         this.F = new Function();
         this.T = this.L.CoreTs;
         this.R = this.F.CoreFn;
-        this.IO = new IO();
+        this.I = new IO();
         this.HyperParameters = this.F.getHyperParameter(netConfig);
         this.BasePipeline = this.F.getPipeline(netConfig);
         this.netParams = this.L.setOrInitParams(this.BasePipeline, netParams);
@@ -109,10 +109,10 @@ export default class CausalNet{
     
     saveParamsSync(fileName='./save.model'){
         const params = this.getParamsSync();
-        return this.IO.writeSync(fileName, JSON.stringify(params));
+        return this.I.writeSync(fileName, JSON.stringify(params));
     }
     readParamsSync(fileName){
-        const params = JSON.parse(this.IO.readSync(fileName));
+        const params = JSON.parse(this.I.readSync(fileName));
         this.netParams = this.L.setOrInitParams(this.BasePipeline, params);
     }
 }
