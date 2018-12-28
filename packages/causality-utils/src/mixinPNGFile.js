@@ -1,5 +1,6 @@
 import { PNG } from 'pngjs3';
 import {default as fetch} from './fetch';
+const stream = require('stream-browserify');
 const {str2ab, ab2str} = require('string-arraybuffer');
 
 const PNGFileMixins = (FileSystemClass)=> class extends FileSystemClass{
@@ -23,8 +24,9 @@ const PNGFileMixins = (FileSystemClass)=> class extends FileSystemClass{
     async fetchPNGFile(url, streamFn=null){
         return await new Promise(async (resolve, reject)=>{
             const response = await fetch(url);
-            let streamReader = response.body.getReader!==undefined?response.body.getReader():response.body;
-            streamReader.pipe(new PNG()).on('parsed', function() {
+            let streamReader = response.body;
+            let pipe = stream.pipeline(streamReader, new PNG());
+            pipe.on('parsed', function() {
                 let procData = (streamFn)?streamFn(this.data):this.data;
                 resolve(procData);
             });
