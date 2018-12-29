@@ -4,9 +4,7 @@
   "description": "this is utils function",
   "main": "dist/CausalNetUtils.node.js",
   "module": "dist/CausalNetUtils.node.js",
-  "browser": {
-    "dist/CausalNetUtils.web.js": "dist/CausalNetUtils.web.js"
-  },
+  "browser": "dist/CausalNetUtils.web.js",
   "author": "nguyenhuynh200188@gmail.com",
   "license": "MIT",
   "scripts": {
@@ -17,6 +15,7 @@
     "build:prod": "webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
+    "browserify": "^16.2.3",
     "cross-fetch": "^3.0.0",
     "eslint": "^5.11.1",
     "level-browserify": "^2.0.0",
@@ -37,6 +36,7 @@
     "@babel/register": "^7.0.0",
     "@babel/types": "^7.2.2",
     "babel-loader": "^8.0.4",
+    "browserify": "^16.2.3",
     "eslint-loader": "^2.1.1",
     "html-webpack-plugin": "^3.2.0",
     "transform-loader": "^0.2.4",

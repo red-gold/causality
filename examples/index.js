@@ -1,9 +1,4 @@
-import { resolve } from 'url';
-
-// var  fetch  = require('cross-fetch');
 import { PNG } from 'pngjs3/browser';
-// var Readable = require('readable-stream');
-// import fetchStream from 'fetch-readablestream';
 const {
     Readable,
     Writable,
