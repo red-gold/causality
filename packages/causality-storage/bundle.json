@@ -1,4 +1,4 @@
 { 
-    "main": "CausalNetUtils", 
-    "min": "CausalNetUtils.min"
+    "main": "@causalNet/storage", 
+    "min": "@causalNet/storage.min"
 }

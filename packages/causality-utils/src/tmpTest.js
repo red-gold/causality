@@ -1,12 +1,4 @@
 import { PNG } from 'pngjs3';
-const {
-    Readable,
-    Writable,
-    Transform,
-    Duplex,
-    pipeline,
-    finished 
-  } = require('readable-stream');
 const fn = async ()=>{
     const url = 'https://avatars3.githubusercontent.com/u/43268620?s=200&v=4';
     console.log({url});
@@ -26,7 +18,7 @@ const fn = async ()=>{
                         // When no more data needs to be consumed, close the stream
                         if (done) {
                             controller.close();
-                            resolve(buffer);
+                            resolve(Buffer.from(buffer[0]));
                             return;
                         }
                         console.log({value});
@@ -42,7 +34,7 @@ const fn = async ()=>{
         });
     }; 
     let data = await stream();
-    let mypng = PNG.sync.read(data[0],{});
+    let mypng = PNG.sync.read(data,{});
     console.log({data, mypngL: mypng.data.length});
 };
 fn();

@@ -15,6 +15,8 @@ const WebConfig = merge(common, {
   plugins: [
     new HtmlWebpackPlugin({
       title: Bundle.main,
+      chunks: [Bundle.name + '.web.js'],
+      template: './template/index.html'
     })
   ]  
 });
