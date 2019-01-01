@@ -1,64 +1,41 @@
-//TODO: enhance this code, this code is not intent for release
-if(typeof window !== undefined){
-    var streamData = async (url, processfn)=>{
-        return new Promise((resolve, reject)=>{
-        let buffer = [];
-        return fetch(url).then(response => response.body)
-            .then(body => {
-                const reader = body.getReader();
-                return new ReadableStream({
-                    start(controller) {
-                    return pump();
-                    function pump() {
-                        return reader.read().then(({ done, value }) => {
-                        // When no more data needs to be consumed, close the stream
-                            if (done) {
-                                controller.close();
-                                processFun(chunk, done);
-                                resolve(processFun);
-                                return;
-                            }
-                            console.log({value});
-                            // Enqueue the next data chunk into our target stream
-                            buffer.push(value);
-                            controller.enqueue(value);
-                            return pump();
-                        });
-                        }
-                    }
-                });
-            });
-        });
-    };
+import fetch  from 'cross-fetch';
+import fetchStream from 'fetch-readablestream';
 
-    var fetchFile = async (url)=>{
-        return new Promise((resolve, reject)=>{
-
-        });
+import {default as Stream} from './stream';
+if(typeof window !== 'undefined'){
+    var streamData = fetchStream;   
+    var streamData = async (url)=>{
+        let response = await fetchStream(url);
+        const streamReader = response.body.getReader();
+        let reader = Stream.makeReadable();
+        let { value, done } = await streamReader.read();
+        if (done) {
+            reader.close();
+        }
+        else{
+            reader.push(value);
+        }
+        return reader;
     };
 }
 else{
-    var cfesh = require('cross-fetch');
-    let streamReader = new PNG();
-    var streamData = async (url, streamReader) => {
-        return await new Promise(async (resolve, reject)=>{
-            const response = await fetch(url);
-            let streamReader = response.body;
-            let pipe = stream.pipeline(streamReader, streamReader);
-            pipe.on('parsed', function() {
-                let procData = (streamFn)?streamFn(this.data):this.data;
-                resolve(procData);
-            });
-        });
-    };
-    var fetchData = async (url)=>{
-        return new Promise(async (resolve, reject)=>{
-            let response = await fetch(url);
-            if (response.status >= 400) {
-                reject("Bad response from server");
-            }
-            resolve(response.text());
-        });
+    
+    var streamData = async (url) => {
+        const response = await fetch(url);
+        if (response.status >= 400) {
+            throw Error("Bad response from server");
+        }
+        return response.body;
     };
 }
+var fetchData = async (url)=>{
+    return new Promise(async (resolve, reject)=>{
+        let response = await fetch(url);
+        if (response.status >= 400) {
+            reject("Bad response from server");
+        }
+        resolve(response.text());
+    });
+};
+
 export {fetchData, streamData};

@@ -1,24 +1,22 @@
-const {Pipe, IO, Log} = require('causal-net-utils');
-const I = new IO();
-let url = 'https://avatars3.githubusercontent.com/u/43268620?s=200&v=4';
-const asyncTest = async ()=>{
-    let stm = await I.streamFile(url,'avatar');
-    let content = await I.readFile('avatar');
-    console.log({len: content.length});
-}
-var  fetch  = require('cross-fetch');
-var { PNG } = require('pngjs3');
-const pumpify = require('pumpify');
-(async ()=>{
-    console.log({url});
-    const response = await fetch(url);
-    let streamReader = response.body;
-    let png = new PNG();
-    png.on('parsed', function() {
-        // let procData = (streamFn)?streamFn(this.data):this.data;
-        console.log({len: this.data.length});
-        resolve(this.data);
-    });
-    pumpify(streamReader, png, ()=>{});
-    // streamReader.pipe(png);
-})();
+const {Stream} = require('causal-net.utils');
+const ST = new Stream();
+let reader = ST.makeReadable();
+
+const TranformFn = (chunkData, chunkEncoding, afterTransformFn) =>{
+    let content = (chunkData.x+1.5).toString();
+    let event = null;
+    afterTransformFn(event, content);
+};
+let transformer = ST.makeTransform(TranformFn);
+
+const WriteFn = (chunkData, chunkEncoding, callback) =>{
+    console.log(chunkData.toString(), chunkEncoding);
+    callback();
+};
+let writer = ST.makeWritable(WriteFn);
+
+reader.pipe(transformer).pipe(writer);
+
+setInterval(() => {
+    reader.push({ x: Math.random() });
+}, 100);

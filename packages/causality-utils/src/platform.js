@@ -7,7 +7,7 @@ export default class Platform{
     getConfig(platformConfigure){
         throw Error('platform not found in configure');
     }
-    PIDExport(){
+    get PID(){
         if(process && process.pid) {
             return process.pid;
         }
