@@ -12,8 +12,7 @@
     "start:node": "webpack --watch --info-verbosity verbose --config webpack.node.babel.js",
     "build:clean": "rimraf dist",
     "build:dev": "webpack --config webpack.dev.babel.js",
-    "build:prod": "webpack --config webpack.prod.babel.js",
-    "run-example": "babel-node"
+    "build:prod": "webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
     "browserify": "^16.2.3",

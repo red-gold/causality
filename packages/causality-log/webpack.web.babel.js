@@ -9,22 +9,14 @@ const WebConfig = merge(common, {
     path: resolve(__dirname, 'dist'),
     libraryTarget: 'umd',
     filename: '[name].web.js',
-    publicPath: 'examples',
     library: Bundle.main,
     globalObject: 'this'
   },
   plugins: [
-    // new HtmlWebpackPlugin({
-    //   chunks: [Bundle.main + '.web.js'],
-    //   title: Bundle.main,
-    // })
     new HtmlWebpackPlugin({
-      title: 'examples',
-      filename:'examples.html',
-      chunks: [Bundle.main + '.web.js'],
-      template:'./examples/example.html',
-      inject: 'head',
-      assets:['/examples/']
+      title: Bundle.main,
+      chunks: [Bundle.name + '.web.js'],
+      template: './template/index.html'
     })
   ]  
 });

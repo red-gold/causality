@@ -1,0 +1,4 @@
+{ 
+    "main": "@causalNet/log", 
+    "min": "@causalNet/log.min"
+}

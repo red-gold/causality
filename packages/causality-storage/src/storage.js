@@ -1,6 +1,6 @@
 // import {default as fetch} from './fetch';
 import {default as FileSystem} from './fs';
-import {default as PNGFileMixins} from './mixinPNGFile';
+import {default as PNGFileMixins} from './PNGFileMixins';
 
 export default class IO extends PNGFileMixins(FileSystem){
     constructor(logger=null){

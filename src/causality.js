@@ -1,5 +1,5 @@
-import {Layer} from 'causal-net-core';
-import {IO} from 'causal-net-utils';
+import {Layer} from 'causal-net.core';
+import {IO} from 'causal-net.utils';
 import {default as Function} from './function';
 
 export default class CausalNet{
@@ -57,12 +57,12 @@ export default class CausalNet{
         return loss;
     };
     /**
-     * @param  {} doSampleGenerator
+     * @param  {} SampleGeneratorFn
      * @param  {} batchSize
      * @param  {} numEpochs=2
      * @param  {} lr=0.01
      */
-    train(doSampleGenerator, batchSize, numEpochs = 2, lr=0.01){
+    train(SampleGeneratorFn, batchSize, numEpochs = 2, lr=0.01){
         const T = this.T, F = this.F, R = this.R;
         const start = new Date();
         let loss = [], averageLoss = [];
@@ -70,7 +70,7 @@ export default class CausalNet{
         for(let epochIdx of F.range(numEpochs)){
             console.log({epochIdx, averageLoss, time: new Date().toISOString(), 
                          start: start.toISOString(), elapse: (new Date() - start)/1000});
-            const sampleGenerator = doSampleGenerator(batchSize);
+            const sampleGenerator = SampleGeneratorFn(batchSize);
             for(let [batchData, batchLabels] of sampleGenerator){
                 // console.log({dlen: batchData.length, llen: batchLabels.length});
                 optimizer.minimize(()=>{
@@ -107,9 +107,9 @@ export default class CausalNet{
         return getParams(this.netParams);
     }
     
-    saveParamsSync(fileName='./save.model'){
+    saveParams(fileName='./save.model'){
         const params = this.getParamsSync();
-        return this.I.writeSync(fileName, JSON.stringify(params));
+        return this.I.writeFile(fileName, JSON.stringify(params));
     }
     readParamsSync(fileName){
         const params = JSON.parse(this.I.readSync(fileName));

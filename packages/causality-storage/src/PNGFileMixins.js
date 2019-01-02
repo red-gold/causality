@@ -1,6 +1,3 @@
-// import { PNG } from 'pngjs3';
-// import {default as fetch} from './fetch';
-// const stream = require('stream-browserify');
 const {str2ab, ab2str} = require('string-arraybuffer');
 
 const PNGFileMixins = (StorageClass)=> class extends StorageClass{

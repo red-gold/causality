@@ -1,28 +1,28 @@
-import st from 'readable-stream';
+import stream from 'readable-stream';
 export default class Stream{
-    constructor(logger=null){
-        this.ST = st;
+    constructor(){
+        this.stream = stream;
     }
     get coreStream(){
-        return this.ST;
+        return this.stream;
     }
     static makeReadable(readFn=()=>{}){
-        let reader = st.Readable({objectMode: true});
+        let reader = stream.Readable({objectMode: true});
         reader._read = readFn;
         return reader;
     }
     static wrapReadable(readableObj){
-        let reader = st.Readable();
+        let reader = stream.Readable();
         reader.wrap(readableObj);
         return reader;
     }
     static makeWritable(writeFn){
-        let writer = st.Writable();
+        let writer = stream.Writable();
         writer._write = writeFn;
         return writer;
     }
     static makeTransform(tranformFn){
-        let transformer = st.Transform({objectMode: true});
+        let transformer = stream.Transform({objectMode: true});
         transformer._transform = tranformFn;
         return transformer;
     }
