@@ -1,9 +1,8 @@
 import fetch  from 'cross-fetch';
 import fetchStream from 'fetch-readablestream';
-
 import {default as Stream} from './stream';
-if(typeof window !== 'undefined'){
-    var streamData = fetchStream;   
+
+if(typeof window !== 'undefined'){   
     var streamData = async (url)=>{
         let response = await fetchStream(url);
         const streamReader = response.body.getReader();
