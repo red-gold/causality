@@ -1,5 +1,5 @@
 {
-  "name": "causal-net-dataset",
+  "name": "causal-net.datasets",
   "version": "0.0.3",
   "description": "dataset collection",
   "main": "dist/causal-net-dataset.js",

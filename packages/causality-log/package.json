@@ -1,6 +1,6 @@
 {
   "name": "causal-net.log",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "this is log class",
   "main": "dist/@causalNet/log.node.js",
   "module": "dist/@causalNet/log.node.js",
@@ -28,7 +28,6 @@
     "babel-loader": "^8.0.4",
     "eslint-loader": "^2.1.1",
     "html-webpack-plugin": "^3.2.0",
-    "transform-loader": "^0.2.4",
     "webpack": "^4.28.2",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.13",

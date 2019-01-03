@@ -1,15 +1,15 @@
 const LogNodeMixins = (LogClass)=> class extends LogClass{
-    connect(){
-
+    connect(channel){
+        //nothing
     }
     log(message){
-        message = this.prefixWraper(message);
+        console.log(this.prefix.join('/'));
         console.log(message);
     }
     trace(message){
-        message = this.prefixWraper(message);
+        console.log(this.prefix.join('/'));
         console.trace(message);
     }
-}
+};
 
 export default LogNodeMixins;

@@ -5,27 +5,24 @@ import common from './webpack.common.babel';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const WebConfig = merge(common, {
+  entry: {
+    examples: ['@babel/polyfill', './examples/examples.js'],
+  },
   output: {
     path: resolve(__dirname, 'dist'),
     libraryTarget: 'umd',
     filename: '[name].web.js',
-    publicPath: 'examples',
     library: Bundle.main,
     globalObject: 'this'
   },
   plugins: [
-    // new HtmlWebpackPlugin({
-    //   chunks: [Bundle.main + '.web.js'],
-    //   title: Bundle.main,
-    // })
     new HtmlWebpackPlugin({
-      title: 'examples',
-      filename:'examples.html',
-      chunks: [Bundle.main + '.web.js'],
-      template:'./examples/example.html',
-      inject: 'head',
-      assets:['/examples/']
+      title: Bundle.main,
+      chunks: ['examples'],
+      filename: 'index.html',
+      template: './examples/index.html'
     })
   ]  
 });
+
 export default WebConfig;

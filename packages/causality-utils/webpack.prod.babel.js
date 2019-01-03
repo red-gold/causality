@@ -6,5 +6,6 @@ NodeConfig.devtool = 'source-map',
 NodeConfig.plugins = [new UglifyJSPlugin({sourceMap: true, include: /\.min\.node\.js$/})];
 WebConfig.mode  = 'production';
 WebConfig.devtool = 'source-map',
+delete WebConfig.entry.examples;
 WebConfig.plugins = [new UglifyJSPlugin({sourceMap: true, include: /\.min\.web\.js$/})];
 module.exports = [NodeConfig, WebConfig];

@@ -14,7 +14,7 @@ export default {
       {
         enforce: 'pre',
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/,/dist/],
         loader: 'eslint-loader',
       },
       {

@@ -1,0 +1,4 @@
+{ 
+    "main": "@causalNet/memcache", 
+    "min": "@causalNet/memcache.min"
+}
