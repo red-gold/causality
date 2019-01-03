@@ -1,5 +1,5 @@
 {
-  "name": "causal-net-utils",
+  "name": "causal-net.utils",
   "version": "0.0.5",
   "description": "this is utils function",
   "main": "dist/@causalNet/utils.node.js",

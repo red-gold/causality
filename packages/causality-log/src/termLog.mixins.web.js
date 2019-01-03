@@ -5,7 +5,7 @@ const WebNodeMixins = (LogClass)=> class extends LogClass{
         this.documentEl = documentEl.getElementsByTagName("UL")[0];
     }
     log(message){
-        if(!this.documentEl){
+        if(!this.documentEl || !this.documentEl.appendChild){
             this.connect();
         }
         var node = document.createElement("LI");       

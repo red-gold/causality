@@ -15,7 +15,9 @@
     "build:prod": "webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
-    "level-browserify": "^2.0.0",
+    "level-js": "^4.0.0",
+    "leveldown": "^4.0.1",
+    "levelup": "^4.0.0",
     "string-arraybuffer": "^1.0.4"
   },
   "devDependencies": {
@@ -34,6 +36,7 @@
     "webpack": "^4.28.2",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.13",
-    "webpack-merge": "^4.1.5"
+    "webpack-merge": "^4.1.5",
+    "webpack-node-externals": "^1.7.2"
   }
 }

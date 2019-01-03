@@ -1,8 +1,0 @@
-{
-  "name": "causal-net-model",
-  "version": "0.0.2",
-  "description": "this is collection of model",
-  "main": "index.js",
-  "author": "nguyenhuynh200188@gmail.com",
-  "license": "MIT"
-}

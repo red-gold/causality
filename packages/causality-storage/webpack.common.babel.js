@@ -1,5 +1,6 @@
 import { join, resolve } from 'path';
 import Bundle from './bundle.json';
+import nodeExternals from 'webpack-node-externals';
 const include = join(__dirname, 'src');
 
 export default {
@@ -14,7 +15,7 @@ export default {
       {
         enforce: 'pre',
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /dist/],
         loader: 'eslint-loader',
       },
       {
@@ -23,5 +24,7 @@ export default {
         loader: 'babel-loader',
       }
     ],
-  }
+  },
+  externals: [nodeExternals(), 'leveldown']
+
 };

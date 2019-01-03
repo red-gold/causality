@@ -1,4 +1,4 @@
-import {Stream} from 'causal-net-utils';
+import {Stream} from 'causal-net.utils';
 
 let reader = Stream.makeReadable();
 

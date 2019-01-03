@@ -1,4 +1,4 @@
-const {str2ab, ab2str} = require('string-arraybuffer');
+import {Platform, Fetch} from 'causal-net.utils';
 
 const PNGFileMixins = (StorageClass)=> class extends StorageClass{
  
