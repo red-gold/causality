@@ -1,0 +1,4 @@
+{ 
+    "main": "@causalNet/preprocessing", 
+    "min": "@causalNet/preprocessing.min"
+}

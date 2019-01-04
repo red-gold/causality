@@ -1,36 +1,39 @@
 {
   "name": "causal-net.datasets",
-  "version": "0.0.3",
-  "description": "dataset collection",
-  "main": "dist/causal-net-dataset.js",
-  "module": "src/index.js",
+  "version": "0.0.5",
+  "description": "the datasets class",
+  "main": "dist/@causalNet/datasets.node.js",
+  "browser": "dist/@causalNet/datasets.web.js",
   "author": "nguyenhuynh200188@gmail.com",
   "license": "MIT",
+  "module": "src/index.js",
   "scripts": {
-    "build": "webpack --configure webpack.config.js",
-    "test": "jest",
-    "build:watch": "webpack --watch --info-verbosity verbose --fix"
+    "start:web": "webpack-dev-server --open --config webpack.web.babel.js",
+    "start:node": "webpack --watch --info-verbosity verbose --config webpack.node.babel.js",
+    "build:clean": "rimraf dist",
+    "build:dev": "webpack --config webpack.dev.babel.js",
+    "build:prod": "webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
-    "@babel/core": "^7.2.0",
-    "async-to-sync": "^1.0.7",
-    "babel-loader": "^8.0.4",
-    "eslint": "^5.10.0",
-    "is-node": "^1.0.2",
-    "ramda": "^0.26.1",
-    "webpack": "^4.27.1",
-    "webpack-cli": "^3.1.2",
-    "webpack-node-externals": "^1.7.2"
+    "@tensorflow/tfjs": "^0.14.1",
+    "@tensorflow/tfjs-node": "^0.2.1"
   },
   "devDependencies": {
-    "@webpack-cli/init": "^0.1.2",
-    "babel-core": "^6.26.3",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/register": "^7.0.0",
+    "@babel/types": "^7.2.2",
     "babel-loader": "^8.0.4",
-    "babel-plugin-syntax-dynamic-import": "^6.18.0",
-    "babel-preset-env": "^1.7.0",
-    "browserify": "^16.2.3",
     "eslint-loader": "^2.1.1",
-    "jest": "^23.6.0",
-    "transform-loader": "^0.2.4"
+    "html-webpack-plugin": "^3.2.0",
+    "transform-loader": "^0.2.4",
+    "webpack": "^4.28.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.13",
+    "webpack-merge": "^4.1.5"
   }
 }

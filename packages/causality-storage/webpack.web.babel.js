@@ -22,7 +22,8 @@ const WebConfig = merge(common, {
       filename: 'index.html',
       template: './examples/index.html'
     })
-  ]  
+  ],
+  externals: ['leveldown']  
 });
 
 export default WebConfig;

@@ -1,1 +1,1 @@
-export {default as MnistDataset} from './MNIST.dataset';
+export {default as MNIST} from './MNIST.ImgDataset';

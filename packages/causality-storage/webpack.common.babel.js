@@ -1,6 +1,5 @@
 import { join, resolve } from 'path';
 import Bundle from './bundle.json';
-import nodeExternals from 'webpack-node-externals';
 const include = join(__dirname, 'src');
 
 export default {
@@ -25,6 +24,6 @@ export default {
       }
     ],
   },
-  externals: [nodeExternals(), 'leveldown']
+  
 
 };

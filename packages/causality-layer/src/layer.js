@@ -1,10 +1,10 @@
 import {default as Function} from './function';
-import {default as Tensor} from './tensor';
-export default class Layer extends Tensor{
+import {Tensor as BaseTensor} from 'causal-net.core';
+export default class Layer extends BaseTensor{
     constructor(){
         super();
         this.F = new Function();
-        this.R = this.F.CoreFn;
+        this.R = this.F.CoreFunction;
     }   
     
     layer(value, layerConfigure, layerParameters, debug=()=>{}){
@@ -25,7 +25,7 @@ export default class Layer extends Tensor{
         return {[Name]: result, trace};
     }
 
-    setOrInitParams(pipeline, netParams, debug=()=>{}){
+    setOrInitParams(pipeline, netParams){
         const R = this.R, T = this.T, F = this.F;
         let pipeParams = R.fromPairs(R.filter(([k,v])=>v !== undefined,
                                 R.map(R.__, pipeline)(p=>[p.Name, p.Parameters])));

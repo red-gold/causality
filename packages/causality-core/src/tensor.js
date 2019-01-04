@@ -1,11 +1,10 @@
-export default class CoreTensor{
-    constructor(config={Backend:'tf'}){
+export default class Tensor{
+    constructor(){
         var tf = require('@tensorflow/tfjs');
-        require('@tensorflow/tfjs-node-gpu');
-        // require('@tensorflow/tfjs-node');
+        // require('@tensorflow/tfjs-node-gpu');
         this.T = tf;
     }
-    get CoreTs(){
+    get CoreTensor(){
         return this.T;
     }
 }

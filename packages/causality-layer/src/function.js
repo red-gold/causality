@@ -1,12 +1,5 @@
-import * as R from 'ramda';
-export default class Function{
-    constructor(){
-        this.R = R;
-    }
-
-    get CoreFn(){
-        return this.R;
-    }
+import {Function as BaseFunction} from 'causal-net.core';
+export default class Function extends BaseFunction{
     
     getTraverse(){
         return R.curry(function(keys, item){

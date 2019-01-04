@@ -1,8 +1,0 @@
-{
-  "name": "causal-net-preprocessing",
-  "version": "0.0.2",
-  "description": "this is the collection of preprocessing functions",
-  "main": "index.js",
-  "author": "nguyenhuynh20018@gmail.com",
-  "license": "MIT"
-}

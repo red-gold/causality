@@ -10,6 +10,6 @@ const NodeConfig = merge(common, {
       library: Bundle.main,
       globalObject: 'this'
     },
-    externals: ['level-browserify', 'cross-fetch']  
+    externals: ['cross-fetch']  
 });
 export default NodeConfig;
