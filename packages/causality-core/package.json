@@ -1,6 +1,6 @@
 {
   "name": "causal-net.core",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "the base class of computing oprators, tensors and base class",
   "main": "dist/@causalNet/core.node.js",
   "browser": "dist/@causalNet/core.web.js",
@@ -8,9 +8,11 @@
   "license": "MIT",
   "module": "src/index.js",
   "scripts": {
-    "build": "webpack",
-    "test": "jest",
-    "build:watch": "webpack --watch"
+    "start:web": "webpack-dev-server --open --config webpack.web.babel.js",
+    "start:node": "webpack --watch --info-verbosity verbose --config webpack.node.babel.js",
+    "build:clean": "rimraf dist",
+    "build:dev": "webpack --config webpack.dev.babel.js",
+    "build:prod": "webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
     "@tensorflow/tfjs": "^0.14.1",
