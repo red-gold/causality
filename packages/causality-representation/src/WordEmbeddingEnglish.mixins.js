@@ -1,12 +1,15 @@
 const EnglishWordEmbeddingMixins = (RepresentationClass)=> class extends RepresentationClass{ 
-    loadWordVec(){
-
+    async loadModel(){
+        const ModelURL = '';
+        return await this.Fetch.fetchData(ModelURL);
     }
-    tokenize(text){
-        return text.split(' ');
+    async tokenize(text){
+        return new Promise((resolve, reject)=>{
+            resolve(text.split(' '));
+        });
     }
-    transform(text){
-        let tokens = tokens(text);
+    async transform(text){
+        let tokens = await this.tokenize(text);
         return tokens;
     }
 };

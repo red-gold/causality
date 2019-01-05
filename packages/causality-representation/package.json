@@ -17,7 +17,6 @@
     "build:prod-maxheap": "node --max_old_space_size=8096 /usr/local/bin/webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
-    "memdown": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

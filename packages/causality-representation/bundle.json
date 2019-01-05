@@ -1,4 +1,4 @@
 { 
-    "main": "@causalNet/preprocessig", 
-    "min": "@causalNet/preprocessig.min"
+    "main": "@causalNet/representation", 
+    "min": "@causalNet/representation.min"
 }

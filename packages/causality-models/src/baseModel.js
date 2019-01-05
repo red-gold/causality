@@ -1,8 +1,14 @@
 export default class BaseModel{
-    constructor(layerParameters={}){
-        this.parameters = layerParameters;
+    constructor(parameters){
+        this.parameters = parameters;
     }
-    layer(){
+    set parameters(parameters){
+        this.parameters = parameters;
+    }
+    get parameters(){
+        this.parameters;
+    }
+    call(){
         
     }
 }
