@@ -13,7 +13,8 @@
     "build:clean": "rimraf dist",
     "test": "jest",
     "build:dev": "webpack --config webpack.dev.babel.js",
-    "build:prod": "webpack --config webpack.prod.babel.js"
+    "build:prod": "webpack --config webpack.prod.babel.js",
+    "build:prod-maxheap": "node --max_old_space_size=8096 /usr/local/bin/webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
     "memdown": "^3.0.0"

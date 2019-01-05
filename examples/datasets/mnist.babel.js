@@ -3,7 +3,7 @@ const { TermLog } = require('causal-net.log');
 (async ()=>{
     const logger = new TermLog();
     let mnist = new MNIST();
-    logger.log(mnist.makeSummary());
+    logger.log(mnist.summary());
     await mnist.fetchDataset();
     let dataset = await mnist.loadDataset();
     let [dataBuffer, labelBuffer] = dataset;
