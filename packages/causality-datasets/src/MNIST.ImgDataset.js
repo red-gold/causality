@@ -1,6 +1,7 @@
 import {default as BaseImgDataset} from './baseImgDataset';
 import {default as Function } from './function';
 import { LevelDBStorage } from 'causal-net.storage';
+import { Preprocessing } from '../../causality-preprocessing/src';
 const MnistConfigure = {
     ImgFileName: 'mnist_images.png',
     LabelFileName: 'mnist_labels_uint8',
@@ -17,10 +18,9 @@ export default class MnistDataset extends BaseImgDataset{
     constructor(){
         super(MnistConfigure.dataSize, MnistConfigure.numClass);
         this.configure = MnistConfigure;
-        this.F = new Function();
         this.storage = new LevelDBStorage();
-        // this.preprocessing = new Preprocessing();
-        // this.memCache = new MemCache();
+        this.preprocessing = new Preprocessing();
+        this.F = new Function();
     }
 
     async fetchDataset(saveDir=null){
@@ -38,14 +38,7 @@ export default class MnistDataset extends BaseImgDataset{
         return [dataFetch, labelFetch];
     }
 
-    // async preprocessData(storeInMemory=true){
-    //     this.assertfetchData();
-    //     let storage = (storeInMemory)?this.memeCache:this.storage;
-    //     let [nameList, dataList] = this.preprocessing.splitImageBuffer(this.saveDataPath);
-        
-    // }
-     
-
+    
     async loadData(){
         if(!this.saveDataPath){
             throw Error('data is not fetch');
@@ -53,10 +46,7 @@ export default class MnistDataset extends BaseImgDataset{
         return await this.storage.readPNGFile(this.saveDataPath);    
     }
     
-    summary(){
-        return {dataSize: this.dataSize, numClass: this.numClass};
-    }
-
+    
     async loadLabel(){
         if(!this.saveLabelPath){
             throw Error('label is not fetch');
@@ -64,13 +54,34 @@ export default class MnistDataset extends BaseImgDataset{
         let labelBuffer = await this.storage.readPNGFile(this.saveLabelPath);
         return new Uint8Array(labelBuffer);
     }
-
+    
     async loadDataset(){
         let dataBuffer  = await this.loadData();
         let labelBuffer = await this.loadLabel();
         return [dataBuffer, labelBuffer];
     }
+    
+    async preprocessingDataset(storeInMemory=false){
         
+        let storage = (storeInMemory)?this.memeCache:this.storage;
+        let dataset = await this.loadDataset();
+        let [dataBuffer, labelBuffer] = dataset;
+        let imageBufferSize = this.F.getImgBufferSize(this.imgSize);
+        let labelBufferSize = this.numClass;
+        let splitedImgBuffer = await this.preprocessing.splitImageBuffer(dataBuffer, imageBufferSize);
+        let splitedLabelBuffer = await this.preprocessing.splitImageBuffer(labelBuffer, labelBufferSize);
+        console.log({imageBufferSize:splitedImgBuffer.length, labelBufferSize: splitedLabelBuffer.length});
+        const datum  = this.F.zip(splitedImgBuffer, splitedLabelBuffer);
+        const generator = this.F.generatorWithIndex(datum);
+        this.sampleIds = [];
+        for(let [idx, item] of generator){
+            this.storage.setItem(idx, item[0], 'data/');
+            this.storage.setItem(idx, item[1], 'label/');
+            this.sampleIds.push(idx);
+        }
+        console.log({lenIdx: this.sampleIds.length});
+        return this.sampleId;
+    }
     
     loadDatasetSync(){
         const F = this.F;
@@ -82,9 +93,9 @@ export default class MnistDataset extends BaseImgDataset{
         console.log({lenData: data.length});
         const encodedLabels = F.splitBuffer(labelBuffer, 10);
         console.log({lenLabel: encodedLabels.length});
-        const datum = F.zip(data, encodedLabels);
         
-        let generator = f.generatorWithIndex(datum);
+        
+        
         this.sampleId = [];
         for(let [idx, item] of generator){
             this.memcache.setItem(idx, item[0], 'data/');

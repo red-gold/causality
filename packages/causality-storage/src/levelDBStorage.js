@@ -7,6 +7,33 @@ import {default as LevelJSMixins} from './levelDBStorage.mixins.web';
 console.log(Platform.currentPlatform());
 export default class LevelDBStorage extends Platform.mixWith(BaseStorage, {'node':[LevelDownMixins, PNGFileMixins],'web':[LevelJSMixins, PNGFileMixins]}){
 
+    async getItem(key, zone='/', asBuffer=false){
+        return new Promise((resolve, reject)=>{
+            this.storage.get(zone + key, {asBuffer}, (err, data)=>{
+                if(err){
+                    reject('error write');
+                }
+                else{
+                    resolve({[key]: data});
+                }
+            });
+        });
+    }
+    getItemBatch(keys, zone='/'){
+        // return keys.map(key=>this.cache[zone+key]);
+    }
+    async setItem(key, data, zone='/'){
+        return new Promise((resolve, reject)=>{
+            this.storage.put(zone + key, data, (err)=>{
+                if(err){
+                    reject('error write');
+                }
+                else{
+                    resolve({[key]: data});
+                }
+            });
+        });
+    }
     /**
      * @async
      * @param  {} filePath

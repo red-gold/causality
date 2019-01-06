@@ -109,6 +109,7 @@ async function readWriteStream(delay){
             reader.push({ x: Math.random() });
         }
     }, delay);
+    console.log({Stream});
     let res = await Stream.makePipeline([reader, transformer, writer],(data)=>{console.log(data);data.x=data.x+10;});
     return res;
 }

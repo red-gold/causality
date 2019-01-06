@@ -8,6 +8,8 @@ const { TermLog } = require('causal-net.log');
     let dataset = await mnist.loadDataset();
     let [dataBuffer, labelBuffer] = dataset;
     logger.log({dataLen: dataBuffer.length, labelLen: labelBuffer.length});
+    let normalizeDataset = await mnist.preprocessingDataset();
+    logger.log({normalizeDataset});
 })();
 
 // const [trainIdxSet, testIdxSet] = mnist.getTrainTestSet(99);
