@@ -12,7 +12,8 @@
     "start:node": "webpack --watch --info-verbosity verbose --config webpack.node.babel.js",
     "build:clean": "rimraf dist",
     "build:dev": "webpack --config webpack.dev.babel.js",
-    "build:prod": "webpack --config webpack.prod.babel.js"
+    "build:prod": "webpack --config webpack.prod.babel.js",
+    "build:prod-maxheap": "node --max_old_space_size=8096 /usr/local/bin/webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
     "cross-fetch": "^3.0.0",

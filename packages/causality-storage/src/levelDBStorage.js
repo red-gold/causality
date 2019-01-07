@@ -4,7 +4,7 @@ import {default as PNGFileMixins} from './PNGFileMixins';
 import {Platform, Fetch} from 'causal-net.utils';
 import {default as LevelDownMixins} from './levelDBStorage.mixins.node';
 import {default as LevelJSMixins} from './levelDBStorage.mixins.web';
-console.log(Platform.currentPlatform());
+
 export default class LevelDBStorage extends Platform.mixWith(BaseStorage, {'node':[LevelDownMixins, PNGFileMixins],'web':[LevelJSMixins, PNGFileMixins]}){
 
     async getItem(key, zone='/', asBuffer=false){
@@ -19,9 +19,7 @@ export default class LevelDBStorage extends Platform.mixWith(BaseStorage, {'node
             });
         });
     }
-    getItemBatch(keys, zone='/'){
-        // return keys.map(key=>this.cache[zone+key]);
-    }
+    
     async setItem(key, data, zone='/'){
         return new Promise((resolve, reject)=>{
             this.storage.put(zone + key, data, (err)=>{
@@ -29,7 +27,7 @@ export default class LevelDBStorage extends Platform.mixWith(BaseStorage, {'node
                     reject('error write');
                 }
                 else{
-                    resolve({[key]: data});
+                    resolve(key);
                 }
             });
         });
@@ -39,14 +37,14 @@ export default class LevelDBStorage extends Platform.mixWith(BaseStorage, {'node
      * @param  {} filePath
      */
     async readFile(filePath, asBuffer=false){
-        return await this.storage.get(filePath, {asBuffer});
+        return await this.getItem(filePath,'/', {asBuffer});
     }
     /**
      * @param  {} filePath
      * @param  {} data
      */
     async writeFile(filePath, data){
-        return await this.storage.put(filePath, data);
+        return await this.setItem(filePath, data);
     }
 
     async fetchFile(url, filePath){
@@ -55,6 +53,6 @@ export default class LevelDBStorage extends Platform.mixWith(BaseStorage, {'node
     }
 
     async streamFile(url, filePath, processFn=null){
-        throw Error('implement require');
+        throw Error('implement required');
     }
 }

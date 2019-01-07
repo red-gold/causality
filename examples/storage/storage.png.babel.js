@@ -1,11 +1,10 @@
 import {LevelDBStorage} from 'causal-net.storage';
 (async ()=>{
-    const I = new LevelDBStorage();
-    await I.writeFile('temp','12345');
-    const wres = await I.readFile('temp');
-    console.log(wres);
-    const url = 'https://avatars3.githubusercontent.com/u/43268620?s=200&v=4';
-    await I.fetchPNGFile(url, 'icon');
-    const iconres = await I.readPNGFile('icon');
-    console.log(iconres);
+    const storage = new LevelDBStorage();
+    // const url = 'https://avatars3.githubusercontent.com/u/43268620?s=200&v=4';
+    const url = 'https://storage.googleapis.com/learnjs-data/model-builder/mnist_images.png';
+    console.log({url});
+    let imageBuffer = await storage.fetchPNG(url);
+    console.log({imageBuffer: imageBuffer.length});
+    // const iconres = await storage.readPNGFile('icon');
 })();

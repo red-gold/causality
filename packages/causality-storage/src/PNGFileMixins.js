@@ -10,43 +10,32 @@ const PNGFileMixins = (StorageClass)=> class extends StorageClass{
      * @param  {} data
      */
     async writePNGFile(filePath, imgBuffer){
-        console.log({imgBuffer:imgBuffer.length});
         return await this.writeFile(filePath, imgBuffer);
     }
 
-    async fetchPNGFile(url, filePath){
-        return new Promise((resolve, reject)=>{
-            Fetch.streamData(url).then(_reader=>{
-                let reader = Stream.wrapReadable(_reader);
-                reader.pipe(new PNG()).on('parsed', function(){
-                    console.log({datalen2:this.data.length});
-                    this.writePNGFile(filePath, Buffer.from(this.data)).then(res=>{
-                        console.log(res);
-                        resolve(res);
-                    }).catch(err=>{
-                        console.error({err});
-                        reject(err);
-                    });
-                });
-            })
-            .catch(err=>{
-                console.error({err});
-                reject(err);
-            });
-        });
-    }
-
-    async streamPNGFile(url, filePath, processFn=null){
+    async fetchPNG(url){
         return new Promise(async (resolve, reject)=>{
             let _reader = await Fetch.streamData(url);
             let reader = Stream.wrapReadable(_reader);
-            reader.pipe(new PNG()).on('parsed', function(){
-                let data = processFn?processFn(this.data):this.data;
-                this.writeFile(data, filePath).then(res=>{
-                    resolve(res);
-                });
+            let png = new PNG();
+            png.on('parsed', function(){
+                resolve(this.data);
             });
+            png.on('error',(err)=>{
+                console.error(err);
+                reject(err);
+            });
+            reader.pipe(png);
         });
+    }
+
+    async fetchPNGFile(url, filePath){
+        let data = await this.fetchPNG(url);
+        return await this.writePNGFile(filePath, data);
+    }
+
+    async streamPNGFile(url, filePath, transfromFn){
+        throw Error('implement required');
     }
 };
 export default PNGFileMixins;
