@@ -1,4 +1,5 @@
-import {Function, Layer} from 'causal-net.layer';
+import { Function, Layer } from 'causal-net.layer';
+import { TermLog } from 'causal-net.log';
 const F = new Function();
 const L = new Layer();
 const R = F.coreFuntion;

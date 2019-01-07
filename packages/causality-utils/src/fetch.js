@@ -40,5 +40,15 @@ export default class Fetch extends Platform.mixWith(fetch, {'node': [NodeStreamM
             resolve(response.text());
         });
     }
+
+    static async fetchJson(url){
+        return new Promise(async (resolve, reject)=>{
+            let response = await fetch(url);
+            if (response.status >= 400) {
+                reject("Bad response from server");
+            }
+            resolve(response.json());
+        });
+    }
 }
 

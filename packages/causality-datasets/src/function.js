@@ -3,6 +3,9 @@ export default class Function extends BaseFunction{
     constructor(){
         super();
     }
+    async forEachPromise(fn){
+        
+    }
     zip(data, label){
         const R = this.R;
         return R.zip(data, label);

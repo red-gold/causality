@@ -1,41 +1,30 @@
 import {default as BaseImgDataset} from './baseImgDataset';
 import {default as Function } from './function';
 import { LevelDBStorage } from 'causal-net.storage';
-import { Preprocessing } from '../../causality-preprocessing/src';
-const MnistConfigure = {
-    ImgFileName: 'mnist_images.png',
-    LabelFileName: 'mnist_labels_uint8',
-    Link: 'https://storage.googleapis.com/learnjs-data/model-builder/',
-    ImgUrl: 'https://storage.googleapis.com/learnjs-data/model-builder/mnist_images.png',
-    LabelUrl: 'https://storage.googleapis.com/learnjs-data/model-builder/mnist_labels_uint8',
-    SaveDir: '/mnistData/',
-    dataSize: [65000, 28, 28, 4],
-    numClass: 10
-};
+import { Preprocessing } from 'causal-net.preprocessing';
 
 export default class MnistDataset extends BaseImgDataset{
     
-    constructor(){
-        super(MnistConfigure.dataSize, MnistConfigure.numClass);
-        this.configure = MnistConfigure;
+    constructor(configure){
+        super(configure);
         this.storage = new LevelDBStorage();
         this.preprocessing = new Preprocessing();
-        this.F = new Function();
     }
 
-    async fetchDataset(saveDir=null){
-        if(this.saveDir){
-            throw Error('data is not fetch');
-        }
-        this.saveDir = saveDir || this.configure.SaveDir;
-        const ImgUrl = this.configure.ImgUrl,
-              LabelUrl = this.configure.LabelUrl;
-        this.saveDataPath  = this.saveDir + this.configure.ImgFileName, 
-        this.saveLabelPath = this.saveDir + this.configure.LabelFileName;
-        console.log(this.saveDataPath);
-        let dataFetch = await this.storage.fetchPNGFile(ImgUrl, this.saveDataPath);
-        let labelFetch = await this.storage.fetchFile(LabelUrl, this.saveLabelPath);
-        return [dataFetch, labelFetch];
+    async fetchDataset(saveDir='/mnist',numchunks=1, selectBy='random'){
+        this.saveDir = saveDir;
+        let fetchChunks = ['chunk-0'];
+        const FetchChunk = async (chunkId)=>{
+            const ImgUrl = this.configure.ImgUrl,
+                  LabelUrl = this.configure.LabelUrl;
+            this.saveDataPath  = this.saveDir + 'dataChunk/' + chunkId; 
+            this.saveLabelPath = this.saveDir + 'labelChunk/' + chunkId;
+            console.log(this.saveDataPath);
+            let dataFetch = await this.storage.fetchPNGFile(ImgUrl, this.saveDataPath);
+            let labelFetch = await this.storage.fetchFile(LabelUrl, this.saveLabelPath);
+            return [dataFetch, labelFetch];
+        };
+        return await FetchChunk(fetchChunks[0]);
     }
 
     

@@ -1,20 +1,23 @@
 export default class BaseImgDataset{
-    constructor(dataSize, numClass){
-        this.dataSize = dataSize;
-        const [numSample, ...imgSize]  = this.dataSize;
-        this.numSample = numSample;
-        this.imgSize  = imgSize;
-        this.numClass = numClass;
+    constructor(datasetConfigure, configureAssertion=null){
+        if(configureAssertion){
+            configureAssertion(this.datasetConfigure);
+        }
+        this.configuration = datasetConfigure;
+        const {numSamples, sampleSize, numClasses} = this.configuration;
+        this.dataSize = [numSamples, ...sampleSize];
+        
+        this.numSamples = numSamples;
+        this.sampleSize = sampleSize;
+        this.numClass   = numClasses;
+        this.F = new Function();
     }
     
     summary(){
-        return {numSample: this.numSample,
-                imgSize: this.imgSize,
-                dataSize: this.dataSize, 
-                numClass: this.numClass};
+        return this.configuration;
     }
     
-    async fetchDataset(saveDir=null, storage){
+    async fetchDataset(saveDir=null){
         throw Error('implement required');
     }
 
