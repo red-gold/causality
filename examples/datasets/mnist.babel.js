@@ -6,20 +6,16 @@ const { Fetch } = require('causal-net.utils');
     const url = 'https://raw.githubusercontent.com/red-gold/causality/wip/datasets/MNIST_dataset/dataset.summary.json';
     const configure = await Fetch.fetchJson(url);
     configure.datasetUrl = 'https://raw.githubusercontent.com/red-gold/causality/wip/datasets/MNIST_dataset/';
-    // logger.log(configure);
     let mnist = new MNIST(configure);
     logger.log(mnist.summary());
-    // await mnist.fetchDataset();
-    // let dataset = await mnist.loadDataset();
-    // let [dataBuffer, labelBuffer] = dataset;
-    // logger.log({dataLen: dataBuffer.length, labelLen: labelBuffer.length});
-    // let normalizeDataset = await mnist.preprocessingDataset();
+    let chunkStorage = await mnist.fetchDataset();
+    logger.log({chunkStorage});
+    let stream = mnist.makePreprocessingStream();
+    let preprocessingStorage = await mnist.preprocessingDataset(stream);
+    logger.log({preLen: preprocessingStorage.length});
+    let [trainSet, testSet] = mnist.getTrainTestSet();
+    logger.log({trainLen: trainSet.length, testSet: testSet.length});
+    
+    
     // logger.log({normalizeDataset});
 })();
-
-// const [trainIdxSet, testIdxSet] = mnist.getTrainTestSet(99);
-// console.log({lenTrain: trainIdxSet.length, lenTest: testIdxSet.length});
-// const batchSampleGenerator = mnist.getSampleGenerator(trainIdxSet, 10);
-// for(let batch of batchSampleGenerator){
-//     console.log({datalen: batch[0].length, labellen: batch[1].length});
-// }

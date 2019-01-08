@@ -1,3 +1,4 @@
+import {default as Function} from './function';
 export default class BaseImgDataset{
     constructor(datasetConfigure, configureAssertion=null){
         if(configureAssertion){

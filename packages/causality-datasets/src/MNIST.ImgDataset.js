@@ -1,7 +1,8 @@
 import {default as BaseImgDataset} from './baseImgDataset';
-import {default as Function } from './function';
 import { LevelDBStorage } from 'causal-net.storage';
 import { Preprocessing } from 'causal-net.preprocessing';
+import { Stream } from 'causal-net.utils';
+import { Transform } from 'stream';
 
 export default class MnistDataset extends BaseImgDataset{
     
@@ -11,100 +12,131 @@ export default class MnistDataset extends BaseImgDataset{
         this.preprocessing = new Preprocessing();
     }
 
-    async fetchDataset(saveDir='/mnist',numchunks=1, selectBy='random'){
-        this.saveDir = saveDir;
-        let fetchChunks = ['chunk-0'];
-        const FetchChunk = async (chunkId)=>{
-            const ImgUrl = this.configure.ImgUrl,
-                  LabelUrl = this.configure.LabelUrl;
-            this.saveDataPath  = this.saveDir + 'dataChunk/' + chunkId; 
-            this.saveLabelPath = this.saveDir + 'labelChunk/' + chunkId;
-            console.log(this.saveDataPath);
-            let dataFetch = await this.storage.fetchPNGFile(ImgUrl, this.saveDataPath);
-            let labelFetch = await this.storage.fetchFile(LabelUrl, this.saveLabelPath);
-            return [dataFetch, labelFetch];
+    async fetchLabelChunk(chunkUrl, savePath){
+        return await this.storage.fetchFile(chunkUrl, savePath);
+    }
+
+    async fetchDataChunk(chunkUrl, savePath){
+        return await this.storage.fetchPNGFile(chunkUrl, savePath);
+    }
+
+    async fetchDataset(saveDir='/mnist/',numchunks=1, selectBy='random'){
+        let dataChunks = ['data-chunk-0.png'];
+        let labelChunks = ['label-chunk-0'];
+        const FetchDataChunk = async (chunkName)=>{
+            const ChunkUrl = this.configuration.datasetUrl + chunkName;
+            const SavePath = saveDir + chunkName;
+            console.log({ChunkUrl, SavePath});
+            return await this.fetchDataChunk(ChunkUrl, SavePath);
         };
-        return await FetchChunk(fetchChunks[0]);
+        const FetchLabelChunk = async (chunkName)=>{
+            let chunkUrl = this.configuration.datasetUrl + chunkName;
+            let savePath = saveDir + chunkName;
+            console.log({chunkUrl, savePath});
+            return await this.fetchLabelChunk(chunkUrl, savePath);
+        };
+        let chunkFetchList = this.F.zip(dataChunks, labelChunks);
+        this.savedChunks = await Promise.all(
+                    chunkFetchList.map(
+                        async ([dataChunk, labelChunk])=>{
+                            let dataPath  = await FetchDataChunk(dataChunk);
+                            let labelPath = await FetchLabelChunk(labelChunk);
+                            return [dataPath, labelPath];
+                        })
+                    );
+        let [dataStorage, labelStorage] = this.F.unzip(this.savedChunks);
+        this.savedChunkData = dataStorage;
+        this.savedChunkLabel = labelStorage;
+        return {dataStorage, labelStorage};
     }
 
-    
-    async loadData(){
-        if(!this.saveDataPath){
-            throw Error('data is not fetch');
-        }
-        return await this.storage.readPNGFile(this.saveDataPath);    
+    preprocessingTransform(){
+
     }
     
-    
-    async loadLabel(){
-        if(!this.saveLabelPath){
-            throw Error('label is not fetch');
-        }
-        let labelBuffer = await this.storage.readPNGFile(this.saveLabelPath);
-        return new Uint8Array(labelBuffer);
-    }
-    
-    async loadDataset(){
-        let dataBuffer  = await this.loadData();
-        let labelBuffer = await this.loadLabel();
-        return [dataBuffer, labelBuffer];
-    }
-    
-    async preprocessingDataset(storeInMemory=false){
+    makePreprocessingStream(saveDir='/preprocessing/mnist/',storeInMemory=false){
+        let preProcessingStorage = (storeInMemory)?this.memeCache:this.storage;
         
-        let storage = (storeInMemory)?this.memeCache:this.storage;
-        let dataset = await this.loadDataset();
-        let [dataBuffer, labelBuffer] = dataset;
-        let imageBufferSize = this.F.getImgBufferSize(this.imgSize);
-        let labelBufferSize = this.numClass;
-        let splitedImgBuffer = await this.preprocessing.splitImageBuffer(dataBuffer, imageBufferSize);
-        let splitedLabelBuffer = await this.preprocessing.splitImageBuffer(labelBuffer, labelBufferSize);
-        console.log({imageBufferSize:splitedImgBuffer.length, labelBufferSize: splitedLabelBuffer.length});
-        const datum  = this.F.zip(splitedImgBuffer, splitedLabelBuffer);
-        const generator = this.F.generatorWithIndex(datum);
-        this.sampleIds = [];
-        for(let [idx, item] of generator){
-            this.storage.setItem(idx, item[0], 'data/');
-            this.storage.setItem(idx, item[1], 'label/');
-            this.sampleIds.push(idx);
-        }
-        console.log({lenIdx: this.sampleIds.length});
-        return this.sampleId;
-    }
-    
-    loadDatasetSync(){
-        const F = this.F;
-        this.memcache = memcache;
-        const dataBuffer = this.loadDataSync();
-        const labelBuffer = this.loadLabelSync();
-        console.log({len: dataBuffer.length, labelLen: labelBuffer.length});
-        const data = F.splitBuffer(dataBuffer, 28*28*4);
-        console.log({lenData: data.length});
-        const encodedLabels = F.splitBuffer(labelBuffer, 10);
-        console.log({lenLabel: encodedLabels.length});
+        const ImageBufferSize = this.F.getImgBufferSize(this.sampleSize);
+        const LabelBufferSize = this.numClass;
+        console.log({imageBufferSize: ImageBufferSize, 
+                     labelBufferSize: LabelBufferSize});
+        const TransformFn = (chunk, chunkEncoding, afterTransformFn) =>{
+            const TransformAsync = async ()=>{
+                let dataBuffer = chunk.data;
+                let labelBuffer = chunk.label;
+                console.log({chunk});
+                let splitedImgBuffer = await this.preprocessing.splitImageBuffer(dataBuffer, ImageBufferSize);
+                let splitedLabelBuffer = await this.preprocessing.splitImageBuffer(labelBuffer, LabelBufferSize);
+                
+                return {transformedData: this.F.zip(splitedImgBuffer, splitedLabelBuffer), chunkIdx: chunk.idx};
+            };
+            TransformAsync(chunk).then(transformedChunk=>{
+                afterTransformFn(null, transformedChunk);
+            });
+        };
         
-        
-        
-        this.sampleId = [];
-        for(let [idx, item] of generator){
-            this.memcache.setItem(idx, item[0], 'data/');
-            this.memcache.setItem(idx, item[1], 'label/');
-            this.sampleId.push(idx);
-        }
-        console.log({lenIdx: this.sampleId.length});
-        return this.sampleId;
+        const WriteFn = (transformedChunk, chunkEncoding, callback) =>{
+            
+            const WriteAsync = async (transformedChunk)=>{
+                let generator = this.F.generatorWithIndex(transformedChunk.transformedData);
+                let chunkIdx  = transformedChunk.chunkIdx;
+                let dataPath  = [], labelPath = [];
+                for(let [idx, [data, label]] of generator){
+                    let preprocessingDataPath  = saveDir + 'data/' + chunkIdx + '/' + idx + '/';
+                    let preprocessingLabelPath = saveDir + 'label/' + chunkIdx + '/' + idx + '/';
+                    console.log({preprocessingDataPath, preprocessingLabelPath});
+                    await preProcessingStorage.setItem(preprocessingDataPath, data);    
+                    await preProcessingStorage.setItem(preprocessingLabelPath, label);
+                    dataPath = [...dataPath, preprocessingDataPath];
+                    labelPath = [...labelPath, preprocessingLabelPath];
+                }
+                return this.F.zip(dataPath, labelPath);
+            };
+            
+            WriteAsync(transformedChunk).then((result)=>{
+                if(this.savedPreprocessing){
+                    this.savedPreprocessing = [...this.savedPreprocessing, ...result];
+                }
+                else{
+                    this.savedPreprocessing = result;
+                }
+                callback();
+            });
+        };
+        let duplexer = Stream.makeDuplex(WriteFn);
+        let transformer = Stream.makeTransform(TransformFn);
+        let stream = duplexer.pipe(transformer).pipe(duplexer);
+        return {reader: duplexer, writer: duplexer, stream};
     }
 
-    getTrainTestSet(trainSize=60000){
-        const F = this.F;
-        const [trainSet, testSet] = F.makeTrainTestSet(this.sampleId, trainSize);
+    async preprocessingDataset({reader, writer, stream}){
+        console.log(this.savedChunks);
+        let generator = this.F.generatorWithIndex(this.savedChunks);
+        for(let [idx, [dataPath, labelPath]] of generator){
+            let dataItem = await this.storage.readFile(dataPath, true);
+            let labelItem = await this.storage.readFile(labelPath, true);
+            let data = dataItem[dataPath];
+            let label = labelItem[labelPath];
+            reader.push({idx, data, label});
+        }
+        reader.push(null);
+        return new Promise((resolve, reject)=>{
+            stream.on('finish', ()=>{
+                resolve(this.savedPreprocessing);
+            });
+        });
+    }
+    
+    getTrainTestSet(trainSize=null){
+        trainSize = trainSize||parseInt(this.savedPreprocessing.length*0.9);
+
+        const [trainSet, testSet] = this.F.splitTrainTestSet(this.savedPreprocessing, trainSize);
         return [trainSet, testSet];
     }
 
     makeSampleGenerator(trainIdxSet, batchSize=10, start=0, end=null){
-        const memcache = this.memcache;
-        const F = this.F;
-        const batches = F.splitBuffer(trainIdxSet, batchSize);
+        const batches = this.F.splitBuffer(trainIdxSet, batchSize);
         if(end === null){
             end = batches.length;
         }
