@@ -10,6 +10,6 @@ const NodeConfig = merge(common, {
       library: Bundle.main,
       globalObject: 'this'
     },
-    externals: ['level-browserify', 'cross-fetch']  
+    externals: ['causal-net.core', 'causal-net.utils', 'causal-net.storage', 'causal-net.preprocessing', 'causal-net.datasets'] 
 });
 export default NodeConfig;

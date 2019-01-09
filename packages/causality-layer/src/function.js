@@ -7,14 +7,6 @@ export default class Function extends BaseFunction{
         }); 
     }
     
-    getIn(keys, item, defaultValue){
-        return R.pathOr(defaultValue, keys, item);
-    }
-    
-    setIn(keys, value, item){
-        return R.assocPath(keys, value, item);
-    }
-
     parameterAcquisition(pipelineItem, hyperParameters){
         const R = this.R; 
         function replaceIfMatch(value, hyperParameters){
@@ -34,21 +26,6 @@ export default class Function extends BaseFunction{
             }
         }
         return replaceHyperParameter(pipelineItem);
-    }
-
-    isParameter(val){
-        const R = this.R;
-        return R.is(Array)(val) && R.all(R.is(Number), val);
-    }
-
-    getPipeline(netConfig){
-        //TODO: make assertor
-        return this.R.prop('Pipeline', netConfig);
-    }
-    
-    getHyperParameter(netConfig){
-        //TODO: make assertor
-        return this.R.prop('HyperParameters', netConfig);
     }
 
     isTensor(object){

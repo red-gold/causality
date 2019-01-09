@@ -1,5 +1,6 @@
-import {Layer} from 'causal-net.core';
-import {IO} from 'causal-net.utils';
+import {Tensor} from 'causal-net.core';
+import {Layer} from 'causal-net.layer';
+import {LevelDBStorage} from 'causal-net.storage';
 import {default as Function} from './function';
 
 export default class CausalNet{
@@ -7,12 +8,12 @@ export default class CausalNet{
      * @param  {} netConfig
      * @param  {} netParams
      */
-    constructor( netConfig, netParams=null, logger=null ){
+    constructor( netConfig, netParams=null, storage=null ){
         this.L = new Layer();
         this.F = new Function();
-        this.T = this.L.CoreTs;
-        this.R = this.F.CoreFn;
-        this.I = new IO();
+        this.T = this.L.CoreTensor;
+        this.R = this.F.CoreFunction;
+        this.storage = storage || new LevelDBStorage();
         this.HyperParameters = this.F.getHyperParameter(netConfig);
         this.BasePipeline = this.F.getPipeline(netConfig);
         this.netParams = this.L.setOrInitParams(this.BasePipeline, netParams);
@@ -62,7 +63,7 @@ export default class CausalNet{
      * @param  {} numEpochs=2
      * @param  {} lr=0.01
      */
-    train(SampleGeneratorFn, batchSize, numEpochs = 2, lr=0.01){
+    async train(SampleGeneratorFn, batchSize, numEpochs = 2, lr=0.01){
         const T = this.T, F = this.F, R = this.R;
         const start = new Date();
         let loss = [], averageLoss = [];
@@ -71,7 +72,7 @@ export default class CausalNet{
             console.log({epochIdx, averageLoss, time: new Date().toISOString(), 
                          start: start.toISOString(), elapse: (new Date() - start)/1000});
             const sampleGenerator = SampleGeneratorFn(batchSize);
-            for(let [batchData, batchLabels] of sampleGenerator){
+            for await (let [batchData, batchLabels] of sampleGenerator){
                 // console.log({dlen: batchData.length, llen: batchLabels.length});
                 optimizer.minimize(()=>{
                     let l = this.loss(batchData, batchLabels, batchSize, (msg)=>{console.log(msg);});
@@ -83,6 +84,9 @@ export default class CausalNet{
             averageLoss = [...averageLoss, R.mean(loss)];
             loss = [];
         }
+        return new Promise((resolve, reject)=>{
+            resolve({averageLoss});
+        });
     };
 
     test(testData, testLabels){
@@ -109,10 +113,8 @@ export default class CausalNet{
     
     saveParams(fileName='./save.model'){
         const params = this.getParamsSync();
-        return this.I.writeFile(fileName, JSON.stringify(params));
     }
     readParamsSync(fileName){
-        const params = JSON.parse(this.I.readSync(fileName));
         this.netParams = this.L.setOrInitParams(this.BasePipeline, params);
     }
 }

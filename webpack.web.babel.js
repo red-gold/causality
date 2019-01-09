@@ -5,6 +5,9 @@ import common from './webpack.common.babel';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const WebConfig = merge(common, {
+  entry: {
+    examples: ['@babel/polyfill', './examples/examples.js'],
+  },
   output: {
     path: resolve(__dirname, 'dist'),
     libraryTarget: 'umd',
@@ -12,13 +15,11 @@ const WebConfig = merge(common, {
     library: Bundle.main,
     globalObject: 'this'
   },
+  externals: ['leveldown'],
   plugins: [
     new HtmlWebpackPlugin({
-      title: Bundle.main,
-    }),
-    new HtmlWebpackPlugin({
-      title: 'example',
-      template:'./examples/example.template.html'
+      title: 'demo',
+      template:'./examples/index.html'
     })
   ]  
 });
