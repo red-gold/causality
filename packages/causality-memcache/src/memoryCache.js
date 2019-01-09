@@ -7,9 +7,9 @@ export default class MemoryCache extends BaseMemCache{
         super(zone);
         this.cache = levelup(memdown());        
     }
-    async getItem(key, zone='/', asBuffer=false){
+    async getItem(key, asBuffer=false){
         return new Promise((resolve, reject)=>{
-            this.cache.get(zone + key, {asBuffer}, (err, data)=>{
+            this.cache.get(key, {asBuffer}, (err, data)=>{
                 if(err){
                     reject('error write');
                 }
@@ -19,12 +19,10 @@ export default class MemoryCache extends BaseMemCache{
             });
         });
     }
-    getItemBatch(keys, zone='/'){
-        // return keys.map(key=>this.cache[zone+key]);
-    }
-    async setItem(key, data, zone='/'){
+    
+    async setItem(key, data){
         return new Promise((resolve, reject)=>{
-            this.cache.put(zone + key, data, (err)=>{
+            this.cache.put(key, data, (err)=>{
                 if(err){
                     reject('error write');
                 }

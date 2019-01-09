@@ -10,6 +10,9 @@ export default class Function extends BaseFunction{
         const R = this.R;
         return R.zip(data, label);
     }
+    splitBuffer(buffer, splitSize){
+        
+    };
     unzip(dataset){
         const R = this.R;
         const Unzip = (uz, datum)=>{

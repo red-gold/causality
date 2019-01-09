@@ -16,4 +16,33 @@ export default class Function{
     setIn(keys, value, item){
         return R.assocPath(keys, value, item);
     }
+
+    vstack(...vals){
+        
+    }
+    hstack(...vals){
+
+    }
+    vsplit(values){
+        
+    }
+    hsplit(values){
+        return null;
+    }
+
+    hsplitEvery(values, splitSize){
+        console.log({vlen: values.length, splitSize});
+        return this.R.splitEvery(splitSize, values);
+    }
+
+    vsplitEvery(values, splitSize){
+        return null;
+    }
+
+    zip(valueLeft, valueRight){
+        this.R.zip(valueLeft, valueRight);
+    }
+    unzip(){
+
+    }
 }

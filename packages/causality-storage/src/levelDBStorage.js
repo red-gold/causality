@@ -7,9 +7,9 @@ import {default as LevelJSMixins} from './levelDBStorage.mixins.web';
 
 export default class LevelDBStorage extends Platform.mixWith(BaseStorage, {'node':[LevelDownMixins, PNGFileMixins],'web':[LevelJSMixins, PNGFileMixins]}){
 
-    async getItem(key, zone='/', asBuffer=false){
+    async getItem(key, asBuffer=false){
         return new Promise((resolve, reject)=>{
-            this.storage.get(zone + key, {asBuffer}, (err, data)=>{
+            this.storage.get(key, {asBuffer}, (err, data)=>{
                 if(err){
                     reject('error write');
                 }
@@ -20,9 +20,9 @@ export default class LevelDBStorage extends Platform.mixWith(BaseStorage, {'node
         });
     }
     
-    async setItem(key, data, zone='/'){
+    async setItem(key, data){
         return new Promise((resolve, reject)=>{
-            this.storage.put(zone + key, data, (err)=>{
+            this.storage.put(key, data, (err)=>{
                 if(err){
                     reject('error write');
                 }
@@ -37,7 +37,7 @@ export default class LevelDBStorage extends Platform.mixWith(BaseStorage, {'node
      * @param  {} filePath
      */
     async readFile(filePath, asBuffer=false){
-        return await this.getItem(filePath,'/', {asBuffer});
+        return await this.getItem(filePath, {asBuffer});
     }
     /**
      * @param  {} filePath
@@ -45,6 +45,20 @@ export default class LevelDBStorage extends Platform.mixWith(BaseStorage, {'node
      */
     async writeFile(filePath, data){
         return await this.setItem(filePath, data);
+    }
+
+    async readBuffer(filePath){
+        let item = await this.getItem(filePath, true);
+        return item[filePath];
+    }
+
+    async writeBuffer(filePath, data){
+        return await this.setItem(filePath, data);
+    }
+
+    async fetchBuffer(url, filePath){
+        let response = await Fetch.fetchData(url);
+        return await this.writeBuffer(filePath, Buffer.from(response));
     }
 
     async fetchFile(url, filePath){

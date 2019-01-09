@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "@tensorflow/tfjs": "^0.14.1",
-    "@tensorflow/tfjs-node": "^0.2.1"
+    "@tensorflow/tfjs-node": "^0.2.1",
+    "ramda": "^0.26.1"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

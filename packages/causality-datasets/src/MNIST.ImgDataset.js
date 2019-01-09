@@ -13,7 +13,7 @@ export default class MnistDataset extends BaseImgDataset{
     }
 
     async fetchLabelChunk(chunkUrl, savePath){
-        return await this.storage.fetchFile(chunkUrl, savePath);
+        return await this.storage.fetchBuffer(chunkUrl, savePath);
     }
 
     async fetchDataChunk(chunkUrl, savePath){
@@ -55,7 +55,7 @@ export default class MnistDataset extends BaseImgDataset{
     }
     
     makePreprocessingStream(saveDir='/preprocessing/mnist/',storeInMemory=false){
-        let preProcessingStorage = (storeInMemory)?this.memeCache:this.storage;
+        this.preProcessingStorage = (storeInMemory)?this.memeCache:this.storage;
         
         const ImageBufferSize = this.F.getImgBufferSize(this.sampleSize);
         const LabelBufferSize = this.numClass;
@@ -65,7 +65,7 @@ export default class MnistDataset extends BaseImgDataset{
             const TransformAsync = async ()=>{
                 let dataBuffer = chunk.data;
                 let labelBuffer = chunk.label;
-                console.log({chunk});
+                console.log({dataBuffer, labelBuffer});
                 let splitedImgBuffer = await this.preprocessing.splitImageBuffer(dataBuffer, ImageBufferSize);
                 let splitedLabelBuffer = await this.preprocessing.splitImageBuffer(labelBuffer, LabelBufferSize);
                 
@@ -83,11 +83,11 @@ export default class MnistDataset extends BaseImgDataset{
                 let chunkIdx  = transformedChunk.chunkIdx;
                 let dataPath  = [], labelPath = [];
                 for(let [idx, [data, label]] of generator){
+                    console.log({label});
                     let preprocessingDataPath  = saveDir + 'data/' + chunkIdx + '/' + idx + '/';
                     let preprocessingLabelPath = saveDir + 'label/' + chunkIdx + '/' + idx + '/';
-                    console.log({preprocessingDataPath, preprocessingLabelPath});
-                    await preProcessingStorage.setItem(preprocessingDataPath, data);    
-                    await preProcessingStorage.setItem(preprocessingLabelPath, label);
+                    await this.preProcessingStorage.setItem(preprocessingDataPath, data);    
+                    await this.preProcessingStorage.setItem(preprocessingLabelPath, label);
                     dataPath = [...dataPath, preprocessingDataPath];
                     labelPath = [...labelPath, preprocessingLabelPath];
                 }
@@ -107,10 +107,10 @@ export default class MnistDataset extends BaseImgDataset{
         let duplexer = Stream.makeDuplex(WriteFn);
         let transformer = Stream.makeTransform(TransformFn);
         let stream = duplexer.pipe(transformer).pipe(duplexer);
-        return {reader: duplexer, writer: duplexer, stream};
+        return stream;
     }
 
-    async preprocessingDataset({reader, writer, stream}){
+    async preprocessingDataset(stream){
         console.log(this.savedChunks);
         let generator = this.F.generatorWithIndex(this.savedChunks);
         for(let [idx, [dataPath, labelPath]] of generator){
@@ -118,9 +118,10 @@ export default class MnistDataset extends BaseImgDataset{
             let labelItem = await this.storage.readFile(labelPath, true);
             let data = dataItem[dataPath];
             let label = labelItem[labelPath];
-            reader.push({idx, data, label});
+            console.log({data, label});
+            stream.push({idx, data, label});
         }
-        reader.push(null);
+        stream.push(null);
         return new Promise((resolve, reject)=>{
             stream.on('finish', ()=>{
                 resolve(this.savedPreprocessing);
@@ -135,25 +136,37 @@ export default class MnistDataset extends BaseImgDataset{
         return [trainSet, testSet];
     }
 
-    makeSampleGenerator(trainIdxSet, batchSize=10, start=0, end=null){
-        const batches = this.F.splitBuffer(trainIdxSet, batchSize);
+    makeTrainSampleGenerator(trainSet, batchSize=10, start=0, end=null){
+        const batches = this.F.hsplitEvery(trainSet, batchSize);
         if(end === null){
             end = batches.length;
         }
-        
         let nextIndex = start, iterationCount = 0, step = 1;
+        console.log({batches: batches[0].length});
         const batchGenerator = {
-            *[Symbol.iterator]() {
-                let result;
-                while(nextIndex < end){
-                    result = [memcache.getItemBatch(batches[nextIndex], 'data/'), 
-                              memcache.getItemBatch(batches[nextIndex], 'label/')];
+                storage: this.preProcessingStorage,
+                next: async()=>{
+                    let [dataPaths, labelPaths] = batches[nextIndex];                      
+                    let batchSamples = await Promise.all( dataPaths.map(async (bidx)=>{
+                                    console.log({bidx});
+                                    let item = await this.storage.getItem(bidx,true);
+                                    return item[bidx];
+                                }) ); 
+                    let batchlabels = await Promise.all( labelPaths.map(async (bidx)=>{
+                                    console.log({bidx});
+                                    let item = await this.storage.getItem(bidx,true);
+                                    return item[bidx];
+                                }) );
                     nextIndex += step;
                     iterationCount++;
-                    yield result;
+                    return [batchSamples, batchlabels];
+                },
+                *[Symbol.iterator]() {
+                    while(nextIndex < end){
+                        yield this.next();
+                    }
                 }
-            }
-        };
+            };
         return batchGenerator;
     }
 };
