@@ -17,7 +17,7 @@ const { Fetch } = require('causal-net.utils');
     logger.log({trainLen: trainSet.length, testSet: testSet.length});
     let trainGenerator = mnist.makeTrainSampleGenerator(trainSet, 10);
     for await (let [sample, label] of trainGenerator) {
-        console.log({lenSample: sample[0]});
-        console.log({lenLabel: label[0]});
+        logger.log({lenSample: sample.length});
+        logger.log({lenLabel: label.length});
     }
 })();

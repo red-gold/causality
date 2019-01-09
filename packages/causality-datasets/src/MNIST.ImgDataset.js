@@ -81,17 +81,17 @@ export default class MnistDataset extends BaseImgDataset{
             const WriteAsync = async (transformedChunk)=>{
                 let generator = this.F.generatorWithIndex(transformedChunk.transformedData);
                 let chunkIdx  = transformedChunk.chunkIdx;
-                let dataPath  = [], labelPath = [];
-                for(let [idx, [data, label]] of generator){
-                    console.log({label});
-                    let preprocessingDataPath  = saveDir + 'data/' + chunkIdx + '/' + idx + '/';
-                    let preprocessingLabelPath = saveDir + 'label/' + chunkIdx + '/' + idx + '/';
-                    await this.preProcessingStorage.setItem(preprocessingDataPath, data);    
-                    await this.preProcessingStorage.setItem(preprocessingLabelPath, label);
-                    dataPath = [...dataPath, preprocessingDataPath];
-                    labelPath = [...labelPath, preprocessingLabelPath];
+                let samplePath  = [], labelPath = [];
+                for(let [idx, [sample, label]] of generator){
+                    
+                    let chunkSamplePath = await this.preProcessingStorage
+                            .setItem(saveDir + 'data/' + chunkIdx + '/' + idx + '/', sample);    
+                    let chunkLabelPath = await this.preProcessingStorage
+                            .setItem(saveDir + 'label/' + chunkIdx + '/' + idx + '/', label);
+                    samplePath = [...samplePath, chunkSamplePath];
+                    labelPath = [...labelPath, chunkLabelPath];
                 }
-                return this.F.zip(dataPath, labelPath);
+                return this.F.zip(samplePath, labelPath);
             };
             
             WriteAsync(transformedChunk).then((result)=>{
@@ -146,20 +146,17 @@ export default class MnistDataset extends BaseImgDataset{
         const batchGenerator = {
                 storage: this.preProcessingStorage,
                 next: async()=>{
-                    let [dataPaths, labelPaths] = batches[nextIndex];                      
-                    let batchSamples = await Promise.all( dataPaths.map(async (bidx)=>{
-                                    console.log({bidx});
-                                    let item = await this.storage.getItem(bidx,true);
-                                    return item[bidx];
-                                }) ); 
-                    let batchlabels = await Promise.all( labelPaths.map(async (bidx)=>{
-                                    console.log({bidx});
-                                    let item = await this.storage.getItem(bidx,true);
-                                    return item[bidx];
-                                }) );
+                    let batchSamples = [], batchLabels = [];
+                    console.log({bl: batches[nextIndex], nextIndex});
+                    for(let [dataPath, labelPath] of batches[nextIndex]){
+                        let dataItem = await this.storage.getItem(dataPath,true);
+                        let labelItem = await this.storage.getItem(labelPath,true);
+                        batchSamples = [...batchSamples, dataItem[dataPath]];
+                        batchLabels = [...batchLabels, labelItem[labelPath]];
+                    }
                     nextIndex += step;
                     iterationCount++;
-                    return [batchSamples, batchlabels];
+                    return [batchSamples, batchLabels];
                 },
                 *[Symbol.iterator]() {
                     while(nextIndex < end){
