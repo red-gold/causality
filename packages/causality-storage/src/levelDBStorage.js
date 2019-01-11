@@ -37,7 +37,8 @@ export default class LevelDBStorage extends Platform.mixWith(BaseStorage, {'node
      * @param  {} filePath
      */
     async readFile(filePath, asBuffer=false){
-        return await this.getItem(filePath, {asBuffer});
+        let item = await this.getItem(filePath, {asBuffer});
+        return item[filePath];
     }
     /**
      * @param  {} filePath

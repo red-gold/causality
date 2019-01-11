@@ -6,16 +6,15 @@ const _NetConfig = {
     HyperParameters: {Datasize:10},
     Pipeline:[
         {   Name: 'input', Type: 'tensor', Input: 'PipeInput', 
-            Flow:[  {Op: 'tensor', Args:[]},
-                    {Op: 'reshape', Args:[['$Datasize', 28, 28, 4]] } ] 
+            Flow:[  {Op: 'reshape', Args:[['$Datasize', 28, 28, 4]] } ] 
         },
         {   Name:'conv1', Type: 'tensor', Input: 'input',
-            Parameters: { Kernel: [3, 3, 4, 32] },
-            Flow: [ { Op: 'conv2d', Parameter: 'Kernel', Args: [1, 'same'] } ] 
+            Parameters: { filter: [3, 3, 4, 32] },
+            Flow: [ { Op: 'conv2d', Parameter: 'filter', Args: [1, 'same'] } ] 
         },
         {   Name:'conv2', Type: 'tensor', Input: 'conv1',
-            Parameters: { Kernel: [3, 3, 32, 32] },
-            Flow: [ { Op: 'conv2d', Parameter: 'Kernel', Args: [1, 'same'] },
+            Parameters: { filter: [3, 3, 32, 32] },
+            Flow: [ { Op: 'conv2d', Parameter: 'filter', Args: [1, 'same'] },
                     { Op: 'reshape', Args: [['$Datasize', -1]] },
                     { Op: 'tanh', Args: [] } ] 
         },
@@ -43,11 +42,15 @@ let parameters = {};
     logger.log({preLen: preprocessingStorage.length});
     let [trainSet, testSet] = mnist.getTrainTestSet();
     logger.log({trainLen: trainSet.length, testSet: testSet.length});
-    let trainGenerator = mnist.makeTrainSampleGenerator(trainSet, 10);
     let causalNet = new CausalNet(_NetConfig, parameters, mnist.storage);
-    const DoBatchSampleGenerator = (batchSize)=>{return mnist.makeTrainSampleGenerator(trainSet, batchSize);};
-    let logTrain = await causalNet.train(DoBatchSampleGenerator, 10);
-    logger.logger(logTrain);
+    const DoBatchTrainSampleGenerator = (batchSize)=>{return mnist.makeSampleGenerator(trainSet, batchSize);};
+    let logTrain = await causalNet.train(DoBatchTrainSampleGenerator, 10);
+    logger.log(logTrain);
+    const DoBatchTestSampleGenerator = (batchSize)=>{return mnist.makeSampleGenerator(testSet, batchSize);};
+    let testResult = await causalNet.test(DoBatchTestSampleGenerator, testSet.length);
+    logger.log({testResult});
+    logger.log(await causalNet.saveParams('saveDemo.model'));
+    logger.log(await causalNet.loadParams('saveDemo.model'));
 })();
 
 

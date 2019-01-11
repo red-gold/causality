@@ -114,8 +114,8 @@ export default class MnistDataset extends BaseImgDataset{
         console.log(this.savedChunks);
         let generator = this.F.generatorWithIndex(this.savedChunks);
         for(let [idx, [dataPath, labelPath]] of generator){
-            let dataItem = await this.storage.readFile(dataPath, true);
-            let labelItem = await this.storage.readFile(labelPath, true);
+            let dataItem = await this.storage.getItem(dataPath, true);
+            let labelItem = await this.storage.getItem(labelPath, true);
             let data = dataItem[dataPath];
             let label = labelItem[labelPath];
             console.log({data, label});
@@ -136,7 +136,7 @@ export default class MnistDataset extends BaseImgDataset{
         return [trainSet, testSet];
     }
 
-    makeTrainSampleGenerator(trainSet, batchSize=10, start=0, end=null){
+    makeSampleGenerator(trainSet, batchSize=10, start=0, end=null){
         const batches = this.F.hsplitEvery(trainSet, batchSize);
         if(end === null){
             end = batches.length;

@@ -1,41 +1,111 @@
 import {Tensor} from 'causal-net.core';
-import {Layer} from 'causal-net.layer';
 import {LevelDBStorage} from 'causal-net.storage';
 import {default as Function} from './function';
 
-export default class CausalNet{
+export default class CausalNet extends Tensor{
     /**
      * @param  {} netConfig
      * @param  {} netParams
      */
     constructor( netConfig, netParams=null, storage=null ){
-        this.L = new Layer();
+        super();
         this.F = new Function();
-        this.T = this.L.CoreTensor;
         this.R = this.F.CoreFunction;
         this.storage = storage || new LevelDBStorage();
         this.HyperParameters = this.F.getHyperParameter(netConfig);
         this.BasePipeline = this.F.getPipeline(netConfig);
-        this.netParams = this.L.setOrInitParams(this.BasePipeline, netParams);
+        this.netParams = this.setOrInitParams(this.BasePipeline, netParams);
+        this.flattenParams = this.flattenParams(this.netParams);        
     }
+
+    flattenParams(params){
+        const R = this.R, F = this.F;
+        const MapValues = (objOrArray)=>Array.isArray(objOrArray)?objOrArray:Object.values(objOrArray);
+        const Flatten = (pv)=>{
+            if(F.isTensor(pv)){
+                return pv;
+            }
+            else{
+                let values = MapValues(pv);
+                let flatten = values.reduce((flatten, v)=>{
+                    let res = Flatten(v);
+                    if(R.is(Array, res)){
+                        flatten = [...flatten, ...res];
+                    }
+                    else{
+                        flatten = [...flatten, res];
+                    }
+                    return flatten;
+                }, []);
+                return flatten;
+            }
+        };
+        let values = MapValues(params);
+        
+        return values.reduce((flatten,v)=>[...flatten, ...Flatten(v)],[]);
+    }
+
+    layer(value, layerConfigure, layerParameters){
+        const R = this.R;
+        const {Name, Type, Parameters, Flow} = layerConfigure;
+        console.log({Name, Type, Parameters, Flow});
+        const OpsRuner = R.addIndex(R.reduce)(R.__,{result: value, trace: {}}, Flow);
+        var {result, trace} = OpsRuner(({result, trace}, node, idx)=>{
+            if(node.Parameter){
+                result = this.T[node.Op](result, layerParameters[node.Parameter], ...node.Args);
+            }
+            else{
+                result = this.T[node.Op](result, ...node.Args);    
+            };
+            trace[idx] = result.shape;
+            return {result, trace};
+        });
+        return {[Name]: result, trace};
+    }
+
+    setOrInitParams(pipeline, netParams){
+        const R = this.R, T = this.T, F = this.F;
+        let pipeParams = R.fromPairs(R.filter(([k,v])=>v !== undefined,
+                                R.map(R.__, pipeline)(p=>[p.Name, p.Parameters])));
+        const SetOrInit = (mainValue, subVal)=>{
+            let keys = R.keys(mainValue);
+            let keyMainValSubVal = R.map((k)=> [k, R.prop(k, mainValue), R.propOr(null, k, subVal)], keys);
+            const ValMapping = ([key, mainVal, subVal])=>{
+                if(F.isParameter(mainVal)){
+                    const paramShape = mainVal;
+                    if(R.isNil(subVal)){
+                        return [key, T.variable(T.randomNormal(paramShape))];
+                    }
+                    else{
+                        return [key, T.variable(T.tensor(subVal).reshape(paramShape))];
+                    }
+                }
+                else{
+                    return [key, SetOrInit(mainVal, subVal)];
+                }
+            };
+            return R.fromPairs(R.map(ValMapping, keyMainValSubVal));
+        };
+        return SetOrInit(pipeParams, netParams);
+    }
+
     /**
      * @param  {} samples
      * @param  {} numSamples=1
-     * @param  {} log=null
      */
-    makePredict(samples, numSamples=1, log=null){
+    makePredict(samples, numSamples=1){
         const T = this.T, f = this.F, l = this.L;
         this.HyperParameters.Datasize = numSamples;
         const Pipeline = f.parameterAcquisition(this.BasePipeline, this.HyperParameters);
-        console.log(JSON.stringify({Pipeline}));
+        console.log(({Pipeline}));
         let pipeValue = {PipeInput: samples}, traces = [], netParams = this.netParams;
         return T.tidy(()=>{
             for(let layer of Pipeline){
-                let layerOutput = l.layer(pipeValue[layer.Input], layer, netParams[layer.Name], ()=>{});
+                let layerOutput = this.layer(pipeValue[layer.Input], layer, netParams[layer.Name]);
                 pipeValue[layer.Name] = layerOutput[layer.Name];
                 traces.push({[layer.Name]: layerOutput.trace});
             }
-            console.log(JSON.stringify({traces}));
+            console.log({traces});
             let pipeOutput = pipeValue['PipeOutput'];
             let logProb = pipeOutput.sub(T.logSumExp(pipeOutput, 1, true));
             let predict = logProb.argMax(1);
@@ -46,15 +116,14 @@ export default class CausalNet{
      * @param  {} sampleBatch
      * @param  {} labelBatch
      * @param  {} numSample
-     * @param  {} log=null
      */
-    loss(sampleBatch, labelBatch, numSample, log=null){
+    loss(batchSamples, batchLabels, numSample){
         const T = this.T;
-        let label = T.tensor(labelBatch).reshape([numSample, -1]);
-        const {logProb} = this.makePredict(sampleBatch, numSample, log);
-        const likelihood = logProb.neg().mul(label);
+        let labelTensor  = T.tensor(batchLabels).reshape([numSample, -1]);
+        let sampleTensor = T.tensor(batchSamples).asType('float32'); 
+        const {logProb} = this.makePredict(sampleTensor, numSample);
+        const likelihood = logProb.neg().mul(labelTensor);
         const loss = likelihood.mean();
-        // if(log){ log({shape: sampleBatch.shape[0]}); };
         return loss;
     };
     /**
@@ -63,7 +132,7 @@ export default class CausalNet{
      * @param  {} numEpochs=2
      * @param  {} lr=0.01
      */
-    async train(SampleGeneratorFn, batchSize, numEpochs = 2, lr=0.01){
+    async train(SampleGeneratorFn, batchSize, numEpochs = 2, lr=0.001){
         const T = this.T, F = this.F, R = this.R;
         const start = new Date();
         let loss = [], averageLoss = [];
@@ -72,13 +141,12 @@ export default class CausalNet{
             console.log({epochIdx, averageLoss, time: new Date().toISOString(), 
                          start: start.toISOString(), elapse: (new Date() - start)/1000});
             const sampleGenerator = SampleGeneratorFn(batchSize);
-            for await (let [batchData, batchLabels] of sampleGenerator){
-                // console.log({dlen: batchData.length, llen: batchLabels.length});
+            for await (let [batchSamples, batchLabels] of sampleGenerator){
                 optimizer.minimize(()=>{
-                    let l = this.loss(batchData, batchLabels, batchSize, (msg)=>{console.log(msg);});
+                    let l = this.loss(batchSamples, batchLabels, batchSize);
                     loss = [...loss, ...l.dataSync()];
                     console.log({loss});
-                    return l;
+                    return l.asType('float32');
                 });
             }
             averageLoss = [...averageLoss, R.mean(loss)];
@@ -89,32 +157,48 @@ export default class CausalNet{
         });
     };
 
-    test(testData, testLabels){
-        let {predict} = this.makePredict(testData);
-        predict = predict.dataSync();
-        let corrects = testLabels.map((testLabel,idx)=>{
-            return testLabel === predict[idx];
-        });
-        return {corect: R.sum(corrects), total: testLabels.length};
+    async test(TestSampleGeneratorFn, testBatchSize, numClasses=10){
+        const T = this.T, F = this.F, R = this.R;
+        const testSampleGenerator = TestSampleGeneratorFn(testBatchSize);
+        let testResult = T.zeros([1]);
+        for await (let [batchSamples, batchLabels] of testSampleGenerator){
+            let labelTensor  = T.tensor(batchLabels).reshape([testBatchSize, numClasses]);
+            let sampleTensor = T.tensor(batchSamples).asType('float32'); 
+            const {predict} = this.makePredict(sampleTensor, testBatchSize);
+            let onehotPredict = T.oneHot(predict, numClasses);
+            testResult.add(onehotPredict.mul(labelTensor).sum());
+        }
+        return await testResult.div(T.tensor(testBatchSize)).data();        
     }
 
-    getParamsSync(){
+    async getParams(){
         const F = this.F, R = this.R;
-        const getParams = (params)=>{
+        const getParams = async (params)=>{
             if(F.isTensor(params)){
-                return Array.from(params.dataSync());
+                return Array.from(await params.data());
             }
             else{
-                return R.map(getParams, params);
+                let kVals = R.toPairs(params);
+                let res = {};
+                for(let [k, val] of kVals){
+                    res[k] = await getParams(val); 
+                }
+                return res;
             }
         };
-        return getParams(this.netParams);
+        return await getParams(this.netParams);
     }
     
-    saveParams(fileName='./save.model'){
-        const params = this.getParamsSync();
+    async saveParams(fileName='./save.model'){
+        const params = await this.getParams();
+        console.log({params});
+        return await this.storage.writeFile(fileName, JSON.stringify(params));
     }
-    readParamsSync(fileName){
-        this.netParams = this.L.setOrInitParams(this.BasePipeline, params);
+    async loadParams(fileName){
+        let _params = await this.storage.readFile(fileName);
+        console.log({_params});
+        let params = JSON.parse(_params);
+        this.netParams = this.setOrInitParams(this.BasePipeline, params);
+        return this.netParams;
     }
 }
