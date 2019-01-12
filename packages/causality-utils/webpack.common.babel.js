@@ -1,11 +1,12 @@
-import { join, resolve } from 'path';
 import Bundle from './bundle.json';
-const include = join(__dirname, 'src');
 
 export default {
   entry: {
-    [Bundle.main]: ['@babel/polyfill', './src/index.js'],
-    [Bundle.min]: ['@babel/polyfill', './src/index.js'],
+    [Bundle.main]:  './src/index.js',
+    [Bundle.dir+'fetch']:  './src/fetch.js',
+    [Bundle.dir+'platform']:  './src/platform.js',
+    [Bundle.dir+'png']:  './src/png.js',
+    [Bundle.dir+'stream']:  './src/stream.js'
   },
   mode: 'development',
   devtool: 'inline-source-map',
@@ -20,7 +21,7 @@ export default {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        loader: 'babel-loader?compact=false',
       }
     ],
   }

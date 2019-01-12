@@ -1,4 +1,4 @@
-import {Function as BaseFunction} from 'causal-net-utils';
+import {Function as BaseFunction} from 'causal-net.core';
 export default class Function extends BaseFunction{
     constructor(){
         super();

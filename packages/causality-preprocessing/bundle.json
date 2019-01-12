@@ -1,4 +1,4 @@
 { 
     "main": "@causalNet/preprocessing", 
-    "min": "@causalNet/preprocessing.min"
+    "dir": "@causalNet/preprocessing/"
 }

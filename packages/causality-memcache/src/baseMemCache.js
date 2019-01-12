@@ -3,15 +3,11 @@ export default class BaseMemCache{
         this.zone = zone;
     }
 
-    flush(){
+    async getItem(key, asBuffer=false){
         throw Error('need to implement');
     }
 
-    getItem(zone, key){
-        throw Error('need to implement');
-    }
-
-    setItem(zone, key, value){
+    async setItem(key, data){
         throw Error('need to implement');
     }
 }

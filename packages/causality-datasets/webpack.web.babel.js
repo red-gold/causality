@@ -20,7 +20,8 @@ const WebConfig = merge(common, {
       title: Bundle.main,
       chunks: ['examples'],
       filename: 'index.html',
-      template: './examples/index.html'
+      template: './examples/index.html',
+      hash: true
     })
   ],  
   externals: ['leveldown']//either do it or make all causal packages external, need thinking

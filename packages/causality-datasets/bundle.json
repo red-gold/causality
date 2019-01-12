@@ -1,4 +1,4 @@
 { 
     "main": "@causalNet/datasets", 
-    "min": "@causalNet/datasets.min"
+    "min": "@causalNet/datasets/"
 }

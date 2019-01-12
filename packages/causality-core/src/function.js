@@ -39,10 +39,16 @@ export default class Function{
         return null;
     }
 
-    zip(valueLeft, valueRight){
-        this.R.zip(valueLeft, valueRight);
+    zip(...sdatum){
+        return this.R.zip(...sdatum);
     }
-    unzip(){
-
+    unzip(datum){
+        const R = this.R;
+        const Unzip = (uz, pair)=>{
+            uz[0] = [...uz[0], pair[0]];
+            uz[1] = [...uz[1], pair[1]];
+            return uz;
+        };
+        return R.reduce(Unzip,[[], []],datum);
     }
 }

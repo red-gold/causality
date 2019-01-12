@@ -1,17 +1,18 @@
-// import {default as fetch} from './fetch';
+import {Platform, Fetch} from 'causal-net.utils';
 import {default as BaseStorage} from './baseStorage';
 import {default as PNGFileMixins} from './PNGFileMixins';
-import {Platform, Fetch} from 'causal-net.utils';
 import {default as LevelDownMixins} from './levelDBStorage.mixins.node';
 import {default as LevelJSMixins} from './levelDBStorage.mixins.web';
 
-export default class LevelDBStorage extends Platform.mixWith(BaseStorage, {'node':[LevelDownMixins, PNGFileMixins],'web':[LevelJSMixins, PNGFileMixins]}){
+class LevelDBStorage extends Platform.mixWith(BaseStorage, 
+                       {'node': [LevelDownMixins, PNGFileMixins],
+                         'web': [LevelJSMixins, PNGFileMixins]}){
 
     async getItem(key, asBuffer=false){
         return new Promise((resolve, reject)=>{
             this.storage.get(key, {asBuffer}, (err, data)=>{
                 if(err){
-                    reject('error write');
+                    reject('error read');
                 }
                 else{
                     resolve({[key]: data});
@@ -36,8 +37,8 @@ export default class LevelDBStorage extends Platform.mixWith(BaseStorage, {'node
      * @async
      * @param  {} filePath
      */
-    async readFile(filePath, asBuffer=false){
-        let item = await this.getItem(filePath, {asBuffer});
+    async readFile(filePath){
+        let item = await this.getItem(filePath);
         return item[filePath];
     }
     /**
@@ -71,3 +72,5 @@ export default class LevelDBStorage extends Platform.mixWith(BaseStorage, {'node
         throw Error('implement required');
     }
 }
+
+export default new LevelDBStorage();

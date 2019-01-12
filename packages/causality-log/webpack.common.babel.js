@@ -4,8 +4,9 @@ const include = join(__dirname, 'src');
 
 export default {
   entry: {
-    [Bundle.main]: ['@babel/polyfill', './src/index.js'],
-    [Bundle.min]: ['@babel/polyfill', './src/index.js']
+    [Bundle.main]: ['./src/index.js'],
+    [Bundle.dir + 'baseLog']: './src/index.js',
+    [Bundle.dir + 'termLog']: './src/termLog.js'
   },
   mode: 'development',
   devtool: 'inline-source-map',

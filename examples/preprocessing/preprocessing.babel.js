@@ -1,5 +1,4 @@
 import {Preprocessing} from 'causal-net.preprocessing';
-import {TermLog} from 'causal-net.log';
-let logger = new TermLog();
+import {Logger} from 'causal-net.log';
 let preprocessing = new Preprocessing();
-logger.log(preprocessing.splitImageBuffer(new Buffer(10), 2));
+Logger.log(preprocessing.splitImageBuffer(new Buffer(10), 2));

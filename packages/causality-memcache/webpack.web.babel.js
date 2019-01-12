@@ -6,7 +6,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const WebConfig = merge(common, {
   entry: {
-    examples: ['@babel/polyfill', './examples/examples.js'],
+    examples: './examples/examples.js',
   },
   output: {
     path: resolve(__dirname, 'dist'),

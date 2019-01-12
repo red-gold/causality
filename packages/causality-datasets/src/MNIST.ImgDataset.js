@@ -1,14 +1,13 @@
 import {default as BaseImgDataset} from './baseImgDataset';
-import { LevelDBStorage } from 'causal-net.storage';
+import { IndexDBStorage } from 'causal-net.storage';
 import { Preprocessing } from 'causal-net.preprocessing';
 import { Stream } from 'causal-net.utils';
-import { Transform } from 'stream';
 
 export default class MnistDataset extends BaseImgDataset{
     
     constructor(configure){
         super(configure);
-        this.storage = new LevelDBStorage();
+        this.storage = IndexDBStorage;
         this.preprocessing = new Preprocessing();
     }
 
@@ -16,18 +15,18 @@ export default class MnistDataset extends BaseImgDataset{
         return await this.storage.fetchBuffer(chunkUrl, savePath);
     }
 
-    async fetchDataChunk(chunkUrl, savePath){
+    async fetchSampleChunk(chunkUrl, savePath){
         return await this.storage.fetchPNGFile(chunkUrl, savePath);
     }
 
     async fetchDataset(saveDir='/mnist/',numchunks=1, selectBy='random'){
         let dataChunks = ['data-chunk-0.png'];
         let labelChunks = ['label-chunk-0'];
-        const FetchDataChunk = async (chunkName)=>{
+        const FetchSampleChunk = async (chunkName)=>{
             const ChunkUrl = this.configuration.datasetUrl + chunkName;
             const SavePath = saveDir + chunkName;
             console.log({ChunkUrl, SavePath});
-            return await this.fetchDataChunk(ChunkUrl, SavePath);
+            return await this.fetchSampleChunk(ChunkUrl, SavePath);
         };
         const FetchLabelChunk = async (chunkName)=>{
             let chunkUrl = this.configuration.datasetUrl + chunkName;
@@ -38,20 +37,16 @@ export default class MnistDataset extends BaseImgDataset{
         let chunkFetchList = this.F.zip(dataChunks, labelChunks);
         this.savedChunks = await Promise.all(
                     chunkFetchList.map(
-                        async ([dataChunk, labelChunk])=>{
-                            let dataPath  = await FetchDataChunk(dataChunk);
+                        async ([sampleChunk, labelChunk])=>{
+                            let samplePath  = await FetchSampleChunk(sampleChunk);
                             let labelPath = await FetchLabelChunk(labelChunk);
-                            return [dataPath, labelPath];
+                            return [samplePath, labelPath];
                         })
                     );
-        let [dataStorage, labelStorage] = this.F.unzip(this.savedChunks);
-        this.savedChunkData = dataStorage;
-        this.savedChunkLabel = labelStorage;
-        return {dataStorage, labelStorage};
-    }
-
-    preprocessingTransform(){
-
+        let [sampleStorage, labelStorage] = this.F.unzip(this.savedChunks);
+        this.savedChunkSamples = sampleStorage;
+        this.savedChunkLabels = labelStorage;
+        return {sampleStorage, labelStorage};
     }
     
     makePreprocessingStream(saveDir='/preprocessing/mnist/',storeInMemory=false){
@@ -63,10 +58,10 @@ export default class MnistDataset extends BaseImgDataset{
                      labelBufferSize: LabelBufferSize});
         const TransformFn = (chunk, chunkEncoding, afterTransformFn) =>{
             const TransformAsync = async ()=>{
-                let dataBuffer = chunk.data;
+                let sampleBuffer = chunk.sample;
                 let labelBuffer = chunk.label;
-                console.log({dataBuffer, labelBuffer});
-                let splitedImgBuffer = await this.preprocessing.splitImageBuffer(dataBuffer, ImageBufferSize);
+                console.log({sampleBuffer, labelBuffer});
+                let splitedImgBuffer = await this.preprocessing.splitImageBuffer(sampleBuffer, ImageBufferSize);
                 let splitedLabelBuffer = await this.preprocessing.splitImageBuffer(labelBuffer, LabelBufferSize);
                 
                 return {transformedData: this.F.zip(splitedImgBuffer, splitedLabelBuffer), chunkIdx: chunk.idx};
@@ -113,13 +108,13 @@ export default class MnistDataset extends BaseImgDataset{
     async preprocessingDataset(stream){
         console.log(this.savedChunks);
         let generator = this.F.generatorWithIndex(this.savedChunks);
-        for(let [idx, [dataPath, labelPath]] of generator){
-            let dataItem = await this.storage.getItem(dataPath, true);
+        for(let [idx, [samplePath, labelPath]] of generator){
+            let sampleItem = await this.storage.getItem(samplePath, true);
             let labelItem = await this.storage.getItem(labelPath, true);
-            let data = dataItem[dataPath];
+            let sample = sampleItem[samplePath];
             let label = labelItem[labelPath];
-            console.log({data, label});
-            stream.push({idx, data, label});
+            console.log({sample, label});
+            stream.push({idx, sample, label});
         }
         stream.push(null);
         return new Promise((resolve, reject)=>{
@@ -148,10 +143,10 @@ export default class MnistDataset extends BaseImgDataset{
                 next: async()=>{
                     let batchSamples = [], batchLabels = [];
                     console.log({bl: batches[nextIndex], nextIndex});
-                    for(let [dataPath, labelPath] of batches[nextIndex]){
-                        let dataItem = await this.storage.getItem(dataPath,true);
+                    for(let [samplePath, labelPath] of batches[nextIndex]){
+                        let sampleItem = await this.storage.getItem(samplePath,true);
                         let labelItem = await this.storage.getItem(labelPath,true);
-                        batchSamples = [...batchSamples, dataItem[dataPath]];
+                        batchSamples = [...batchSamples, sampleItem[samplePath]];
                         batchLabels = [...batchLabels, labelItem[labelPath]];
                     }
                     nextIndex += step;

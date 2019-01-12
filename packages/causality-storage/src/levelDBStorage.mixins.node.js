@@ -1,7 +1,7 @@
 import levelup from 'levelup';
-import leveldown from 'leveldown';
 const LevelDownMixins = (StorageClass)=> class extends StorageClass{ 
     constructor(){
+        var leveldown = require('leveldown');
         super(levelup(leveldown('data')));
     }
 };

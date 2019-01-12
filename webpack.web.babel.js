@@ -15,12 +15,15 @@ const WebConfig = merge(common, {
     library: Bundle.main,
     globalObject: 'this'
   },
-  externals: ['leveldown'],
   plugins: [
     new HtmlWebpackPlugin({
       title: 'demo',
+      chunks: ['examples'],
+      filename: 'index.html',
+      hash: true,
       template:'./examples/index.html'
     })
-  ]  
+  ],
+  externals: ['leveldown']  
 });
 export default WebConfig;

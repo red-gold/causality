@@ -4,14 +4,8 @@ const include = join(__dirname, 'src');
 
 export default {
   entry: {
-    [Bundle.main]: ['@babel/polyfill', './src/index.js'],
-    [Bundle.min]: ['@babel/polyfill', './src/index.js'],
+    [Bundle.main]: './src/index.js',
   },
-  // optimization: {
-  //   splitChunks: {
-  //     chunks: 'all'
-  //   }
-  // },
   mode: 'development',
   devtool: 'inline-source-map',
   module: {
@@ -24,7 +18,7 @@ export default {
       },
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /dist/],
         loader: 'babel-loader',
       }
     ],

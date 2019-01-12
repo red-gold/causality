@@ -1,10 +1,6 @@
-import * as R from 'ramda';
-export default class Function{
+import {Function as BaseFunction} from 'causal-net.core';
+export default class Function extends BaseFunction{
     constructor(){
-        this.R = R;
-    }
-
-    get CoreFn(){
-        return this.R;
+        super();
     }
 }

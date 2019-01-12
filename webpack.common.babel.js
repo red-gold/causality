@@ -4,8 +4,7 @@ const include = join(__dirname, 'src');
 
 export default {
   entry: {
-    [Bundle.main]: ['@babel/polyfill', './src/index.js'],
-    [Bundle.min]: ['@babel/polyfill', './src/index.js'],
+    [Bundle.main]: ['@babel/polyfill', './src/index.js']
   },
   mode: 'development',
   devtool: 'inline-source-map',

@@ -6,7 +6,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const WebConfig = merge(common, {
   entry: {
-    examples: ['@babel/polyfill', './examples/examples.js'],
+    examples: './examples/examples.js',
   },
   output: {
     path: resolve(__dirname, 'dist'),
@@ -18,11 +18,9 @@ const WebConfig = merge(common, {
   plugins: [
     new HtmlWebpackPlugin({
       title: Bundle.main,
-      chunks: ['examples'],
       filename: 'index.html',
       template: './examples/index.html'
     })
   ]  
 });
-
 export default WebConfig;

@@ -168,7 +168,7 @@ export default class CausalNet extends Tensor{
             let onehotPredict = T.oneHot(predict, numClasses);
             testResult.add(onehotPredict.mul(labelTensor).sum());
         }
-        return await testResult.div(T.tensor(testBatchSize)).data();        
+        return {accuracy: await testResult.div(T.tensor(testBatchSize)).data(), pass: await testResult.data()};        
     }
 
     async getParams(){
