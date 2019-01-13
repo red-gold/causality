@@ -1,4 +1,4 @@
 { 
     "main": "@causalNet/pipeline", 
-    "min": "@causalNet/pipeline.min"
+    "dir": "@causalNet/pipeline/"
 }

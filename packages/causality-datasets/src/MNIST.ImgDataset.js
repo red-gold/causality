@@ -1,5 +1,6 @@
 import {default as BaseImgDataset} from './baseImgDataset';
 import { IndexDBStorage } from 'causal-net.storage';
+import { MemDownCache } from 'causal-net.memcache';
 import { Preprocessing } from 'causal-net.preprocessing';
 import { Stream } from 'causal-net.utils';
 
@@ -8,7 +9,9 @@ export default class MnistDataset extends BaseImgDataset{
     constructor(configure){
         super(configure);
         this.storage = IndexDBStorage;
+        this.memCache = MemDownCache;
         this.preprocessing = new Preprocessing();
+        
     }
 
     async fetchLabelChunk(chunkUrl, savePath){
@@ -20,7 +23,7 @@ export default class MnistDataset extends BaseImgDataset{
     }
 
     async fetchDataset(saveDir='/mnist/',numchunks=1, selectBy='random'){
-        let dataChunks = ['data-chunk-0.png'];
+        let sampleChunks = ['data-chunk-0.png'];
         let labelChunks = ['label-chunk-0'];
         const FetchSampleChunk = async (chunkName)=>{
             const ChunkUrl = this.configuration.datasetUrl + chunkName;
@@ -34,7 +37,7 @@ export default class MnistDataset extends BaseImgDataset{
             console.log({chunkUrl, savePath});
             return await this.fetchLabelChunk(chunkUrl, savePath);
         };
-        let chunkFetchList = this.F.zip(dataChunks, labelChunks);
+        let chunkFetchList = this.F.zip(sampleChunks, labelChunks);
         this.savedChunks = await Promise.all(
                     chunkFetchList.map(
                         async ([sampleChunk, labelChunk])=>{
@@ -50,7 +53,7 @@ export default class MnistDataset extends BaseImgDataset{
     }
     
     makePreprocessingStream(saveDir='/preprocessing/mnist/',storeInMemory=false){
-        this.preProcessingStorage = (storeInMemory)?this.memeCache:this.storage;
+        this.preProcessingStorage = (storeInMemory)?this.memCache:this.storage;
         
         const ImageBufferSize = this.F.getImgBufferSize(this.sampleSize);
         const LabelBufferSize = this.numClass;
@@ -131,8 +134,9 @@ export default class MnistDataset extends BaseImgDataset{
         return [trainSet, testSet];
     }
 
-    makeSampleGenerator(trainSet, batchSize=10, start=0, end=null){
-        const batches = this.F.hsplitEvery(trainSet, batchSize);
+    makeSampleGenerator(sampleIdxSet, batchSize=null, start=0, end=null){
+        batchSize = batchSize?batchSize:sampleIdxSet.length;
+        const batches = this.F.hsplitEvery(sampleIdxSet, batchSize);
         if(end === null){
             end = batches.length;
         }

@@ -10,6 +10,8 @@ const NodeConfig = merge(common, {
       library: Bundle.main,
       globalObject: 'this'
     },
-    externals: ['causal-net.core', 'causal-net.utils', 'causal-net.storage', 'causal-net.preprocessing', 'causal-net.datasets'] 
+    externals: ['causal-net.core', 'causal-net.utils', 
+                'causal-net.storage', 'causal-net.preprocessing', 
+                'causal-net.datasets'] 
 });
 export default NodeConfig;

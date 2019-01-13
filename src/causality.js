@@ -1,5 +1,5 @@
 import {Tensor} from 'causal-net.core';
-import {LevelDBStorage} from 'causal-net.storage';
+import {IndexDBStorage} from 'causal-net.storage';
 import {default as Function} from './function';
 
 export default class CausalNet extends Tensor{
@@ -11,7 +11,7 @@ export default class CausalNet extends Tensor{
         super();
         this.F = new Function();
         this.R = this.F.CoreFunction;
-        this.storage = storage || new LevelDBStorage();
+        this.storage = storage || IndexDBStorage;
         this.HyperParameters = this.F.getHyperParameter(netConfig);
         this.BasePipeline = this.F.getPipeline(netConfig);
         this.netParams = this.setOrInitParams(this.BasePipeline, netParams);
@@ -166,9 +166,15 @@ export default class CausalNet extends Tensor{
             let sampleTensor = T.tensor(batchSamples).asType('float32'); 
             const {predict} = this.makePredict(sampleTensor, testBatchSize);
             let onehotPredict = T.oneHot(predict, numClasses);
-            testResult.add(onehotPredict.mul(labelTensor).sum());
+            onehotPredict.print();
+            labelTensor.print();
+            onehotPredict.mul(labelTensor).sum().print();
+            testResult = testResult.add(onehotPredict.mul(labelTensor).sum());
         }
-        return {accuracy: await testResult.div(T.tensor(testBatchSize)).data(), pass: await testResult.data()};        
+        let result = await testResult.data();
+        let pass = result[0];
+        let accuracy = pass/testBatchSize;
+        return {accuracy, pass};        
     }
 
     async getParams(){
@@ -198,7 +204,7 @@ export default class CausalNet extends Tensor{
         let _params = await this.storage.readFile(fileName);
         console.log({_params});
         let params = JSON.parse(_params);
-        this.netParams = this.setOrInitParams(this.BasePipeline, params);
-        return this.netParams;
+        this.setOrInitParams(this.BasePipeline, params);
+        return await this.getParams();
     }
 }

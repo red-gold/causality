@@ -6,21 +6,27 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const WebConfig = merge(common, {
   entry: {
-    examples: ['@babel/polyfill', './examples/examples.js'],
+    examples: './examples/examples.js',
+    vendor:['causal-net.datasets','causal-net.log','causal-net.utils']
   },
+	optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+	},
   output: {
     path: resolve(__dirname, 'dist'),
     libraryTarget: 'umd',
     filename: '[name].web.js',
+    chunkFilename: '[name].bundle.js',
     library: Bundle.main,
     globalObject: 'this'
   },
+  
   plugins: [
     new HtmlWebpackPlugin({
       title: 'demo',
-      chunks: ['examples'],
       filename: 'index.html',
-      hash: true,
       template:'./examples/index.html'
     })
   ],

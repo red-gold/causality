@@ -1,10 +1,9 @@
-import { join, resolve } from 'path';
 import Bundle from './bundle.json';
-const include = join(__dirname, 'src');
 
 export default {
   entry: {
-    [Bundle.main]: ['@babel/polyfill', './src/index.js']
+    [Bundle.main]: './src/index.js',
+    [Bundle.dir+'pipeline']: './src/causality.js',
   },
   mode: 'development',
   devtool: 'inline-source-map',
@@ -18,7 +17,7 @@ export default {
       },
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/,/dist/],
         loader: 'babel-loader',
       }
     ],

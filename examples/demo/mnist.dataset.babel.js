@@ -1,6 +1,6 @@
 import {CausalNet} from '../../src/index';
 import {MNIST} from 'causal-net.datasets';
-import {TermLog} from 'causal-net.log';
+import {Logger} from 'causal-net.log';
 import {Fetch} from 'causal-net.utils';
 const _NetConfig = {
     HyperParameters: {Datasize:10},
@@ -29,28 +29,27 @@ const _NetConfig = {
 
 let parameters = {};
 (async ()=>{
-    const logger = new TermLog();
     const url = 'https://raw.githubusercontent.com/red-gold/causality/wip/datasets/MNIST_dataset/dataset.summary.json';
     const configure = await Fetch.fetchJson(url);
     configure.datasetUrl = 'https://raw.githubusercontent.com/red-gold/causality/wip/datasets/MNIST_dataset/';
     let mnist = new MNIST(configure);
-    logger.log(mnist.summary());
+    Logger.log(mnist.summary());
     let chunkStorage = await mnist.fetchDataset();
-    logger.log({chunkStorage});
+    Logger.log({chunkStorage});
     let stream = mnist.makePreprocessingStream();
     let preprocessingStorage = await mnist.preprocessingDataset(stream);
-    logger.log({preLen: preprocessingStorage.length});
+    Logger.log({preLen: preprocessingStorage.length});
     let [trainSet, testSet] = mnist.getTrainTestSet();
-    logger.log({trainLen: trainSet.length, testSet: testSet.length});
+    Logger.log({trainLen: trainSet.length, testSet: testSet.length});
     let causalNet = new CausalNet(_NetConfig, parameters, mnist.storage);
     const DoBatchTrainSampleGenerator = (batchSize)=>{return mnist.makeSampleGenerator(trainSet, batchSize);};
-    let logTrain = await causalNet.train(DoBatchTrainSampleGenerator, 10);
-    logger.log(logTrain);
+    let logTrain = await causalNet.train(DoBatchTrainSampleGenerator, 10, 25, 0.005);
+    Logger.log(logTrain);
     const DoBatchTestSampleGenerator = (batchSize)=>{return mnist.makeSampleGenerator(testSet, batchSize);};
     let testResult = await causalNet.test(DoBatchTestSampleGenerator, testSet.length);
-    logger.log({testResult});
-    logger.log(await causalNet.saveParams('saveDemo.model'));
-    logger.log(await causalNet.loadParams('saveDemo.model'));
+    Logger.log({testResult});
+    Logger.log(await causalNet.saveParams('saveDemo.model'));
+    Logger.log(await causalNet.loadParams('saveDemo.model'));
 })();
 
 
