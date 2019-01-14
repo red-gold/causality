@@ -39,8 +39,8 @@ export default class Function{
         return null;
     }
 
-    zip(...sdatum){
-        return this.R.zip(...sdatum);
+    zip(...pairs){
+        return this.R.zip(...pairs);
     }
     unzip(datum){
         const R = this.R;

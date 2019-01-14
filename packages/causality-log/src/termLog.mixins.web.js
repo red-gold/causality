@@ -1,23 +1,25 @@
+import {default as JsonView} from './prettyJson';
 const WebNodeMixins = (LogClass)=> class extends LogClass{
     connect(documentEl=null){
         documentEl = documentEl||document.body;
-        documentEl.appendChild(document.createElement("UL"));
-        this.documentEl = documentEl.getElementsByTagName("UL")[0];
+        let node = document.createElement("ul");
+        node.style.cssText = "list-style-type: none;";documentEl.appendChild(node);
+        
+        this.documentEl = documentEl.getElementsByTagName("ul")[0];
     }
     log(message){
         if(!this.documentEl || !this.documentEl.appendChild){
             this.connect();
         }
-        var node = document.createElement("LI");       
-        var textnode = document.createTextNode(JSON.stringify(message));
-        node.appendChild(textnode);      
+        let node = document.createElement("li");
+        node.style.cssText = 'border-bottom: 1px solid #dedede;';       
+        let jsonNode = JsonView.JSONDisplay(message);
+        var date = new Date();
+        node.innerHTML = `<p style="font-size: 12px; text-align:right">${date}</p>`;
+        node.appendChild(jsonNode);
         this.documentEl.appendChild(node);
         console.log(this.prefix.join('/'));
         console.log(message);
-    }
-    trace(message){
-        console.log(this.prefix.join('/'));
-        console.trace(message);
     }
 };
 

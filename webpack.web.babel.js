@@ -6,10 +6,9 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const WebConfig = merge(common, {
   entry: {
-    examples: './examples/examples.js',
-    vendor:['causal-net.datasets','causal-net.log','causal-net.utils']
-  },
-	optimization: {
+    examples: './examples/examples.js'
+  },	
+  optimization: {
     splitChunks: {
       chunks: 'all'
     }

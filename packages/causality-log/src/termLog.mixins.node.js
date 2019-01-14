@@ -3,12 +3,7 @@ const LogNodeMixins = (LogClass)=> class extends LogClass{
         //nothing
     }
     log(message){
-        console.log(this.prefix.join('/'));
         console.log(message);
-    }
-    trace(message){
-        console.log(this.prefix.join('/'));
-        console.trace(message);
     }
 };
 

@@ -177,7 +177,7 @@ export default class CausalNet extends Tensor{
         return {accuracy, pass};        
     }
 
-    async getParams(){
+    async getParams(asObject=true){
         const F = this.F, R = this.R;
         const getParams = async (params)=>{
             if(F.isTensor(params)){
@@ -192,7 +192,13 @@ export default class CausalNet extends Tensor{
                 return res;
             }
         };
-        return await getParams(this.netParams);
+        let params = await getParams(this.netParams);
+        if(asObject){
+            return params;
+        }
+        else{
+            return JSON.stringify(params);
+        }
     }
     
     async saveParams(fileName='./save.model'){
@@ -205,6 +211,6 @@ export default class CausalNet extends Tensor{
         console.log({_params});
         let params = JSON.parse(_params);
         this.setOrInitParams(this.BasePipeline, params);
-        return await this.getParams();
+        return await this.getParams(false);
     }
 }

@@ -8,6 +8,11 @@ const WebConfig = merge(common, {
   entry: {
     examples: './examples/examples.js',
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+	},
   output: {
     path: resolve(__dirname, 'dist'),
     libraryTarget: 'umd',
@@ -18,7 +23,6 @@ const WebConfig = merge(common, {
   plugins: [
     new HtmlWebpackPlugin({
       title: Bundle.main,
-      chunks: ['examples'],
       filename: 'index.html',
       template: './examples/index.html'
     })

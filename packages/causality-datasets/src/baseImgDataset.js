@@ -11,7 +11,6 @@ export default class BaseImgDataset{
         this.numSamples = numSamples;
         this.sampleSize = sampleSize;
         this.numClass   = numClasses;
-        this.F = new Function();
     }
     
     summary(){

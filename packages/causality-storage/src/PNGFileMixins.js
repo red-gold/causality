@@ -15,8 +15,7 @@ const PNGFileMixins = (StorageClass)=> class extends StorageClass{
 
     async fetchPNG(url){
         return new Promise(async (resolve, reject)=>{
-            let _reader = await Fetch.streamData(url);
-            let reader = Stream.wrapReadable(_reader);
+            let reader = await Fetch.streamData(url);
             let png = new PNG();
             png.on('parsed', function(){
                 resolve(this.data);

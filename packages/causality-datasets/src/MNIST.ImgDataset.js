@@ -1,8 +1,9 @@
-import {default as BaseImgDataset} from './baseImgDataset';
+import { default as BaseImgDataset } from './baseImgDataset';
+import { default as Function } from './function';
 import { IndexDBStorage } from 'causal-net.storage';
 import { MemDownCache } from 'causal-net.memcache';
 import { Preprocessing } from 'causal-net.preprocessing';
-import { Stream } from 'causal-net.utils';
+import { Stream, Sampling } from 'causal-net.utils';
 
 export default class MnistDataset extends BaseImgDataset{
     
@@ -11,41 +12,43 @@ export default class MnistDataset extends BaseImgDataset{
         this.storage = IndexDBStorage;
         this.memCache = MemDownCache;
         this.preprocessing = new Preprocessing();
-        
+        this.F = new Function();
     }
 
     async fetchLabelChunk(chunkUrl, savePath){
-        return await this.storage.fetchBuffer(chunkUrl, savePath);
+        console.log({chunkUrl, savePath});
+        return await this.storage.fetchFile(chunkUrl, savePath);
     }
 
     async fetchSampleChunk(chunkUrl, savePath){
         return await this.storage.fetchPNGFile(chunkUrl, savePath);
     }
 
+    selectFetchedChunks(numchunks, selectBy='random'){
+        let chunkIdxs = Sampling.choice(this.configuration.chunkList, numchunks);
+        return chunkIdxs.map(idx=>{
+                        return [`data-chunk-${idx}.png`,`label-chunk-${idx}`];
+                    });
+    }
+
     async fetchDataset(saveDir='/mnist/',numchunks=1, selectBy='random'){
-        let sampleChunks = ['data-chunk-0.png'];
-        let labelChunks = ['label-chunk-0'];
-        const FetchSampleChunk = async (chunkName)=>{
-            const ChunkUrl = this.configuration.datasetUrl + chunkName;
-            const SavePath = saveDir + chunkName;
-            console.log({ChunkUrl, SavePath});
-            return await this.fetchSampleChunk(ChunkUrl, SavePath);
-        };
-        const FetchLabelChunk = async (chunkName)=>{
-            let chunkUrl = this.configuration.datasetUrl + chunkName;
-            let savePath = saveDir + chunkName;
-            console.log({chunkUrl, savePath});
-            return await this.fetchLabelChunk(chunkUrl, savePath);
-        };
+        let selectedChunks = this.selectFetchedChunks(numchunks, selectBy);
+        let [sampleChunks, labelChunks] = this.F.unzip(selectedChunks);
+        console.log({selectedChunks, sampleChunks, labelChunks});
         let chunkFetchList = this.F.zip(sampleChunks, labelChunks);
-        this.savedChunks = await Promise.all(
-                    chunkFetchList.map(
-                        async ([sampleChunk, labelChunk])=>{
-                            let samplePath  = await FetchSampleChunk(sampleChunk);
-                            let labelPath = await FetchLabelChunk(labelChunk);
-                            return [samplePath, labelPath];
-                        })
-                    );
+        this.savedChunks = [];
+        for(let [sampleChunk, labelChunk] of chunkFetchList){
+            let sampleChunkUrl = this.configuration.datasetUrl + sampleChunk;
+            let sammpleSavePath = saveDir + sampleChunk;
+            console.log({sampleChunkUrl, sammpleSavePath});
+            let samplePath = await this.storage.fetchPNGFile(sampleChunkUrl, sammpleSavePath);
+            let labelChunkUrl = this.configuration.datasetUrl + labelChunk;
+            let labelSavePath = saveDir + labelChunk;
+            console.log({labelChunkUrl, labelSavePath});
+            let labelPath = await this.storage.fetchFile(labelChunkUrl, labelSavePath);
+            console.log({labelPath});
+            this.savedChunks.push([samplePath, labelPath]);
+        };
         let [sampleStorage, labelStorage] = this.F.unzip(this.savedChunks);
         this.savedChunkSamples = sampleStorage;
         this.savedChunkLabels = labelStorage;
@@ -135,8 +138,10 @@ export default class MnistDataset extends BaseImgDataset{
     }
 
     makeSampleGenerator(sampleIdxSet, batchSize=null, start=0, end=null){
+        
         batchSize = batchSize?batchSize:sampleIdxSet.length;
-        const batches = this.F.hsplitEvery(sampleIdxSet, batchSize);
+        const _batches = this.F.hsplitEvery(sampleIdxSet, batchSize);
+        const batches = Sampling.choice(_batches, _batches.length);
         if(end === null){
             end = batches.length;
         }

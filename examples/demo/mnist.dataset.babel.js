@@ -29,12 +29,12 @@ const _NetConfig = {
 
 let parameters = {};
 (async ()=>{
-    const url = 'https://raw.githubusercontent.com/red-gold/causality/wip/datasets/MNIST_dataset/dataset.summary.json';
+    const url = 'http://127.0.0.1:8080/MNIST_dataset/dataset.summary.json';
     const configure = await Fetch.fetchJson(url);
-    configure.datasetUrl = 'https://raw.githubusercontent.com/red-gold/causality/wip/datasets/MNIST_dataset/';
+    configure.datasetUrl = 'http://127.0.0.1:8080/MNIST_dataset/';
     let mnist = new MNIST(configure);
     Logger.log(mnist.summary());
-    let chunkStorage = await mnist.fetchDataset();
+    let chunkStorage = await mnist.fetchDataset('/mnist/',3);
     Logger.log({chunkStorage});
     let stream = mnist.makePreprocessingStream();
     let preprocessingStorage = await mnist.preprocessingDataset(stream);

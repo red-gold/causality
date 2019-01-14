@@ -1,13 +1,13 @@
 const { MNIST } = require('causal-net.datasets');
 const { Logger } = require('causal-net.log');
 const { Fetch } = require('causal-net.utils');
-(async ()=>{
-    const url = 'https://raw.githubusercontent.com/red-gold/causality/wip/datasets/MNIST_dataset/dataset.summary.json';
+const mnist = async ()=>{
+    const url = 'http://127.0.0.1:8080/MNIST_dataset/dataset.summary.json';
     const configure = await Fetch.fetchJson(url);
-    configure.datasetUrl = 'https://raw.githubusercontent.com/red-gold/causality/wip/datasets/MNIST_dataset/';
+    configure.datasetUrl = 'http://127.0.0.1:8080/MNIST_dataset/';
     let mnist = new MNIST(configure);
     Logger.log(mnist.summary());
-    let chunkStorage = await mnist.fetchDataset();
+    let chunkStorage = await mnist.fetchDataset('/mnist/',2);
     Logger.log({chunkStorage});
     let stream = mnist.makePreprocessingStream();
     let preprocessingStorage = await mnist.preprocessingDataset(stream);
@@ -19,4 +19,7 @@ const { Fetch } = require('causal-net.utils');
         Logger.log({lenSample: sample.length});
         Logger.log({lenLabel: label.length});
     }
-})();
+};
+mnist().catch(err=>{
+    console.log({err});
+});

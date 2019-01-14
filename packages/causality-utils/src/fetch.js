@@ -15,7 +15,7 @@ const NodeStreamMixins = (FetchClass)=> class extends FetchClass{
 
 const WebStreamMixins = (FetchClass)=> class extends FetchClass{ 
     static async streamData(url){
-        let response = await fetchStream(url);
+        let response = await window.fetch(url);
         const streamReader = response.body.getReader();
         let reader = Stream.makeReadable();
         let { value, done } = await streamReader.read();

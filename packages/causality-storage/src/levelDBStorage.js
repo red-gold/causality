@@ -12,6 +12,7 @@ class LevelDBStorage extends Platform.mixWith(BaseStorage,
         return new Promise((resolve, reject)=>{
             this.storage.get(key, {asBuffer}, (err, data)=>{
                 if(err){
+                    console.error({err});
                     reject('error read');
                 }
                 else{
@@ -25,6 +26,7 @@ class LevelDBStorage extends Platform.mixWith(BaseStorage,
         return new Promise((resolve, reject)=>{
             this.storage.put(key, data, (err)=>{
                 if(err){
+                    console.error({err});
                     reject('error write');
                 }
                 else{
