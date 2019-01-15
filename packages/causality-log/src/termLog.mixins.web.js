@@ -3,8 +3,8 @@ const WebNodeMixins = (LogClass)=> class extends LogClass{
     connect(documentEl=null){
         documentEl = documentEl||document.body;
         let node = document.createElement("ul");
-        node.style.cssText = "list-style-type: none;";documentEl.appendChild(node);
-        
+        node.style.cssText = "list-style-type: none;";
+        documentEl.appendChild(node);
         this.documentEl = documentEl.getElementsByTagName("ul")[0];
     }
     log(message){

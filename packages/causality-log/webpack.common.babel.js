@@ -6,8 +6,7 @@ export default {
   entry: {
     [Bundle.main]: ['./src/index.js'],
     [Bundle.dir + 'baseLog']: './src/index.js',
-    [Bundle.dir + 'termLog']: './src/termLog.js',
-    'causal-net.utils': 'causal-net.utils',
+    [Bundle.dir + 'termLog']: './src/termLog.js'
   },
   mode: 'development',
   devtool: 'inline-source-map',

@@ -5,9 +5,6 @@ import common from './webpack.common.babel';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const WebConfig = merge(common, {
-  entry: {
-    examples: './examples/examples.js'
-  },	
   optimization: {
     splitChunks: {
       chunks: 'all'
@@ -20,15 +17,7 @@ const WebConfig = merge(common, {
     chunkFilename: '[name].bundle.js',
     library: Bundle.main,
     globalObject: 'this'
-  },
-  
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: 'demo',
-      filename: 'index.html',
-      template:'./examples/index.html'
-    })
-  ],
-  externals: ['leveldown']  
+  }
+  // externals: ['leveldown']  
 });
 export default WebConfig;

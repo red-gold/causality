@@ -1,5 +1,4 @@
 import fetch  from 'cross-fetch';
-import fetchStream from 'fetch-readablestream';
 import {default as Stream} from './stream';
 import {default as Platform} from './platform';
 

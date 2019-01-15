@@ -28,28 +28,39 @@ const _NetConfig = {
         } ] };
 
 let parameters = {};
-(async ()=>{
+Logger.connect(document.getElementById('logger'));
+Logger.log({'a':[1,2,3,4]});
+var mnist = null, causalNet = null, trainSet = null, testSet = null;
+const FetchData = async ()=>{
     const url = 'http://127.0.0.1:8080/MNIST_dataset/dataset.summary.json';
     const configure = await Fetch.fetchJson(url);
     configure.datasetUrl = 'http://127.0.0.1:8080/MNIST_dataset/';
-    let mnist = new MNIST(configure);
+    mnist = new MNIST(configure);
     Logger.log(mnist.summary());
-    let chunkStorage = await mnist.fetchDataset('/mnist/',3);
+    let chunkStorage = await mnist.fetchDataset('/mnist/',);
     Logger.log({chunkStorage});
+};
+const PreprocessingData = async ()=>{
     let stream = mnist.makePreprocessingStream();
     let preprocessingStorage = await mnist.preprocessingDataset(stream);
-    Logger.log({preLen: preprocessingStorage.length});
-    let [trainSet, testSet] = mnist.getTrainTestSet();
+    Logger.log({preprocessingDataLength: preprocessingStorage.length});
+};
+const TrainModel = async ()=>{
+    [trainSet, testSet] = mnist.getTrainTestSet();
     Logger.log({trainLen: trainSet.length, testSet: testSet.length});
-    let causalNet = new CausalNet(_NetConfig, parameters, mnist.storage);
+    var causalNet = new CausalNet(_NetConfig, parameters, mnist.storage);
     const DoBatchTrainSampleGenerator = (batchSize)=>{return mnist.makeSampleGenerator(trainSet, batchSize);};
     let logTrain = await causalNet.train(DoBatchTrainSampleGenerator, 10, 25, 0.005);
     Logger.log(logTrain);
+};
+const TestModel = async ()=>{
     const DoBatchTestSampleGenerator = (batchSize)=>{return mnist.makeSampleGenerator(testSet, batchSize);};
     let testResult = await causalNet.test(DoBatchTestSampleGenerator, testSet.length);
     Logger.log({testResult});
     Logger.log(await causalNet.saveParams('saveDemo.model'));
-    Logger.log(await causalNet.loadParams('saveDemo.model'));
-})();
+};
+const SaveModel = async (modelName='saveDemo.model')=>{
+    return await causalNet.loadParams(modelName);
+};
 
 
