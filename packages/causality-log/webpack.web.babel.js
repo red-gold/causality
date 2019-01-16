@@ -11,7 +11,8 @@ const WebConfig = merge(common, {
     filename: '[name].web.js',
     library: Bundle.main,
     globalObject: 'this'
-  }  
+  },  
+  externals:['causal-net.utils']
 });
 
 export default WebConfig;

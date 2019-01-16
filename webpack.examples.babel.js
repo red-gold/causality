@@ -4,13 +4,13 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 const WebConfig = {
     entry: {
         'core-example': './examples/core/examples.js',
-        // 'datasets-example': './examples/datasets/examples.js',
-        // 'demo-example': './examples/demo/examples.js',
+        'datasets-example': './examples/datasets/examples.js',
+        'MNIST-demo': './examples/MNIST-demo/mnist.dataset.babel.js',
         // // 'layer-example': './examples/layer/examples.js',
         // // 'models-example': './examples/models/examples.js',
         'log-example': './examples/log/examples.js',
         'memcache-example': './examples/memcache/examples.js',
-        // 'preprocessing-example': './examples/preprocessing/examples.js',
+        'preprocessing-example': './examples/preprocessing/examples.js',
         // 'representation-example': './examples/representation/examples.js',
         'storage-example': './examples/storage/examples.js',
         'utils-example': './examples/utils/examples.js',
@@ -33,17 +33,9 @@ const WebConfig = {
         }
         ],
     },	
-    // optimization: {
-    //     splitChunks: {
-    //         chunks: 'all'
-    //     }
-	// },
     output: {
-        path: resolve(__dirname, 'example_dist'),
-        globalObject: 'this',
-        filename: '[name].js'
+        path: resolve(__dirname, 'example_dist')
     },
-  
     plugins: [
         new HtmlWebpackPlugin({
             title: 'core example',
@@ -74,15 +66,26 @@ const WebConfig = {
             chunks: ['memcache-example'],
             filename: 'memcache.html',
             template:'./examples/memcache/index.html'
+        }),
+        new HtmlWebpackPlugin({
+            title: 'log example',
+            chunks: ['memcache-example'],
+            filename: 'memcache.html',
+            template:'./examples/memcache/index.html'
+        }),
+        new HtmlWebpackPlugin({
+            title: 'datasets example',
+            chunks: ['datasets-example'],
+            filename: 'datasets.html',
+            template:'./examples/datasets/index.html'
+        }),
+        new HtmlWebpackPlugin({
+            title: 'demos example',
+            chunks: ['MNIST-demo'],
+            filename: 'MNIST.html',
+            template:'./examples/MNIST-demo/index.html'
         })
-    ],
-    externals:[function(context, request, callback) {
-        if (/^leveldown$/.test(request)){
-            console.log('found leveldown');
-            return callback(null, '"leveldown"');//need to consider for alternative solution;
-        }
-        callback();
-      }]  
+    ]
 };
 
 export default WebConfig;

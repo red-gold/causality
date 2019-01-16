@@ -2,12 +2,8 @@ import { resolve } from 'path';
 import Bundle from './bundle.json';
 import merge from 'webpack-merge';
 import common from './webpack.common.babel';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const WebConfig = merge(common, {
-  entry: {
-    examples: ['@babel/polyfill', './examples/examples.js'],
-  },
   output: {
     path: resolve(__dirname, 'dist'),
     libraryTarget: 'umd',
@@ -15,16 +11,19 @@ const WebConfig = merge(common, {
     library: Bundle.main,
     globalObject: 'this'
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: Bundle.main,
-      chunks: ['examples'],
-      filename: 'index.html',
-      template: './examples/index.html',
-      hash: true
-    })
-  ],  
-  externals: ['leveldown']//either do it or make all causal packages external, need thinking
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all'
+        }
+      }
+    }
+  },
+  externals: ['causal-net.core', 'causal-net.utils', 'causal-net.storage', 
+              'causal-net.preprocessing', 'causal-net.memcache']
 });
 
 export default WebConfig;
