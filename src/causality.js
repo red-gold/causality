@@ -1,8 +1,10 @@
 import {Tensor} from 'causal-net.core';
 import {IndexDBStorage} from 'causal-net.storage';
+import {Platform} from 'causal-net.utils';
+import {default as EnsembleMixins} from './ensemble.mixins';
 import {default as Function} from './function';
 
-export default class CausalNet extends Tensor{
+export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins]){
     /**
      * @param  {} netConfig
      * @param  {} netParams
@@ -12,6 +14,7 @@ export default class CausalNet extends Tensor{
         this.F = new Function();
         this.R = this.F.CoreFunction;
         this.storage = storage || IndexDBStorage;
+        this.saveModelDir = '/saveModel/';
         this.HyperParameters = this.F.getHyperParameter(netConfig);
         this.BasePipeline = this.F.getPipeline(netConfig);
         this.netParams = this.setOrInitParams(this.BasePipeline, netParams);
@@ -138,8 +141,10 @@ export default class CausalNet extends Tensor{
         let loss = [], averageLoss = [];
         const optimizer = T.train.adam(lr);
         for(let epochIdx of F.range(numEpochs)){
-            console.log({epochIdx, averageLoss, time: new Date().toISOString(), 
-                         start: start.toISOString(), elapse: (new Date() - start)/1000});
+            if(this.logger){
+                this.logger.progress({epochIdx, averageLoss, time: new Date().toISOString(), 
+                             start: start.toISOString(), elapse: (new Date() - start)/1000});
+            }
             const sampleGenerator = SampleGeneratorFn(batchSize);
             for await (let [batchSamples, batchLabels] of sampleGenerator){
                 optimizer.minimize(()=>{
@@ -200,17 +205,22 @@ export default class CausalNet extends Tensor{
             return JSON.stringify(params);
         }
     }
-    
-    async saveParams(fileName='./save.model'){
-        const params = await this.getParams();
-        console.log({params});
-        return await this.storage.writeFile(fileName, JSON.stringify(params));
+    async getSavedParams(){
+        let fileList = await this.storage.getFileList(this.saveModelDir);
+        return fileList.map(fileName=>fileName.replace(this.saveModelDir,''));
     }
-    async loadParams(fileName){
-        let _params = await this.storage.readFile(fileName);
-        console.log({_params});
-        let params = JSON.parse(_params);
-        this.setOrInitParams(this.BasePipeline, params);
+    async saveParams(fileName='save.model'){
+        const params = await this.getParams();
+        await this.storage.writeFile(this.saveModelDir + fileName, JSON.stringify(params));
+        return params;
+    }
+    async loadParams(fileName, params=null){
+        if(!params){
+            let _params = await this.storage.readFile(this.saveModelDir+fileName);
+            console.log({_params});
+            params = JSON.parse(_params);
+        }
+        this.netParams = this.setOrInitParams(this.BasePipeline, params);
         return await this.getParams(false);
     }
 }

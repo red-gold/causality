@@ -2,6 +2,12 @@ class BasePipeline{
     constructor(netConfig, netParams){
 
     }
+    set Logger(logger){
+        this.logger = logger;
+    }
+    get Logger(){
+        return this.logger;
+    }
     makePredict(data){
         throw Error('implment require');
     }

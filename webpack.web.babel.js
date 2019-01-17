@@ -5,11 +5,6 @@ import common from './webpack.common.babel';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const WebConfig = merge(common, {
-  optimization: {
-    splitChunks: {
-      chunks: 'all'
-    }
-	},
   output: {
     path: resolve(__dirname, 'dist'),
     libraryTarget: 'umd',

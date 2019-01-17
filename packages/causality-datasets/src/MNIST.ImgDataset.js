@@ -26,7 +26,8 @@ export default class MnistDataset extends BaseImgDataset{
 
     selectFetchedChunks(numchunks, selectBy='random'){
         let chunkIdxs = Sampling.choice(this.configuration.chunkList, numchunks);
-        return chunkIdxs.map(idx=>{
+        return chunkIdxs.map((idx, ith)=>{
+                        idx = ith;
                         return [`data-chunk-${idx}.png`,`label-chunk-${idx}`];
                     });
     }

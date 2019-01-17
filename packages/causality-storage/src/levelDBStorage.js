@@ -23,7 +23,17 @@ class LevelDBStorage extends Platform.mixWith(BaseStorage,
     }
     
     async setItem(key, data){
+        const ReformateName = (key)=>{
+            key = key.replace(/\/{2,3,4,5}/g,'/');
+            if(key[0]==='/'){
+                return key;
+            }
+            else{
+                return '/' + key;
+            }
+        };
         return new Promise((resolve, reject)=>{
+            key = ReformateName(key);
             this.storage.put(key, data, (err)=>{
                 if(err){
                     console.error({err});
@@ -33,6 +43,39 @@ class LevelDBStorage extends Platform.mixWith(BaseStorage,
                     resolve(key);
                 }
             });
+        });
+    }
+
+    async getFileList(filePath='/'){
+        const CreateNameTest = (name)=>{
+            var pattern = name;
+            var regex = new RegExp(`^${pattern}.*`,'g');
+            return (fileName)=>fileName.match(regex) || [];
+        };
+        const NameTester = CreateNameTest(filePath);
+
+        return new Promise((resolve, reject)=>{
+            let fileList = [];
+            this.storage.createKeyStream()
+                .on('data', (key) =>{
+                    key = key.toString('utf8');
+                    // console.log('key=',filePath, NameTester(key));
+                    if(NameTester(key).length===1){
+                        fileList.push(key);
+                    }
+                })
+                .on('error', (err) =>{
+                    console.log('Oh my!', err);
+                    reject(err);
+                })
+                .on('close', () =>{
+                    console.log('Stream closed');
+                    resolve(fileList);
+                })
+                .on('end',  () =>{
+                    console.log('Stream ended');
+                    resolve(fileList);
+                });
         });
     }
     /**

@@ -32,6 +32,39 @@ class MemoryCache extends BaseMemCache{
             });
         });
     }
+
+    async getFileList(filePath='/'){
+        const CreateNameTest = (name)=>{
+            var pattern = name;
+            var regex = new RegExp(`^${pattern}.*`,'g');
+            return (fileName)=>fileName.match(regex) || [];
+        };
+        const NameTester = CreateNameTest(filePath);
+
+        return new Promise(async (resolve, reject)=>{
+            let fileList = [];
+            this.cache.createKeyStream()
+                .on('data', (key) =>{
+                    key = key.toString('utf8');
+                    // console.log('key=',filePath, NameTester(key));
+                    if(NameTester(key).length===1){
+                        fileList.push(key);
+                    }
+                })
+                .on('error', (err) =>{
+                    console.log('Oh my!', err);
+                    reject(err);
+                })
+                .on('close', () =>{
+                    console.log('Stream closed');
+                    resolve(fileList);
+                })
+                .on('end',  () =>{
+                    console.log('Stream ended');
+                    resolve(fileList);
+                });
+        });
+    }
 }
 
 const MemDownCache = new MemoryCache();

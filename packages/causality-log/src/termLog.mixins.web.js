@@ -5,10 +5,31 @@ const WebNodeMixins = (LogClass)=> class extends LogClass{
         let node = document.createElement("ul");
         node.style.cssText = "list-style-type: none;";
         documentEl.appendChild(node);
-        this.documentEl = documentEl.getElementsByTagName("ul")[0];
+        this.frameEl = documentEl;
+        this.loggerEl = documentEl.getElementsByTagName("ul")[0];
+    }
+    scrollBottom(element=null){
+        element = element || this.frameEl;
+        console.log('scoll bottom ' + element.scrollHeight + element.clientHeight);
+        element.scrollTop = element.scrollHeight - element.clientHeight;
+    }
+    progress(processMessage){
+        // let node = this.loggerEl.getElementsByTagName("li:nth-last-of-type(1)");
+        let LINodes = this.loggerEl.getElementsByTagName("li");
+        let node = LINodes[LINodes.length-1];
+        if(!node || node.classList.contains("logger-progress")){//create new
+            node = document.createElement("li");
+            node.classList.add("logger-progress");
+            this.loggerEl.appendChild(node);
+        }
+        let jsonNode = JsonView.JSONDisplay(processMessage);
+        var date = new Date();
+        node.innerHTML = `<p style="font-size: 12px; text-align:right">${date}</p>`;
+        node.appendChild(jsonNode);
+        this.scrollBottom();
     }
     log(message){
-        if(!this.documentEl || !this.documentEl.appendChild){
+        if(!this.loggerEl || !this.loggerEl.appendChild){
             this.connect();
         }
         let node = document.createElement("li");
@@ -17,7 +38,8 @@ const WebNodeMixins = (LogClass)=> class extends LogClass{
         var date = new Date();
         node.innerHTML = `<p style="font-size: 12px; text-align:right">${date}</p>`;
         node.appendChild(jsonNode);
-        this.documentEl.appendChild(node);
+        this.loggerEl.appendChild(node);
+        this.scrollBottom();
         console.log(this.prefix.join('/'));
         console.log(message);
     }

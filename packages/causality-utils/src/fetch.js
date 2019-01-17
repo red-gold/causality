@@ -15,11 +15,16 @@ const NodeStreamMixins = (FetchClass)=> class extends FetchClass{
 const WebStreamMixins = (FetchClass)=> class extends FetchClass{ 
     static async streamData(url){
         let response = await window.fetch(url);
+        console.log({fetch:url});
+        if (response.status >= 400) {
+            console.error(response.status);
+            reject("Bad response from server");
+        }
         const streamReader = response.body.getReader();
         let reader = Stream.makeReadable();
         let { value, done } = await streamReader.read();
         if (done) {
-            reader.close();
+            reader.push(null);
         }
         else{
             reader.push(value);
@@ -31,22 +36,26 @@ const WebStreamMixins = (FetchClass)=> class extends FetchClass{
 export default class Fetch extends Platform.mixWith(fetch, {'node': [NodeStreamMixins], 'web':[WebStreamMixins]}){
     constructor(){}
     static async fetchData(url){
-        return new Promise(async (resolve, reject)=>{
-            let response = await fetch(url);
-            if (response.status >= 400) {
-                reject("Bad response from server");
-            }
-            resolve(response.text());
+        return new Promise((resolve, reject)=>{
+            fetch(url).then(response=>{
+                if (response.status >= 400) {
+                    console.error(response.status);
+                    reject("Bad response from server");
+                }
+                resolve(response.text());
+            });
         });
     }
 
     static async fetchJson(url){
         return new Promise(async (resolve, reject)=>{
-            let response = await fetch(url);
-            if (response.status >= 400) {
-                reject("Bad response from server");
-            }
-            resolve(response.json());
+            fetch(url).then(response=>{
+                if (response.status >= 400) {
+                    console.error(response.status);
+                    reject("Bad response from server");
+                }
+                resolve(response.json());
+            });
         });
     }
 }

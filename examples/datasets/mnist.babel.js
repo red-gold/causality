@@ -2,9 +2,10 @@ const { MNIST } = require('causal-net.datasets');
 const { Logger } = require('causal-net.log');
 const { Fetch } = require('causal-net.utils');
 const mnist = async ()=>{
-    const url = 'http://127.0.0.1:8080/MNIST_dataset/dataset.summary.json';
+    const datasetUrl = "http://storage.googleapis.com/moderatordev-223307.appspot.com/MNIST_dataset/";
+    const url = `${datasetUrl}dataset.summary.json`;
     const configure = await Fetch.fetchJson(url);
-    configure.datasetUrl = 'http://127.0.0.1:8080/MNIST_dataset/';
+    configure.datasetUrl = datasetUrl;
     let mnist = new MNIST(configure);
     Logger.log(mnist.summary());
     let chunkStorage = await mnist.fetchDataset('/mnist/',2);

@@ -13,8 +13,7 @@ const WebConfig = {
         'preprocessing-example': './examples/preprocessing/examples.js',
         // 'representation-example': './examples/representation/examples.js',
         'storage-example': './examples/storage/examples.js',
-        'utils-example': './examples/utils/examples.js',
-        // 'examples': './examples/examples.js'
+        'utils-example': './examples/utils/examples.js'
     },
     mode: 'development',
     devtool: 'inline-source-map',
@@ -36,46 +35,56 @@ const WebConfig = {
     output: {
         path: resolve(__dirname, 'example_dist')
     },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                vendors: {
+                    test: /node_modules/,
+                    reuseExistingChunk: true
+                }
+            }
+        }
+    },
     plugins: [
         new HtmlWebpackPlugin({
             title: 'core example',
-            chunks: ['core-example'],
+            chunks: ['core-example','deploy'],
             filename: 'core.html',
             template:'./examples/core/index.html'
         }),
         new HtmlWebpackPlugin({
             title: 'utils example',
-            chunks: ['utils-example'],
+            chunks: ['utils-example','deploy'],
             filename: 'utils.html',
             template:'./examples/utils/index.html'
         }),
         new HtmlWebpackPlugin({
             title: 'log example',
-            chunks: ['log-example'],
+            chunks: ['log-example','deploy'],
             filename: 'log.html',
             template:'./examples/log/index.html'
         }),
         new HtmlWebpackPlugin({
             title: 'log example',
-            chunks: ['storage-example'],
+            chunks: ['storage-example','deploy'],
             filename: 'storage.html',
             template:'./examples/storage/index.html'
         }),
         new HtmlWebpackPlugin({
             title: 'log example',
-            chunks: ['memcache-example'],
+            chunks: ['memcache-example','deploy'],
             filename: 'memcache.html',
             template:'./examples/memcache/index.html'
         }),
         new HtmlWebpackPlugin({
             title: 'log example',
-            chunks: ['memcache-example'],
+            chunks: ['memcache-example','deploy'],
             filename: 'memcache.html',
             template:'./examples/memcache/index.html'
         }),
         new HtmlWebpackPlugin({
             title: 'datasets example',
-            chunks: ['datasets-example'],
+            chunks: ['datasets-example','deploy'],
             filename: 'datasets.html',
             template:'./examples/datasets/index.html'
         }),
