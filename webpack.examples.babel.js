@@ -13,7 +13,8 @@ const WebConfig = {
         'preprocessing-example': './examples/preprocessing/examples.js',
         // 'representation-example': './examples/representation/examples.js',
         'storage-example': './examples/storage/examples.js',
-        'utils-example': './examples/utils/examples.js'
+        'utils-example': './examples/utils/examples.js',
+        'example':'./examples/example.js'
     },
     mode: 'development',
     devtool: 'inline-source-map',
@@ -35,16 +36,20 @@ const WebConfig = {
     output: {
         path: resolve(__dirname, 'example_dist')
     },
-    optimization: {
-        splitChunks: {
-            cacheGroups: {
-                vendors: {
-                    test: /node_modules/,
-                    reuseExistingChunk: true
-                }
-            }
-        }
-    },
+    // optimization: {
+    //     splitChunks: {
+    //         chunks (chunk) {
+    //             console.log(chunk.name);
+    //             return chunk.name !== 'my-excluded-chunk';
+    //         },
+    //         cacheGroups: {
+    //             vendors: {
+    //                 test: /node_modules/,
+    //                 reuseExistingChunk: true
+    //             }
+    //         }
+    //     }
+    // },
     plugins: [
         new HtmlWebpackPlugin({
             title: 'core example',

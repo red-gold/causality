@@ -11,7 +11,7 @@
     "packages/*"
   ],
   "scripts": {
-    "start:web": "webpack-dev-server --open --config webpack.web.babel.js",
+    "start:web": "webpack --watch --info-verbosity verbose --config webpack.web.babel.js",
     "start:examples": "webpack-dev-server --open --config webpack.examples.babel.js",
     "build:examples": "webpack --config webpack.examples.babel.js",
     "start:node": "webpack --watch --info-verbosity verbose --config webpack.node.babel.js",
@@ -25,8 +25,10 @@
     "build-utils": "cd packages/causality-utils; yarn build",
     "build-core": "cd packages/causality-core; yarn build",
     "build-dataset": "cd packages/causality-dataset; yarn build",
-    "build-memcache": "cd packages/causality-memcache; yarn build",
-    "run-example": "babel-node"
+    "build-memcache": "cd packages/causality-memcache; yarn build"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
