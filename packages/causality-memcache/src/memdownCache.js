@@ -67,5 +67,5 @@ class MemoryCache extends BaseMemCache{
     }
 }
 
-const MemDownCache = new MemoryCache();
-export default MemDownCache;
+const memDownCache = new MemoryCache();
+export default memDownCache;

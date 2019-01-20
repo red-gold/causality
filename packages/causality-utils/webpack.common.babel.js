@@ -2,11 +2,7 @@ import Bundle from './bundle.json';
 
 export default {
   entry: {
-    [Bundle.main]:  './src/index.js',
-    [Bundle.dir+'fetch']:  './src/fetch.js',
-    [Bundle.dir+'platform']:  './src/platform.js',
-    [Bundle.dir+'png']:  './src/png.js',
-    [Bundle.dir+'stream']:  './src/stream.js'
+    [Bundle.main]:  './src/index.js'
   },
   mode: 'development',
   devtool: 'inline-source-map',

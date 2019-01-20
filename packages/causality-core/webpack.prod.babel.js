@@ -6,7 +6,6 @@ const TerserJS = new TerserPlugin({
     include: /\.js$/, 
     parallel:true
 });
-
 NodeConfig.mode = 'production';
 NodeConfig.devtool = 'source-map';
 NodeConfig.optimization = {minimizer: [TerserJS]};

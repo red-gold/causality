@@ -1,5 +1,5 @@
-import {default as MemDownCache} from '../src/memdownCache';
+import {memDownCache} from '../src/index';
 
 test('memdown instance should be define', ()=>{
-    expect(MemDownCache).toBeDefined();
+    expect(memDownCache).toBeDefined();
 })

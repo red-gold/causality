@@ -20,7 +20,6 @@
   "dependencies": {
     "causal-net.core": "*",
     "causal-net.utils": "*",
-    "cross-fetch": "^3.0.0",
     "level-js": "^4.0.0",
     "leveldown": "^4.0.1",
     "levelup": "^4.0.0"

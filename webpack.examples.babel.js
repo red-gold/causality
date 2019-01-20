@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-const WebConfig = {
+const ExamplesConfig = {
     entry: {
         'core-example': './examples/core/examples.js',
         'datasets-example': './examples/datasets/examples.js',
@@ -14,7 +14,7 @@ const WebConfig = {
         // 'representation-example': './examples/representation/examples.js',
         'storage-example': './examples/storage/examples.js',
         'utils-example': './examples/utils/examples.js',
-        'example':'./examples/example.js'
+        'example':'./examples/examples.js'
     },
     mode: 'development',
     devtool: 'inline-source-map',
@@ -36,20 +36,17 @@ const WebConfig = {
     output: {
         path: resolve(__dirname, 'example_dist')
     },
-    // optimization: {
-    //     splitChunks: {
-    //         chunks (chunk) {
-    //             console.log(chunk.name);
-    //             return chunk.name !== 'my-excluded-chunk';
-    //         },
-    //         cacheGroups: {
-    //             vendors: {
-    //                 test: /node_modules/,
-    //                 reuseExistingChunk: true
-    //             }
-    //         }
-    //     }
-    // },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                vendors: {
+                    test: /node_modules/,//still fail to make this it as seperated chunks
+                    reuseExistingChunk: true,
+                    name: 'vendors'
+                }
+            }
+        }
+    },
     plugins: [
         new HtmlWebpackPlugin({
             title: 'core example',
@@ -102,4 +99,4 @@ const WebConfig = {
     ]
 };
 
-export default WebConfig;
+export default ExamplesConfig;

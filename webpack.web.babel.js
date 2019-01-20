@@ -2,7 +2,6 @@ import { resolve } from 'path';
 import Bundle from './bundle.json';
 import merge from 'webpack-merge';
 import common from './webpack.common.babel';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const WebConfig = merge(common, {
   output: {
@@ -13,6 +12,5 @@ const WebConfig = merge(common, {
     library: Bundle.main,
     globalObject: 'this'
   }
-  // externals: ['leveldown']  
 });
 export default WebConfig;

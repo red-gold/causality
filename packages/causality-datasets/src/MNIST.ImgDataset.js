@@ -1,7 +1,7 @@
 import { default as BaseImgDataset } from './baseImgDataset';
 import { default as Function } from './function';
-import { IndexDBStorage } from 'causal-net.storage';
-import { MemDownCache } from 'causal-net.memcache';
+import { indexDBStorage } from 'causal-net.storage';
+import { memDownCache } from 'causal-net.memcache';
 import { Preprocessing } from 'causal-net.preprocessing';
 import { Stream, Sampling } from 'causal-net.utils';
 
@@ -9,8 +9,8 @@ export default class MnistDataset extends BaseImgDataset{
     
     constructor(configure){
         super(configure);
-        this.storage = IndexDBStorage;
-        this.memCache = MemDownCache;
+        this.storage = indexDBStorage;
+        this.memCache = memDownCache;
         this.preprocessing = new Preprocessing();
         this.F = new Function();
     }
@@ -27,7 +27,6 @@ export default class MnistDataset extends BaseImgDataset{
     selectFetchedChunks(numchunks, selectBy='random'){
         let chunkIdxs = Sampling.choice(this.configuration.chunkList, numchunks);
         return chunkIdxs.map((idx, ith)=>{
-                        idx = ith;
                         return [`data-chunk-${idx}.png`,`label-chunk-${idx}`];
                     });
     }

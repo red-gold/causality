@@ -3,7 +3,6 @@ import Bundle from './bundle.json';
 export default {
   entry: {
     [Bundle.main]: './src/index.js',
-    [Bundle.dir+'pipeline']: './src/causality.js'
   },
   mode: 'development',
   devtool: 'inline-source-map',

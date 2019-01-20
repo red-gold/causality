@@ -8,6 +8,7 @@ const WebConfig = merge(common, {
     path: resolve(__dirname, 'dist'),
     libraryTarget: 'umd',
     filename: '[name].web.js',
+    chunkFilename: '[name].js',
     library: Bundle.main,
     globalObject: 'this'
   },

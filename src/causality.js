@@ -1,5 +1,5 @@
 import {Tensor} from 'causal-net.core';
-import {IndexDBStorage} from 'causal-net.storage';
+import {indexDBStorage} from 'causal-net.storage';
 import {Platform} from 'causal-net.utils';
 import {default as EnsembleMixins} from './ensemble.mixins';
 import {default as Function} from './function';
@@ -11,9 +11,10 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
      */
     constructor( netConfig, netParams=null, storage=null ){
         super();
+        console.log(this.T);
         this.F = new Function();
         this.R = this.F.CoreFunction;
-        this.storage = storage || IndexDBStorage;
+        this.storage = storage || indexDBStorage;
         this.saveModelDir = '/saveModel/';
         this.HyperParameters = this.F.getHyperParameter(netConfig);
         this.BasePipeline = this.F.getPipeline(netConfig);
@@ -52,8 +53,8 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
         const R = this.R;
         const {Name, Type, Parameters, Flow} = layerConfigure;
         console.log({Name, Type, Parameters, Flow});
-        const OpsRuner = R.addIndex(R.reduce)(R.__,{result: value, trace: {}}, Flow);
-        var {result, trace} = OpsRuner(({result, trace}, node, idx)=>{
+        const OpsRunner = R.addIndex(R.reduce)(R.__,{result: value, trace: {}}, Flow);
+        var {result, trace} = OpsRunner(({result, trace}, node, idx)=>{
             if(node.Parameter){
                 result = this.T[node.Op](result, layerParameters[node.Parameter], ...node.Args);
             }

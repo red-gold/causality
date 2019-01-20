@@ -7,6 +7,7 @@ const NodeConfig = merge(common, {
       path: resolve(__dirname, 'dist'),
       libraryTarget: 'umd',
       filename: '[name].node.js',
+      chunkFilename: '[name].js',
       library: Bundle.main,
       globalObject: 'this'
     },

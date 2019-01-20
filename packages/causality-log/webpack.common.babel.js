@@ -4,9 +4,7 @@ const include = join(__dirname, 'src');
 
 export default {
   entry: {
-    [Bundle.main]: ['./src/index.js'],
-    [Bundle.dir + 'baseLog']: './src/index.js',
-    [Bundle.dir + 'termLog']: './src/termLog.js'
+    [Bundle.main]: ['./src/index.js']
   },
   mode: 'development',
   devtool: 'inline-source-map',

@@ -17,7 +17,9 @@
     "build:prod": "webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
+    
     "causal-net.utils":"*"
+    
   },
   "jest": {
     "testEnvironment": "node"

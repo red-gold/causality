@@ -30,6 +30,15 @@
   "jest": {
     "testEnvironment": "node"
   },
+  "dependencies": {
+    "causal-net.core": "*",
+    "causal-net.utils": "*",
+    "causal-net.storage": "*",
+    "causal-net.memcache": "*",
+    "causal-net.log": "*",
+    "causal-net.preprocessing": "*",
+    "causal-net.datasets": "*"
+  },
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.2.0",

@@ -1,6 +1,4 @@
-import { join, resolve } from 'path';
 import Bundle from './bundle.json';
-const include = join(__dirname, 'src');
 
 export default {
   entry: {

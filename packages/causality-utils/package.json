@@ -3,7 +3,6 @@
   "version": "0.0.6",
   "description": "this is utils function",
   "main": "dist/@causalNet/utils.node.js",
-  "module": "dist/@causalNet/utils.node.js",
   "browser": "dist/@causalNet/utils.web.js",
   "author": "nguyenhuynh200188@gmail.com",
   "license": "MIT",
@@ -14,8 +13,7 @@
     "test": "jest",
     "test:report": "jest --coverage",
     "build:dev": "webpack --config webpack.dev.babel.js",
-    "build:prod": "webpack --config webpack.prod.babel.js",
-    "run-example": "babel-node"
+    "build:prod": "webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.2.0",
