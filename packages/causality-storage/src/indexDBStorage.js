@@ -22,6 +22,7 @@ class IndexDBStorage extends Platform.mixWith(BaseStorage,
         });
     }
     
+    
     async setItem(key, data){
         const ReformateName = (key)=>{
             key = key.replace(/\/{2,3,4,5}/g,'/');
@@ -46,14 +47,88 @@ class IndexDBStorage extends Platform.mixWith(BaseStorage,
         });
     }
 
-    async getFileList(filePath='/'){
-        const CreateNameTest = (name)=>{
-            var pattern = name;
-            var regex = new RegExp(`^${pattern}.*`,'g');
-            return (fileName)=>fileName.match(regex) || [];
-        };
-        const NameTester = CreateNameTest(filePath);
+    async delItem(key){
+        return new Promise((resolve, reject)=>{
+            key = ReformateName(key);
+            this.storage.del(key, (err)=>{
+                if(err){
+                    console.error({err});
+                    reject('error write');
+                }
+                else{
+                    resolve(key);
+                }
+            });
+        });
+    }
 
+    async Batch(ops){
+        return new Promise((resolve, reject)=>{
+            this.storage.batch(ops, (err)=>{
+                if(err){
+                    console.error({err});
+                    reject('error ops');
+                }
+                else{
+                    resolve(ops);
+                }
+            });
+        });
+    }
+
+    createCheckFileNameFn(name){
+        var pattern = name;
+        var regex = new RegExp(`^${pattern}.*`,'g');
+        return (fileName)=>fileName.match(regex) || [];
+    };
+
+    async delete(filePath){
+        return new Promise((resolve, reject)=>{
+            this.storage.del(filePath, (err)=>{
+                if(err){
+                    console.error({err});
+                    reject('error ops');
+                }
+                else{
+                    resolve(ops);
+                }
+            })
+        })
+    }
+
+    async deleteByPrefix(filePath){
+        const NameTester = this.createCheckFileNameFn(filePath);
+        const DelOp = (key)=>({type: 'del', key: key});
+        return new Promise((resolve, reject)=>{
+            let opList = [];
+            this.storage.createKeyStream()
+                .on('data', (key) =>{
+                    key = key.toString('utf8');
+                    // console.log('key=',filePath, NameTester(key));
+                    if(NameTester(key).length===1){
+                        opList.push(DelOp(key));
+                    }
+                })
+                .on('error', (err) =>{
+                    console.log('Oh my!', err);
+                    reject(err);
+                })
+                .on('close', () =>{
+                    console.log('Stream closed');
+                    let ops = await this.batch(opList);
+                        if (err) return console.log('Ooops!', err)
+                        resolve(fileList);
+                    })
+                })
+                .on('end',  () =>{
+                    console.log('Stream ended');
+                    resolve(fileList);
+                });
+        });
+    }
+
+    async getFileList(filePath='/'){
+        const NameTester = this.createCheckFileNameFn(filePath);
         return new Promise((resolve, reject)=>{
             let fileList = [];
             this.storage.createKeyStream()
