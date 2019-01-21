@@ -15,7 +15,6 @@ export default class Sampling{
     
     static choice(a, size, replace=false, p=null){
         let domain = Array.isArray(a)?a.slice(0):Sampling.range(a);
-        console.log({domain});
         if(size>domain.length && replace === true){
             throw Error('sample size shall not bigger than domain length without replacing');
         }

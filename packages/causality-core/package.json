@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "@tensorflow/tfjs": "^0.14.1",
+    "@tensorflow/tfjs-node": "^0.2.3",
+    "@tensorflow/tfjs-node-gpu": "^0.2.3",
     "ramda": "^0.26.1"
   },
   "jest": {

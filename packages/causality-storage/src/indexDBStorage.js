@@ -4,9 +4,26 @@ import {default as PNGFileMixins} from './PNGFileMixins';
 import {default as LevelDownMixins} from './indexDBStorage.mixins.node';
 import {default as LevelJSMixins} from './indexDBStorage.mixins.web';
 
+
 class IndexDBStorage extends Platform.mixWith(BaseStorage, 
                        {'node': [LevelDownMixins, PNGFileMixins],
                          'web': [LevelJSMixins, PNGFileMixins]}){
+
+    reformateName(key){
+        key = key.replace(/\/{2,3,4,5}/g,'/');
+        if(key[0]==='/'){
+            return key;
+        }
+        else{
+            return '/' + key;
+        }
+    };
+
+    createCheckFileNameFn(name){
+        var pattern = name;
+        var regex = new RegExp(`^${pattern}.*`,'g');
+        return (fileName)=>fileName.match(regex) || [];
+    };
 
     async getItem(key, asBuffer=false){
         return new Promise((resolve, reject)=>{
@@ -24,17 +41,9 @@ class IndexDBStorage extends Platform.mixWith(BaseStorage,
     
     
     async setItem(key, data){
-        const ReformateName = (key)=>{
-            key = key.replace(/\/{2,3,4,5}/g,'/');
-            if(key[0]==='/'){
-                return key;
-            }
-            else{
-                return '/' + key;
-            }
-        };
+        
         return new Promise((resolve, reject)=>{
-            key = ReformateName(key);
+            key = this.reformateName(key);
             this.storage.put(key, data, (err)=>{
                 if(err){
                     console.error({err});
@@ -49,7 +58,7 @@ class IndexDBStorage extends Platform.mixWith(BaseStorage,
 
     async delItem(key){
         return new Promise((resolve, reject)=>{
-            key = ReformateName(key);
+            key = this.reformateName(key);
             this.storage.del(key, (err)=>{
                 if(err){
                     console.error({err});
@@ -62,9 +71,9 @@ class IndexDBStorage extends Platform.mixWith(BaseStorage,
         });
     }
 
-    async Batch(ops){
+    async batch(ops){
         return new Promise((resolve, reject)=>{
-            this.storage.batch(ops, (err)=>{
+            this.storage.batch(ops, (err, data)=>{
                 if(err){
                     console.error({err});
                     reject('error ops');
@@ -76,13 +85,8 @@ class IndexDBStorage extends Platform.mixWith(BaseStorage,
         });
     }
 
-    createCheckFileNameFn(name){
-        var pattern = name;
-        var regex = new RegExp(`^${pattern}.*`,'g');
-        return (fileName)=>fileName.match(regex) || [];
-    };
 
-    async delete(filePath){
+    async deleteItem(filePath){
         return new Promise((resolve, reject)=>{
             this.storage.del(filePath, (err)=>{
                 if(err){
@@ -92,39 +96,15 @@ class IndexDBStorage extends Platform.mixWith(BaseStorage,
                 else{
                     resolve(ops);
                 }
-            })
-        })
+            });
+        });
     }
 
-    async deleteByPrefix(filePath){
-        const NameTester = this.createCheckFileNameFn(filePath);
+    async deleteFileByPrefix(filePath){
         const DelOp = (key)=>({type: 'del', key: key});
-        return new Promise((resolve, reject)=>{
-            let opList = [];
-            this.storage.createKeyStream()
-                .on('data', (key) =>{
-                    key = key.toString('utf8');
-                    // console.log('key=',filePath, NameTester(key));
-                    if(NameTester(key).length===1){
-                        opList.push(DelOp(key));
-                    }
-                })
-                .on('error', (err) =>{
-                    console.log('Oh my!', err);
-                    reject(err);
-                })
-                .on('close', () =>{
-                    console.log('Stream closed');
-                    let ops = await this.batch(opList);
-                        if (err) return console.log('Ooops!', err)
-                        resolve(fileList);
-                    })
-                })
-                .on('end',  () =>{
-                    console.log('Stream ended');
-                    resolve(fileList);
-                });
-        });
+        let fileList = await this.getFileList(filePath);
+        let delFileOps = fileList.map(f=>DelOp(f));
+        return await this.batch(delFileOps);
     }
 
     async getFileList(filePath='/'){
@@ -134,22 +114,15 @@ class IndexDBStorage extends Platform.mixWith(BaseStorage,
             this.storage.createKeyStream()
                 .on('data', (key) =>{
                     key = key.toString('utf8');
-                    // console.log('key=',filePath, NameTester(key));
                     if(NameTester(key).length===1){
                         fileList.push(key);
                     }
                 })
-                .on('error', (err) =>{
-                    console.log('Oh my!', err);
-                    reject(err);
-                })
-                .on('close', () =>{
-                    console.log('Stream closed');
-                    resolve(fileList);
-                })
-                .on('end',  () =>{
-                    console.log('Stream ended');
-                    resolve(fileList);
+                .on('close', () => resolve(fileList) )
+                .on('end',  () => resolve(fileList) )
+                .on('error', (err) =>{ 
+                    console.error(err);
+                    reject('error getFileList') ;
                 });
         });
     }
@@ -169,18 +142,8 @@ class IndexDBStorage extends Platform.mixWith(BaseStorage,
         return await this.setItem(filePath, data);
     }
 
-    async readBuffer(filePath){
-        let item = await this.getItem(filePath, true);
-        return item[filePath];
-    }
-
-    async writeBuffer(filePath, data){
-        return await this.setItem(filePath, data);
-    }
-
-    async fetchBuffer(url, filePath){
-        let response = await Fetch.fetchData(url);
-        return await this.writeBuffer(filePath, Buffer.from(response));
+    async deleteFile(filePath){
+        return await this.delItem(filePath);
     }
 
     async fetchFile(url, filePath){
@@ -188,7 +151,7 @@ class IndexDBStorage extends Platform.mixWith(BaseStorage,
         return await this.writeFile(filePath, response);
     }
 
-    async streamFile(url, filePath, processFn=null){
+    async streamFile(url, filePath, transformer=null){
         throw Error('implement required');
     }
 }

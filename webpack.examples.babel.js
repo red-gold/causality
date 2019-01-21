@@ -50,43 +50,43 @@ const ExamplesConfig = {
     plugins: [
         new HtmlWebpackPlugin({
             title: 'core example',
-            chunks: ['core-example','deploy'],
+            chunks: ['core-example','vendors'],
             filename: 'core.html',
             template:'./examples/core/index.html'
         }),
         new HtmlWebpackPlugin({
             title: 'utils example',
-            chunks: ['utils-example','deploy'],
+            chunks: ['utils-example','vendors'],
             filename: 'utils.html',
             template:'./examples/utils/index.html'
         }),
         new HtmlWebpackPlugin({
             title: 'log example',
-            chunks: ['log-example','deploy'],
+            chunks: ['log-example','vendors'],
             filename: 'log.html',
             template:'./examples/log/index.html'
         }),
         new HtmlWebpackPlugin({
             title: 'log example',
-            chunks: ['storage-example','deploy'],
+            chunks: ['storage-example','vendors'],
             filename: 'storage.html',
             template:'./examples/storage/index.html'
         }),
         new HtmlWebpackPlugin({
             title: 'log example',
-            chunks: ['memcache-example','deploy'],
+            chunks: ['memcache-example','vendors'],
             filename: 'memcache.html',
             template:'./examples/memcache/index.html'
         }),
         new HtmlWebpackPlugin({
             title: 'log example',
-            chunks: ['memcache-example','deploy'],
+            chunks: ['memcache-example','vendors'],
             filename: 'memcache.html',
             template:'./examples/memcache/index.html'
         }),
         new HtmlWebpackPlugin({
             title: 'datasets example',
-            chunks: ['datasets-example','deploy'],
+            chunks: ['datasets-example','vendors'],
             filename: 'datasets.html',
             template:'./examples/datasets/index.html'
         }),

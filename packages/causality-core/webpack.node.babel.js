@@ -10,6 +10,7 @@ const NodeConfig = merge(common, {
       chunkFilename: '[name].js',
       library: Bundle.main,
       globalObject: 'this'
-    }
+    },
+    externals:['@tensorflow/tfjs-node','@tensorflow/tfjs-node-gpu', 'ramda','@tensorflow/tfjs']
 });
 export default NodeConfig;

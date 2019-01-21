@@ -11,7 +11,6 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
      */
     constructor( netConfig, netParams=null, storage=null ){
         super();
-        console.log(this.T);
         this.F = new Function();
         this.R = this.F.CoreFunction;
         this.storage = storage || indexDBStorage;
@@ -218,7 +217,6 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
     async loadParams(fileName, params=null){
         if(!params){
             let _params = await this.storage.readFile(this.saveModelDir+fileName);
-            console.log({_params});
             params = JSON.parse(_params);
         }
         this.netParams = this.setOrInitParams(this.BasePipeline, params);

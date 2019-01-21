@@ -11,7 +11,15 @@ const WebConfig = merge(common, {
     chunkFilename: '[name].js',
     library: Bundle.main,
     globalObject: 'this'
-  }  
+  },  
+  externals: [function(context, request, callback) {
+                if (/tfjs-node/.test(request)){
+                    console.log('found tfjs-node');
+                    return callback(null, '@tensorflow/tfjs');//need to consider for alternative solution;
+                }
+                callback();
+              },
+              'ramda','@tensorflow/tfjs']
 });
 
 export default WebConfig;

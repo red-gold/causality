@@ -19,7 +19,7 @@ const EnsembleMixins = (PipelineClass)=> class extends PipelineClass{
         return {accuracy, pass};        
     }
     async makeEnsemblePredict(modelList, samples, numSamples=1){
-        const T = this.T, f = this.F, l = this.L;
+        const T = this.T, f = this.F;
         this.HyperParameters.Datasize = numSamples;
         const Pipeline = f.parameterAcquisition(this.BasePipeline, this.HyperParameters);
         let pipeValue = {PipeInput: samples}, traces = [], netParams = this.netParams;

@@ -1,10 +1,9 @@
-import { CausalNet } from '../../src/index';
-import { MNIST } from 'causal-net.datasets';
-import { Logger } from 'causal-net.log';
-import { Fetch } from 'causal-net.utils';
-import {datasetUrl} from './deploy.json';
+import { CausalNet, Storage, Datasets, Log, Utils } from '../../src/index';
+const { MNIST }  = Datasets;
+const { Logger } = Log;
+const { Fetch }  = Utils;
 const _NetConfig = {
-    HyperParameters: {Datasize:10},
+    HyperParameters: {Datasize:100},
     Pipeline:[
         {   Name: 'input', Type: 'tensor', Input: 'PipeInput', 
             Flow:[  {Op: 'reshape', Args:[['$Datasize', 28, 28, 4]] } ] 
@@ -222,6 +221,10 @@ const SaveModel = async (modelName=null)=>{
         });
     });
 
+    $('#DeleteStorage').click(function(){
+        Storage.indexDBStorage.deleteFileByPrefix('/');
+    });
+
     $('#TestEnsemble').click(function(){
         if(ensemble.models.length==0){
             Logger.log('atleast one pretrained model is required');
@@ -233,7 +236,6 @@ const SaveModel = async (modelName=null)=>{
             console.error(error);
         });
     });
-    
 })();
 
 

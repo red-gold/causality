@@ -31,6 +31,10 @@ export default class MnistDataset extends BaseImgDataset{
                     });
     }
 
+    async readDataset(datasetDir, saveDir='/mnist/',numchunks=1, selectBy='random'){
+        throw Error('implement require');
+    }
+
     async fetchDataset(saveDir='/mnist/',numchunks=1, selectBy='random'){
         let selectedChunks = this.selectFetchedChunks(numchunks, selectBy);
         let [sampleChunks, labelChunks] = this.F.unzip(selectedChunks);
