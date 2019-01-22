@@ -12,53 +12,14 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" 
                 integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" 
                 crossorigin="anonymous"></script>
+        <script  id="deploy" type="application/json">
+            {"datasetUrl":"http://storage.googleapis.com/moderatordev-223307.appspot.com/MNIST_dataset/"}
+        </script>
     </head>
     <body>
         <div class="container">
-            <h1></h1>
-            <div class="alert alert-primary" role="alert">
-                This is mnist model training demo with ensemble learning
-            </div>
-            <div class="row">
-                <div class="col">
-                    <h4>training configure</h4>
-                    <ul class="nav flex-column">
-                            
-                        <li class="nav-item">
-                            <p>number of data chunks</p>
-                            <input type="text" class="form-control" id="SetChunks"
-                                type="number" min=0 value="3">
-                        </li>
-                        <li class="nav-item">
-                            <p>Load chunks from server</p>
-                            <button id="FetchData">fetch data chunks</button>
-                        </li>
-                        <li class="nav-item">
-                            <p>save model</p>
-                            <button id="SaveModel">save</button>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="#">Disabled</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-9" id="logger">
-                    <h4>model logger</h4>
-                </div>
-            </div>
+            <h1 class="text-center">Demo in-browser training with ensemble</h1>
+            <a href="MNIST.html">mnist</a>
         </div>
-        <script>
-            var NumChunks = 3;
-            $('#SetChunks').change(function(){
-                NumChunks = this.val();
-                console.log({NumChunks});
-            });
-            $('#FetchData').change(function(){
-                FetchData();
-            });
-        </script>
     </body>
 </html>

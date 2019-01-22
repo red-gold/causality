@@ -13,12 +13,21 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
         super();
         this.F = new Function();
         this.R = this.F.CoreFunction;
+        this.logger = console;
         this.storage = storage || indexDBStorage;
         this.saveModelDir = '/saveModel/';
         this.HyperParameters = this.F.getHyperParameter(netConfig);
         this.BasePipeline = this.F.getPipeline(netConfig);
         this.netParams = this.setOrInitParams(this.BasePipeline, netParams);
         this.flattenParams = this.flattenParams(this.netParams);        
+    }
+
+    set Logger(logger){
+        this.logger = logger;
+    }
+
+    get Logger(){
+        return this.logger;
     }
 
     flattenParams(params){
@@ -51,7 +60,7 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
     layer(value, layerConfigure, layerParameters){
         const R = this.R;
         const {Name, Type, Parameters, Flow} = layerConfigure;
-        console.log({Name, Type, Parameters, Flow});
+        this.logger.debug({Name, Type, Parameters, Flow});
         const OpsRunner = R.addIndex(R.reduce)(R.__,{result: value, trace: {}}, Flow);
         var {result, trace} = OpsRunner(({result, trace}, node, idx)=>{
             if(node.Parameter){
@@ -100,7 +109,7 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
         const T = this.T, f = this.F, l = this.L;
         this.HyperParameters.Datasize = numSamples;
         const Pipeline = f.parameterAcquisition(this.BasePipeline, this.HyperParameters);
-        console.log(({Pipeline}));
+        // console.log(({Pipeline}));
         let pipeValue = {PipeInput: samples}, traces = [], netParams = this.netParams;
         return T.tidy(()=>{
             for(let layer of Pipeline){
@@ -108,7 +117,7 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
                 pipeValue[layer.Name] = layerOutput[layer.Name];
                 traces.push({[layer.Name]: layerOutput.trace});
             }
-            console.log({traces});
+            // console.log({traces});
             let pipeOutput = pipeValue['PipeOutput'];
             let logProb = pipeOutput.sub(T.logSumExp(pipeOutput, 1, true));
             let predict = logProb.argMax(1);
@@ -122,36 +131,43 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
      */
     loss(batchSamples, batchLabels, numSample){
         const T = this.T;
+        let sampleTensor = T.tensor(batchSamples).reshape([numSample, -1]).asType('float32'); 
         let labelTensor  = T.tensor(batchLabels).reshape([numSample, -1]);
-        let sampleTensor = T.tensor(batchSamples).asType('float32'); 
         const {logProb} = this.makePredict(sampleTensor, numSample);
         const likelihood = logProb.neg().mul(labelTensor);
         const loss = likelihood.mean();
         return loss;
     };
+    makeOptimizer(method='adam', args=[0.02]){        
+        this.optimizer = this.T.train[method](...args);
+        return this.optimizer;
+    }
     /**
      * @param  {} SampleGeneratorFn
      * @param  {} batchSize
      * @param  {} numEpochs=2
      * @param  {} lr=0.01
      */
-    async train(SampleGeneratorFn, batchSize, numEpochs = 2, lr=0.001){
+    async train(SampleGeneratorFn, numEpochs = 2, lr=0.001){
         const T = this.T, F = this.F, R = this.R;
         const start = new Date();
         let loss = [], averageLoss = [];
-        const optimizer = T.train.adam(lr);
+        if(!this.optimizer){
+            this.makeOptimizer();
+        }
+        let optimizer = this.optimizer;
         for(let epochIdx of F.range(numEpochs)){
-            if(this.logger){
+            if(this.logger.progress){
                 this.logger.progress({epochIdx, averageLoss, time: new Date().toISOString(), 
                              start: start.toISOString(), elapse: (new Date() - start)/1000});
             }
-            const sampleGenerator = SampleGeneratorFn(batchSize);
-            for await (let [batchSamples, batchLabels] of sampleGenerator){
+            const sampleGenerator = SampleGeneratorFn();
+            for await (let {idx, batchSize, data} of sampleGenerator){
+                let [batchSamples, batchLabels] = data;
                 optimizer.minimize(()=>{
                     let l = this.loss(batchSamples, batchLabels, batchSize);
                     loss = [...loss, ...l.dataSync()];
-                    console.log({loss});
-                    return l.asType('float32');
+                    return l;
                 });
             }
             averageLoss = [...averageLoss, R.mean(loss)];
@@ -162,14 +178,20 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
         });
     };
 
-    async test(TestSampleGeneratorFn, testBatchSize, numClasses=10){
+    async test(TestSampleGeneratorFn){
         const T = this.T, F = this.F, R = this.R;
-        const testSampleGenerator = TestSampleGeneratorFn(testBatchSize);
+        const testSampleGenerator = TestSampleGeneratorFn();
         let testResult = T.zeros([1]);
-        for await (let [batchSamples, batchLabels] of testSampleGenerator){
-            let labelTensor  = T.tensor(batchLabels).reshape([testBatchSize, numClasses]);
-            let sampleTensor = T.tensor(batchSamples).asType('float32'); 
-            const {predict} = this.makePredict(sampleTensor, testBatchSize);
+        let testSize = 0;
+        for await (let {idx, batchSize, data} of testSampleGenerator){
+            let [batchSamples, batchLabels] = data;
+            let labelTensor  = T.tensor(batchLabels).reshape([batchSize, -1]);
+            let sampleTensor = T.tensor(batchSamples);
+            let numClasses = labelTensor.shape[1];
+            testSize += batchSize;
+            const {predict} = this.makePredict(sampleTensor, batchSize);
+            
+            
             let onehotPredict = T.oneHot(predict, numClasses);
             onehotPredict.print();
             labelTensor.print();
@@ -178,7 +200,7 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
         }
         let result = await testResult.data();
         let pass = result[0];
-        let accuracy = pass/testBatchSize;
+        let accuracy = pass/testSize;
         return {accuracy, pass};        
     }
 

@@ -11,6 +11,7 @@ const WebConfig = merge(common, {
     chunkFilename: '[name].js',
     library: Bundle.main,
     globalObject: 'this'
-  }  
+  },
+  externals:['cross-fetch','fetch-readablestream','platform','random','pngjs3']  
 });
 export default WebConfig;

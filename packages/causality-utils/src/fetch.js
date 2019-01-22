@@ -2,7 +2,6 @@ import fetch  from 'cross-fetch';
 import {default as Stream} from './stream';
 import {default as Platform} from './platform';
 import fetchStream from 'fetch-readablestream';
-import { rejects } from 'assert';
 
 const NodeStreamMixins = (FetchClass)=> class extends FetchClass{ 
     static async streamData(url){

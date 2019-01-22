@@ -83,15 +83,16 @@ const LoadSavedModels = async ()=>{
     });
 };
 
-const TrainModel = async (trainSet)=>{
+const TrainModel = async (trainSet, batchSize=10)=>{
     causalNet.logger = Logger;    
-    const DoBatchTrainSampleGenerator = (batchSize)=>{return mnist.makeSampleGenerator(trainSet, batchSize);};
-    let logTrain = await causalNet.train(DoBatchTrainSampleGenerator, 10, 25, 0.005);
+    const DoBatchTrainSampleGenerator = (epochIdx)=>{return mnist.makeSampleGenerator(trainSet, batchSize);};
+    let logTrain = await causalNet.train(DoBatchTrainSampleGenerator, batchSize);
     Logger.log(logTrain);
 };
 const TestModel = async (testSet)=>{
+    let batchSize = testSet.length;
     const DoBatchTestSampleGenerator = (batchSize)=>{return mnist.makeSampleGenerator(testSet, batchSize);};
-    let testResult = await causalNet.test(DoBatchTestSampleGenerator, testSet.length);
+    let testResult = await causalNet.test(DoBatchTestSampleGenerator);
     Logger.log({testResult});
     return testResult;
     
@@ -99,7 +100,7 @@ const TestModel = async (testSet)=>{
 
 const TestEnsembleModel = async (testSet, models)=>{
     const DoBatchTestSampleGenerator = (batchSize)=>{return mnist.makeSampleGenerator(testSet, batchSize);};
-    let testResult = await causalNet.ensembleTest(DoBatchTestSampleGenerator, models, testSet.length);
+    let testResult = await causalNet.ensembleTest(DoBatchTestSampleGenerator, models);
     Logger.log({testResult});
     return testResult;
     

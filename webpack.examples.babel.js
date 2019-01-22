@@ -42,6 +42,13 @@ const ExamplesConfig = {
                 vendors: {
                     test: /node_modules/,//still fail to make this it as seperated chunks
                     reuseExistingChunk: true,
+                    chunks: 'initial',
+                    name: 'vendors'
+                },
+                vendors: {
+                    test: /node_modules/,//still fail to make this it as seperated chunks
+                    reuseExistingChunk: true,
+                    chunks: 'initial',
                     name: 'vendors'
                 }
             }
@@ -92,9 +99,15 @@ const ExamplesConfig = {
         }),
         new HtmlWebpackPlugin({
             title: 'demos example',
-            chunks: ['MNIST-demo'],
+            chunks: ['MNIST-demo','vendors'],
             filename: 'MNIST.html',
             template:'./examples/MNIST-demo/index.html'
+        }),
+        new HtmlWebpackPlugin({
+            title: 'causality',
+            chunks: ['example','vendors'],
+            filename: 'index.html',
+            template:'./examples/index.html'
         })
     ]
 };

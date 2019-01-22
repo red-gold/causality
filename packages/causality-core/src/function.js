@@ -31,7 +31,7 @@ export default class Function{
     }
 
     hsplitEvery(values, splitSize){
-        console.log({vlen: values.length, splitSize});
+        
         return this.R.splitEvery(splitSize, values);
     }
 

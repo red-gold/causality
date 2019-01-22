@@ -11,6 +11,16 @@ export default class BaseImgDataset{
         this.numSamples = numSamples;
         this.sampleSize = sampleSize;
         this.numClass   = numClasses;
+
+        this.logger = console;
+    }
+
+    set Logger(logger){
+        this.logger = logger;
+    }
+    
+    get Logger(){
+        return this.logger;
     }
     
     summary(){
@@ -32,6 +42,8 @@ export default class BaseImgDataset{
     async loadDataset(storage){
         throw Error('implement required');
     }
+
+    
 
     makeSampleGenerator(batchSize=10){
         throw Error('implement required');

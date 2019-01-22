@@ -1,12 +1,16 @@
 const EnsembleMixins = (PipelineClass)=> class extends PipelineClass{ 
-    async ensembleTest(TestSampleGeneratorFn, modelList, testBatchSize, numClasses=10){
+    async ensembleTest(TestSampleGeneratorFn, modelList){
         const T = this.T, F = this.F, R = this.R;
-        const testSampleGenerator = TestSampleGeneratorFn(testBatchSize);
+        const testSampleGenerator = TestSampleGeneratorFn();
         let testResult = T.zeros([1]);
-        for await (let [batchSamples, batchLabels] of testSampleGenerator){
-            let labelTensor  = T.tensor(batchLabels).reshape([testBatchSize, numClasses]);
-            let sampleTensor = T.tensor(batchSamples).asType('float32'); 
-            const {predict} = await this.makeEnsemblePredict(modelList, sampleTensor, testBatchSize);
+        let testSize = 0;
+        for await (let {idx, batchSize, data} of testSampleGenerator){
+            let [batchSamples, batchLabels] = data;
+            let labelTensor  = T.tensor(batchLabels).reshape([batchSize, -1]);
+            let sampleTensor = T.tensor(batchSamples);
+            let numClasses = labelTensor.shape[1];
+            testSize += batchSize;
+            const {predict} = await this.makeEnsemblePredict(modelList, sampleTensor, batchSize);
             let onehotPredict = T.oneHot(predict, numClasses);
             onehotPredict.print();
             labelTensor.print();
@@ -15,7 +19,7 @@ const EnsembleMixins = (PipelineClass)=> class extends PipelineClass{
         }
         let result = await testResult.data();
         let pass = result[0];
-        let accuracy = pass/testBatchSize;
+        let accuracy = pass/testSize;
         return {accuracy, pass};        
     }
     async makeEnsemblePredict(modelList, samples, numSamples=1){

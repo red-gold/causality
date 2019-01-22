@@ -11,6 +11,9 @@ const WebConfig = merge(common, {
     chunkFilename: '[name].bundle.js',
     library: Bundle.main,
     globalObject: 'this'
-  }
+  },
+  externals: [ 'causal-net.core', 'causal-net.utils', 
+               'causal-net.memcache', 'causal-net.storage', 
+               'causal-net.preprocessing', 'causal-net.datasets'] 
 });
 export default WebConfig;

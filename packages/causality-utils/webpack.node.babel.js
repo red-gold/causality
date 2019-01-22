@@ -12,6 +12,6 @@ const NodeConfig = merge(common, {
       library: Bundle.main,
       globalObject: 'this'
     },
-    externals: ['cross-fetch']  
+    externals: ['cross-fetch','fetch-readablestream','platform','random','pngjs3']  
 });
 export default NodeConfig;

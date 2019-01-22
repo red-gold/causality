@@ -29,6 +29,9 @@ const WebNodeMixins = (LogClass)=> class extends LogClass{
         this.scrollBottom();
     }
     log(message){
+        if(this.level >= this.AcceptedLevels['log']){
+            return null;
+        }
         if(!this.loggerEl || !this.loggerEl.appendChild){
             this.connect();
         }
@@ -40,8 +43,15 @@ const WebNodeMixins = (LogClass)=> class extends LogClass{
         node.appendChild(jsonNode);
         this.loggerEl.appendChild(node);
         this.scrollBottom();
-        console.log(this.prefix.join('/'));
         console.log(message);
+    }
+
+    debug(message){
+        if(this.level >= this.AcceptedLevels['debug']){
+            return null;
+        }
+        //no show on web screen;        
+        console.debug(message);
     }
 };
 
