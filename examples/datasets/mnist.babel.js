@@ -1,6 +1,7 @@
-const { MNIST } = require('causal-net.datasets');
-const { Logger } = require('causal-net.log');
-const { Fetch } = require('causal-net.utils');
+import {Datasets, Log, Utils} from '../../src/index';
+const { MNIST } = Datasets;
+const { Logger } = Log;
+const { Fetch } = Utils;
 const mnist = async ()=>{
     const datasetUrl = "http://storage.googleapis.com/moderatordev-223307.appspot.com/MNIST_dataset/";
     const url = `${datasetUrl}dataset.summary.json`;

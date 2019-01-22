@@ -42,13 +42,7 @@ const ExamplesConfig = {
                 vendors: {
                     test: /node_modules/,//still fail to make this it as seperated chunks
                     reuseExistingChunk: true,
-                    chunks: 'initial',
-                    name: 'vendors'
-                },
-                vendors: {
-                    test: /node_modules/,//still fail to make this it as seperated chunks
-                    reuseExistingChunk: true,
-                    chunks: 'initial',
+                    chunks: 'all',
                     name: 'vendors'
                 }
             }

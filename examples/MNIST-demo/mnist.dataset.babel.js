@@ -223,7 +223,9 @@ const SaveModel = async (modelName=null)=>{
     });
 
     $('#DeleteStorage').click(function(){
-        Storage.indexDBStorage.deleteFileByPrefix('/');
+        Storage.indexDBStorage.deleteFileByPrefix('').then(res=>{
+            console.log({res});
+        });
     });
 
     $('#TestEnsemble').click(function(){

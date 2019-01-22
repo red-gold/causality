@@ -9,17 +9,25 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
      * @param  {} netConfig
      * @param  {} netParams
      */
-    constructor( netConfig, netParams=null, storage=null ){
+    constructor( netConfig, netParams=null ){
         super();
         this.F = new Function();
         this.R = this.F.CoreFunction;
         this.logger = console;
-        this.storage = storage || indexDBStorage;
+        this.storage = indexDBStorage;
         this.saveModelDir = '/saveModel/';
         this.HyperParameters = this.F.getHyperParameter(netConfig);
         this.BasePipeline = this.F.getPipeline(netConfig);
         this.netParams = this.setOrInitParams(this.BasePipeline, netParams);
         this.flattenParams = this.flattenParams(this.netParams);        
+    }
+
+    set Storage(storage){
+        this.storage = storage;
+    }
+
+    get Storage(){
+        return this.storage;
     }
 
     set Logger(logger){
@@ -109,16 +117,17 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
         const T = this.T, f = this.F, l = this.L;
         this.HyperParameters.Datasize = numSamples;
         const Pipeline = f.parameterAcquisition(this.BasePipeline, this.HyperParameters);
-        // console.log(({Pipeline}));
-        let pipeValue = {PipeInput: samples}, traces = [], netParams = this.netParams;
+        let pipeValue = {PipeInput: samples}, traces = [], 
+            netParams = this.netParams, lastLayer = 'PipeInput';
         return T.tidy(()=>{
             for(let layer of Pipeline){
-                let layerOutput = this.layer(pipeValue[layer.Input], layer, netParams[layer.Name]);
+                let layerOutput = this.layer(pipeValue[lastLayer], layer, netParams[layer.Name]);
+                lastLayer = layer.Name;
                 pipeValue[layer.Name] = layerOutput[layer.Name];
                 traces.push({[layer.Name]: layerOutput.trace});
             }
-            // console.log({traces});
-            let pipeOutput = pipeValue['PipeOutput'];
+            this.logger.debug({traces});
+            let pipeOutput = pipeValue[lastLayer];
             let logProb = pipeOutput.sub(T.logSumExp(pipeOutput, 1, true));
             let predict = logProb.argMax(1);
             return {logProb, predict};
@@ -185,13 +194,11 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
         let testSize = 0;
         for await (let {idx, batchSize, data} of testSampleGenerator){
             let [batchSamples, batchLabels] = data;
+            let sampleTensor = T.tensor(batchSamples).reshape([batchSize, -1]).asType('float32');
             let labelTensor  = T.tensor(batchLabels).reshape([batchSize, -1]);
-            let sampleTensor = T.tensor(batchSamples);
             let numClasses = labelTensor.shape[1];
             testSize += batchSize;
-            const {predict} = this.makePredict(sampleTensor, batchSize);
-            
-            
+            let {predict} = this.makePredict(sampleTensor, batchSize);
             let onehotPredict = T.oneHot(predict, numClasses);
             onehotPredict.print();
             labelTensor.print();
@@ -206,7 +213,7 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
 
     async getParams(asObject=true){
         const F = this.F, R = this.R;
-        const getParams = async (params)=>{
+        const extractParams = async (params)=>{
             if(F.isTensor(params)){
                 return Array.from(await params.data());
             }
@@ -214,12 +221,12 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
                 let kVals = R.toPairs(params);
                 let res = {};
                 for(let [k, val] of kVals){
-                    res[k] = await getParams(val); 
+                    res[k] = await extractParams(val); 
                 }
                 return res;
             }
         };
-        let params = await getParams(this.netParams);
+        let params = await extractParams(this.netParams);
         if(asObject){
             return params;
         }
@@ -231,7 +238,7 @@ export default class CausalNet extends Platform.mixWith(Tensor,[EnsembleMixins])
         let fileList = await this.storage.getFileList(this.saveModelDir);
         return fileList.map(fileName=>fileName.replace(this.saveModelDir,''));
     }
-    async saveParams(fileName='save.model'){
+    async saveParams(fileName){
         const params = await this.getParams();
         await this.storage.writeFile(this.saveModelDir + fileName, JSON.stringify(params));
         return params;
