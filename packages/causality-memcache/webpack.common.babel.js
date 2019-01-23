@@ -4,10 +4,7 @@ const include = join(__dirname, 'src');
 
 export default {
   entry: {
-    [Bundle.main]: './src/index.js',
-    [Bundle.dir +'baseMemCache']: './src/index.js',
-    [Bundle.dir +'memoryCache']: './src/memdownCache.js',
-    [Bundle.dir +'function']: './src/function.js'
+    [Bundle.main]: './src/index.js'
   },
   mode: 'development',
   devtool: 'inline-source-map',

@@ -33,35 +33,42 @@ class MemoryCache extends BaseMemCache{
         });
     }
 
-    async getFileList(filePath='/'){
-        const CreateNameTest = (name)=>{
-            var pattern = name;
-            var regex = new RegExp(`^${pattern}.*`,'g');
-            return (fileName)=>fileName.match(regex) || [];
-        };
-        const NameTester = CreateNameTest(filePath);
+    async delItem(key){
+        return new Promise((resolve, reject)=>{
+            this.storage.del(key, (err)=>{
+                if(err){
+                    console.error({err});
+                    reject('error write');
+                }
+                else{
+                    resolve(key);
+                }
+            });
+        });
+    }
 
-        return new Promise(async (resolve, reject)=>{
+    createCheckItemNameFn(name){
+        var pattern = name;
+        var regex = new RegExp(`${pattern}.*`,'g');
+        return (fileName)=>fileName.match(regex) || [];
+    };
+
+    async getItemList(namePath='/'){
+        const NameTester = this.createCheckItemNameFn(filePath);
+        return new Promise((resolve, reject)=>{
             let fileList = [];
-            this.cache.createKeyStream()
+            this.storage.createKeyStream()
                 .on('data', (key) =>{
                     key = key.toString('utf8');
-                    // console.log('key=',filePath, NameTester(key));
                     if(NameTester(key).length===1){
                         fileList.push(key);
                     }
                 })
-                .on('error', (err) =>{
-                    console.log('Oh my!', err);
-                    reject(err);
-                })
-                .on('close', () =>{
-                    console.log('Stream closed');
-                    resolve(fileList);
-                })
-                .on('end',  () =>{
-                    console.log('Stream ended');
-                    resolve(fileList);
+                .on('close', () => resolve(fileList) )
+                .on('end',  () => resolve(fileList) )
+                .on('error', (err) =>{ 
+                    console.error(err);
+                    reject('error getFileList') ;
                 });
         });
     }

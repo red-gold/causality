@@ -27,7 +27,6 @@ const _NetConfig = {
         } ] };
 let configure = require('../../datasets/MNIST_dataset/dataset.summary.json');
 Logger.log(configure);
-// Logger.Level = 'log';
 (async ()=>{
     configure.datasetUrl = "http://storage.googleapis.com/moderatordev-223307.appspot.com/MNIST_dataset/";
     let mnist = new MNIST(configure);

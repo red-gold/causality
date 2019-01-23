@@ -1,12 +1,6 @@
 import { Stream } from 'causal-net.utils';
-import { memDownCache } from 'causal-net.memcache';
 import { Preprocessing } from 'causal-net.preprocessing';
 const ImgDatasetPreprocessingMixins = (BaseImageClass)=> class extends BaseImageClass{ 
-    constructor(...args){
-        super(...args);
-        this.memCache = memDownCache;
-        this.preprocessing = new Preprocessing();
-    }
     makePreprocessingStream(saveDir){
         const ImageBufferSize = this.F.getImgBufferSize(this.sampleSize);
         const LabelBufferSize = this.numClass;
@@ -63,6 +57,7 @@ const ImgDatasetPreprocessingMixins = (BaseImageClass)=> class extends BaseImage
 
     async preprocessingDataset(saveDir='/preprocessing/mnist/',storeInMemory=false){
         this.preProcessingStorage = (storeInMemory)?this.memCache:this.storage;
+        this.preprocessing = new Preprocessing();
         let stream = this.makePreprocessingStream(saveDir);
         let generator = this.F.generatorWithIndex(this.savedChunks);
         for(let [idx, [samplePath, labelPath]] of generator){

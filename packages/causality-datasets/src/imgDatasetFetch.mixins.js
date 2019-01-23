@@ -1,10 +1,6 @@
-import { indexDBStorage } from 'causal-net.storage';
+
 import { Sampling } from 'causal-net.utils';
 const ImgDatasetFetchMixins = (BaseImageClass)=> class extends BaseImageClass{ 
-    constructor(...args){
-        super(...args);
-        this.storage = indexDBStorage;
-    }
     async fetchLabelChunk(saveDir, labelChunk){
         let labelChunkUrl = this.configuration.datasetUrl + labelChunk;
         let labelSavePath = saveDir + labelChunk;

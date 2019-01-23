@@ -1,37 +1,55 @@
 const PipelineTrainingMixins = (PipelineClass)=> class extends PipelineClass{
-    /**
-     * @param  {} SampleGeneratorFn
-     * @param  {} batchSize
-     * @param  {} numEpochs=2
-     * @param  {} lr=0.01
-     */
-    async train(SampleGeneratorFn, numEpochs = 2, lr=0.001){
-        const T = this.T, F = this.F, R = this.R;
-        const start = new Date();
-        let loss = [], averageLoss = [];
-        if(!this.optimizer){
-            this.makeOptimizer();
+    trainProgress(epochIdx, losses, start){
+        if(this.logger.progress){
+            this.logger.progress({epochIdx, losses,  
+                         'start at': start.toISOString(), 
+                         'elapse in second': (new Date() - start)/1000});
         }
+    }
+    /**
+     * @param  {} sampleBatch
+     * @param  {} labelBatch
+     * @param  {} numSample
+     */
+    loss(batchSamples, batchLabels, numSample){
+        if(!this.predict){
+            throw Error('PipelinePredict.mixins must be included');
+        }
+        this.SampleSize = numSample;
+        const T = this.T;
+        let sampleTensor = T.tensor(batchSamples).reshape([numSample, -1]).asType('float32'); 
+        let labelTensor  = T.tensor(batchLabels).reshape([numSample, -1]);
+        const {logProb} = this.predict(sampleTensor, numSample);
+        const likelihood = logProb.neg().mul(labelTensor);
+        const loss = likelihood.mean();
+        return loss;
+    };
+    async train(SampleGeneratorFn, numEpochs = 2){
+        if(!this.optimizer){
+            throw Error('optimizer must be set');
+        }
+        const T = this.T, F = this.F, R = this.R;
         let optimizer = this.optimizer;
+        const startTimeStamp = new Date();
+        let losses = [];
+        
         for(let epochIdx of F.range(numEpochs)){
-            if(this.logger.progress){
-                this.logger.progress({epochIdx, averageLoss, time: new Date().toISOString(), 
-                             start: start.toISOString(), elapse: (new Date() - start)/1000});
-            }
             const sampleGenerator = SampleGeneratorFn();
+            let iterLosses = [];
             for await (let {idx, batchSize, data} of sampleGenerator){
                 let [batchSamples, batchLabels] = data;
                 optimizer.minimize(()=>{
                     let l = this.loss(batchSamples, batchLabels, batchSize);
-                    loss = [...loss, ...l.dataSync()];
+                    iterLosses.push(l.dataSync());
                     return l;
                 });
             }
-            averageLoss = [...averageLoss, R.mean(loss)];
-            loss = [];
+            losses.push(R.mean(iterLosses));
+            iterLosses = [];
+            this.trainProgress(epochIdx, losses, startTimeStamp);
         }
         return new Promise((resolve, reject)=>{
-            resolve({averageLoss});
+            resolve({losses});
         });
     };
 
@@ -41,13 +59,12 @@ const PipelineTrainingMixins = (PipelineClass)=> class extends PipelineClass{
         let testResult = T.zeros([1]);
         let testSize = 0;
         for await (let {idx, batchSize, data} of testSampleGenerator){
+            this.SampleSize = batchSize;
             let [batchSamples, batchLabels] = data;
             let sampleTensor = T.tensor(batchSamples).reshape([batchSize, -1]).asType('float32');
             let labelTensor  = T.tensor(batchLabels).reshape([batchSize, -1]);
-            let numClasses = labelTensor.shape[1];
             testSize += batchSize;
-            let {predict} = this.makePredict(sampleTensor, batchSize);
-            let onehotPredict = T.oneHot(predict, numClasses);
+            let {onehotPredict} = this.predict(sampleTensor, batchSize);
             onehotPredict.print();
             labelTensor.print();
             onehotPredict.mul(labelTensor).sum().print();
@@ -55,7 +72,7 @@ const PipelineTrainingMixins = (PipelineClass)=> class extends PipelineClass{
         }
         let result = await testResult.data();
         let pass = result[0];
-        let accuracy = pass/testSize;
+        let accuracy = pass / testSize;
         return {accuracy, pass};        
     }
 }

@@ -1,4 +1,5 @@
-import { CausalNet, Log } from '../../src/index';
+import { default as SimpleNet } from './simplePipeline.babel';
+import { Log } from '../../src/index';
 const { Logger } = Log;
 let inputs = [[0.52, 1.12,  0.77],
               [0.88, -1.08, 0.15],
@@ -6,23 +7,20 @@ let inputs = [[0.52, 1.12,  0.77],
               [0.74, -2.49, 1.39]];
 let targets = [[0, 1], [0, 1], [0, 1], [0, 1]];
 const _NetConfig = {
-    HyperParameters: {BatchSize:4},
+    HyperParameters: {SampleSize:4},
     Classes: 2,
     Pipeline:[
-        {   Name: 'input', Type: 'tensor', 
-            Flow:[  {Op: 'reshape', Args:[['$BatchSize', 3]] } ] 
-        },
-        {   Name:'dense', Type: 'tensor', 
+        {   Name:'dense', Type: 'Tensor', 
             Parameters: { Weight: [3, 2], Bias: [2]  },
             Flow: [ { Op: 'dot', Parameter: 'Weight', Args: [] },
                     { Op: 'add', Parameter: 'Bias',  Args: [] } ] 
         },
-        {   Name:'PipeOutput', Type: 'tensor', 
-            Flow: [ { Op: 'reshape', Args: [['$BatchSize', -1]] } ] 
+        {   Name:'PipeOutput', Type: 'Tensor', 
+            Flow: [ { Op: 'reshape', Args: [['$SampleSize', -1]] } ] 
         } ] };
 let parameters = {};
-let causalNet = new CausalNet(_NetConfig, parameters);
-causalNet.logger = Logger;
+
+let causalNet = new SimpleNet(_NetConfig, parameters);
 
 (async ()=>{
     const DoBatchTrainSampleGenerator = (epochIdx)=>([{idx:0, batchSize:4, data: [inputs, targets]}]);
@@ -39,4 +37,6 @@ causalNet.logger = Logger;
     Logger.log({testResult});
     testResult = await causalNet.ensembleTest(DoBatchTestSampleGenerator, ['save_model.model']);
     Logger.log({testResult});
-})();
+})().catch(err=>{
+    console.error({err});
+});

@@ -1,9 +1,16 @@
 const PipelineOptimizingMixins = (PipelineClass)=> class extends PipelineClass{ 
-    constructor(...args){
-        super();
-        // this.flattenParams = this.flattenParams(this.netParams);
+    
+    set Optimizer(optimizer){
+        this.optimizer = optimizer;
+    }
+    get Optimizer(){
+        this.optimizer;
     }
 
+    setDefaultOptimizer(){
+        this.optimizer = this.makeOptimizer();
+    }
+    
     flattenParams(params){
         const R = this.R, F = this.F;
         const MapValues = (objOrArray)=>Array.isArray(objOrArray)?objOrArray:Object.values(objOrArray);
@@ -30,20 +37,7 @@ const PipelineOptimizingMixins = (PipelineClass)=> class extends PipelineClass{
         
         return values.reduce((flatten,v)=>[...flatten, ...Flatten(v)],[]);
     }
-    /**
-     * @param  {} sampleBatch
-     * @param  {} labelBatch
-     * @param  {} numSample
-     */
-    loss(batchSamples, batchLabels, numSample){
-        const T = this.T;
-        let sampleTensor = T.tensor(batchSamples).reshape([numSample, -1]).asType('float32'); 
-        let labelTensor  = T.tensor(batchLabels).reshape([numSample, -1]);
-        const {logProb} = this.makePredict(sampleTensor, numSample);
-        const likelihood = logProb.neg().mul(labelTensor);
-        const loss = likelihood.mean();
-        return loss;
-    };
+    
     makeOptimizer(method='adam', args=[0.02]){        
         this.optimizer = this.T.train[method](...args);
         return this.optimizer;

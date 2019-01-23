@@ -1,6 +1,8 @@
 import { default as BaseImgDataset } from './baseImgDataset';
 import { Platform } from 'causal-net.utils';
 import { LoggerMixins } from 'causal-net.log';
+import { StorageMixins, indexDBStorage } from 'causal-net.storage';
+import { MemCacheMixins, memDownCache } from 'causal-net.memcache';
 import { default as Function } from './function';
 import { default as ImgDatasetFetchMixins } from './imgDatasetFetch.mixins';
 import { default as ImgDatasetPreprocessingMixins } from './imgDatasetPreprocessing.mixins';
@@ -9,10 +11,14 @@ export default class MnistDataset extends Platform.mixWith(BaseImgDataset,
         [ ImgDatasetFetchMixins,
           ImgDatasetPreprocessingMixins,
           ImgDatasetGeneratorMixins,
+          MemCacheMixins,
+          StorageMixins,
           LoggerMixins ]){
     
     constructor(...args){
         super(...args);
         this.F = new Function();
+        this.Storage = indexDBStorage;
+        this.MemCache = memDownCache;
     }
 };

@@ -1,11 +1,21 @@
 const PipelineParametersMixins = (PipelineClass)=> class extends PipelineClass{ 
-    constructor(netConfigure){
-        this.saveModelDir = '/saveModel/';
+    get Parameters(){
+        if(!this.parameters){
+            throw Error('parameter must be set');
+        }
+        return (async ()=>{
+            const Fn = async (param)=>(Array.from(await param.data()));
+            let params = await this.extractParamFromTensorDict(this.parameters, Fn);
+            return params;
+        })();
     }
-    createNet(netParams){
-        this.netParams = this.setOrInitParams(this.BasePipeline, netParams);
+    set Parameters(params){
+        if(!this.basePipeline){
+            throw Error('basepipeline must be set');
+        }
+        this.parameters = this.setOrInitParams(this.basePipeline, params);
     }
-    async extractParams(params){
+    async extractParamFromTensorDict(params, fn){
         const F = this.F, R = this.R;
         const Traveller = async (params, fn)=>{
             if(F.isTensor(params)){
@@ -15,16 +25,19 @@ const PipelineParametersMixins = (PipelineClass)=> class extends PipelineClass{
                 let kVals = R.toPairs(params);
                 let res = {};
                 for(let [k, val] of kVals){
-                    res[k] = await Traveller(val); 
+                    res[k] = await Traveller(val, fn); 
                 }
                 return res;
             }
-        }
-        return Traveller(params);
+        };
+        return Traveller(params, fn);
     };
-    async netSummary(){
-        const Fn = (param)=>Array.from(await params.mean().data);
-        return extractParams(this.netParams, Fn);
+    async parametersSummary(){
+        if(!this.parameters){
+            throw Error('parameter must be set');
+        }
+        const Fn = async (param)=>Array.from(await param.mean().data());
+        return await this.extractParamFromTensorDict(this.parameters, Fn);
     }
     setOrInitParams(pipeline, netParams){
         const R = this.R, T = this.T, F = this.F;
@@ -52,31 +65,21 @@ const PipelineParametersMixins = (PipelineClass)=> class extends PipelineClass{
         return SetOrInit(pipeParams, netParams);
     }
 
-    async getParams(asObject=true){
-        let params = await extractParams(this.netParams,(param)=>(Array.from(await param.data())) );
-        if(asObject){
-            return params;
-        }
-        else{
-            return JSON.stringify(params);
-        }
-    }
     async getSavedParams(){
         let fileList = await this.storage.getFileList(this.saveModelDir);
         return fileList.map(fileName=>fileName.replace(this.saveModelDir,''));
     }
+
     async saveParams(fileName){
-        const params = await this.getParams();
+        const params = await this.Parameters;
         await this.storage.writeFile(this.saveModelDir + fileName, JSON.stringify(params));
         return params;
     }
-    async loadParams(fileName, params=null){
-        if(!params){
-            let _params = await this.storage.readFile(this.saveModelDir+fileName);
-            params = JSON.parse(_params);
-        }
-        this.netParams = this.setOrInitParams(this.BasePipeline, params);
-        return await this.getParams(false);
+    async loadParams(fileName){
+        let strParams = await this.storage.readFile(this.saveModelDir+fileName);
+        let params = JSON.parse(strParams);
+        this.Parameters = params;
+        return await this.Parameters;
     }
 };
 
