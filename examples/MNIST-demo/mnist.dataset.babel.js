@@ -43,8 +43,7 @@ const FetchData = async ()=>{
     return chunkStorage;
 };
 const PreprocessingData = async ()=>{
-    let stream = mnist.makePreprocessingStream();
-    let preprocessingStorage = await mnist.preprocessingDataset(stream);
+    let preprocessingStorage = await mnist.preprocessingDataset();
     Logger.log({'number of preprocessing samples': preprocessingStorage.length});
 };
 const SplitTrainTestSet = (ratio)=>{

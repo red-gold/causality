@@ -8,10 +8,8 @@ const LogNodeMixins = (LogClass)=> class extends LogClass{
         }
         console.log(message);
     }
-    scrollBottom(){
-        //nothing
-    }
     progress(processMessage){
+        //TODO: implement progress show
     }
     debug(message){
         if(this.level >= this.AcceptedLevels['debug']){

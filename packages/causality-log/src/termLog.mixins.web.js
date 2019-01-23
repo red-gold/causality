@@ -10,14 +10,14 @@ const WebNodeMixins = (LogClass)=> class extends LogClass{
     }
     scrollBottom(element=null){
         element = element || this.frameEl;
-        console.log('scoll bottom ' + element.scrollHeight + element.clientHeight);
         element.scrollTop = element.scrollHeight - element.clientHeight;
     }
     progress(processMessage){
         // let node = this.loggerEl.getElementsByTagName("li:nth-last-of-type(1)");
         let LINodes = this.loggerEl.getElementsByTagName("li");
         let node = LINodes[LINodes.length-1];
-        if(!node || node.classList.contains("logger-progress")){//create new
+        if(!node || node.classList.contains("logger-progress")){
+            //create new el
             node = document.createElement("li");
             node.classList.add("logger-progress");
             this.loggerEl.appendChild(node);

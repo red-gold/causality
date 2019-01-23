@@ -1,9 +1,5 @@
-import {default as Function} from './function';
 export default class BaseImgDataset{
-    constructor(datasetConfigure, configureAssertion=null){
-        if(configureAssertion){
-            configureAssertion(this.datasetConfigure);
-        }
+    constructor(datasetConfigure){
         this.configuration = datasetConfigure;
         const {numSamples, sampleSize, numClasses} = this.configuration;
         this.dataSize = [numSamples, ...sampleSize];
@@ -11,41 +7,9 @@ export default class BaseImgDataset{
         this.numSamples = numSamples;
         this.sampleSize = sampleSize;
         this.numClass   = numClasses;
-
-        this.logger = console;
-    }
-
-    set Logger(logger){
-        this.logger = logger;
-    }
-    
-    get Logger(){
-        return this.logger;
     }
     
     summary(){
         return this.configuration;
-    }
-    
-    async fetchDataset(saveDir=null){
-        throw Error('implement required');
-    }
-
-    async loadData(storage){
-        throw Error('implement required');
-    }
-
-    async loadLabel(storage){
-        throw Error('implement required');
-    }    
-    
-    async loadDataset(storage){
-        throw Error('implement required');
-    }
-
-    
-
-    makeSampleGenerator(batchSize=10){
-        throw Error('implement required');
     }
 }

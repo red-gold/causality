@@ -1,4 +1,4 @@
-//origin code from https://github.com/lucygilbert/json-display/blob/master/json-display.js
+// origin code from https://github.com/lucygilbert/json-display/blob/master/json-display.js
 // Copyright (c) 2017 Lucy Gilbert
 export default class JsonView{
     constructor(){

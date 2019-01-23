@@ -1,19 +1,8 @@
-import {Function as BaseFunction} from 'causal-net.core';
-export default class Function extends BaseFunction{
+import { Function as BaseFunction} from 'causal-net.core';
+import { Platform } from 'causal-net.utils';
+import { default as FunctionMixins} from './function.mixins';
+export default class Function extends Platform.mixWith(BaseFunction,[FunctionMixins]){
     constructor(){
         super();
-    }
-    
-    getImgBufferSize(imgSize){
-        const R = this.R;
-        return R.reduce((s,d)=>s*d,1,imgSize);
-    }
-    generatorWithIndex(items){
-        const R = this.R;
-        return R.addIndex(R.map)((d, idx)=>[idx, d], items);
-    }
-    splitTrainTestSet(items, splitIndex){
-        const R = this.R;
-        return R.splitAt(splitIndex, items);
     }
 }
