@@ -16,8 +16,6 @@ const PipelineLayersMixins = (PipelineClass)=> class extends PipelineClass{
                 result = this.T[node.Op](result, parameters[node.Parameter], ...node.Args);
             }
             else{
-                result.print();
-                console.log(node.Args);
                 result = this.T[node.Op](result, ...node.Args);    
             };
             trace[idx] = result.shape;
@@ -28,7 +26,7 @@ const PipelineLayersMixins = (PipelineClass)=> class extends PipelineClass{
     runOpNet(value, net, parameters){
         let result = net(value, parameters);
         let trace = {};
-        return {result, trace}
+        return {result, trace};
     }
     runLayer(value, layerConfigure, layerParameters){
         const {Name, Type, Flow, Net} = layerConfigure;
@@ -42,7 +40,7 @@ const PipelineLayersMixins = (PipelineClass)=> class extends PipelineClass{
             return {[Name]: result, trace};
         }   
         else{
-            throw Error('type must be one of Net or Tensor')
+            throw Error('type must be one of Net or Tensor');
         }
     }
     tracing(traces, layer, layerOutput){
@@ -51,7 +49,6 @@ const PipelineLayersMixins = (PipelineClass)=> class extends PipelineClass{
         }
     }
     runPipeline(samples, traces=[]){
-        console.log({pipeline: this.pipeline});
         let pipeValue = {PipeInput: samples}, lastLayer = 'PipeInput';
         for(let layer of this.pipeline){
             let layerOutput = this.runLayer(pipeValue[lastLayer], layer, this.parameters[layer.Name]);
@@ -62,5 +59,5 @@ const PipelineLayersMixins = (PipelineClass)=> class extends PipelineClass{
         this.logger.debug({traces});
         return pipeValue[lastLayer];
     }
-}
+};
 export default PipelineLayersMixins;

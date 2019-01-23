@@ -75,5 +75,5 @@ const PipelineTrainingMixins = (PipelineClass)=> class extends PipelineClass{
         let accuracy = pass / testSize;
         return {accuracy, pass};        
     }
-}
+};
 export default PipelineTrainingMixins;

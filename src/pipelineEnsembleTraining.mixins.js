@@ -10,11 +10,11 @@ const PipelineEnsembleTrainingMixins = (PipelineClass)=> class extends PipelineC
             let sampleTensor = T.tensor(batchSamples).reshape([batchSize, -1]).asType('float32');
             let labelTensor  = T.tensor(batchLabels).reshape([batchSize, -1]);
             testSize += batchSize;
-            let {onehotPredict} = this.ensemblePredict(modelList, sampleTensor, batchSize);
-            onehotPredict.print();
+            let {predict} = await this.ensemblePredict(modelList, sampleTensor, batchSize);
+            predict.print();
             labelTensor.print();
-            onehotPredict.mul(labelTensor).sum().print();
-            testResult = testResult.add(onehotPredict.mul(labelTensor).sum());
+            predict.mul(labelTensor).sum().print();
+            testResult = testResult.add(predict.mul(labelTensor).sum());
         }
         let result = await testResult.data();
         let pass = result[0];

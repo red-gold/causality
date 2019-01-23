@@ -34,7 +34,7 @@ const PipelineFunctionMixins = (FunctionClass)=> class extends FunctionClass{
                 const key = R.slice(1, Infinity, value);
                 let param = R.prop(key, hyperParameters);
                 if(!param){
-                    throw Error(`${key} not found in ${Object.keys(hyperParameters)}`)
+                    throw Error(`${key} not found in ${Object.keys(hyperParameters)}`);
                 }
                 return param;
             }

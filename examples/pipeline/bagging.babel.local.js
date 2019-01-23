@@ -2,28 +2,28 @@ import { CausalNet, Storage, Datasets, Log, Utils } from '../../src/index';
 const { MNIST }  = Datasets;
 const { Logger } = Log;
 const _NetConfig = {
-    HyperParameters: {Datasize:10},
+    HyperParameters: {SampleSize:10},
     Pipeline:[
-        {   Name: 'input', Type: 'tensor', 
-            Flow:[  {Op: 'reshape', Args:[['$Datasize', 28, 28, 4]] } ] 
+        {   Name: 'input', Type: 'Tensor', 
+            Flow:[  {Op: 'reshape', Args:[['$SampleSize', 28, 28, 4]] } ] 
         },
-        {   Name:'conv1', Type: 'tensor', 
+        {   Name:'conv1', Type: 'Tensor', 
             Parameters: { filter: [3, 3, 4, 32] },
             Flow: [ { Op: 'conv2d', Parameter: 'filter', Args: [1, 'same'] } ] 
         },
-        {   Name:'conv2', Type: 'tensor', 
+        {   Name:'conv2', Type: 'Tensor', 
             Parameters: { filter: [3, 3, 32, 32] },
             Flow: [ { Op: 'conv2d', Parameter: 'filter', Args: [1, 'same'] },
-                    { Op: 'reshape', Args: [['$Datasize', -1]] },
+                    { Op: 'reshape', Args: [['$SampleSize', -1]] },
                     { Op: 'tanh', Args: [] } ] 
         },
-        {   Name:'dense', Type: 'tensor', 
+        {   Name:'dense', Type: 'Tensor', 
             Parameters: { Weight: [28*28*32, 10], Bias: [10]  },
             Flow: [ { Op: 'dot', Parameter: 'Weight', Args: [] },
                     { Op: 'add', Parameter: 'Bias',  Args: [] } ] 
         },
-        {   Name:'PipeOutput', Type: 'tensor', 
-            Flow: [ { Op: 'reshape', Args: [['$Datasize', -1]] } ] 
+        {   Name:'PipeOutput', Type: 'Tensor', 
+            Flow: [ { Op: 'reshape', Args: [['$SampleSize', -1]] } ] 
         } ] };
 let configure = require('../../datasets/MNIST_dataset/dataset.summary.json');
 Logger.log(configure);
@@ -37,9 +37,7 @@ Logger.log(configure);
     Logger.log({preprocessingStorage});
     let parameters = {};
     let causalNet = new CausalNet(_NetConfig, parameters);
-    causalNet.makeOptimizer('adam', [0.002]);
     let [trainSet, testSet] = mnist.getTrainTestSet();
-    causalNet.logger = Logger;    
     let batchSize = 10;
     const MakeBatchTrainSampleGenerator = (epochIdx)=>{return mnist.makeSampleGenerator(trainSet, batchSize);};
     let logTrain = await causalNet.train(MakeBatchTrainSampleGenerator, 20);
