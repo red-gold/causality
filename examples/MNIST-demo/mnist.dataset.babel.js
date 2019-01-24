@@ -3,28 +3,28 @@ const { MNIST }  = Datasets;
 const { Logger } = Log;
 const { Fetch }  = Utils;
 const _NetConfig = {
-    HyperParameters: {Datasize:100},
+    HyperParameters: {SampleSize:100},
     Pipeline:[
-        {   Name: 'input', Type: 'tensor', Input: 'PipeInput', 
-            Flow:[  {Op: 'reshape', Args:[['$Datasize', 28, 28, 4]] } ] 
+        {   Name: 'input', Type: 'Tensor', Input: 'PipeInput', 
+            Flow:[  {Op: 'reshape', Args:[['$SampleSize', 28, 28, 4]] } ] 
         },
-        {   Name:'conv1', Type: 'tensor', Input: 'input',
+        {   Name:'conv1', Type: 'Tensor', Input: 'input',
             Parameters: { filter: [3, 3, 4, 32] },
             Flow: [ { Op: 'conv2d', Parameter: 'filter', Args: [1, 'same'] } ] 
         },
-        {   Name:'conv2', Type: 'tensor', Input: 'conv1',
+        {   Name:'conv2', Type: 'Tensor', Input: 'conv1',
             Parameters: { filter: [3, 3, 32, 32] },
             Flow: [ { Op: 'conv2d', Parameter: 'filter', Args: [1, 'same'] },
-                    { Op: 'reshape', Args: [['$Datasize', -1]] },
+                    { Op: 'reshape', Args: [['$SampleSize', -1]] },
                     { Op: 'tanh', Args: [] } ] 
         },
-        {   Name:'dense', Type: 'tensor', Input: 'conv2',
+        {   Name:'dense', Type: 'Tensor', Input: 'conv2',
             Parameters: { Weight: [28*28*32, 10], Bias: [10]  },
             Flow: [ { Op: 'dot', Parameter: 'Weight', Args: [] },
                     { Op: 'add', Parameter: 'Bias',  Args: [] } ] 
         },
-        {   Name:'PipeOutput', Type: 'tensor', Input: 'dense',
-            Flow: [ { Op: 'reshape', Args: [['$Datasize', -1]] } ] 
+        {   Name:'PipeOutput', Type: 'Tensor', Input: 'dense',
+            Flow: [ { Op: 'reshape', Args: [['$SampleSize', -1]] } ] 
         } ] };
 
 let parameters = {};
