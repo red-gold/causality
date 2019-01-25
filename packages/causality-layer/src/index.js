@@ -1,2 +1,2 @@
-export {default as Layer} from './layer';
-export {default as Function} from './function';
+export { default as causalNetLayer } from './causalNetLayer';
+export { default as CausalNetLayerMixins } from './causalNetLayer.mixins';

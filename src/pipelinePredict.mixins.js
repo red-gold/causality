@@ -1,20 +1,18 @@
 const PipelinePredictMixins = (PipelineClass)=> class extends PipelineClass{
     /**
      * @param  {} samples
-     * @param  {} numSamples=1
      */
-    predict(samples){
-        if(!this.runPipeline){
-            throw Error('PipelineLayersMixins must be included');
-        }
+    predict(samples, numSamples=1){
         const T = this.T;
         return T.tidy(()=>{
-            let pipeOutput = this.runPipeline(samples);
+            let sampleTensor = T.tensor(samples).reshape([numSamples, -1]).asType('float32'); 
+            sampleTensor.print();
+            let pipeOutput = this.runPipeline(sampleTensor);
             let logProb = pipeOutput.sub(T.logSumExp(pipeOutput, 1, true));
-            let predict = logProb.argMax(1);
             let numClasses = logProb.shape[1];
+            let predict = logProb.argMax(1);
             let onehotPredict = T.oneHot(predict, numClasses);
-            return {logProb, predict, onehotPredict};
+            return {predict, onehotPredict};
         });
     }
 };

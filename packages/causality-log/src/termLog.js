@@ -7,5 +7,4 @@ class TermLog extends Platform.mixWith(BaseLog, {'node':[LogNodeMixins],'web':[W
         super();
     }
 }
-const Logger = new TermLog();
-export default Logger;
+export default new TermLog();

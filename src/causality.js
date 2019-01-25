@@ -1,9 +1,11 @@
 import { Tensor } from 'causal-net.core';
 import { Platform } from 'causal-net.utils';
-import { LoggerMixins, Logger } from 'causal-net.log';
+import { LoggerMixins, termLogger } from 'causal-net.log';
 import { StorageMixins, indexDBStorage } from 'causal-net.storage';
+import { CausalNetLayerMixins, causalNetLayer } from 'causal-net.layer';
 import { default as PipelinePredictMixins } from './pipelinePredict.mixins';
-import { default as PipelineLayersMixins } from './pipelineLayers.mixins';
+import { default as PipelineBaseMixins } from './pipelineBase.mixins';
+import { default as PipelineRunnerMixins } from './pipelineRunner.mixins';
 import { default as PipelineTrainingMixins } from './pipelineTraining.mixins';
 import { default as PipelineEnsemblePredictMixins } from './pipelineEnsemblePredict.mixins';
 import { default as PipelineEnsembleTrainingMixins } from './pipelineEnsembleTraining.mixins';
@@ -16,9 +18,11 @@ import { default as Function } from './function';
 export default class CausalNet extends Platform.mixWith(Tensor, [
         StorageMixins,
         LoggerMixins,
-        PipelineLayersMixins,
-        PipelineParametersMixins,
+        PipelineBaseMixins,
         PipelineHyperParametersMixins,
+        PipelineParametersMixins,
+        CausalNetLayerMixins,
+        PipelineRunnerMixins,
         PipelineOptimizingMixins,
         PipelinePredictMixins,
         PipelineTrainingMixins,
@@ -29,12 +33,13 @@ export default class CausalNet extends Platform.mixWith(Tensor, [
         super();
         this.F = new Function();
         this.R = this.F.CoreFunction;
-        this.setPipelineByConfig(netConfig);
+        this.setBasePipelineByConfig(netConfig);
         this.setHyperParametersByConfig(netConfig);
         this.setDefaultOptimizer();
         this.Parameters = parameters;
         this.Storage = indexDBStorage;
         this.saveModelDir = '/saveModel/';
-        this.Logger = Logger;
+        this.Logger = termLogger;
+        this.Layer = causalNetLayer;
     }  
 }

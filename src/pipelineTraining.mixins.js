@@ -1,9 +1,15 @@
 const PipelineTrainingMixins = (PipelineClass)=> class extends PipelineClass{
-    trainProgress(epochIdx, losses, start){
+    trainProgress(epochIdx, losses, numEpochs){
+        if(!this.startTimeStamp){
+            this.startTimeStamp = new Date();
+        }
         if(this.logger.progress){
             this.logger.progress({epochIdx, losses,  
-                         'start at': start.toISOString(), 
-                         'elapse in second': (new Date() - start)/1000});
+                         'start at': this.startTimeStamp.toISOString(), 
+                         'elapse in second': (new Date() - this.startTimeStamp)/1000});
+        }
+        if(epochIdx === numEpochs - 1){//done
+            this.startTimeStamp = null;
         }
     }
     /**
@@ -11,42 +17,47 @@ const PipelineTrainingMixins = (PipelineClass)=> class extends PipelineClass{
      * @param  {} labelBatch
      * @param  {} numSample
      */
-    loss(batchSamples, batchLabels, numSample){
-        if(!this.predict){
-            throw Error('PipelinePredict.mixins must be included');
-        }
-        this.SampleSize = numSample;
+    loss(data, numSamples, getcorrectPredicts=false){
+        this.SampleSize = numSamples;
         const T = this.T;
-        let sampleTensor = T.tensor(batchSamples).reshape([numSample, -1]).asType('float32'); 
-        let labelTensor  = T.tensor(batchLabels).reshape([numSample, -1]);
-        const {logProb} = this.predict(sampleTensor, numSample);
-        const likelihood = logProb.neg().mul(labelTensor);
-        const loss = likelihood.mean();
-        return loss;
+        let [batchSamples, batchLabels] = data;
+        return T.tidy(()=>{
+            let sampleTensor = T.tensor(batchSamples).reshape([numSamples, -1]).asType('float32'); 
+            let labelTensor = T.tensor(batchLabels).reshape([numSamples, -1]);
+            let numClasses = labelTensor.shape[1];
+            let pipeOutput = this.runPipeline(sampleTensor);
+            let logProb = pipeOutput.sub(T.logSumExp(pipeOutput, 1, true));
+            let likelihood = logProb.neg().mul(labelTensor);
+            let loss = likelihood.mean();
+            if(getcorrectPredicts){
+                let predict = logProb.argMax(1);
+                let onehotPredict = T.oneHot(predict, numClasses);
+                let correctPredicts = onehotPredict.mul(labelTensor)
+                return {loss, correctPredicts};
+            }
+            else{
+                return {loss};
+            }
+        });
     };
+    
     async train(SampleGeneratorFn, numEpochs = 2){
-        if(!this.optimizer){
-            throw Error('optimizer must be set');
-        }
-        const T = this.T, F = this.F, R = this.R;
+        const F = this.F, R = this.R;
         let optimizer = this.optimizer;
-        const startTimeStamp = new Date();
         let losses = [];
-        
         for(let epochIdx of F.range(numEpochs)){
-            const sampleGenerator = SampleGeneratorFn();
+            const sampleGenerator = SampleGeneratorFn(epochIdx);
             let iterLosses = [];
             for await (let {idx, batchSize, data} of sampleGenerator){
-                let [batchSamples, batchLabels] = data;
                 optimizer.minimize(()=>{
-                    let l = this.loss(batchSamples, batchLabels, batchSize);
-                    iterLosses.push(l.dataSync());
-                    return l;
+                    let {loss} = this.loss(data, batchSize);
+                    iterLosses.push(loss.dataSync());
+                    return loss;
                 });
             }
             losses.push(R.mean(iterLosses));
             iterLosses = [];
-            this.trainProgress(epochIdx, losses, startTimeStamp);
+            this.trainProgress(epochIdx, losses, numEpochs);
         }
         return new Promise((resolve, reject)=>{
             resolve({losses});
@@ -58,17 +69,11 @@ const PipelineTrainingMixins = (PipelineClass)=> class extends PipelineClass{
         const testSampleGenerator = TestSampleGeneratorFn();
         let testResult = T.zeros([1]);
         let testSize = 0;
+        let getpredictedLabels = true;
         for await (let {idx, batchSize, data} of testSampleGenerator){
-            this.SampleSize = batchSize;
-            let [batchSamples, batchLabels] = data;
-            let sampleTensor = T.tensor(batchSamples).reshape([batchSize, -1]).asType('float32');
-            let labelTensor  = T.tensor(batchLabels).reshape([batchSize, -1]);
+            let {correctPredicts} = this.loss(data, batchSize, getpredictedLabels);   
             testSize += batchSize;
-            let {onehotPredict} = this.predict(sampleTensor, batchSize);
-            onehotPredict.print();
-            labelTensor.print();
-            onehotPredict.mul(labelTensor).sum().print();
-            testResult = testResult.add(onehotPredict.mul(labelTensor).sum());
+            testResult = correctPredicts.sum();
         }
         let result = await testResult.data();
         let pass = result[0];

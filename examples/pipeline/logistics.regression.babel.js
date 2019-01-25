@@ -1,6 +1,6 @@
 import { default as SimpleNet } from './simplePipeline.babel';
 import { Log } from '../../src/index';
-const { Logger } = Log;
+const { termLogger } = Log;
 let inputs = [[0.52, 1.12,  0.77],
               [0.88, -1.08, 0.15],
               [0.52, 0.06, -1.30],
@@ -17,7 +17,8 @@ const _NetConfig = {
         },
         {   Name:'PipeOutput', Type: 'Tensor', 
             Flow: [ { Op: 'reshape', Args: [['$SampleSize', -1]] } ] 
-        } ] };
+        } 
+    ] };
 let parameters = {};
 
 let causalNet = new SimpleNet(_NetConfig, parameters);
@@ -25,18 +26,18 @@ let causalNet = new SimpleNet(_NetConfig, parameters);
 (async ()=>{
     const DoBatchTrainSampleGenerator = (epochIdx)=>([{idx:0, batchSize:4, data: [inputs, targets]}]);
     let logTrain = await causalNet.train(DoBatchTrainSampleGenerator, 20);
-    Logger.log(logTrain);
+    termLogger.log(logTrain);
     const DoBatchTestSampleGenerator = ()=>([{idx:0, batchSize:4, data: [inputs, targets]}]);
     let testResult = await causalNet.test(DoBatchTestSampleGenerator);
-    Logger.log({testResult});
+    termLogger.log({testResult});
     await causalNet.saveParams('save_model.model');
     await causalNet.loadParams('save_model.model');
     testResult = await causalNet.test(DoBatchTestSampleGenerator);
-    Logger.log({testResult});
+    termLogger.log({testResult});
     testResult = await causalNet.ensembleTest(DoBatchTestSampleGenerator, ['save_model.model']);
-    Logger.log({testResult});
+    termLogger.log({testResult});
     testResult = await causalNet.ensembleTest(DoBatchTestSampleGenerator, ['save_model.model']);
-    Logger.log({testResult});
+    termLogger.log({testResult});
 })().catch(err=>{
     console.error({err});
 });

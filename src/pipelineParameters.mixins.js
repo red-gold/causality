@@ -10,10 +10,10 @@ const PipelineParametersMixins = (PipelineClass)=> class extends PipelineClass{
         })();
     }
     set Parameters(params){
-        if(!this.basePipeline){
-            throw Error('basepipeline must be set');
+        if(!this.pipeline){
+            throw Error('pipeline is not defined and must be set from basePipeline');
         }
-        this.parameters = this.setOrInitParams(this.basePipeline, params);
+        this.parameters = this.setOrInitParams(this.pipeline, params);
     }
     async extractParamFromTensorDict(params, fn){
         const F = this.F, R = this.R;
