@@ -2,23 +2,6 @@ import { Log, Layer, CausalNet, Core } from '../../src/index';
 const { Tensor } = Core;
 const { termLogger } = Log;
 const { causalNetLayer } = Layer;
-const DenseLayer = (name, inputSize, outputSize)=>{
-        return { 
-            Name: name, Type: 'Layer',
-            Parameters: { Weight: [inputSize, outputSize], Bias: [outputSize] },
-            Net: function(value, params){
-                    let {Weight, Bias} = params;
-                    let result = value.dot(Weight).add(Bias);
-                var methods = [];
-                for(let m in result){
-                        methods.push(m);
-                }
-                console.log(methods);
-                // return result;
-                return value;
-            }
-        };
-    };
 let denseLayer = causalNetLayer.dense('dense1', 3, 2);
 console.log({denseLayer});
 const T = new Tensor().CoreTensor;
