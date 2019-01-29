@@ -1,5 +1,5 @@
 import { Sampling } from 'causal-net.utils';
-const ImgDatasetGeneratorMixins = (BaseImageClass)=> class extends BaseImageClass{ 
+const ImageDatasetGeneratorMixins = (BaseImageClass)=> class extends BaseImageClass{ 
     
     getTrainTestSet(trainSize=null){
         trainSize = trainSize||parseInt(this.savedPreprocessing.length*0.9);
@@ -41,4 +41,4 @@ const ImgDatasetGeneratorMixins = (BaseImageClass)=> class extends BaseImageClas
         return batchGenerator;
     }
 };
-export default ImgDatasetGeneratorMixins;
+export default ImageDatasetGeneratorMixins;

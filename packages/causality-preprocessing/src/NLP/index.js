@@ -1,2 +1,2 @@
-export {default as ImageSplittingMixins} from './tokenizer.mixins';
-export {default as ColorTransformMixins} from './wordFiltering.mixins';
+export {default as TokenizingMixins } from './tokenizing.mixins';
+export {default as WordFilteringMixins } from './wordFiltering.mixins';

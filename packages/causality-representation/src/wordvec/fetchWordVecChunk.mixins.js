@@ -1,4 +1,4 @@
-const EnglishWordEmbeddingMixins = (BaseTensorClass)=> class extends BaseTensorClass{ 
+const FetchWordVecChunk = (BaseWordEmbeddingClass)=> class extends BaseWordEmbeddingClass{ 
     get Representation(){
         return this.representation;
     }

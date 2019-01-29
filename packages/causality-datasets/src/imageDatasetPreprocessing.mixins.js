@@ -1,6 +1,5 @@
 import { Stream } from 'causal-net.utils';
-import { Preprocessing } from 'causal-net.preprocessing';
-const ImgDatasetPreprocessingMixins = (BaseImageClass)=> class extends BaseImageClass{ 
+const ImageDatasetPreprocessingMixins = (BaseImageClass)=> class extends BaseImageClass{ 
     makePreprocessingStream(saveDir){
         const ImageBufferSize = this.F.getImgBufferSize(this.sampleSize);
         const LabelBufferSize = this.numClass;
@@ -11,9 +10,9 @@ const ImgDatasetPreprocessingMixins = (BaseImageClass)=> class extends BaseImage
                 let sampleBuffer = chunk.sample;
                 let labelBuffer = chunk.label;
                 this.logger.debug({sampleBuffer, labelBuffer});
-                let splitedImgBuffer = await this.preprocessing.splitImageBuffer(sampleBuffer, ImageBufferSize);
-                let splitedLabelBuffer = await this.preprocessing.splitImageBuffer(labelBuffer, LabelBufferSize);
-                return { processedChunk: this.F.zip(splitedImgBuffer, splitedLabelBuffer), 
+                let preprocessedImgBuffer = await this.PreprocessingSampleFn(sampleBuffer, ImageBufferSize);
+                let preprocessedLabelBuffer = await this.PreprocessingLabelFn(labelBuffer, LabelBufferSize);
+                return { processedChunk: this.F.zip(preprocessedImgBuffer, preprocessedLabelBuffer), 
                          chunkIdx: chunk.idx};
             };
             TransformAsync(chunk).then(processedChunk=>{
@@ -57,7 +56,6 @@ const ImgDatasetPreprocessingMixins = (BaseImageClass)=> class extends BaseImage
 
     async preprocessingDataset(saveDir='/preprocessing/mnist/',storeInMemory=false){
         this.preProcessingStorage = (storeInMemory)?this.memCache:this.storage;
-        this.preprocessing = new Preprocessing();
         let stream = this.makePreprocessingStream(saveDir);
         let generator = this.F.generatorWithIndex(this.savedChunks);
         for(let [idx, [samplePath, labelPath]] of generator){
@@ -76,4 +74,4 @@ const ImgDatasetPreprocessingMixins = (BaseImageClass)=> class extends BaseImage
         });
     }
 };
-export default ImgDatasetPreprocessingMixins;
+export default ImageDatasetPreprocessingMixins;

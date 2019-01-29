@@ -4,13 +4,16 @@ import { LoggerMixins } from 'causal-net.log';
 import { StorageMixins, indexDBStorage } from 'causal-net.storage';
 import { MemCacheMixins, memDownCache } from 'causal-net.memcache';
 import { default as Function } from './function';
-import { default as ImgDatasetFetchMixins } from './imgDatasetFetch.mixins';
-import { default as ImgDatasetPreprocessingMixins } from './imgDatasetPreprocessing.mixins';
-import { default as ImgDatasetGeneratorMixins } from './imgDatasetGenerator.mixins';
+import { default as ImageDatasetFetchMixins } from './imageDatasetFetch.mixins';
+import { default as ImageDatasetPreprocessingMixins } from './imageDatasetPreprocessing.mixins';
+import { default as ImageDatasetGeneratorMixins } from './imageDatasetGenerator.mixins';
+import { PreprocessingMixins, imagePreprocessing } from 'causal-net.preprocessing';
+
 export default class MnistDataset extends Platform.mixWith(BaseImgDataset, 
-        [ ImgDatasetFetchMixins,
-          ImgDatasetPreprocessingMixins,
-          ImgDatasetGeneratorMixins,
+        [ ImageDatasetFetchMixins,
+          ImageDatasetPreprocessingMixins,
+          PreprocessingMixins,
+          ImageDatasetGeneratorMixins,
           MemCacheMixins,
           StorageMixins,
           LoggerMixins ]){
@@ -20,5 +23,12 @@ export default class MnistDataset extends Platform.mixWith(BaseImgDataset,
         this.F = new Function();
         this.Storage = indexDBStorage;
         this.MemCache = memDownCache;
+        const PreprocessingSample = async (masterSampleBuffer, sampleSize)=>{
+            return await imagePreprocessing.imageSplit(masterSampleBuffer, sampleSize);
+        };
+        const PreprocessingLabel = async (masterLabelBuffer, labelSize)=>{
+            return await imagePreprocessing.imageSplit(masterLabelBuffer, labelSize);
+        };
+        this.setPreprocessingFunctions(PreprocessingSample, PreprocessingLabel);
     }
 };

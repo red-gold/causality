@@ -9,6 +9,7 @@ const NodeConfig = merge(common, {
       filename: '[name].node.js',
       library: Bundle.main,
       globalObject: 'this'
-    }
+    },
+    externals: ['causal-net.core','causal-net.utils']
 });
 export default NodeConfig;
