@@ -1,4 +1,4 @@
 { 
-    "main": "@causalNet/memcache", 
-    "min": "@causalNet/memcache.min"
+    "main": "@causalNet/models", 
+    "dir": "@causalNet/models/"
 }

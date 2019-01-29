@@ -1,6 +1,4 @@
-import { join, resolve } from 'path';
 import Bundle from './bundle.json';
-const include = join(__dirname, 'src');
 
 export default {
   entry: {
@@ -18,9 +16,9 @@ export default {
       },
       {
         test: /\.js$/,
-        exclude: [/node_modules/],
+        exclude: [/node_modules/, /dist/],
         loader: 'babel-loader',
       }
-    ],
+    ]
   }
 };
