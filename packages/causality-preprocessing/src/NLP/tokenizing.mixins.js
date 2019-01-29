@@ -1,7 +1,7 @@
-const TokenizingMixins = (PreprocessingClass) => class extends PreprocessingClass{
-    tokenize(imageBuffer, chunkSize){
-        const R = this.F.CoreFunction;
-        return R.splitEvery(chunkSize, imageBuffer);
+const TokenizingMixins = (BaseFunctionClass) => class extends BaseFunctionClass{
+    tokenize(text){
+        const Tokenizer = this.Tokenizer;
+        return Tokenizer(text);
     }
 };
 

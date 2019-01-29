@@ -18,9 +18,7 @@ const PipelineTrainingMixins = (PipelineClass)=> class extends PipelineClass{
      * @param  {} numSample
      */
     loss(data, numSamples){
-        if(!this.Loss){
-            throw Error('piplineModels.mixins must be included and inited');
-        }
+        const Loss = this.Loss;
         this.SampleSize = numSamples;
         const T = this.T;
         let [batchSamples, batchLabels] = data;
@@ -28,13 +26,14 @@ const PipelineTrainingMixins = (PipelineClass)=> class extends PipelineClass{
             let sampleTensor = T.tensor(batchSamples).reshape([numSamples, -1]).asType('float32'); 
             let labelTensor = T.tensor(batchLabels).reshape([numSamples, -1]);
             let pipelineOutTensor = this.runPipeline(sampleTensor);
-            let loss = this.Loss(pipelineOutTensor, labelTensor);
+            let loss = Loss(pipelineOutTensor, labelTensor);
             return loss;
         });
     };
     
     async train(SampleGeneratorFn, numEpochs = 2){
         const F = this.F, R = this.R;
+        const Loss = this.Loss;
         let optimizer = this.optimizer;
         let losses = [];
         for(let epochIdx of F.range(numEpochs)){
@@ -42,7 +41,7 @@ const PipelineTrainingMixins = (PipelineClass)=> class extends PipelineClass{
             let iterLosses = [];
             for await (let {idx, batchSize, data} of sampleGenerator){
                 optimizer.minimize(()=>{
-                    let loss = this.loss(data, batchSize);
+                    let loss = Loss(data, batchSize);
                     iterLosses.push(loss.dataSync());
                     return loss;
                 });
