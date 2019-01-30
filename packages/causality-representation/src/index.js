@@ -1,2 +1,2 @@
-export {default as WordEmbedding} from './wordEmbedding';
-export {default as BaseRepresentation} from './baseRepresentation';
+export { default as RepresentationMixins } from './representation.mixins';
+export { default as causalNetWordVec } from './WordEmbedding/index';

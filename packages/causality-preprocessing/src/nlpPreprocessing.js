@@ -7,6 +7,7 @@ class NLPPreprocessing extends Platform.mixWith(BaseFunction,
         WordFilteringMixins ]){
     constructor(){
         super();
+        this.Tokenizer = TokenizerEN;
     }
     get Tokenizer(){
         if(!this.tokenizer){

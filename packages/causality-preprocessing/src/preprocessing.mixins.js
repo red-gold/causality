@@ -1,13 +1,19 @@
 const PreprocessingMixins = (BaseClass) => class extends BaseClass{
     get PreprocessingSampleFn(){
+        if(!this.preprocessingSampleFn){
+            throw Error('setPreprocessingFunctions must be called');
+        }
         return this.preprocessingSampleFn;
+    }
+    get PreprocessingLabelFn(){
+        if(!this.preprocessingLabelFn){
+            throw Error('setPreprocessingFunctions must be called');
+        }
+        return this.preprocessingLabelFn;
     }
     set PreprocessingSampleFn(preprocessingSampleFn){
         this.preprocessingSampleFn = preprocessingSampleFn;
         this.preprocessingSampleFn.bind(this);
-    }
-    get PreprocessingLabelFn(){
-        return this.preprocessingSampleFn;
     }
     set PreprocessingLabelFn(preprocessingLabelFn){
         this.preprocessingLabelFn = preprocessingLabelFn;

@@ -1,5 +1,5 @@
 {
-  "name": "causal-net.models",
+  "name": "causal-net.optimizers",
   "version": "0.0.5",
   "description": "this is optimizers class",
   "main": "dist/@causalNet/optimizers.node.js",

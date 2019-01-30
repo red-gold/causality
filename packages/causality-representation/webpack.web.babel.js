@@ -12,7 +12,7 @@ const WebConfig = merge(common, {
     library: Bundle.main,
     globalObject: 'this'
   },
-  externals:['causal-net.utils','causal-net.core']
+  externals:['causal-net.utils','causal-net.core','object-hash','causal-net.storage']
 });
 
 export default WebConfig;
