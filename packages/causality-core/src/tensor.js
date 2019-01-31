@@ -4,6 +4,7 @@ export default class Tensor{
         import('@tensorflow/tfjs-node');
         import('@tensorflow/tfjs-node-gpu');
         this.T = tf;
+        this.logger = console;
     }
     get CoreTensor(){
         return this.T;

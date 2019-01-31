@@ -1,8 +1,9 @@
-import {Platform, Fetch} from 'causal-net.utils';
-import {default as BaseStorage} from './baseStorage';
-import {default as PNGFileMixins} from './PNGFileMixins';
-import {default as LevelDownMixins} from './indexDBStorage.mixins.node';
-import {default as LevelJSMixins} from './indexDBStorage.mixins.web';
+import { Platform } from 'causal-net.utils';
+import { default as BaseStorage } from './baseStorage';
+import { default as PNGFileMixins } from './PNGFileMixins';
+import { default as TextFileMixins } from './textFile.mixins';
+import { default as LevelDownMixins } from './indexDBStorage.mixins.node';
+import { default as LevelJSMixins } from './indexDBStorage.mixins.web';
 
 
 class IndexDBStorage extends Platform.mixWith(BaseStorage, 
@@ -92,6 +93,39 @@ class IndexDBStorage extends Platform.mixWith(BaseStorage,
                 }
             });
         });
+    }
+
+    async deleteFileByPrefix(filePath){
+        const DelOp = (key)=>({type: 'del', key: key});
+        let fileList = await this.getFileList(filePath);
+        let delFileOps = fileList.map(f=>DelOp(f));
+        return await this.batch(delFileOps);
+    }
+
+    async getFileList(filePath='/'){
+        const NameTester = this.createCheckFileNameFn(filePath);
+        return new Promise((resolve, reject)=>{
+            let fileList = [];
+            this.storage.createKeyStream()
+                .on('data', (key) =>{
+                    key = key.toString('utf8');
+                    if(NameTester(key).length===1){
+                        fileList.push(key);
+                    }
+                })
+                .on('close', () => resolve(fileList) )
+                .on('end',  () => resolve(fileList) )
+                .on('error', (err) =>{ 
+                    console.error(err);
+                    reject('error getFileList') ;
+                });
+        });
+    }
+
+    createCheckFileNameFn(name){
+        var pattern = name;
+        var regex = new RegExp(`^${pattern}.*`,'g');
+        return (fileName)=>fileName.match(regex) || [];
     }
 }
 

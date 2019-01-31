@@ -1,8 +1,8 @@
-import {WordEmbedding} from 'causal-net.representation';
-const { causalNetWordVec } = WordEmbedding;
-import {TermLog} from 'causal-net.log';
-let logger = new TermLog();
+import { Representation, Log } from '../../src/index';
+const { termLogger } = Log;
+const { causalNetWordVec } = Representation;
 (async ()=>{
-    logger.log({causalNetWordVec});
-    logger.log(await causalNetWordVec.transform('this is test'));
+    termLogger.log({causalNetWordVec});
+    let wordEmbedding = await causalNetWordVec.EN;
+    termLogger.log(await wordEmbedding.transform(['thisthissupportnotbefound', 'is', 'test']));
 })();

@@ -1,5 +1,11 @@
 import {default as wordVecEN} from './wordVec.EN';
 let causalNetWordVec = {
-    'EN': wordVecEN
+    language: ['EN'],
+    get EN(){
+        return new Promise(async (resolve, reject)=>{
+            await wordVecEN.getDescription();
+            resolve(wordVecEN);
+        });
+    }
 };
 export default causalNetWordVec;

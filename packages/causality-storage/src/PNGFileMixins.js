@@ -1,4 +1,4 @@
-import {Fetch, PNG, Stream} from 'causal-net.utils';
+import {Fetch, PNG } from 'causal-net.utils';
 
 const PNGFileMixins = (StorageClass)=> class extends StorageClass{
  
