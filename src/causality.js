@@ -5,20 +5,32 @@ import { StorageMixins, indexDBStorage } from 'causal-net.storage';
 import { LayerMixins, causalNetLayer } from 'causal-net.layer';
 import { SupervisedModelsMixins, causalNetModels } from 'causal-net.models';
 
-import { default as PipelineBaseMixins } from './pipelineBase.mixins';
-import { default as PipelineRunnerMixins } from './pipelineRunner.mixins';
-import { default as PipelinePredictingMixins } from './pipelinePredicting.mixins';
-import { default as PipelineTrainingMixins } from './pipelineTraining.mixins';
-import { default as PipelineEvaluatingMixins } from './pipelineEvaluating.mixins';
-import { default as PipelineEnsemblePredictMixins } from './pipelineEnsemblePredicting.mixins';
-import { default as PipelineEnsembleTrainingMixins } from './pipelineEnsembleTraining.mixins';
-import { default as PipelineEnsembleEvaluatingTrainingMixins } from './pipelineEnsembleEvaluating.mixins';
-import { default as PipelineParametersMixins } from './pipelineParameters.mixins';
-import { default as PipelineHyperParametersMixins } from './pipelineHyperParameters.mixins';
-import { default as PipelineOptimizerMixins } from './pipelineOptimizer.mixins';
-
-import { default as Function } from './function';
-
+ import { PipelineBaseMixins,
+          PipelineRunnerMixins,
+          PipelinePredictingMixins,
+          PipelineTrainingMixins,
+          PipelineEvaluatingMixins,
+          PipelineEnsemblePredictingMixins,
+          PipelineEnsembleTrainingMixins,
+          PipelineEnsembleEvaluatingMixins,
+          PipelineParametersMixins,
+          PipelineHyperParametersMixins,
+          PipelineOptimizerMixins, Function } from './pipeline/index';
+console.log({StorageMixins,
+    LoggerMixins,
+    PipelineBaseMixins,
+    PipelineHyperParametersMixins,
+    PipelineParametersMixins,
+    LayerMixins,
+    SupervisedModelsMixins,
+    PipelineRunnerMixins,
+    PipelineOptimizerMixins,
+    PipelinePredictingMixins,
+    PipelineTrainingMixins,
+    PipelineEvaluatingMixins,
+    PipelineEnsemblePredictingMixins,
+    PipelineEnsembleTrainingMixins,
+    PipelineEnsembleEvaluatingMixins});
 export default class CausalNet extends Platform.mixWith(Tensor, [
         StorageMixins,
         LoggerMixins,
@@ -32,9 +44,9 @@ export default class CausalNet extends Platform.mixWith(Tensor, [
         PipelinePredictingMixins,
         PipelineTrainingMixins,
         PipelineEvaluatingMixins,
-        PipelineEnsemblePredictMixins,
+        PipelineEnsemblePredictingMixins,
         PipelineEnsembleTrainingMixins,
-        PipelineEnsembleEvaluatingTrainingMixins
+        PipelineEnsembleEvaluatingMixins
     ]){
     constructor(netConfig, parameters={}){
         super();
