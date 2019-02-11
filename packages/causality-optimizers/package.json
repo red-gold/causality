@@ -1,6 +1,6 @@
 {
   "name": "causal-net.optimizers",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "this is optimizers class",
   "main": "dist/@causalNet/optimizers.node.js",
   "module": "dist/@causalNet/optimizers.node.js",
@@ -15,8 +15,7 @@
     "build:dev": "webpack --config webpack.dev.babel.js",
     "build:prod": "webpack --config webpack.prod.babel.js"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
