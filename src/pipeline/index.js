@@ -8,5 +8,4 @@ export { default as PipelineParametersMixins } from './pipelineParameters.mixins
 export { default as PipelineHyperParametersMixins } from './pipelineHyperParameters.mixins';
 export { default as PipelineBaseMixins } from './pipelineBase.mixins';
 export { default as PipelineRunnerMixins } from './pipelineRunner.mixins';
-export { default as PipelineOptimizerMixins} from './pipelineOptimizer.mixins';
 export { default as Function } from './function';

@@ -8,4 +8,5 @@ export { default as Representation } from './causalNet.representation';
 export { default as Datasets } from './causalNet.datasets';
 export { default as Layer } from './causalNet.layer';
 export { default as Models } from './causalNet.models';
+export { default as Optimizers } from './causalNet.optimizers';
 export { default as CausalNet } from './causality';

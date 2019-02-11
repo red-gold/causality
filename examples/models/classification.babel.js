@@ -1,6 +1,6 @@
 import { Log, Models, CausalNet, Optimizers } from '../../src/index';
 const { causalNetModels } = Models;
-const { causalNetOptimizers } = Optimizers;
+const { causalNetSGDOptimizer } = Optimizers;
 const { termLogger } = Log;
 let inputs = [[0.52, 1.12,  0.77],
               [0.88, -1.08, 0.15],
@@ -21,8 +21,11 @@ const _NetConfig = {
         } 
     ],
     Model:  causalNetModels.classification(),
-    OptimizerParams: { LearningRate: 0.05 },
-    Optimizer: causalNetOptimizers.adam() };
+    Trainer: { 
+        Optimizer: causalNetSGDOptimizer.adam,  
+        OptimizerParameters: { learningRate: 0.05 }
+    } 
+};
 
 console.log({NetConfig: _NetConfig});
 let parameters = {};

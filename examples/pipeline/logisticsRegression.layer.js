@@ -1,6 +1,6 @@
-import { default as SimpleNet } from './simplePipeline.babel';
-import { Log } from '../../src/index';
+import { Log, Optimizers, CausalNet } from '../../src/index';
 const { termLogger } = Log;
+const { causalNetSGDOptimizer } = Optimizers;
 let inputs = [[0.52, 1.12,  0.77],
               [0.88, -1.08, 0.15],
               [0.52, 0.06, -1.30],
@@ -13,29 +13,24 @@ const DenseLayer = (name, inputSize, outputSize)=>{
             Net: function(value, params){
                     let {Weight, Bias} = params;
                     let result = value.dot(Weight).add(Bias);
-                    var methods = [];
-                    for(let m in result){
-                        methods.push(m);
-                    }
-                    console.log(methods);
                     return result;
                 }
             };
     };
 let denseLayer = DenseLayer('dense1', 3, 2);
 console.log({denseLayer});
+console.log({causalNetSGDOptimizer});
 const _NetConfig = {
-    HyperParameters: {SampleSize:4},
-    Classes: 2,
-    Pipeline:[
-        denseLayer
-        // {   Name:'PipeOutput', Type: 'Tensor', 
-        //     Flow: [ { Op: 'reshape', Args: [['$SampleSize', -1]] } ] 
-        // } 
-    ] };
+        HyperParameters: {SampleSize:4},
+        Classes: 2,
+        Pipeline:[ denseLayer ],
+        Trainer: { 
+                Optimizer: causalNetSGDOptimizer.adam,  
+                OptimizerParameters: { learningRate: 0.01 }
+            }
+    };
 let parameters = {};
-
-let causalNet = new SimpleNet(_NetConfig, parameters);
+let causalNet = new CausalNet(_NetConfig, parameters);
 (async ()=>{
     const DoBatchTrainSampleGenerator = (epochIdx)=>([{idx:0, batchSize:4, data: [inputs, targets]}]);
     let logTrain = await causalNet.train(DoBatchTrainSampleGenerator, 20);

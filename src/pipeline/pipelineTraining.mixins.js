@@ -33,13 +33,13 @@ const PipelineTrainingMixins = (PipelineClass)=> class extends PipelineClass{
     
     async train(SampleGeneratorFn, numEpochs = 2){
         const F = this.F, R = this.R;
-        let optimizer = this.optimizer;
+        const Trainer = this.Trainer;
         let losses = [];
         for(let epochIdx of F.range(numEpochs)){
             const sampleGenerator = SampleGeneratorFn(epochIdx);
             let iterLosses = [];
             for await (let {idx, batchSize, data} of sampleGenerator){
-                optimizer.minimize(()=>{
+                Trainer.fit(()=>{
                     let loss = this.loss(data, batchSize);
                     iterLosses.push(loss.dataSync());
                     return loss;

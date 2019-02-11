@@ -1,5 +1,5 @@
 import { default as SimpleNet } from './simplePipeline.babel';
-import { Log } from '../../src/index';
+import { Log, Optimizer } from '../../src/index';
 const { termLogger } = Log;
 let inputs = [[0.52, 1.12,  0.77],
               [0.88, -1.08, 0.15],

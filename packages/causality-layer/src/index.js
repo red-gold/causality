@@ -1,2 +1,2 @@
 export { default as causalNetLayer } from './causalNetLayer';
-export { default as LayerMixins } from './Layer.mixins';
+export { default as LayerMixins } from './layer.mixins';

@@ -1,12 +1,9 @@
-import { Log, Utils, Core, Storage, Function, Layer,
+import { Log, Utils, Core, Storage, Function, Layer, Optimizers,
     PipelineParametersMixins,
     PipelineHyperParametersMixins,
-    PipelineOptimizingMixins,
-    PipelinePredictMixins,
     PipelineBaseMixins,
     PipelineRunnerMixins,
-    PipelineEnsemblePredictMixins,
-    PipelineEnsembleTrainingMixins,
+    PipelinePredictMixins,
     PipelineTrainingMixins } from '../../src/index';
 const { termLogger, LoggerMixins } = Log;
 const { Platform } = Utils;
@@ -16,7 +13,6 @@ const { CausalNetLayerMixins, causalNetLayer } = Layer;
 const _NetConfig = { HyperParameters: {BatchSize:4}, Classes: 2,
                      Pipeline:[{Name:'dense', Type: 'tensor', Parameters: { Weight: [2, 4]} } ] };
 let parameters = {};
-console.log(PipelineBaseMixins);
 export default class myNet extends Platform.mixWith(Tensor, [
         StorageMixins,
         LoggerMixins,
@@ -27,9 +23,7 @@ export default class myNet extends Platform.mixWith(Tensor, [
         PipelineHyperParametersMixins,
         PipelineOptimizingMixins,
         PipelinePredictMixins,
-        PipelineTrainingMixins,
-        PipelineEnsemblePredictMixins,
-        PipelineEnsembleTrainingMixins
+        PipelineTrainingMixins
     ]){
     constructor(netConfig, parameters={}){
         super();
@@ -37,7 +31,7 @@ export default class myNet extends Platform.mixWith(Tensor, [
         this.R = this.F.CoreFunction;
         this.setPipelineByConfig(netConfig);
         this.setHyperParametersByConfig(netConfig);
-        this.setDefaultOptimizer();
+        this.setTrainerByConfig(netConfig);
         this.Parameters = parameters;
         this.Storage = indexDBStorage;
         this.saveModelDir = '/saveModel/';

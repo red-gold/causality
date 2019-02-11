@@ -4,8 +4,9 @@ import { LoggerMixins, termLogger } from 'causal-net.log';
 import { StorageMixins, indexDBStorage } from 'causal-net.storage';
 import { LayerMixins, causalNetLayer } from 'causal-net.layer';
 import { SupervisedModelsMixins, causalNetModels } from 'causal-net.models';
+import { TrainerMixins } from 'causal-net.optimizers';
 
- import { PipelineBaseMixins,
+import {  PipelineBaseMixins,
           PipelineRunnerMixins,
           PipelinePredictingMixins,
           PipelineTrainingMixins,
@@ -15,22 +16,8 @@ import { SupervisedModelsMixins, causalNetModels } from 'causal-net.models';
           PipelineEnsembleEvaluatingMixins,
           PipelineParametersMixins,
           PipelineHyperParametersMixins,
-          PipelineOptimizerMixins, Function } from './pipeline/index';
-console.log({StorageMixins,
-    LoggerMixins,
-    PipelineBaseMixins,
-    PipelineHyperParametersMixins,
-    PipelineParametersMixins,
-    LayerMixins,
-    SupervisedModelsMixins,
-    PipelineRunnerMixins,
-    PipelineOptimizerMixins,
-    PipelinePredictingMixins,
-    PipelineTrainingMixins,
-    PipelineEvaluatingMixins,
-    PipelineEnsemblePredictingMixins,
-    PipelineEnsembleTrainingMixins,
-    PipelineEnsembleEvaluatingMixins});
+          Function } from './pipeline/index';
+
 export default class CausalNet extends Platform.mixWith(Tensor, [
         StorageMixins,
         LoggerMixins,
@@ -39,8 +26,8 @@ export default class CausalNet extends Platform.mixWith(Tensor, [
         PipelineParametersMixins,
         LayerMixins,
         SupervisedModelsMixins,
+        TrainerMixins,
         PipelineRunnerMixins,
-        PipelineOptimizerMixins,
         PipelinePredictingMixins,
         PipelineTrainingMixins,
         PipelineEvaluatingMixins,
@@ -54,10 +41,9 @@ export default class CausalNet extends Platform.mixWith(Tensor, [
         this.R = this.F.CoreFunction;
         this.setBasePipelineByConfig(netConfig);
         this.setHyperParametersByConfig(netConfig);
-        this.setHyperParametersByConfig(netConfig);
         this.setModelByConfig(netConfig);
-        this.setDefaultOptimizer();
         this.Parameters = parameters;
+        this.setTrainerByConfig(netConfig);
         this.Storage = indexDBStorage;
         this.saveModelDir = '/saveModel/';
         this.Logger = termLogger;
