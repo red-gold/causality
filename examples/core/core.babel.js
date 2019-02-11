@@ -1,5 +1,4 @@
-var {Function, Tensor} = require('causal-net.core');
-const F = new Function();
-const T = new Tensor();
-const R = F.CoreFunction;
-console.log(T.CoreTensor);
+var { causalNetCore } = require('causal-net.core');
+const F = causalNetCore.CoreFunction;
+const T = causalNetCore.CoreTensor;
+console.log(causalNetCore.CoreFunction);

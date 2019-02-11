@@ -1,10 +1,10 @@
 import { Function as BaseFunction } from 'causal-net.core';
 import { Platform } from 'causal-net.utils';
-import { TokenizingMixins, WordFilteringMixins } from './NLP/index';
+import { TokenizingMixins, TokenTransformingMixins } from './NLP/index';
 import { default as TokenizerEN } from './tokenizer.en';
 class NLPPreprocessing extends Platform.mixWith(BaseFunction, 
     [   TokenizingMixins, 
-        WordFilteringMixins ]){
+        TokenTransformingMixins ]){
     constructor(){
         super();
         this.Tokenizer = TokenizerEN;

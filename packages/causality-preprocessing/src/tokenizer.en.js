@@ -1,3 +1,4 @@
 export default function TokenizerEN(text){
-    return text.split(' ');
+    const Re = /[\s."'/\|;:()\[\]\@\#\$\&]/g;
+    return text.split(Re);
 }
