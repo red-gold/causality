@@ -10,6 +10,6 @@ const NodeConfig = merge(common, {
       library: Bundle.main,
       globalObject: 'this'
     },
-    externals:['causal-net.utils']
+    externals:['causal-net.utils', 'cli-progress']
 });
 export default NodeConfig;

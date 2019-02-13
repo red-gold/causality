@@ -18,7 +18,8 @@
   },
   "dependencies": {
     "memdown": "^3.0.0",
-    "causal-net.core": "*"
+    "causal-net.core": "*",
+    "causal-net.utils": "*"
   },
   "jest": {
     "testEnvironment": "node"

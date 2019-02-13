@@ -11,7 +11,7 @@ let corpusReader = fs.createReadStream('./datasets/text8/small.txt');
 
 var remainingChars = '', wordFreqCount = {}, lineIndex = 0;
 function tranformFn(chunkData, chunkEncoding, afterTransformFn){
-    let sampleText = remainingChars + chunkData + '\n';
+    let sampleText = remainingChars + chunkData;
     let sampleLines = sampleText.split('\n');
     let transformedData = [], counter = 0;
     for(let line of sampleLines){
@@ -56,6 +56,7 @@ let writer = Stream.makeWritable(writeTokens);
     const GetVocab = ([v,f]) => v;
     const GetFreq = ([v,f]) => f;
     const VocabFreqPairs = SortByFreq(R.toPairs(wordFreqCount));
+    
     const Vocab = R.map(GetVocab, VocabFreqPairs);
     const Freq = R.map(GetFreq, VocabFreqPairs);
     console.log({Vocab, Freq});
@@ -63,5 +64,10 @@ let writer = Stream.makeWritable(writeTokens);
     let listFiles = await indexDBStorage.getFileList('/corpus/');
     console.log(listFiles);
     let tokens = await indexDBStorage.readFile(listFiles[0]);
+    for(tokens )
+    for(let [w, context] of )
+    const makeTrainData = ()=>{
+        
+    }
     console.log({tokens: JSON.parse(tokens)});    
 })();

@@ -12,6 +12,6 @@ const WebConfig = merge(common, {
     library: Bundle.main,
     globalObject: 'this'
   },
-  externals:['cross-fetch','fetch-readablestream','platform','random','pngjs3']  
+  externals:['cross-fetch','fetch-readablestream','platform','random','pngjs3','csv-parser']  
 });
 export default WebConfig;

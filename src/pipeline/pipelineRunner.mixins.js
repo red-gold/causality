@@ -36,6 +36,7 @@ const PipelineRunnerMixins = (PipelineClass)=> class extends PipelineClass{
             throw Error('type must be either Layer or Tensor');
         }
     }
+    
     tracing(traces, name, trace){
         if(traces){
             traces.push({[name]: trace});

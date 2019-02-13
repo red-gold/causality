@@ -1,30 +1,43 @@
 const SupervisedModelsMixins = (BasePipelineClass)=> class extends BasePipelineClass{
-    get Models(){
-        this.models;
-    }
-    set Models(models){
-        this.models = models;
-    }
+    
     get Loss(){
+        if(!this.modelLoss){
+            throw Error('modelLoss is not set');
+        }
         return this.modelLoss;
     }
     set Loss(loss){
+        if(!loss || typeof(Loss) !== 'function'){
+            throw Error(`expect loss, got ${JSON.stringify(loss)}`);
+        }
         this.modelLoss = loss;
         this.modelLoss.bind(this);
     }
 
     get Predict(){
+        if(!this.modelPredict){
+            throw Error('modelPredict is not set');
+        }
         return this.modelPredict;
     }
     set Predict(predict){
+        if(!predict){
+            throw Error(`expect predict, got ${predict}`);
+        }
         this.modelPredict = predict;
         this.modelPredict.bind(this);
     }
 
     get Fit(){
+        if(!this.modelFit){
+            throw Error(`modelFit is not set`);
+        }
         return this.modelFit;
     }
     set Fit(fit){
+        if(!fit || typeof(fit) !== 'function' ){
+            throw Error(`expect fit, got ${JSON.stringify(fit)}`);
+        }
         this.modelFit = fit;
         this.modelFit.bind(this);
     }
@@ -33,6 +46,9 @@ const SupervisedModelsMixins = (BasePipelineClass)=> class extends BasePipelineC
         return this.modelNumClasses;
     }
     set NumClasses(numClasses){
+        if(typeof(numClasses) !== 'number' || numClasses <= 0){
+            throw Error(`expect numClasses, got ${JSON.stringify(numClasses)}`);
+        }
         this.modelNumClasses = numClasses;
     }
 
@@ -40,6 +56,9 @@ const SupervisedModelsMixins = (BasePipelineClass)=> class extends BasePipelineC
         return (samples)=>this.modelOneHotPredict(samples, this.NumClasses);
     }
     set OneHotPredict(oneHotPredict){
+        if(!oneHotPredict || typeof(oneHotPredict) !== 'function' ){
+            throw Error(`expect oneHotPredict, got ${JSON.stringify(oneHotPredict)}`);
+        }
         this.modelOneHotPredict = oneHotPredict;
         this.modelOneHotPredict.bind(this);
     }
@@ -47,39 +66,11 @@ const SupervisedModelsMixins = (BasePipelineClass)=> class extends BasePipelineC
     setModelByConfig(netConfig){
         const NumClasses = netConfig.NumClasses;
         const {Loss, Predict, OneHotPredict, Fit} = netConfig.Model;
-        if(!Loss){
-            throw Error('Loss must be defind as a tensor function or acquire from CausalNet.models');
-        }
-        if(typeof(Loss) === 'function'){
-            this.Loss = Loss;
-        }
-        else{
-            throw Error('not knowning yet');
-        }
-        if(typeof(Fit) === 'function'){
-            this.Fit = Fit;
-        }
-        else{
-            throw Error('not knowning yet');
-        }
-        if(typeof(Predict) === 'function'){
-            this.Predict = Predict;
-        }
-        else{
-            throw Error('not knowning yet');
-        }
-        if(typeof(OneHotPredict) === 'function'){
-            this.OneHotPredict = OneHotPredict;
-        }
-        else{
-            throw Error('not knowning yet');
-        }
-        if(NumClasses > 0){
-            this.NumClasses = NumClasses;
-        }
-        else{
-            throw Error('NumClasses from netConfig must be non zero, positive number');
-        }
+        this.Loss = Loss;
+        this.Fit = Fit;
+        this.Predict = Predict;
+        this.OneHotPredict = OneHotPredict;
+        this.NumClasses = NumClasses;
     }
 };
 

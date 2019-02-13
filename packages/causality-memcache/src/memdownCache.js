@@ -1,8 +1,10 @@
+import { Platform } from 'causal-net.utils';
 import BaseMemCache from './baseMemCache';
 import levelup from 'levelup';
 import memdown from 'memdown';
-
-class MemoryCache extends BaseMemCache{
+import { default as MemorizingMixins } from './memorizing.mixins';
+class MemoryCache extends Platform.mixWith(BaseMemCache,
+    [ MemorizingMixins ]){
     constructor(zone){
         super(zone);
         this.cache = levelup(memdown());        

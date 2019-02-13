@@ -6,12 +6,6 @@ const causalNetCore = {
     },
     get CoreTensor(){
         return new Tensor().CoreTensor; 
-    },
-    get tensor(){
-        return new Tensor();
-    },
-    get function(){
-        return new Function();
     }
 };
 export { Tensor, Function, causalNetCore };

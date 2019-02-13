@@ -3,6 +3,12 @@ const WordEmbeddingTransformMixins = (BaseWordEmbeddingClass)=> class extends Ba
     unknowVec(){
         return this.F.zeroVec(this.VecSize);
     }
+
+    async sentenceEncode(tokens){
+        let vecs = await this.transform(tokens);
+        return await this.T.tensor(vecs).mean(0).data;
+    }
+    
     async transform(tokens){
         const TokenLookUp = this.TokenLookUp, ChunkLookUp = this.ChunkLookUp;
         console.log(TokenLookUp);
