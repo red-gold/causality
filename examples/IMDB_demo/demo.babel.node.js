@@ -29,7 +29,7 @@ function loadCSVCorpus(filePath){
             .on('data', (item)=>{
                 let tokens = nlpPreprocessing.tokenize(item.review);
                 updateTokens(tokens);
-                let row = {type:item.type, review: tokens,
+                let row = {type:item.type, review: item.review,
                            label: item.label, tokens: tokens };
                 termLogger.progress({current: results.length, total: results.length});
                 results.push(row);
@@ -43,21 +43,46 @@ function loadCSVCorpus(filePath){
 (async ()=>{
     const FullData = './datasets/IMDB_dataset/imdb_master.csv';
     const SmallData = './datasets/IMDB_dataset/smallSample.csv';
-    let data = await loadCSVCorpus(SmallData);
-    console.log({data: data[0]});
+    let data = await loadCSVCorpus(FullData);
     let tokenFreqPairs = R.toPairs(freqTokens);
     let cleanedPairs = R.filter(([token, freq])=>freq>1,tokenFreqPairs);
-    let filteredTokens = R.map(([token, freq])=>token, cleanedPairs);
-    console.log({tokenFreqPairs: tokenFreqPairs.length, filterTokens: filteredTokens.length});
-    let vecMap = {};
-    let wordEmbedding = await causalNetWordVec.EN;
+    let validTokens = R.map(([token, freq])=>token, cleanedPairs);
+    console.log({tokenFreqPairs: tokenFreqPairs.length, validTokens: validTokens.length});
     
-    for(let token of filteredTokens){
-        let vec = await wordEmbedding.transform([token]);
-        console.log({token: vec});
-        vecMap[token] = vec;
+    let trainSamples = [], testSamples = [];
+    
+    const isValid = (token)=>validTokens.indexOf(token)>-1;
+    let wordEmbedding = await causalNetWordVec.EN, labelCount = {pos: 0, neg: 0};
+    for(let sample of data){
+        let label = sample.label;
+        let type = sample.type;
+        sample.validTokens = R.filter(isValid)(sample.tokens);
+        sample.docVec = await wordEmbedding.sentenceEncode(sample.validTokens);
+        if(label==='neg'){
+            sample.encodedLabel = [ 0, 1];
+            labelCount.neg += 1;
+        }
+        else{
+            sample.encodedLabel = [ 1, 0];
+            labelCount.pos += 1;
+        }
+        
+        if( type === 'train'){
+            trainSamples.push(sample);
+        }
+        else{
+            testSamples.push(sample);
+        }
     }
-    for(let {tokens} of data){
-        R.filter(R.findIndex(filteredTokens, token) > 1)
-    }
+    console.log({ trainLength: trainSamples.length, testLength: testSamples.length, labelCount });
+    
+    // for(let token of filteredTokens){
+    //     
+    //     console.log({token: vec});
+    //     vecMap[token] = vec;
+    // }
+    // let trainSet = [], testSet = [];
+    // for(let {tokens} of data){
+        
+    // }
 })();

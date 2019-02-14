@@ -1,6 +1,6 @@
-const SequenceDecodingMixins = (basePipelineClass)=> class extends (basePipelineClass){
-    sequenceDecoding(){
-        const Fit = (pipelineOutTensor) =>{
+const SequenceLabelsMixins = (basePipelineClass)=> class extends (basePipelineClass){
+    Decoder(){
+        const Fit = (pipelineOutTensor, labelTensor) =>{
             let logProb = pipelineOutTensor.sub(pipelineOutTensor.logSumExp(1, true));
             return logProb;
         };
@@ -15,7 +15,7 @@ const SequenceDecodingMixins = (basePipelineClass)=> class extends (basePipeline
             return oneHotPredict;
         };
         const Loss = (pipelineOutTensor, labelTensor)=>{
-            let logProb = Fit(pipelineOutTensor);
+            let logProb = Fit(pipelineOutTensor, labelTensor);
             let likelihood = logProb.neg().mul(labelTensor);
             let loss = likelihood.mean();
             return loss;
@@ -24,4 +24,4 @@ const SequenceDecodingMixins = (basePipelineClass)=> class extends (basePipeline
     }
 };
 
-export default SequenceDecodingMixins;
+export default SequenceLabelsMixins;

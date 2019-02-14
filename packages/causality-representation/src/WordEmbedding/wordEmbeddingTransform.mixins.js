@@ -6,7 +6,7 @@ const WordEmbeddingTransformMixins = (BaseWordEmbeddingClass)=> class extends Ba
 
     async sentenceEncode(tokens){
         let vecs = await this.transform(tokens);
-        return await this.T.tensor(vecs).mean(0).data;
+        return await this.T.tensor(vecs).mean(0).data();
     }
     
     async transform(tokens){

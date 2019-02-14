@@ -1,6 +1,5 @@
-import { Log, Models, CausalNet, Optimizers } from '../../src/index';
+import { Log, Models, CausalNet } from '../../src/index';
 const { causalNetModels } = Models;
-const { causalNetSGDOptimizer } = Optimizers;
 const { termLogger } = Log;
 let inputs = [[0.52, 1.12,  0.77],
               [0.88, -1.08, 0.15],
@@ -20,12 +19,7 @@ const _NetConfig = {
             Flow: [ { Op: 'reshape', Args: [['$SampleSize', -1]] } ] 
         } 
     ],
-    Model:  causalNetModels.classification(),
-    Trainer: { 
-        Optimizer: causalNetSGDOptimizer.adam,  
-        OptimizerParameters: { learningRate: 0.05 }
-    } 
-};
+    Model:  causalNetModels.classification() };
 
 console.log({NetConfig: _NetConfig});
 let parameters = {};
@@ -45,7 +39,7 @@ let causalNet = new CausalNet(_NetConfig, parameters);
     termLogger.log({testResult});
     testResult = await causalNet.ensembleAccuracyTest(DoBatchTestSampleGenerator, ['save_model.model']);
     termLogger.log({testResult});
-    testResult = await causalNet.ensembleAccuracyTest(DoBatchTestSampleGenerator, ['save_model.model']);
+    testResult = await causalNet.accuracyTest(DoBatchTestSampleGenerator, ['save_model.model']);
     termLogger.log({testResult});
 })().catch(err=>{
     console.error({err});

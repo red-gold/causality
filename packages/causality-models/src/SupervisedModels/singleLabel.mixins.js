@@ -1,4 +1,4 @@
-const ClassificationModelMixins = (basePipelineClass)=> class extends (basePipelineClass){
+const SingleLabelMixins = (basePipelineClass)=> class extends (basePipelineClass){
     classification(){
         const Fit = (pipelineOutTensor) =>{
             let logProb = pipelineOutTensor.sub(pipelineOutTensor.logSumExp(1, true));
@@ -24,4 +24,4 @@ const ClassificationModelMixins = (basePipelineClass)=> class extends (basePipel
     }
 };
 
-export default ClassificationModelMixins;
+export default SingleLabelMixins;

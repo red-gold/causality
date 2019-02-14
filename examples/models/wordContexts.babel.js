@@ -3,7 +3,18 @@ import { causalNetModels } from "causal-net.models";
 import { causalNetSGDOptimizer } from 'causal-net.optimizers';
 var adam = causalNetSGDOptimizer.adam({learningRate: 0.01});
 const T = causalNetCore.CoreTensor;
-var W = T.variable(T.tensor([1,2,3,4,5,6]));
+var vocab = T.tensor([[1,2,3,4,5,6],
+                      [1,2,3,4,5,6],
+                      [1,2,3,4,5,6],
+                      [1,2,3,4,5,6],
+                      [1,2,3,4,5,6],
+                      [1,2,3,4,5,6] ])
+// var W = T.variable(T.tensor());
+// var Wc1 = T.variable(T.tensor([1,2,3,4,5,6])); 
+// var Wc2 = T.variable(T.tensor([1,2,3,4,5,6]));
+// var Wnc1 =  T.variable(T.tensor([1,2,3,4,5,6]));
+// var Wnc2 =  T.variable(T.tensor([1,2,3,4,5,6]));
+var W = T.variable(vocab.gather([0]).reshape([6]));
 var Wc1 = T.variable(T.tensor([1,2,3,4,5,6])); 
 var Wc2 = T.variable(T.tensor([1,2,3,4,5,6]));
 var Wnc1 =  T.variable(T.tensor([1,2,3,4,5,6]));
@@ -22,3 +33,4 @@ Wc1.print();
 Wc2.print();
 Wnc1.print();
 Wnc2.print();
+vocab.print();
