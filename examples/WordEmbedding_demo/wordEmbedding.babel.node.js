@@ -64,10 +64,5 @@ let writer = Stream.makeWritable(writeTokens);
     let listFiles = await indexDBStorage.getFileList('/corpus/');
     console.log(listFiles);
     let tokens = await indexDBStorage.readFile(listFiles[0]);
-    for(tokens )
-    for(let [w, context] of )
-    const makeTrainData = ()=>{
-        
-    }
     console.log({tokens: JSON.parse(tokens)});    
 })();

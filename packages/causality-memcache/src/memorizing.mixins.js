@@ -10,5 +10,13 @@ const MemorizingMixins = (BaseMemCacheClass)=> class extends BaseMemCacheClass{
     async write(memorySlotIndex, value){
         return await this.setItem(memorySlotIndex, value);
     }
+
+    async recall(slotIdxs){
+        let memory = [];
+        for(let slotIdx of slotIdxs){
+            memory.push(await this.read(slotIdx));
+        }
+        return memory;
+    }
 };
 export default MemorizingMixins;

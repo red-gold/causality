@@ -1,4 +1,4 @@
-var { causalNetCore } = require('causal-net.core');
-const F = causalNetCore.CoreFunction;
-const T = causalNetCore.CoreTensor;
+import { causalNetCore } from 'causal-net.core';
+
+console.log(causalNetCore.CoreTensor);
 console.log(causalNetCore.CoreFunction);

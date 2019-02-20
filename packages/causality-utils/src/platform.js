@@ -10,24 +10,21 @@ const PlatformMapping = (name)=>{
     }
 };
 
-export default class Platform{
-    constructor(){
-        this.platform = platform;
-    }
-    static PID(){
+const Platform = {
+    PID: ()=>{
         if(typeof process !== 'undefined' && process.pid) {
             return process.pid;
         }
         else{
             return null;
         }
-    }
+    },
 
-    static currentPlatform(){
+    currentPlatform: ()=>{
         return platform.parse();
-    }
+    },
 
-    static mixWith(BaseClass, mixins){
+    mixWith: (BaseClass, mixins)=>{
         var mixinsList = [];
         if(Array.isArray(mixins)){
             mixinsList = mixins;
@@ -42,3 +39,5 @@ export default class Platform{
         return mixinsList.reduce((c, mixin) => mixin(c), BaseClass);
     }
 }
+
+export default Platform;

@@ -5,8 +5,8 @@ export default class Function{
         this.logger = console;
     }
 
-    get CoreFunction(){
-        return this.R;
+    static get CoreFunction(){
+        return R;
     }
     
     

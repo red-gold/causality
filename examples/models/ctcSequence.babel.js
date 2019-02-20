@@ -33,8 +33,8 @@ const SimpleRegressionFitFn = ()=>{
 };
 SimpleRegressionFitFn().print();
 adam.fit(SimpleRegressionFitFn).print();
-const Loss()= {
-    const FW_trace = ()=>{
+const Loss = ()=>{
+    const FWBW = ()=>{
 
     };
 

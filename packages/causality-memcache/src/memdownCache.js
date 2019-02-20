@@ -76,5 +76,4 @@ class MemoryCache extends Platform.mixWith(BaseMemCache,
     }
 }
 
-const memDownCache = new MemoryCache();
-export default memDownCache;
+export default new MemoryCache();

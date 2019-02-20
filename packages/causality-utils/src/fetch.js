@@ -48,9 +48,9 @@ const WebStreamMixins = (FetchClass)=> class extends FetchClass{
     }
 };
 
-export default class Fetch extends Platform.mixWith(fetch, {'node': [NodeStreamMixins], 'web':[WebStreamMixins]}){
+class Fetch extends Platform.mixWith(fetch, {'node': [NodeStreamMixins], 'web':[WebStreamMixins]}){
     constructor(){}
-    static async fetchData(url){
+    async fetchData(url){
         return new Promise((resolve, reject)=>{
             fetch(url).then(response=>{
                 if (response.status >= 400) {
@@ -62,7 +62,7 @@ export default class Fetch extends Platform.mixWith(fetch, {'node': [NodeStreamM
         });
     }
 
-    static async fetchJson(url){
+    async fetchJson(url){
         return new Promise(async (resolve, reject)=>{
             fetch(url).then(response=>{
                 if (response.status >= 400) {
@@ -74,4 +74,6 @@ export default class Fetch extends Platform.mixWith(fetch, {'node': [NodeStreamM
         });
     }
 }
+
+export default new Fetch();
 
