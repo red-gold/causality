@@ -3,7 +3,7 @@ import { Platform } from 'causal-net.utils';
 import random from 'random';
 import { default as SubSamplingMixins } from './subSampling.mixins';
 import { default as NegSamplingMixins } from './negSampling.mixins';
-class causalNetSampling extends Platform.mixWith(Function, 
+class CausalNetSampling extends Platform.mixWith(Function, 
     [ SubSamplingMixins, NegSamplingMixins ]){
     constructor(){
         super();
@@ -25,4 +25,4 @@ class causalNetSampling extends Platform.mixWith(Function,
     }
 }
 
-export default new causalNetSampling();
+export default new CausalNetSampling();

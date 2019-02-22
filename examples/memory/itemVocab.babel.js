@@ -27,6 +27,14 @@ import { termLogger } from 'causal-net.log';
     writeTensor.print();
     let reReadTensor = await memory.readSlots([0,1,2]);
     reReadTensor.print();
+
+    let readTensor1 = await memory.readSlots([0, 1]);
+    readTensor1.print();
+    let writeTensor1 = await memory.writeSlots([0, 1], readTensor1.add([1]));
+    writeTensor1.print();
+    let reReadTensor1 = await memory.readSlots([0, 1]);
+    reReadTensor1.print();
+
     let topKTensor = await memory.getTopKSimilar([1],2);
     topKTensor.print();
     let topks = Array.from(await topKTensor.data());

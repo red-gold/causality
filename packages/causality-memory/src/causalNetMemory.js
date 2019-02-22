@@ -26,6 +26,7 @@ class CausalNetMemory extends Tensor{
         return this.memorySize[0];
     }
     get SlotSize(){
+        
         return this.memorySize[1];
     }
     async initMemory(size, initTensor=null){
@@ -41,7 +42,6 @@ class CausalNetMemory extends Tensor{
     async normalize(){
         const Memory = this.Memory, NumSlots = this.NumSlots, R = this.R;
         let memValues = await Memory.recall(R.range(0, NumSlots));
-        
         let allTs = this.T.tensor(memValues);
         let meanTs = allTs.mean(1, true);
         let stdTs = allTs.sub(meanTs).pow(2).mean(1, true).pow(0.5);
@@ -65,19 +65,19 @@ class CausalNetMemory extends Tensor{
         const R = this.R, SlotSize = this.SlotSize, Memory = this.Memory;
         let tensorData = await memoryTensor.data(); 
         let values = R.splitEvery(SlotSize, tensorData);
-        for(let slotIdx of slotIdxs){
-            await Memory.write(slotIdx, values[slotIdx]);
+        for(let idx of R.range(0, slotIdxs.length)){
+            await Memory.write(slotIdxs[idx], values[idx]);
         }
         return memoryTensor;
     }
     async readSlots(slotIndexs){
-        const Memory = this.Memory;
+        const Memory = this.Memory, T = this.T;
         let values = [];
         for(let slotIdx of slotIndexs){
             let value = await Memory.read(slotIdx);
             values.push(value);
         }
-        return this.T.tensor(values);
+        return T.variable(T.tensor(values));
     }
 }
 
