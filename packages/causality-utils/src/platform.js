@@ -9,22 +9,47 @@ const PlatformMapping = (name)=>{
         return 'web';
     }
 };
-
-const Platform = {
-    PID: ()=>{
+/**
+ * This platform class provide ultility methods for checking current platform (node, web) 
+ * and enhanced mixins
+ * @class Platform
+ */
+class Platform{
+    /**
+     *Creates an instance of Platform.
+     * @memberof Platform
+     */
+    constructor(){
+        this.platform = platform;
         if(typeof process !== 'undefined' && process.pid) {
-            return process.pid;
+            this.pid = process.pid;
         }
         else{
-            return null;
+            this.pid = null;
         }
-    },
+    }
+    /**
+     * return current process pid on node or `null` on web
+     * @readonly
+     * @memberof Platform
+     */
+    get PID(){
+        return this.pid;
+    }
 
-    currentPlatform: ()=>{
+    currentPlatform(){
         return platform.parse();
-    },
-
-    mixWith: (BaseClass, mixins)=>{
+    }
+    /**
+     * Enhanced mixins for based class and list of mixins
+     *
+     * @param { Class } BaseClass - base class
+     * @param { List } mixins - list of mixins function
+     * @returns { Class } 
+     * @memberof Platform
+     
+     */
+    mixWith(BaseClass, mixins){
         var mixinsList = [];
         if(Array.isArray(mixins)){
             mixinsList = mixins;
@@ -38,6 +63,6 @@ const Platform = {
         }
         return mixinsList.reduce((c, mixin) => mixin(c), BaseClass);
     }
-}
+};
 
-export default Platform;
+export default new Platform();

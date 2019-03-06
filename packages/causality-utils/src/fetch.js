@@ -3,8 +3,20 @@ import {default as Stream} from './stream';
 import {default as Platform} from './platform';
 import fetchStream from 'fetch-readablestream';
 
+/**
+ * mixins function for Fetch on node environment
+ * @function
+ * @param { Class } FetchClass
+ * @returns { Class } Fetclass - class with extended methods
+ */
 const NodeStreamMixins = (FetchClass)=> class extends FetchClass{ 
-    static async streamData(url){
+    /**
+     * @override 
+     * @param { String } url - url for content
+     * @returns { Readable } content
+     * @memberof Fetch
+     */
+    async streamData(url){
         const response = await fetch(url);
         if (response.status >= 400) {
             throw Error("Bad response from server");
@@ -13,8 +25,20 @@ const NodeStreamMixins = (FetchClass)=> class extends FetchClass{
     }
 };
 
+/**
+ * provide streamData method for web environment
+ * @function
+ * @param { Class } FetchClass
+ * @returns { Class } Fetclass - class with extended methods
+ */
+
 const WebStreamMixins = (FetchClass)=> class extends FetchClass{ 
-    static async streamData(url){
+    /**
+     * Stream content given the url
+     * @param { String } url - url for content
+     * @returns { Readable } content
+     */
+    async streamData(url){
         let response = await fetchStream(url);
         if(response.status >= 400){
             console.error(response.status);
@@ -48,9 +72,29 @@ const WebStreamMixins = (FetchClass)=> class extends FetchClass{
     }
 };
 
-class Fetch extends Platform.mixWith(fetch, {'node': [NodeStreamMixins], 'web':[WebStreamMixins]}){
-    constructor(){}
-    async fetchData(url){
+
+class BaseFetch{
+    constructor(){
+        this.fetch = fetch;
+    }
+}
+
+/**
+ * @class Fetch
+ * @extends BaseFetch
+ *
+ */
+class Fetch extends Platform.mixWith(BaseFetch, {'node': [NodeStreamMixins], 'web':[WebStreamMixins]}){
+    constructor(){
+        super();
+    }
+    /**
+     * fetch text content given the url 1
+     * @property { Function } fetchData
+     * @param { String } url
+     * @returns { Promise } promise of content
+     */
+    fetchData(url){
         return new Promise((resolve, reject)=>{
             fetch(url).then(response=>{
                 if (response.status >= 400) {
@@ -61,8 +105,13 @@ class Fetch extends Platform.mixWith(fetch, {'node': [NodeStreamMixins], 'web':[
             });
         });
     }
-
-    async fetchJson(url){
+    /**
+     * fetch json content given the url 
+     * @property { Function } fetchJson
+     * @param { String } url
+     * @returns { promise } promise of content
+     */
+    fetchJson(url){
         return new Promise(async (resolve, reject)=>{
             fetch(url).then(response=>{
                 if (response.status >= 400) {
@@ -76,4 +125,3 @@ class Fetch extends Platform.mixWith(fetch, {'node': [NodeStreamMixins], 'web':[
 }
 
 export default new Fetch();
-

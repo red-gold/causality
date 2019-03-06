@@ -1,0 +1,18 @@
+{
+    "source": "./src",
+    "destination": "./docs",
+    "plugins": [
+        {
+            "name": "esdoc-standard-plugin",
+            "option": {
+                "test": {
+                    "source": "./test/",
+                    "interfaces": ["test"],
+                    "includes": ["(spec|test)\\.js$"]
+                }
+            }
+        },
+        {
+            "name": "./esdoc-plugins/force-function-plugin.js"
+        }]
+}

@@ -1,34 +1,47 @@
 import stream from 'readable-stream';
-const Stream = {
-    makeReadable: (readFn=null)=>{
+/**
+ * 
+ * @class Stream
+ */
+class Stream{
+    constructor(){
+        this.stream = stream;
+    }
+    
+    makeReadable(readFn=null){
         let reader = new stream.Readable({objectMode: true});
         const DefaultReader = ()=>{};
         reader._read = readFn || DefaultReader;
         return reader;
-    },
-    wrapReadable: (readableObj)=>{
+    }
+     
+    wrapReadable(readableObj){
         let reader = new stream.Readable();
         reader.wrap(readableObj);
         return reader;
-    },
-    makeWritable: (writeFn)=>{
+    }
+
+    makeWritable(writeFn){
         let writer = new stream.Writable({objectMode: true});
         writer._write = writeFn;
         return writer;
-    },
-    makeDuplex: (writeFn, readFn=null)=>{
+    }
+
+    makeDuplex(writeFn, readFn=null){
         let duplex = new stream.Duplex({objectMode: true});
         duplex._write = writeFn;
         const DefaultReader = ()=>{};
         duplex._read = readFn || DefaultReader;
         return duplex;
-    },
-    makeTransform: (tranformFn)=>{
+    }
+
+    makeTransform(tranformFn){
         let transformer = new stream.Transform({objectMode: true});
         transformer._transform = tranformFn;
         return transformer;
-    },
-    makePipeline: (streams, onDataFn=null)=>{
+    }
+    
+    makePipeline(streams, onDataFn=null){
         return new Promise((resolve, reject)=>{
             let writer = streams.slice(-1)[0];
             let reader = streams[0];
@@ -48,4 +61,4 @@ const Stream = {
     }
 };
 
-export default Stream;
+export default new Stream();
