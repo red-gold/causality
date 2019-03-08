@@ -1,8 +1,5 @@
 const PipelinePredictMixins = (PipelineClass)=> class extends PipelineClass{
 
-    /**
-     * @param  {} samples
-     */
     predict(samples, numSamples=1){
         const Predict = this.Predict;
         const T = this.T;

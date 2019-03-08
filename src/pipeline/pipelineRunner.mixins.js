@@ -53,6 +53,6 @@ const PipelineRunnerMixins = (PipelineClass)=> class extends PipelineClass{
         this.logger.debug({traces});
         return pipeValue[lastLayer];
     }
-}
+};
 
 export default PipelineRunnerMixins;

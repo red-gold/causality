@@ -5,13 +5,12 @@ import fetchStream from 'fetch-readablestream';
 
 /**
  * mixins function for Fetch on node environment
- * @function
+ * @class
  * @param { Class } FetchClass
  * @returns { Class } Fetclass - class with extended methods
  */
 const NodeStreamMixins = (FetchClass)=> class extends FetchClass{ 
     /**
-     * @override 
      * @param { String } url - url for content
      * @returns { Readable } content
      * @memberof Fetch
@@ -27,9 +26,9 @@ const NodeStreamMixins = (FetchClass)=> class extends FetchClass{
 
 /**
  * provide streamData method for web environment
- * @function
+ * @class
  * @param { Class } FetchClass
- * @returns { Class } Fetclass - class with extended methods
+ * @returns { Class } FetchClass - class with extended methods
  */
 
 const WebStreamMixins = (FetchClass)=> class extends FetchClass{ 
@@ -82,15 +81,14 @@ class BaseFetch{
 /**
  * @class Fetch
  * @extends BaseFetch
- *
+ * @mixins NodeStreamMixins
  */
 class Fetch extends Platform.mixWith(BaseFetch, {'node': [NodeStreamMixins], 'web':[WebStreamMixins]}){
     constructor(){
         super();
     }
     /**
-     * fetch text content given the url 1
-     * @property { Function } fetchData
+     * fetch text content given the url
      * @param { String } url
      * @returns { Promise } promise of content
      */
@@ -107,7 +105,6 @@ class Fetch extends Platform.mixWith(BaseFetch, {'node': [NodeStreamMixins], 'we
     }
     /**
      * fetch json content given the url 
-     * @property { Function } fetchJson
      * @param { String } url
      * @returns { promise } promise of content
      */

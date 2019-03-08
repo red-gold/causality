@@ -17,8 +17,13 @@
     "build:prod": "webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
+    "billboard.js": "^1.7.1",
     "causal-net.utils": "*",
-    "cli-progress": "^2.1.1"
+    "cli-progress": "^2.1.1",
+    "d3": "^5.9.1",
+    "jsdom": "^13.2.0",
+    "svg2png": "^4.1.1",
+    "vivid.d3-node": "^0.0.2"
   },
   "jest": {
     "testEnvironment": "node"

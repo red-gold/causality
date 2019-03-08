@@ -16,6 +16,6 @@ const PipelineEvaluatingMixins= (BasePipeline)=> class extends BasePipeline{
         let accuracy = pass / testSize;
         return {accuracy, pass};        
     }
-}
+};
 
 export default PipelineEvaluatingMixins;

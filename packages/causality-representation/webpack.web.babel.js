@@ -12,7 +12,8 @@ const WebConfig = merge(common, {
     library: Bundle.main,
     globalObject: 'this'
   },
-  externals:['causal-net.utils','causal-net.core','object-hash','causal-net.storage']
+  externals:['causal-net.utils','causal-net.core',
+             'causal-net.storage', '@tensorflow-models/universal-sentence-encoder']
 });
 
 export default WebConfig;

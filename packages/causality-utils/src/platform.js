@@ -47,7 +47,6 @@ class Platform{
      * @param { List } mixins - list of mixins function
      * @returns { Class } 
      * @memberof Platform
-     
      */
     mixWith(BaseClass, mixins){
         var mixinsList = [];

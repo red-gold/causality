@@ -12,11 +12,7 @@ const PipelineTrainingMixins = (PipelineClass)=> class extends PipelineClass{
             this.startTimeStamp = null;
         }
     }
-    /**
-     * @param  {} sampleBatch
-     * @param  {} labelBatch
-     * @param  {} numSample
-     */
+    
     loss(data, numSamples){
         const Loss = this.Loss;
         this.SampleSize = numSamples;

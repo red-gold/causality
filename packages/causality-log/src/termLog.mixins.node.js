@@ -1,8 +1,5 @@
 import * as cliProgress from 'cli-progress';
-function resetProgress(target, key, returnFn){
-    returnFn.currentBar = false;
-    return returnFn;
-}
+
 const LogNodeMixins = (LogClass)=> class extends LogClass{
     connect(channel){
         this.currentBar = false;
@@ -15,18 +12,20 @@ const LogNodeMixins = (LogClass)=> class extends LogClass{
         }
         console.log(message);
     }
-    progress(progressMessage){
+    progressBegin(range){
+        this.processCounter += 1;
+        this.currentBar = new cliProgress.Bar({}, cliProgress.Presets.shades_classic);
+        this.currentBar.setTotal(range);
+    }
+    progressUpdate(progressMessage){
         if(!this.currentBar){
-            this.currentBar = new cliProgress.Bar({}, cliProgress.Presets.shades_classic);
-            let totalVal = (progressMessage.total)?progressMessage.total:100;
-            this.currentBar.start(totalVal, 0, progressMessage);
+            progressBegin()
         }
-        else{
-            let totalVal = (progressMessage.total)?progressMessage.total:100;
-            let currentVal = (progressMessage.current)?progressMessage.current:1;
-            this.currentBar.setTotal(totalVal);
-            this.currentBar.update(currentVal);
-        }
+        this.processCounter += 1;
+        this.currentBar.update(currentVal);
+    }
+    progressEnd(){
+        this.currentBar.stop();
     }
     debug(message){
         this.currentBar = false; 

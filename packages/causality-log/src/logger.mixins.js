@@ -1,6 +1,6 @@
 const LoggerMixins = (BasedClass)=> class extends BasedClass{
-    constructor(...args){
-        super(...args);
+    constructor(){
+        super();
         this.logger = console;
     }
     progress(progressMessage){

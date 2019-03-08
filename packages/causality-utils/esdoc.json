@@ -1,5 +1,5 @@
 {
-    "source": "./src",
+    "source": "./src/",
     "destination": "./docs",
     "plugins": [
         {
@@ -14,5 +14,9 @@
         },
         {
             "name": "./esdoc-plugins/force-function-plugin.js"
+        },
+        {
+            "name": "esdoc-ecmascript-proposal-plugin", 
+            "option": { "all": true }
         }]
 }
