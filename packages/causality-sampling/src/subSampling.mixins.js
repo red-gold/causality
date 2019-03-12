@@ -1,4 +1,11 @@
 const SubSamplingMixins = (BaseSamplingClass) => class extends BaseSamplingClass{
+    /**
+     * Perform uniform sample a sub set of Ids given the candidate list
+     * @param { Number } samplingSize
+     * @param { Array|Number } candidateList - list of candidates or size of candidate list
+     * @param { Boolean } [replacable=true] - if true, no duplicated sampling Id returned
+     * @returns { Array } array of sampled Ids
+     */
     subSampling(samplingSize, candidateList, replacable=true){
         const R = this.R, Random = this.Random;
         let candidates = Array.isArray(candidateList)?R.clone(candidateList):R.range(0, candidateList);

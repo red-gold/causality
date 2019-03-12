@@ -1,7 +1,7 @@
 import { Function as BaseFunction } from 'causal-net.core';
 import { Platform } from 'causal-net.utils';
 import { ColorTransformingMixins, ImageSplittingMixins } from './Image/index';
-class NLPPreprocessing extends Platform.mixWith(BaseFunction, [
+class ImagePreprocessing extends Platform.mixWith(BaseFunction, [
         ColorTransformingMixins, ImageSplittingMixins
     ]){
     constructor(){
@@ -9,4 +9,4 @@ class NLPPreprocessing extends Platform.mixWith(BaseFunction, [
     }
 }
 
-export default new NLPPreprocessing;
+export default new ImagePreprocessing;

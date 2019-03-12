@@ -1,3 +1,4 @@
+import { Assert } from 'causal-net.utils';
 const RepresentationMixins = (BaseTensorClass)=> class extends BaseTensorClass{ 
     get Representation(){
         if(!this.representation){
@@ -11,29 +12,20 @@ const RepresentationMixins = (BaseTensorClass)=> class extends BaseTensorClass{
         }
         this.representation = representation;
     }
-    get Embedding(){
-        if(!this.embedding){
-            throw Error('embedding is not set');
-        }
-        return this.embedding;
-    }
-    set Embedding(embedding){
-        if(!embedding){
-            throw Error(`expect embedding instance, got ${embedding}`);
-        }
-        this.embedding = embedding;
-    }
-    setEmbeddingByConfig(netConfig){
-        let [type, subType] = netConfig.Type.split('/');
-        if(type !== 'text'){
-            throw Error(`expect type to be "text" got ${type}`);
-        }
-        if(!subType){
-            throw Error(`expect valid string subtype got ${subType}`);
-        }
-        this.Embedding = this.Representation[subType];
-    }
 
+    async connect(){
+        let configureLink = this.representationConfigureLink;
+        if(super.connect){
+            super.connect();
+        }
+        this.logger.log(`representation connect to ${configureLink}`);
+        await this.Representation.connect(configureLink);
+    }
     
+    setRepresentationByConfig(netConfig){
+        let configureLink = netConfig.Representation;
+        Assert.beInstanceOf(configureLink, String);
+        this.representationConfigureLink = configureLink;
+    }
 };
-export default RepresentationMixins;
+export default RepresentationMixins;    

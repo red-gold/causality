@@ -1,9 +1,4 @@
-const MetroHasting = BaseOptimizerClass => class extends BaseOptimizerClass{
-    sampling(size){
 
-    }
+const MetroHastingMixins = BaseOptimizerClass => class extends BaseOptimizerClass{
 
-    accept(){
-
-    }
 }

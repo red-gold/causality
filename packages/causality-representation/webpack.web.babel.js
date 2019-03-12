@@ -2,7 +2,6 @@ import { resolve } from 'path';
 import Bundle from './bundle.json';
 import merge from 'webpack-merge';
 import common from './webpack.common.babel';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const WebConfig = merge(common, {
   output: {
@@ -12,8 +11,9 @@ const WebConfig = merge(common, {
     library: Bundle.main,
     globalObject: 'this'
   },
-  externals:['causal-net.utils','causal-net.core',
-             'causal-net.storage', '@tensorflow-models/universal-sentence-encoder']
+  externals:[ 'causal-net.utils', 'causal-net.core', 'causal-net.storage', 'causal-net.memcache',
+              '@tensorflow/tfjs', 
+              '@tensorflow-models/universal-sentence-encoder', 'tsne-js']
 });
 
 export default WebConfig;

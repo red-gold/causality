@@ -1,3 +1,4 @@
+import { Fetch } from 'causal-net.utils';
 const TextFileMixins = (StorageClass)=> class extends StorageClass{
     
     /**

@@ -10,9 +10,12 @@ const PlatformMapping = (name)=>{
     }
 };
 /**
- * This platform class provide ultility methods for checking current platform (node, web) 
- * and enhanced mixins
+ * This Platform class uses [platform](https://www.npmjs.com/package/platform) for checking current platform 
+ * it now understand either 'node' or 'web'.
+ * @todo: extend more platform in future
  * @class Platform
+ * @example
+ * [EXAMPLE ../examples/platform.babel.js]
  */
 class Platform{
     /**
@@ -42,7 +45,6 @@ class Platform{
     }
     /**
      * Enhanced mixins for based class and list of mixins
-     *
      * @param { Class } BaseClass - base class
      * @param { List } mixins - list of mixins function
      * @returns { Class } 
@@ -60,7 +62,14 @@ class Platform{
         if(mixinsList === undefined){
             throw Error(`${PfName} not found in mixins`);
         }
-        return mixinsList.reduce((c, mixin) => mixin(c), BaseClass);
+        return mixinsList.reduce((c, mixin) => {
+            if(typeof c === "function"){
+                return mixin(c);
+            }
+            else{
+                throw Error(`${JSON.stringify(c)} is not support mixins`);
+            }
+        }, BaseClass);
     }
 };
 

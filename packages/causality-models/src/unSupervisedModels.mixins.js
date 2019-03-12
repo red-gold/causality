@@ -30,8 +30,7 @@ const UnSupervisedModelsMixins = (BasePipelineClass)=> class extends BasePipelin
     }
 
     setModelByConfig(netConfig){
-        const NumClasses = netConfig.NumClasses;
-        const {Loss, Predict, OneHotPredict, Fit} = netConfig.Model;
+        const {Loss, Encode, Decode, Fit} = netConfig.Model;
         if(!Loss){
             throw Error('Loss must be defind as a tensor function or acquire from CausalNet.models');
         }

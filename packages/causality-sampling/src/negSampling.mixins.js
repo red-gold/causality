@@ -1,8 +1,18 @@
+import random from "random/dist/random";
+
 const NegativeSamplingMixins = (BaseSamplingClass)=> class extends BaseSamplingClass{
+    /**
+     * Perform negative sampling given the select prob of ids and list of positive samples
+     * @param { Number } negativeSize - size to sample
+     * @param { Array } positiveSamples - Array of possitive Ids
+     * @param { Array } candidateProbs - Array of probablity of candidate Ids
+     * @param { Boolean } [replacable=true] - if true, no duplicated sampling Id returned
+     * @returns { Array } array of sampled Ids
+     */
     negSampling(negativeSize, positiveSamples, candidateProbs, replacable=true){
         const R = this.R, Random = this.Random;
-        if(!candidateProbs || candidateProbs.length === 0){
-            throw Error('candidate length should be positive');
+        if(R.any((v)=> !R.type(Number,v) || v > 1 || v < 0, candidateProbs)){
+            throw Error(`${JSON.stringify(candidateProbs)} is not allow`);
         }
         let seletionProbs = R.reduce((selectionProbs, pidx)=>{
                                 selectionProbs[pidx] = Infinity;//positive candidate never be choosed

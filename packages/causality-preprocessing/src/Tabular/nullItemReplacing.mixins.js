@@ -1,6 +1,6 @@
 const NullItemReplacingMixins = (PreprocessingClass) => class extends PreprocessingClass{
     nullItemReplace(sample){
-        return sample;
+        throw Error('implement required');
     }
 };
 

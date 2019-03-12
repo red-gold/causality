@@ -1,13 +1,16 @@
-const PreprocessingMixins = (BaseClass) => class extends BaseClass{
+import { Assert } from 'causal-net.utils';
+const PreprocessingMixins = (BasePipelineClass) => class extends BasePipelineClass{
+    
     get PreprocessingSampleFn(){
         if(!this.preprocessingSampleFn){
-            throw Error('setPreprocessingFunctions must be called');
+            throw Error('preprocessingSampleFn is not set');
         }
         return this.preprocessingSampleFn;
     }
+    
     get PreprocessingLabelFn(){
         if(!this.preprocessingLabelFn){
-            throw Error('setPreprocessingFunctions must be called');
+            throw Error('preprocessingLabelFn is not set');
         }
         return this.preprocessingLabelFn;
     }
@@ -19,13 +22,10 @@ const PreprocessingMixins = (BaseClass) => class extends BaseClass{
         this.preprocessingLabelFn = preprocessingLabelFn;
         this.preprocessingLabelFn.bind(this);
     }
+    
     setPreprocessingFunctions(preprocessingSampleFn, preprocessingLabelFn){
-        if(typeof(preprocessingSampleFn)!=='function'){
-            throw Error('preprocessingSampleFn must be Function');
-        }
-        if(typeof(preprocessingLabelFn)!=='function'){
-            throw Error('preprocessingLabelFn must be Function');
-        }
+        Assert.beInstanceOf(preprocessingSampleFn, Function);
+        Assert.beInstanceOf(preprocessingLabelFn, Function);
         this.PreprocessingSampleFn = preprocessingSampleFn;
         this.PreprocessingLabelFn = preprocessingLabelFn;
     }

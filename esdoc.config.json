@@ -1,0 +1,38 @@
+{
+  "source": "./",
+  "destination": "./doc_dist",
+  "includes": [ "^(src\\/).*\\.js$", 
+                "^(packages\\/).*?(src\\/).*\\.js"
+               ],
+  "excludes": [ ".*?(node_modules).*?", "(test\\/).*\\.js$", ".*?(examples\\/).*\\.js$" ],
+  "index": "./README.md",
+  "plugins": [
+        { "name": "esdoc-standard-plugin",
+          "option": {
+            "manual": {
+              "globalIndex": true,
+              "index": "./causal-doc/index.md",
+              "asset": "./causal-doc/asset",
+              "files": [
+                "./causal-doc/overview/introduction.md"
+              ]
+            }
+            ,
+            "test": {
+                "source": "./",
+                "interfaces": ["test"],
+                "excludes": [ ".*?(node_modules).*?" ],
+                "includes": ["^(packages\\/).*?(test\\/).*?(spec|test)\\.js$"]
+            }
+          }
+        },
+        { "name": "esdoc-ecmascript-proposal-plugin", "option": {"all": true}},
+        {"name": "esdoc-inject-style-plugin", "option": 
+            {
+              "enable": true, 
+              "styles": ["./causal-doc/css/causal-style.css"]
+            }
+        },
+        { "name": "./causal-doc/esdoc.plugin.js" }
+  ]
+}

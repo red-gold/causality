@@ -1,16 +1,21 @@
-# causal-net.utils module
+# causal-net.utils 
 
-This module provides those ulitities class:
+This causal-net.Utils is a sub-module for [causality](https://red-gold.github.io/causality-docs/) project.  module provides those ulitities class:
 
 ### Platform 
-- Enhanced mixins with corresponding platform (node|web).
+- Enhanced isomorphic mixins with corresponding platform (node|web).
+
 ### Fetch 
-- Fetch that works on both node and web environment.
+- isomorphic Fetch.
+
 ### PNG 
-- PNG parser.
+- isomorphic PNG parser.
+
 ### CSV 
-- CSV parser.
+- isomorphic CSV parser.
+
 ### Stream 
-- Readable, Writeable, duplex.
+- isomorphic Stream with Readable, Writeable, Duplex.
+
 ### Assert 
-- Enhanced assert with schema learn from example.
+- Enhanced isomorphic Assert with schema learnt from example.

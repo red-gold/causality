@@ -1,26 +1,10 @@
 const SequenceLabelsMixins = (basePipelineClass)=> class extends (basePipelineClass){
     Decoder(){
-        const Fit = (pipelineOutTensor, labelTensor) =>{
-            let logProb = pipelineOutTensor.sub(pipelineOutTensor.logSumExp(1, true));
-            return logProb;
-        };
-        const Predict = (pipelineOutTensor) =>{
-            let logProb = Fit(pipelineOutTensor);
-            let predictedClass = logProb.argMax(1);
-            return predictedClass;
-        };
-        const OneHotPredict = (pipelineOutTensor, numClasses) =>{
-            let predictedClass = Predict(pipelineOutTensor);
-            let oneHotPredict = this.T.oneHot(predictedClass, numClasses);
-            return oneHotPredict;
-        };
-        const Loss = (pipelineOutTensor, labelTensor)=>{
-            let logProb = Fit(pipelineOutTensor, labelTensor);
-            let likelihood = logProb.neg().mul(labelTensor);
-            let loss = likelihood.mean();
-            return loss;
-        };
-        return { Predict, OneHotPredict, Loss, Fit };
+        throw Error('implement required');
+    }
+
+    CTCDecode(){
+        throw Error('implement required');
     }
 };
 

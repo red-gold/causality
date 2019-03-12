@@ -1,6 +1,6 @@
 const ItemNormalizingMixins = (PreprocessingClass) => class extends PreprocessingClass{
     itemNormalize(sample){
-        return sample;
+        throw Error('implement require');
     }
 };
 
