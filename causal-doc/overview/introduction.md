@@ -1,6 +1,6 @@
 ![Photo by Iker Urteaga on Unsplash](./asset/iker-urteaga-246955-unsplash.jpg)
 # Introduction to mixins
-Causality intensively uses [mixin](https://en.wikipedia.org/wiki/Mixin) for composing class. Mixins allow constructing elastic class that imports enough methods for target usages. We try to mitigate redudant methods and reduce bundle size. The main mixins for building pipeline class can be found at `/src/` folder which prebuilt CausalNet pipeline ready to use (check tutorials session). Advance mixins 
+Causality intensively uses [mixin](https://en.wikipedia.org/wiki/Mixin) for composing class. Mixins allow constructing elastic class that imports enough methods for target usages. We try to mitigate redundant methods and reduce bundle size. The main mixins for building a pipeline class can be found at the `/src/` folder which pre-built `CausalNet` pipeline ready to use (check tutorials session). Advance mixins 
 are seperated into different sub-packages under the `/packages/` folder. Each sub-package exports at most one mixin for building pipeline, for example, causality-optimizer provide trainerMixins for optimizing parameters. 
 
 ## Pipeline package
