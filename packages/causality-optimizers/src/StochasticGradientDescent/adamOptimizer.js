@@ -7,8 +7,9 @@ export default class AdamOptimizer extends Platform.mixWith(BaseTensor,
         super();
         let defaultOptimizerParameters = {beta1: 0.1, beta2: 0.2, epsilon:0.03};
         this.F = new Function();
+        const R = this.F.R;
         const {learningRate, beta1, beta2, epsilon} = 
-            this.F.R.mergeDeepLeft(optimizerParams, defaultOptimizerParameters);
+            R.mergeDeepLeft(optimizerParams, defaultOptimizerParameters);
         this.trainer = this.T.train.adam(learningRate, beta1, beta2, epsilon);
     }
 }

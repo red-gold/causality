@@ -1,9 +1,9 @@
 import { universalEmbedding, Log } from 'causal-net.representation';
 import { termLogger } from 'causal-net.log';
-import { Fetch } from 'causal-net.utils';
-var fetch = Fetch.fetch;
 (async ()=>{
-    termLogger.log({universalEmbedding});
+    // termLogger.groupBegin();
     await universalEmbedding.connect();
-    termLogger.log(await universalEmbedding.sentenceEncode([ ['this', 'is', 'test'] ]));
+    // termLogger.groupEnd();
+    let sentVec = await universalEmbedding.sentenceEncode([ 'this is test' ])
+    sentVec.print();
 })();

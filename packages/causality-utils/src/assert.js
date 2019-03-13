@@ -47,7 +47,17 @@ class Assert{
      * @memberof Assert
      */
     beInstanceOf(instance, targetClass){
-        if(!(instance instanceof targetClass)){
+        if(targetClass === String){
+            if(typeof(instance) !== 'string'){
+                throw Error(`${JSON.stringify(instance)} must be type of ${targetClass.name}`);
+            }
+        }
+        if(targetClass === Function){
+            if(typeof(instance) !== 'function'){
+                throw Error(`${JSON.stringify(instance)} must be type of ${targetClass.name}`);
+            }
+        }
+        else if(!(instance instanceof targetClass)){
             throw Error(`${JSON.stringify(instance)} must be instance of ${targetClass.name}`);
         }
     }

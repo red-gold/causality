@@ -1,4 +1,5 @@
 const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
+    
     get Optimizer(){
         if(!this.optimizer){
             throw Error('optimizer is not set');

@@ -1,20 +1,45 @@
 import { Function as BaseFunction } from 'causal-net.core';
 import { Platform } from 'causal-net.utils';
-import { TokenizingMixins, TokenTransformingMixins } from './NLP/index';
-import { default as TokenizerEN } from './tokenizer.en';
+import { TokenTransformingMixins } from './NLP/index';
+/**
+ * This NLPPreprocessing class provide methods for preprocessing text and output valid tokens.
+ * { MixWith:
+ *     [ TokenTransformingMixins ]) }
+ * @class NLPPreprocessing
+ * @extends BaseFunction
+ * @example
+ * [!EXAMPLE ../examples/nlpPreprocessing.babel.node.js]
+ */
+
 class NLPPreprocessing extends Platform.mixWith(BaseFunction, 
-    [   TokenizingMixins, 
-        TokenTransformingMixins ]){
+    [ TokenTransformingMixins ]){
     constructor(){
         super();
-        this.Tokenizer = TokenizerEN;
     }
+    /**
+     * This method is used in case tokenizer requires data setup.
+     * @param { Url|FilePath } configLink
+     * @memberof NLPPreprocessing
+     */
+    connect(configLink){
+        this.tokenizer.connect(configLink);
+    }
+    /**
+     * Get tokenizer
+     *
+     * @memberof NLPPreprocessing
+     */
     get Tokenizer(){
         if(!this.tokenizer){
             throw Error('tokenizer is not set');
         }
         return this.tokenizer;
     }
+    /**
+     * Set tokenizer
+     * @param { Object } tokenizer - tokenizer object
+     * @memberof NLPPreprocessing
+     */
     set Tokenizer(tokenizer){
         this.tokenizer = tokenizer;
     }

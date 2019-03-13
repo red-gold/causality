@@ -1,4 +1,10 @@
 const WordEmbeddingFunctionMixins = (BaseFunctionClass) => class extends BaseFunctionClass{
+    /**
+     *
+     * @param { Array } tokens - list of tokens to find coresponding ids
+     * @param { Function } mapper - 
+     * @returns 
+     */
     mapTokenToChunkIds(tokens, mapper){
         const R = this.R;
         const TokenChunkIdMapper = mapper;
@@ -11,7 +17,11 @@ const WordEmbeddingFunctionMixins = (BaseFunctionClass) => class extends BaseFun
         console.log({chunkIds, tokenChunkIds});
         return {tokenChunkIds, chunkIds};
     }
-
+    /**
+     * return zero vector given the vec size
+     * @param { Number } vecSize - positive integer indicates vector length
+     * @returns { Array } zero vector
+     */
     zeroVec(vecSize){
         return this.R.map(()=>0,this.R.range(0, vecSize));
     };

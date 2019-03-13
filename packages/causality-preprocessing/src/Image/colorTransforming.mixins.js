@@ -1,19 +1,21 @@
 const ColorTransformingMixins = (PreprocessingClass) => class extends PreprocessingClass{
-    colorTransform(sampleBuffer, channelSize, tranformFn){
+    
+    colorTransform(tranformFn, sampleBuffer, channelSize){
         const R = this.R;
-        return R.map(tranformFn, R.splitEvery(channelSize, sampleBuffer));
+        return R.flatten(R.map(tranformFn, R.splitEvery(channelSize, sampleBuffer)));
     }
+    /**
+     * Transform color image to black on white image. This function also reduce chanel to 1.
+     * @param { Array|Buffer } sampleBuffer
+     * @param { Number } channelSize
+     * @return { Array } image data after transform
+     */
     blackWhiteTransform(sampleBuffer, channelSize){
         const BlackWhiteFn = (pixel)=>{
-            let pixelValue = pixel[0]*255 + pixel[1]*255 +pixel[2];
-            if( pixelValue > 0 ){
-                return 0;
-            }
-            else{
-                return 1;
-            }
+            let pixelValue = (pixel[0] + pixel[1] +pixel[2])/3;
+            return ~~pixelValue;
         };
-        this.colorTransform(BlackWhiteFn, sampleBuffer, channelSize);
+        return this.colorTransform(BlackWhiteFn, sampleBuffer, channelSize);
     }
 };
 

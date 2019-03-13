@@ -1,4 +1,12 @@
+
 const DenseLayerMixins = (PipelineClass)=> class extends PipelineClass{
+    /**
+     * Simple dense layer
+     * @param { String } name - layer name
+     * @param { Number } inputSize - size of net input
+     * @param { Number } outputSize - size of net output
+     * @returns { Object } layer
+     */
     dense(name, inputSize, outputSize){
         return { 
             Name: name, Type: 'Layer',

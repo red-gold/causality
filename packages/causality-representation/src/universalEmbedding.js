@@ -1,6 +1,15 @@
 import * as use from '@tensorflow-models/universal-sentence-encoder';
 import { Platform } from 'causal-net.utils';
 import { Tensor } from 'causal-net.core';
+import { Fetch } from 'causal-net.utils';
+/**
+ *
+ * This UniversialEmbedding provide methods for transform sentences into 
+ * its single vector representation 
+ * based on [use](https://github.com/tensorflow/tfjs-models/tree/master/universal-sentence-encoder)
+ * @class UniversialEmbedding
+ * @extends Tensor
+ */
 class UniversialEmbedding extends Platform.mixWith(Tensor, []){
     
     constructor(){
@@ -13,8 +22,10 @@ class UniversialEmbedding extends Platform.mixWith(Tensor, []){
     }
     
     async connect(){
-        
-        this.use.bind(this);
+        if(global){
+            //TODO: make better with Platform
+            global.fetch = Fetch.fetch;
+        }
         this.model = await this.use.load();
         return this;
     }
