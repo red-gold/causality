@@ -570,12 +570,6 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "causal-net/causality/packages/causality-core/src/index.js~causalnetcore",
-    "variable/index.html#static-variable-causalNetCore",
-    "<span>causalNetCore</span> <span class=\"search-result-import-path\">causal-net/causality/packages/causality-core/src/index.js</span>",
-    "variable"
-  ],
-  [
     "causal-net/causality/packages/causality-representation/src/causalnetembedding.js~causalnetembedding",
     "variable/index.html#static-variable-causalNetEmbedding",
     "<span>causalNetEmbedding</span> <span class=\"search-result-import-path\">causal-net/causality/packages/causality-representation/src/causalNetEmbedding.js</span>",
@@ -718,6 +712,12 @@ window.esdocSearchIndex = [
     "test-file/causality/packages/causality-utils/test/assert.test.js.html#lineNumber3",
     "assert should be define",
     "test"
+  ],
+  [
+    "causality/packages/causality-core/src/causalnetcore.js",
+    "file/causality/packages/causality-core/src/causalNetCore.js.html",
+    "causality/packages/causality-core/src/causalNetCore.js",
+    "file"
   ],
   [
     "causality/packages/causality-core/src/function.js",
@@ -1095,12 +1095,6 @@ window.esdocSearchIndex = [
     "causality/packages/causality-layer/src/causalnetlayer.js~causalnetlayer#f",
     "class/causality/packages/causality-layer/src/causalNetLayer.js~CausalNetLayer.html#instance-member-F",
     "causality/packages/causality-layer/src/causalNetLayer.js~CausalNetLayer#F",
-    "member"
-  ],
-  [
-    "causality/packages/causality-layer/src/causalnetlayer.js~causalnetlayer#r",
-    "class/causality/packages/causality-layer/src/causalNetLayer.js~CausalNetLayer.html#instance-member-R",
-    "causality/packages/causality-layer/src/causalNetLayer.js~CausalNetLayer#R",
     "member"
   ],
   [
@@ -4026,7 +4020,7 @@ window.esdocSearchIndex = [
     "test"
   ],
   [
-    "",
+    " tensor   tensor , tensor ",
     "test-file/causality/packages/causality-core/test/tensor.test.js.html#lineNumber3",
     "tensor init should be okay",
     "test"

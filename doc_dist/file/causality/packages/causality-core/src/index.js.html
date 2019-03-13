@@ -31,7 +31,6 @@
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#packages-causality-core-src">packages/causality-core/src</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/causality/packages/causality-core/src/function.js~Function.html">Function</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/causality/packages/causality-core/src/tensor.js~Tensor.html">Tensor</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-causalNetCore">causalNetCore</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#packages-causality-datasets-src">packages/causality-datasets/src</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/causality/packages/causality-datasets/src/MNIST.ImgDataset.js~MnistDataset.html">MnistDataset</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/causality/packages/causality-datasets/src/baseImgDataset.js~BaseImgDataset.html">BaseImgDataset</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/causality/packages/causality-datasets/src/baseNLPDataset.js~BaseNLPDataset.html">BaseNLPDataset</a></span></span></li>
@@ -149,17 +148,10 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">causality/packages/causality-core/src/index.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { default as Tensor } from &apos;./tensor&apos;;
-import { default as Function } from &apos;./function&apos;;
-const causalNetCore = {
-    get CoreFunction(){
-        return Function.CoreFunction; 
-    },
-    get CoreTensor(){
-        return Tensor.CoreTensor; 
-    }
-};
-export { Tensor, Function, causalNetCore };
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">export { default as Tensor } from &apos;./tensor&apos;;
+export { default as Function } from &apos;./function&apos;;
+export { default as causalNetCore } from &apos;./CausalNetCore&apos;;
+
 </code></pre>
 
 </div>
