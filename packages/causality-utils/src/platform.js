@@ -1,7 +1,7 @@
 import platform from 'platform';
 import process from 'process';
 
-const PlatformMapping = (name)=>{
+const platformMapping = (name)=>{
     if(name === 'Node.js'){
         return 'node';
     }
@@ -10,8 +10,8 @@ const PlatformMapping = (name)=>{
     }
 };
 /**
- * This Platform class uses [platform](https://www.npmjs.com/package/platform) for checking current platform 
- * it now understand either 'node' or 'web'.
+ * This Platform class wrap [platform](https://www.npmjs.com/package/platform) 
+ * for checking current platform either 'node' or 'web'. And advance mixins
  * @todo: extend more platform in future
  * @class Platform
  * @example
@@ -19,7 +19,7 @@ const PlatformMapping = (name)=>{
  */
 class Platform{
     /**
-     *Creates an instance of Platform.
+     *Creates an instance of platform.
      * @memberof Platform
      */
     constructor(){
@@ -41,7 +41,7 @@ class Platform{
     }
 
     currentPlatform(){
-        return platform.parse();
+        return this.platform.parse();
     }
     /**
      * Enhanced mixins for based class and list of mixins
@@ -56,7 +56,7 @@ class Platform{
             mixinsList = mixins;
         }
         else{
-            const PfName = PlatformMapping(platform.parse()['name']);
+            const PfName = platformMapping(platform.parse()['name']);
             mixinsList = mixins[PfName];
         }
         if(mixinsList === undefined){
@@ -67,7 +67,7 @@ class Platform{
                 return mixin(c);
             }
             else{
-                throw Error(`${JSON.stringify(c)} is not support mixins`);
+                throw Error(`${JSON.stringify(c)} is not support mixins with ${BaseClass.name}`);
             }
         }, BaseClass);
     }

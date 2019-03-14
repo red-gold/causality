@@ -1,17 +1,18 @@
 {
-  "coverage": "25.29%",
-  "expectCount": 510,
-  "actualCount": 129,
+  "coverage": "26.93%",
+  "expectCount": 505,
+  "actualCount": 136,
   "files": {
     "causality/packages/causality-core/src/causalNetCore.js": {
-      "expectCount": 6,
+      "expectCount": 7,
       "actualCount": 1,
       "undocumentLines": [
         14,
         15,
         16,
         18,
-        22
+        22,
+        26
       ]
     },
     "causality/packages/causality-core/src/function.js": {
@@ -21,14 +22,24 @@
         7
       ]
     },
-    "causality/packages/causality-core/src/tensor.js": {
-      "expectCount": 6,
-      "actualCount": 2,
+    "causality/packages/causality-core/src/store.js": {
+      "expectCount": 11,
+      "actualCount": 6,
       "undocumentLines": [
-        1,
+        8,
+        9,
         10,
         11,
-        12
+        14
+      ]
+    },
+    "causality/packages/causality-core/src/tensor.js": {
+      "expectCount": 5,
+      "actualCount": 2,
+      "undocumentLines": [
+        7,
+        8,
+        11
       ]
     },
     "causality/packages/causality-datasets/src/MNIST.ImgDataset.js": {
@@ -237,59 +248,37 @@
         49
       ]
     },
-    "causality/packages/causality-memcache/src/baseMemCache.js": {
-      "expectCount": 5,
-      "actualCount": 0,
-      "undocumentLines": [
-        1,
-        2,
-        3,
-        6,
-        10
-      ]
-    },
     "causality/packages/causality-memcache/src/function.js": {
       "expectCount": 2,
-      "actualCount": 0,
+      "actualCount": 1,
       "undocumentLines": [
-        2,
-        3
+        10
       ]
     },
     "causality/packages/causality-memcache/src/memcache.mixins.js": {
       "expectCount": 5,
-      "actualCount": 0,
+      "actualCount": 1,
       "undocumentLines": [
-        1,
         2,
-        5,
-        6,
-        9
+        11,
+        12,
+        15
       ]
     },
     "causality/packages/causality-memcache/src/memdownCache.js": {
-      "expectCount": 9,
-      "actualCount": 0,
+      "expectCount": 5,
+      "actualCount": 2,
       "undocumentLines": [
-        6,
-        8,
-        10,
-        12,
-        25,
-        38,
-        52,
-        58,
-        79
+        13,
+        23,
+        27
       ]
     },
     "causality/packages/causality-memcache/src/memorizing.mixins.js": {
       "expectCount": 4,
-      "actualCount": 0,
+      "actualCount": 3,
       "undocumentLines": [
-        1,
-        2,
-        10,
-        14
+        2
       ]
     },
     "causality/packages/causality-memory/src/causalNetMemory.js": {
@@ -589,11 +578,11 @@
       "expectCount": 7,
       "actualCount": 2,
       "undocumentLines": [
-        15,
-        21,
-        24,
-        33,
-        41
+        14,
+        20,
+        23,
+        32,
+        40
       ]
     },
     "causality/packages/causality-representation/src/wordEmbedding.mixins.js": {
@@ -665,10 +654,10 @@
       ]
     },
     "causality/packages/causality-storage/src/indexDBStorage.js": {
-      "expectCount": 11,
-      "actualCount": 10,
+      "expectCount": 5,
+      "actualCount": 4,
       "undocumentLines": [
-        223
+        106
       ]
     },
     "causality/packages/causality-storage/src/indexDBStorage.mixins.node.js": {
@@ -695,13 +684,12 @@
       ]
     },
     "causality/packages/causality-storage/src/textFile.mixins.js": {
-      "expectCount": 6,
+      "expectCount": 5,
       "actualCount": 2,
       "undocumentLines": [
         2,
-        20,
-        24,
-        29
+        19,
+        23
       ]
     },
     "causality/packages/causality-utils/src/assert.js": {
@@ -711,7 +699,7 @@
         87
       ]
     },
-    "causality/packages/causality-utils/src/csv.js": {
+    "causality/packages/causality-utils/src/csvUtils.js": {
       "expectCount": 9,
       "actualCount": 3,
       "undocumentLines": [
@@ -720,7 +708,7 @@
         11,
         43,
         47,
-        66
+        65
       ]
     },
     "causality/packages/causality-utils/src/fetch.js": {
@@ -744,14 +732,14 @@
       "actualCount": 2,
       "undocumentLines": []
     },
-    "causality/packages/causality-utils/src/json.js": {
+    "causality/packages/causality-utils/src/jsonUtils.js": {
       "expectCount": 9,
       "actualCount": 5,
       "undocumentLines": [
-        9,
         10,
         11,
-        80
+        12,
+        81
       ]
     },
     "causality/packages/causality-utils/src/platform.js": {
@@ -765,7 +753,7 @@
         107
       ]
     },
-    "causality/packages/causality-utils/src/png.js": {
+    "causality/packages/causality-utils/src/pngUtils.js": {
       "expectCount": 9,
       "actualCount": 5,
       "undocumentLines": [
@@ -780,7 +768,7 @@
       "actualCount": 7,
       "undocumentLines": [
         32,
-        114
+        112
       ]
     },
     "causality/src/causality.js": {

@@ -19,7 +19,7 @@ const WebConfig = merge(common, {
                 }
                 callback();
               },
-              'ramda','@tensorflow/tfjs']
+              'ramda','levelup','@tensorflow/tfjs']
 });
 
 export default WebConfig;

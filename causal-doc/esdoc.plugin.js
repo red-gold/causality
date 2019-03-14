@@ -1,21 +1,56 @@
 const path = require("path");
 const fs = require("fs");
 
-const inject = (content, sourcePath, format) => {
+const inject = (content, sourcePath, format, copyfile=false) => {
   return content.replace(/\[EXAMPLE (.*)\]/g, (_, injectPath) => {
     const codePath = path.resolve(path.dirname(sourcePath), injectPath);
     console.log({ codePath });
     try {
       const code = fs.readFileSync(codePath).toString();
-      return format(code);
+      if(copyfile){
+        const fname=path.basename(codePath);
+        const destFile = `./causal-doc/asset/examples/${fname}`;
+        console.log('...................');
+        console.log({ destFile });
+        console.log('...................');
+        fs.copyFileSync(codePath, destFile);
+        return format(code)+`\n[Run code](./asset/examples/${fname})`;
+      }
+      else{
+        return format(code);
+      }
+      
     } catch (e) {
       console.error(`[ERROR] CANNOT INJECT EXAMPLE ${codePath}`);
-      return `[EXAMPLE  ERROR! ${injectPath}]`;
+      return `[EXAMPLE  ERROR! ${sourcePath}, ${codePath}]`;
+    }
+  });
+};
+
+const mdInject = (content, sourcePath) => {
+  return content.replace(/\[INCLUDE (.*)\]/g, (_, injectPath) => {
+    const subMdPath = path.resolve(path.dirname(sourcePath), injectPath);
+    try {
+      const code = fs.readFileSync(subMdPath).toString();
+      const ToCode = (code)=>'\n```javascript\n'+code+'\n```\n';
+      return inject(code, subMdPath, ToCode, true);
+    } catch (e) {
+      console.error(`[ERROR] CANNOT INJECT INCLUDE ${subMdPath}`);
+      return `[EXAMPLE  ERROR! ${subMdPath}]`;
     }
   });
 };
 
 module.exports = {
+    onHandlePlugins(event){
+      var builtins = event.data.plugins.filter((plugin)=>plugin.name.startsWith('esdoc-'));
+      var customs = event.data.plugins.filter((plugin)=>!plugin.name.startsWith('esdoc-'));
+      for(let custom of customs){
+        builtins.push(custom);
+      }
+      event.data.plugins = builtins;
+      console.log({plugin: event.data.plugins});
+    },
     onHandleConfig(event) {
       console.log("configuration", event.data.config);
     },
@@ -50,9 +85,11 @@ module.exports = {
     onHandleDocs(event) {
       event.data.docs.forEach(doc => {
         const fencesFormatter = code => `\`\`\`\n${code}\n\`\`\``;
-              
         if (doc.longname.match(/\.md$/)) {
+          //import example
           doc.content = inject(doc.content, doc.longname, fencesFormatter);
+          //import sub doc
+          doc.content = mdInject(doc.content, doc.longname);
         }
       });
     }

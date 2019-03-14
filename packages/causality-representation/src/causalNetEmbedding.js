@@ -1,5 +1,5 @@
 import { Tensor } from 'causal-net.core';
-import { Platform, Fetch, JSONUtils } from 'causal-net.utils';
+import { platform, fetch, jsonUtils } from 'causal-net.utils';
 import { StorageMixins, indexDBStorage } from 'causal-net.storage';
 import { MemCacheMixins, memDownCache } from 'causal-net.memcache';
 import { default as WordEmbeddingMixins } from './wordEmbedding.mixins';
@@ -20,7 +20,7 @@ import { default as Function } from './function';
  * @example
  * [EXAMPLE ../examples/causalNetEmbedding.babel.node.js]
  */
-class CausalNetEmbedding extends Platform.mixWith(Tensor, 
+class CausalNetEmbedding extends platform.mixWith(Tensor, 
         [   StorageMixins, 
             MemCacheMixins,
             TokenLookUpMixins,
@@ -28,7 +28,7 @@ class CausalNetEmbedding extends Platform.mixWith(Tensor,
             WordEmbeddingMixins ]){
     constructor(){
         super();
-        this.Fetch = Fetch;
+        this.fetch = fetch;
         this.Storage = indexDBStorage;   //store configure
         this.MemCache = memDownCache;    //store chunks
         this.F = new Function();
@@ -95,10 +95,10 @@ class CausalNetEmbedding extends Platform.mixWith(Tensor,
      */
     async query(link){
         if(link.startsWith('http')){
-            return await JSONUtils.fetchJson(link);
+            return await jsonUtils.fetchJson(link);
         }
         else{
-            return await JSONUtils.readJSON(link);
+            return await jsonUtils.readJSON(link);
         }
     }
     /**

@@ -1,17 +1,15 @@
 import stream from 'readable-stream';
 /**
- * This class provide wrapper functions for readable-stream 
- * @see https://www.npmjs.com/package/readable-stream
- * @class Stream
+ * This Stream class provide wrapper functions for 
+ * [readable-stream](https://www.npmjs.com/package/readable-stream)
+ * @class StreamUtils
  * @example
  * [EXAMPLE ../examples/stream.babel.js]
  */
 class Stream{
     constructor(){
     
-        /**
-         * @private { readable-stream }
-         */
+        /** @private { readable-stream } */
         this.stream = stream;
     }
     
@@ -59,7 +57,7 @@ class Stream{
      */
     makeTransform(transformFn){
         let transformer = new stream.Transform({objectMode: true});
-        transformer._transform = tranformFn;
+        transformer._transform = transformFn;
         return transformer;
     }
     

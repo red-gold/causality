@@ -70,9 +70,9 @@
                   "line": 1,
                   "column": 17
                 },
-                "identifierName": "PNGUtils"
+                "identifierName": "pngUtils"
               },
-              "name": "PNGUtils"
+              "name": "pngUtils"
             },
             "local": {
               "type": "Identifier",
@@ -87,9 +87,9 @@
                   "line": 1,
                   "column": 17
                 },
-                "identifierName": "PNGUtils"
+                "identifierName": "pngUtils"
               },
-              "name": "PNGUtils"
+              "name": "pngUtils"
             }
           }
         ],
@@ -680,7 +680,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Fetch PNG file, transform to get raw pixel data and save to file at the filePath\n     * @param { Url } url - url for png file\n     * @param { String } filePath - file name to save content\n     * @returns { Promise } Array content promiser \n     ",
+                  "value": "*\n     * fetch PNG file, transform to get raw pixel data and save to file at the filePath\n     * @param { Url } url - url for png file\n     * @param { String } filePath - file name to save content\n     * @returns { Promise } Array content promiser \n     ",
                   "start": 811,
                   "end": 1069,
                   "loc": {
@@ -886,9 +886,9 @@
                                     "line": 32,
                                     "column": 33
                                   },
-                                  "identifierName": "PNGUtils"
+                                  "identifierName": "pngUtils"
                                 },
-                                "name": "PNGUtils"
+                                "name": "pngUtils"
                               },
                               "property": {
                                 "type": "Identifier",
@@ -1069,7 +1069,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Fetch PNG file, transform to get raw pixel data and save to file at the filePath\n     * @param { Url } url - url for png file\n     * @param { String } filePath - file name to save content\n     * @returns { Promise } Array content promiser \n     ",
+                  "value": "*\n     * fetch PNG file, transform to get raw pixel data and save to file at the filePath\n     * @param { Url } url - url for png file\n     * @param { String } filePath - file name to save content\n     * @returns { Promise } Array content promiser \n     ",
                   "start": 811,
                   "end": 1069,
                   "loc": {
@@ -1703,7 +1703,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Fetch PNG file, transform to get raw pixel data and save to file at the filePath\n     * @param { Url } url - url for png file\n     * @param { String } filePath - file name to save content\n     * @returns { Promise } Array content promiser \n     ",
+                    "value": "*\n     * fetch PNG file, transform to get raw pixel data and save to file at the filePath\n     * @param { Url } url - url for png file\n     * @param { String } filePath - file name to save content\n     * @returns { Promise } Array content promiser \n     ",
                     "start": 811,
                     "end": 1069,
                     "loc": {
@@ -1909,9 +1909,9 @@
                                       "line": 32,
                                       "column": 33
                                     },
-                                    "identifierName": "PNGUtils"
+                                    "identifierName": "pngUtils"
                                   },
-                                  "name": "PNGUtils"
+                                  "name": "pngUtils"
                                 },
                                 "property": {
                                   "type": "Identifier",
@@ -2092,7 +2092,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Fetch PNG file, transform to get raw pixel data and save to file at the filePath\n     * @param { Url } url - url for png file\n     * @param { String } filePath - file name to save content\n     * @returns { Promise } Array content promiser \n     ",
+                    "value": "*\n     * fetch PNG file, transform to get raw pixel data and save to file at the filePath\n     * @param { Url } url - url for png file\n     * @param { String } filePath - file name to save content\n     * @returns { Promise } Array content promiser \n     ",
                     "start": 811,
                     "end": 1069,
                     "loc": {
@@ -2187,7 +2187,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Fetch PNG file, transform to get raw pixel data and save to file at the filePath\n     * @param { Url } url - url for png file\n     * @param { String } filePath - file name to save content\n     * @returns { Promise } Array content promiser \n     ",
+      "value": "*\n     * fetch PNG file, transform to get raw pixel data and save to file at the filePath\n     * @param { Url } url - url for png file\n     * @param { String } filePath - file name to save content\n     * @returns { Promise } Array content promiser \n     ",
       "start": 811,
       "end": 1069,
       "loc": {
@@ -2268,7 +2268,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "PNGUtils",
+      "value": "pngUtils",
       "start": 9,
       "end": 17,
       "loc": {
@@ -3555,7 +3555,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Fetch PNG file, transform to get raw pixel data and save to file at the filePath\n     * @param { Url } url - url for png file\n     * @param { String } filePath - file name to save content\n     * @returns { Promise } Array content promiser \n     ",
+      "value": "*\n     * fetch PNG file, transform to get raw pixel data and save to file at the filePath\n     * @param { Url } url - url for png file\n     * @param { String } filePath - file name to save content\n     * @returns { Promise } Array content promiser \n     ",
       "start": 811,
       "end": 1069,
       "loc": {
@@ -3893,7 +3893,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "PNGUtils",
+      "value": "pngUtils",
       "start": 1134,
       "end": 1142,
       "loc": {

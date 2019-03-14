@@ -1,5 +1,5 @@
-import { default as BaseStorage } from './baseStorage';
-import { Assert } from 'causal-net.utils';
+import { Store as BaseStorage } from 'causal-net.core';
+import { assert } from 'causal-net.utils';
 /**
  * This indexDBStorage class is the default consistent storage based on 
  * [leveldown](https://www.npmjs.com/package/leveldown) storage 
@@ -27,7 +27,7 @@ const StorageMixins = (BasePipelineClass)=> class extends BasePipelineClass{
      * @param { Object } - storage instance
      */
     set Storage(storage){
-        Assert.beInstanceOf(storage, BaseStorage);
+        assert.beInstanceOf(storage, BaseStorage);
         this.storage = storage;
     }
     

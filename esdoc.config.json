@@ -30,7 +30,19 @@
         {"name": "esdoc-inject-style-plugin", "option": 
             {
               "enable": true, 
-              "styles": ["./causal-doc/css/causal-style.css"]
+              "styles": [
+                "./causal-doc/css/pure-min.css",
+                "./causal-doc/css/causal-style.css"
+              ]
+            }
+        },
+        { "name": "esdoc-inject-script-plugin", 
+          "option": {
+            "enable": true, 
+            "scripts": 
+               [
+                  "./causal-doc/scripts/jquery-3.3.1.min.js",
+                  "./causal-doc/scripts/run_examples.js"]
             }
         },
         { "name": "./causal-doc/esdoc.plugin.js" }

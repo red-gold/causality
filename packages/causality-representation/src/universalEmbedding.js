@@ -1,7 +1,6 @@
-import * as use from '@tensorflow-models/universal-sentence-encoder';
-import { Platform } from 'causal-net.utils';
+import { platform } from 'causal-net.utils';
 import { Tensor } from 'causal-net.core';
-import { Fetch } from 'causal-net.utils';
+import { fetch } from 'causal-net.utils';
 /**
  *
  * This UniversialEmbedding provide methods for transform sentences into 
@@ -10,21 +9,21 @@ import { Fetch } from 'causal-net.utils';
  * @class UniversialEmbedding
  * @extends Tensor
  */
-class UniversialEmbedding extends Platform.mixWith(Tensor, []){
+class UniversialEmbedding extends platform.mixWith(Tensor, []){
     
     constructor(){
         super();
         /**
          * @private { TensorModel } 
          */
-        this.use = use;
+        this.use = require('@tensorflow-models/universal-sentence-encoder');
         this.model = null;
     }
     
     async connect(){
         if(global){
-            //TODO: make better with Platform
-            global.fetch = Fetch.fetch;
+            //TODO: make better with platform
+            global.fetch = fetch.fetch;
         }
         this.model = await this.use.load();
         return this;

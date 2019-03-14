@@ -8,7 +8,7 @@ class Function{
         /**
          * @private { Object } Ramda instance
          */
-        this.R = R;
+        this.R = require('ramda');
     
         /**
          * @private { Logger } logger   
@@ -21,7 +21,7 @@ class Function{
      * @memberof Function
      */
     get CoreFunction(){
-        return R;
+        return this.R;
     }
     
     /**
@@ -45,7 +45,7 @@ class Function{
      * @memberof Function
      */
     setIn(keys, value, item){
-        return R.assocPath(keys, value, item);
+        return this.R.assocPath(keys, value, item);
     }
 
     /**

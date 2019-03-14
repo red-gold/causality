@@ -12,8 +12,8 @@ import * as Validator from 'ajv';
  */
 class Assert{
     /**
-     *Creates an instance of Assert.
-     * @memberof Assert
+     *Creates an instance of assert.
+     * @memberof assert
      */
     constructor(){
         /** 
@@ -29,7 +29,7 @@ class Assert{
      * @param { Any } value - input value
      * @param { Any } sample - sample value pattern
      * @param { String } [name='sample'] - value name
-     * @memberof Assert
+     * @memberof assert
      */
     seemMatchSample(value, sample, name='sample'){
         let schema = generateSchema.json(name, sample);
@@ -41,10 +41,10 @@ class Assert{
         }
     }
     /**
-     * Assert object to be instance of class
+     * assert object to be instance of class
      * @param { Object } instance
      * @param { Class } targetClass
-     * @memberof Assert
+     * @memberof assert
      */
     beInstanceOf(instance, targetClass){
         if(targetClass === String){

@@ -4,8 +4,8 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 const ExamplesConfig = {
     entry: {
         'core-example': './examples/core/examples.js',
-        'datasets-example': './examples/datasets/examples.js',
-        'MNIST-demo': './examples/MNIST-demo/mnist.dataset.babel.js',
+        // 'datasets-example': './examples/datasets/examples.js',
+        // 'MNIST-demo': './examples/MNIST-demo/mnist.dataset.babel.js',
         // // 'layer-example': './examples/layer/examples.js',
         // // 'models-example': './examples/models/examples.js',
         'log-example': './examples/log/examples.js',

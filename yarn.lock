@@ -3395,6 +3395,14 @@ esdoc-external-ecmascript-plugin@^1.0.0:
   dependencies:
     fs-extra "1.0.0"
 
+esdoc-inject-script-plugin@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/esdoc-inject-script-plugin/-/esdoc-inject-script-plugin-1.0.0.tgz#1d6d6e9cd74e863acbe9eec7bc8ed135b8742e2f"
+  integrity sha1-HW1unNdOhjrL6e7HvI7RNbh0Li8=
+  dependencies:
+    cheerio "0.22.0"
+    fs-extra "1.0.0"
+
 esdoc-inject-style-plugin@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/esdoc-inject-style-plugin/-/esdoc-inject-style-plugin-1.0.0.tgz#a13597368bb9fb89c365e066495caf97a4decbb1"

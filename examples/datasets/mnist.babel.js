@@ -1,11 +1,11 @@
 import {Datasets, Log, Utils} from '../../src/index';
 const { MNIST } = Datasets;
 const { termLogger } = Log;
-const { Fetch } = Utils;
+const { fetch } = Utils;
 const mnist = async ()=>{
     const datasetUrl = "http://storage.googleapis.com/moderatordev-223307.appspot.com/MNIST_dataset/";
     const url = `${datasetUrl}dataset.summary.json`;
-    const configure = await Fetch.fetchJson(url);
+    const configure = await fetch.fetchJson(url);
     configure.datasetUrl = datasetUrl;
     let mnist = new MNIST(configure);
     mnist.Logger = termLogger;

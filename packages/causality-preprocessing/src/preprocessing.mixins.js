@@ -1,4 +1,4 @@
-import { Assert } from 'causal-net.utils';
+import { assert } from 'causal-net.utils';
 const PreprocessingMixins = (BasePipelineClass) => class extends BasePipelineClass{
     
     get PreprocessingSampleFn(){
@@ -16,13 +16,13 @@ const PreprocessingMixins = (BasePipelineClass) => class extends BasePipelineCla
     }
 
     set PreprocessingSampleFn(sampleFn){
-        Assert.beInstanceOf(sampleFn, Function);
+        assert.beInstanceOf(sampleFn, Function);
         this.preprocessingSampleFn = sampleFn;
         this.preprocessingSampleFn.bind(this);
     }
     
     set PreprocessingLabelFn(labelFn){
-        Assert.beInstanceOf(labelFn, Function);
+        assert.beInstanceOf(labelFn, Function);
         this.preprocessingLabelFn = labelFn;
         this.preprocessingLabelFn.bind(this);
     }

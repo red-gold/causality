@@ -760,13 +760,13 @@ function isView(arrbuf) {
   return false;
 }
 // 1. The assert module provides functions that throw
-// AssertionError's when particular conditions are not met. The
+// assertionError's when particular conditions are not met. The
 // assert module must conform to the following interface.
 
 var assert = module.exports = ok;
 
-// 2. The AssertionError is defined in assert.
-// new assert.AssertionError({ message: message,
+// 2. The assertionError is defined in assert.
+// new assert.assertionError({ message: message,
 //                             actual: actual,
 //                             expected: expected })
 
@@ -783,8 +783,8 @@ function getName(func) {
   var match = str.match(regex);
   return match && match[1];
 }
-assert.AssertionError = function AssertionError(options) {
-  this.name = 'AssertionError';
+assert.assertionError = function assertionError(options) {
+  this.name = 'assertionError';
   this.actual = options.actual;
   this.expected = options.expected;
   this.operator = options.operator;
@@ -819,8 +819,8 @@ assert.AssertionError = function AssertionError(options) {
   }
 };
 
-// assert.AssertionError instanceof Error
-util.inherits(assert.AssertionError, Error);
+// assert.assertionError instanceof Error
+util.inherits(assert.assertionError, Error);
 
 function truncate(s, n) {
   if (typeof s === 'string') {
@@ -845,17 +845,17 @@ function getMessage(self) {
 
 // At present only the three keys mentioned above are used and
 // understood by the spec. Implementations or sub modules can pass
-// other keys to the AssertionError's constructor - they will be
+// other keys to the assertionError's constructor - they will be
 // ignored.
 
-// 3. All of the following functions must throw an AssertionError
+// 3. All of the following functions must throw an assertionError
 // when a corresponding condition is not met, with a message that
 // may be undefined if not provided.  All assertion methods provide
 // both the actual and expected values to the assertion error for
 // display purposes.
 
 function fail(actual, expected, message, operator, stackStartFunction) {
-  throw new assert.AssertionError({
+  throw new assert.assertionError({
     message: message,
     actual: actual,
     expected: expected,
@@ -2427,10 +2427,10 @@ function checkOffset (offset, ext, length) {
   if (offset + ext > length) throw new RangeError('Trying to access beyond buffer length')
 }
 
-Buffer.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert) {
+Buffer.prototype.readUIntLE = function readUIntLE (offset, byteLength, noassert) {
   offset = offset | 0
   byteLength = byteLength | 0
-  if (!noAssert) checkOffset(offset, byteLength, this.length)
+  if (!noassert) checkOffset(offset, byteLength, this.length)
 
   var val = this[offset]
   var mul = 1
@@ -2442,10 +2442,10 @@ Buffer.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert)
   return val
 }
 
-Buffer.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert) {
+Buffer.prototype.readUIntBE = function readUIntBE (offset, byteLength, noassert) {
   offset = offset | 0
   byteLength = byteLength | 0
-  if (!noAssert) {
+  if (!noassert) {
     checkOffset(offset, byteLength, this.length)
   }
 
@@ -2458,23 +2458,23 @@ Buffer.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert)
   return val
 }
 
-Buffer.prototype.readUInt8 = function readUInt8 (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 1, this.length)
+Buffer.prototype.readUInt8 = function readUInt8 (offset, noassert) {
+  if (!noassert) checkOffset(offset, 1, this.length)
   return this[offset]
 }
 
-Buffer.prototype.readUInt16LE = function readUInt16LE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 2, this.length)
+Buffer.prototype.readUInt16LE = function readUInt16LE (offset, noassert) {
+  if (!noassert) checkOffset(offset, 2, this.length)
   return this[offset] | (this[offset + 1] << 8)
 }
 
-Buffer.prototype.readUInt16BE = function readUInt16BE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 2, this.length)
+Buffer.prototype.readUInt16BE = function readUInt16BE (offset, noassert) {
+  if (!noassert) checkOffset(offset, 2, this.length)
   return (this[offset] << 8) | this[offset + 1]
 }
 
-Buffer.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 4, this.length)
+Buffer.prototype.readUInt32LE = function readUInt32LE (offset, noassert) {
+  if (!noassert) checkOffset(offset, 4, this.length)
 
   return ((this[offset]) |
       (this[offset + 1] << 8) |
@@ -2482,8 +2482,8 @@ Buffer.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
       (this[offset + 3] * 0x1000000)
 }
 
-Buffer.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 4, this.length)
+Buffer.prototype.readUInt32BE = function readUInt32BE (offset, noassert) {
+  if (!noassert) checkOffset(offset, 4, this.length)
 
   return (this[offset] * 0x1000000) +
     ((this[offset + 1] << 16) |
@@ -2491,10 +2491,10 @@ Buffer.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
     this[offset + 3])
 }
 
-Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
+Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noassert) {
   offset = offset | 0
   byteLength = byteLength | 0
-  if (!noAssert) checkOffset(offset, byteLength, this.length)
+  if (!noassert) checkOffset(offset, byteLength, this.length)
 
   var val = this[offset]
   var mul = 1
@@ -2509,10 +2509,10 @@ Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
   return val
 }
 
-Buffer.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
+Buffer.prototype.readIntBE = function readIntBE (offset, byteLength, noassert) {
   offset = offset | 0
   byteLength = byteLength | 0
-  if (!noAssert) checkOffset(offset, byteLength, this.length)
+  if (!noassert) checkOffset(offset, byteLength, this.length)
 
   var i = byteLength
   var mul = 1
@@ -2527,26 +2527,26 @@ Buffer.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
   return val
 }
 
-Buffer.prototype.readInt8 = function readInt8 (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 1, this.length)
+Buffer.prototype.readInt8 = function readInt8 (offset, noassert) {
+  if (!noassert) checkOffset(offset, 1, this.length)
   if (!(this[offset] & 0x80)) return (this[offset])
   return ((0xff - this[offset] + 1) * -1)
 }
 
-Buffer.prototype.readInt16LE = function readInt16LE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 2, this.length)
+Buffer.prototype.readInt16LE = function readInt16LE (offset, noassert) {
+  if (!noassert) checkOffset(offset, 2, this.length)
   var val = this[offset] | (this[offset + 1] << 8)
   return (val & 0x8000) ? val | 0xFFFF0000 : val
 }
 
-Buffer.prototype.readInt16BE = function readInt16BE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 2, this.length)
+Buffer.prototype.readInt16BE = function readInt16BE (offset, noassert) {
+  if (!noassert) checkOffset(offset, 2, this.length)
   var val = this[offset + 1] | (this[offset] << 8)
   return (val & 0x8000) ? val | 0xFFFF0000 : val
 }
 
-Buffer.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 4, this.length)
+Buffer.prototype.readInt32LE = function readInt32LE (offset, noassert) {
+  if (!noassert) checkOffset(offset, 4, this.length)
 
   return (this[offset]) |
     (this[offset + 1] << 8) |
@@ -2554,8 +2554,8 @@ Buffer.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
     (this[offset + 3] << 24)
 }
 
-Buffer.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 4, this.length)
+Buffer.prototype.readInt32BE = function readInt32BE (offset, noassert) {
+  if (!noassert) checkOffset(offset, 4, this.length)
 
   return (this[offset] << 24) |
     (this[offset + 1] << 16) |
@@ -2563,23 +2563,23 @@ Buffer.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
     (this[offset + 3])
 }
 
-Buffer.prototype.readFloatLE = function readFloatLE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 4, this.length)
+Buffer.prototype.readFloatLE = function readFloatLE (offset, noassert) {
+  if (!noassert) checkOffset(offset, 4, this.length)
   return ieee754.read(this, offset, true, 23, 4)
 }
 
-Buffer.prototype.readFloatBE = function readFloatBE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 4, this.length)
+Buffer.prototype.readFloatBE = function readFloatBE (offset, noassert) {
+  if (!noassert) checkOffset(offset, 4, this.length)
   return ieee754.read(this, offset, false, 23, 4)
 }
 
-Buffer.prototype.readDoubleLE = function readDoubleLE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 8, this.length)
+Buffer.prototype.readDoubleLE = function readDoubleLE (offset, noassert) {
+  if (!noassert) checkOffset(offset, 8, this.length)
   return ieee754.read(this, offset, true, 52, 8)
 }
 
-Buffer.prototype.readDoubleBE = function readDoubleBE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 8, this.length)
+Buffer.prototype.readDoubleBE = function readDoubleBE (offset, noassert) {
+  if (!noassert) checkOffset(offset, 8, this.length)
   return ieee754.read(this, offset, false, 52, 8)
 }
 
@@ -2589,11 +2589,11 @@ function checkInt (buf, value, offset, ext, max, min) {
   if (offset + ext > buf.length) throw new RangeError('Index out of range')
 }
 
-Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, noAssert) {
+Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, noassert) {
   value = +value
   offset = offset | 0
   byteLength = byteLength | 0
-  if (!noAssert) {
+  if (!noassert) {
     var maxBytes = Math.pow(2, 8 * byteLength) - 1
     checkInt(this, value, offset, byteLength, maxBytes, 0)
   }
@@ -2608,11 +2608,11 @@ Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, 
   return offset + byteLength
 }
 
-Buffer.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, noAssert) {
+Buffer.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, noassert) {
   value = +value
   offset = offset | 0
   byteLength = byteLength | 0
-  if (!noAssert) {
+  if (!noassert) {
     var maxBytes = Math.pow(2, 8 * byteLength) - 1
     checkInt(this, value, offset, byteLength, maxBytes, 0)
   }
@@ -2627,10 +2627,10 @@ Buffer.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, 
   return offset + byteLength
 }
 
-Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
+Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noassert) {
   value = +value
   offset = offset | 0
-  if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0)
+  if (!noassert) checkInt(this, value, offset, 1, 0xff, 0)
   if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
   this[offset] = (value & 0xff)
   return offset + 1
@@ -2644,10 +2644,10 @@ function objectWriteUInt16 (buf, value, offset, littleEndian) {
   }
 }
 
-Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert) {
+Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noassert) {
   value = +value
   offset = offset | 0
-  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
+  if (!noassert) checkInt(this, value, offset, 2, 0xffff, 0)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value & 0xff)
     this[offset + 1] = (value >>> 8)
@@ -2657,10 +2657,10 @@ Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert
   return offset + 2
 }
 
-Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert) {
+Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noassert) {
   value = +value
   offset = offset | 0
-  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
+  if (!noassert) checkInt(this, value, offset, 2, 0xffff, 0)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 8)
     this[offset + 1] = (value & 0xff)
@@ -2677,10 +2677,10 @@ function objectWriteUInt32 (buf, value, offset, littleEndian) {
   }
 }
 
-Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert) {
+Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noassert) {
   value = +value
   offset = offset | 0
-  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0)
+  if (!noassert) checkInt(this, value, offset, 4, 0xffffffff, 0)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset + 3] = (value >>> 24)
     this[offset + 2] = (value >>> 16)
@@ -2692,10 +2692,10 @@ Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert
   return offset + 4
 }
 
-Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert) {
+Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noassert) {
   value = +value
   offset = offset | 0
-  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0)
+  if (!noassert) checkInt(this, value, offset, 4, 0xffffffff, 0)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 24)
     this[offset + 1] = (value >>> 16)
@@ -2707,10 +2707,10 @@ Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert
   return offset + 4
 }
 
-Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, noAssert) {
+Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, noassert) {
   value = +value
   offset = offset | 0
-  if (!noAssert) {
+  if (!noassert) {
     var limit = Math.pow(2, 8 * byteLength - 1)
 
     checkInt(this, value, offset, byteLength, limit - 1, -limit)
@@ -2730,10 +2730,10 @@ Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, no
   return offset + byteLength
 }
 
-Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, noAssert) {
+Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, noassert) {
   value = +value
   offset = offset | 0
-  if (!noAssert) {
+  if (!noassert) {
     var limit = Math.pow(2, 8 * byteLength - 1)
 
     checkInt(this, value, offset, byteLength, limit - 1, -limit)
@@ -2753,20 +2753,20 @@ Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, no
   return offset + byteLength
 }
 
-Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
+Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noassert) {
   value = +value
   offset = offset | 0
-  if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80)
+  if (!noassert) checkInt(this, value, offset, 1, 0x7f, -0x80)
   if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
   if (value < 0) value = 0xff + value + 1
   this[offset] = (value & 0xff)
   return offset + 1
 }
 
-Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) {
+Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noassert) {
   value = +value
   offset = offset | 0
-  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
+  if (!noassert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value & 0xff)
     this[offset + 1] = (value >>> 8)
@@ -2776,10 +2776,10 @@ Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) 
   return offset + 2
 }
 
-Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) {
+Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noassert) {
   value = +value
   offset = offset | 0
-  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
+  if (!noassert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 8)
     this[offset + 1] = (value & 0xff)
@@ -2789,10 +2789,10 @@ Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) 
   return offset + 2
 }
 
-Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) {
+Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noassert) {
   value = +value
   offset = offset | 0
-  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
+  if (!noassert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value & 0xff)
     this[offset + 1] = (value >>> 8)
@@ -2804,10 +2804,10 @@ Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) 
   return offset + 4
 }
 
-Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) {
+Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noassert) {
   value = +value
   offset = offset | 0
-  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
+  if (!noassert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
   if (value < 0) value = 0xffffffff + value + 1
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 24)
@@ -2825,36 +2825,36 @@ function checkIEEE754 (buf, value, offset, ext, max, min) {
   if (offset < 0) throw new RangeError('Index out of range')
 }
 
-function writeFloat (buf, value, offset, littleEndian, noAssert) {
-  if (!noAssert) {
+function writeFloat (buf, value, offset, littleEndian, noassert) {
+  if (!noassert) {
     checkIEEE754(buf, value, offset, 4, 3.4028234663852886e+38, -3.4028234663852886e+38)
   }
   ieee754.write(buf, value, offset, littleEndian, 23, 4)
   return offset + 4
 }
 
-Buffer.prototype.writeFloatLE = function writeFloatLE (value, offset, noAssert) {
-  return writeFloat(this, value, offset, true, noAssert)
+Buffer.prototype.writeFloatLE = function writeFloatLE (value, offset, noassert) {
+  return writeFloat(this, value, offset, true, noassert)
 }
 
-Buffer.prototype.writeFloatBE = function writeFloatBE (value, offset, noAssert) {
-  return writeFloat(this, value, offset, false, noAssert)
+Buffer.prototype.writeFloatBE = function writeFloatBE (value, offset, noassert) {
+  return writeFloat(this, value, offset, false, noassert)
 }
 
-function writeDouble (buf, value, offset, littleEndian, noAssert) {
-  if (!noAssert) {
+function writeDouble (buf, value, offset, littleEndian, noassert) {
+  if (!noassert) {
     checkIEEE754(buf, value, offset, 8, 1.7976931348623157E+308, -1.7976931348623157E+308)
   }
   ieee754.write(buf, value, offset, littleEndian, 52, 8)
   return offset + 8
 }
 
-Buffer.prototype.writeDoubleLE = function writeDoubleLE (value, offset, noAssert) {
-  return writeDouble(this, value, offset, true, noAssert)
+Buffer.prototype.writeDoubleLE = function writeDoubleLE (value, offset, noassert) {
+  return writeDouble(this, value, offset, true, noassert)
 }
 
-Buffer.prototype.writeDoubleBE = function writeDoubleBE (value, offset, noAssert) {
-  return writeDouble(this, value, offset, false, noAssert)
+Buffer.prototype.writeDoubleBE = function writeDoubleBE (value, offset, noassert) {
+  return writeDouble(this, value, offset, false, noassert)
 }
 
 // copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)

@@ -1,11 +1,11 @@
-import { Assert } from 'causal-net.utils';
+import { assert } from 'causal-net.utils';
 import { Tensor } from 'causal-net.core';
 /**
  * This LayerMixins class provide mixin for building pipeline
- * mixWith:
- *  [ DenseMixins ]
  * @class CausalNetLayer
- * @extends BaseTensor
+ * @extends BasePipelineClass
+ * @example
+ * 
  */
 const LayerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     get Layer(){
@@ -15,7 +15,7 @@ const LayerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         this.layer;
     }
     set Layer(layer){
-        Assert.beInstanceOf(layer, Tensor);
+        assert.beInstanceOf(layer, Tensor);
         this.layer = layer;
     }
 };

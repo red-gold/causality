@@ -1,6 +1,6 @@
-import {default as Assert} from '../src/assert';
-/** @test {Assert} */
+import {default as assert} from '../src/assert';
+/** @test {assert} */
 test('assert should be define', async ()=>{
-    /** @test {Assert#instance} */
-    expect(Assert).toBeDefined();
+    /** @test {assert#instance} */
+    expect(assert).toBeDefined();
 })

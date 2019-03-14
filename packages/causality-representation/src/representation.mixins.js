@@ -1,5 +1,5 @@
 import { Tensor } from 'causal-net.core'; 
-import { Assert } from 'causal-net.utils';
+import { assert } from 'causal-net.utils';
 /**
  * This RepresentationMixins provide mixins for composing pipeline with representation transform for text
  * @class RepresentationMixins
@@ -22,7 +22,7 @@ const RepresentationMixins = (BasePipelineClass)=> class extends BasePipelineCla
     }
     
     set Representation(representation){
-        Assert.beInstanceOf(representation, Tensor);
+        assert.beInstanceOf(representation, Tensor);
         this.representation = representation;
     }
     /**
@@ -48,7 +48,7 @@ const RepresentationMixins = (BasePipelineClass)=> class extends BasePipelineCla
      */
     setRepresentationByConfig(netConfig){
         let { EmbeddingConfig, Embedding } = netConfig.Representation;
-        Assert.beInstanceOf(EmbeddingConfig, String);
+        assert.beInstanceOf(EmbeddingConfig, String);
         this.Representation = Embedding;
         this.embeddingConfig = EmbeddingConfig;
     }

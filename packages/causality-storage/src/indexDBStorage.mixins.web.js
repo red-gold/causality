@@ -15,7 +15,7 @@ const LevelJSMixins = (StorageClass)=> class extends StorageClass{
      */
     connect(storageName){
         var leveljs = require('level-js');
-        this.storage = this.levelup(leveljs(storageName));
+        this.store = this.levelup(leveljs(storageName));
     }
 };
 export default LevelJSMixins;

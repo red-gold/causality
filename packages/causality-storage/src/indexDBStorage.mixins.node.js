@@ -15,7 +15,7 @@ const LevelDownMixins = (StorageClass)=> class extends StorageClass{
      */
     connect(storageName){
         var leveldown = require('leveldown');
-        this.storage = this.levelup(leveldown(storageName));
+        this.store = this.levelup(leveldown(storageName));
     }
 };
 export default LevelDownMixins;

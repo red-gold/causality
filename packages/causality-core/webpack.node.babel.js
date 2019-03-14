@@ -11,6 +11,6 @@ const NodeConfig = merge(common, {
       library: Bundle.main,
       globalObject: 'this'
     },
-    externals:['@tensorflow/tfjs-node','@tensorflow/tfjs-node-gpu', 'ramda','@tensorflow/tfjs']
+    externals:['@tensorflow/tfjs-node','@tensorflow/tfjs-node-gpu', 'ramda','levelup','@tensorflow/tfjs']
 });
 export default NodeConfig;

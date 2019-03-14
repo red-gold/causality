@@ -19,4 +19,5 @@ class CausalNetCore{
     get CoreTensor(){
         return this.T.CoreTensor; 
     }
-};
+}
+export default new CausalNetCore();

@@ -1,9 +1,9 @@
-import {default as Platform} from '../src/platform';
+import {default as platform} from '../src/platform';
 /** @test {Platform} */
 test('platform must return', ()=>{
-    let platform = Platform.currentPlatform();
+    let machine = platform.currentPlatform();
     /** @test {Platform#instance} */
-    expect(platform).toBeDefined();
+    expect(machine).toBeDefined();
 });
 test('platform mix should works', ()=>{
     class A{
@@ -18,7 +18,7 @@ test('platform mix should works', ()=>{
             return 'say A with mixins';
         }
     }
-    class AExtends extends Platform.mixWith(A, [AMixins]){}
+    class AExtends extends platform.mixWith(A, [AMixins]){}
     const a = new AExtends();
     /** @test {Platform#mixWith} */
     expect(a.sayAExtend()).toEqual('say A with mixins');

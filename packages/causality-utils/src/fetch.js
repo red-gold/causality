@@ -1,22 +1,22 @@
 import fetch from 'cross-fetch';
-import { default as Platform } from './platform';
+import { default as platform } from './platform';
 import { default as NodeStreamMixins } from './fetchStreamMixins.node';
 import { default as WebStreamMixins } from './fetchStreamMixins.web';
 
-class BaseFetch{
+class Basefetch{
     constructor(){
         this.fetch = fetch;
     }
 }
 
 /**
- * This isomorphic Fetch class is mixed with:
+ * This isomorphic fetch class is mixed with:
  * - NodeStreamMixins  
  * - WebStreamMixins
- * @class Fetch
- * @extends BaseFetch
+ * @class fetch
+ * @extends Basefetch
  */
-class Fetch extends Platform.mixWith(BaseFetch, {'node': [NodeStreamMixins], 'web':[WebStreamMixins]}){
+class Fetch extends platform.mixWith(Basefetch, {'node': [NodeStreamMixins], 'web':[WebStreamMixins]}){
     constructor(){
         super();
     }

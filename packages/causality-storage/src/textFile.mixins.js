@@ -1,8 +1,7 @@
-import { Fetch } from 'causal-net.utils';
+import { fetch } from 'causal-net.utils';
 const TextFileMixins = (StorageClass)=> class extends StorageClass{
     
     /**
-     * @async
      * @param  {} filePath
      */
     async readFile(filePath){
@@ -22,12 +21,8 @@ const TextFileMixins = (StorageClass)=> class extends StorageClass{
     }
 
     async fetchFile(url, filePath){
-        let response = await Fetch.fetchData(url);
+        let response = await fetch.fetchData(url);
         return await this.writeFile(filePath, response);
-    }
-
-    async streamFile(url, filePath, transformer=null){
-        throw Error('implement required');
     }
 };
 export default TextFileMixins;

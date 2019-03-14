@@ -1,6 +1,6 @@
-import { JSONUtils } from 'causal-net.utils';
+import { jsonUtils } from 'causal-net.utils';
 (async ()=>{
-    let data = await JSONUtils.readJSON('./test.json');
+    let data = await jsonUtils.readJSON('./test.json');
     console.log(data);
-    JSONUtils.writeJSON(data, './out.json');
+    jsonUtils.writeJSON(data, './out.json');
 })();

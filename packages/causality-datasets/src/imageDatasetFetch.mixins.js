@@ -1,6 +1,6 @@
 
 import { Sampling } from 'causal-net.utils';
-const ImageDatasetFetchMixins = (BaseImageClass)=> class extends BaseImageClass{ 
+const ImageDatasetfetchMixins = (BaseImageClass)=> class extends BaseImageClass{ 
     async fetchLabelChunk(saveDir, labelChunk){
         let labelChunkUrl = this.configuration.datasetUrl + labelChunk;
         let labelSavePath = saveDir + labelChunk;
@@ -31,4 +31,4 @@ const ImageDatasetFetchMixins = (BaseImageClass)=> class extends BaseImageClass{
         return this.F.unzip(this.savedChunks);
     }
 };
-export default ImageDatasetFetchMixins;
+export default ImageDatasetfetchMixins;

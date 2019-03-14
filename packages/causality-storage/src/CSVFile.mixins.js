@@ -1,4 +1,4 @@
-import { CSVUtils } from 'causal-net.utils';
+import { csvUtils } from 'causal-net.utils';
 /** 
  * This CSVFileMixins class provide mixins for handle read/write/fetch csv content
  * @class CSVFileMixins
@@ -23,13 +23,13 @@ const CSVFileMixins = (StorageClass)=> class extends StorageClass{
     }
 
     /**
-     * Fetch CSV file, transform to get raw pixel data and save to file at the filePath
+     * fetch CSV file, transform to get raw pixel data and save to file at the filePath
      * @param { Url } url - url for png file
      * @param { String } filePath - file name to save content
      * @returns { Promise } Array content promiser 
      */
     async fetchCSVFile(url, filePath){
-        let data = await CSVUtils.fetchCSV(url);
+        let data = await csvUtils.fetchCSV(url);
         return await this.writePNGFile(filePath, data);
     }
 };

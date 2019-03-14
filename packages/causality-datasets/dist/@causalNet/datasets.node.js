@@ -900,12 +900,12 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_causal_net_utils__;
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
   if (true) {
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, __webpack_require__(/*! ./baseImgDataset */ "./src/baseImgDataset.js"), __webpack_require__(/*! causal-net.utils */ "causal-net.utils"), __webpack_require__(/*! causal-net.log */ "../causality-log/dist/@causalNet/log.web.js"), __webpack_require__(/*! causal-net.storage */ "causal-net.storage"), __webpack_require__(/*! causal-net.memcache */ "causal-net.memcache"), __webpack_require__(/*! ./function */ "./src/function.js"), __webpack_require__(/*! ./imageDatasetFetch.mixins */ "./src/imageDatasetFetch.mixins.js"), __webpack_require__(/*! ./imageDatasetPreprocessing.mixins */ "./src/imageDatasetPreprocessing.mixins.js"), __webpack_require__(/*! ./imageDatasetGenerator.mixins */ "./src/imageDatasetGenerator.mixins.js"), __webpack_require__(/*! causal-net.preprocessing */ "causal-net.preprocessing")], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, __webpack_require__(/*! ./baseImgDataset */ "./src/baseImgDataset.js"), __webpack_require__(/*! causal-net.utils */ "causal-net.utils"), __webpack_require__(/*! causal-net.log */ "../causality-log/dist/@causalNet/log.web.js"), __webpack_require__(/*! causal-net.storage */ "causal-net.storage"), __webpack_require__(/*! causal-net.memcache */ "causal-net.memcache"), __webpack_require__(/*! ./function */ "./src/function.js"), __webpack_require__(/*! ./imageDatasetfetch.mixins */ "./src/imageDatasetfetch.mixins.js"), __webpack_require__(/*! ./imageDatasetPreprocessing.mixins */ "./src/imageDatasetPreprocessing.mixins.js"), __webpack_require__(/*! ./imageDatasetGenerator.mixins */ "./src/imageDatasetGenerator.mixins.js"), __webpack_require__(/*! causal-net.preprocessing */ "causal-net.preprocessing")], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
   } else { var mod; }
-})(this, function (_exports, _baseImgDataset, _causalNet, _causalNet2, _causalNet3, _causalNet4, _function, _imageDatasetFetch, _imageDatasetPreprocessing, _imageDatasetGenerator, _causalNet5) {
+})(this, function (_exports, _baseImgDataset, _causalNet, _causalNet2, _causalNet3, _causalNet4, _function, _imageDatasetfetch, _imageDatasetPreprocessing, _imageDatasetGenerator, _causalNet5) {
   "use strict";
 
   var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
@@ -916,11 +916,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   _exports.default = void 0;
   _baseImgDataset = _interopRequireDefault(_baseImgDataset);
   _function = _interopRequireDefault(_function);
-  _imageDatasetFetch = _interopRequireDefault(_imageDatasetFetch);
+  _imageDatasetfetch = _interopRequireDefault(_imageDatasetfetch);
   _imageDatasetPreprocessing = _interopRequireDefault(_imageDatasetPreprocessing);
   _imageDatasetGenerator = _interopRequireDefault(_imageDatasetGenerator);
 
-  class MnistDataset extends _causalNet.Platform.mixWith(_baseImgDataset.default, [_imageDatasetFetch.default, _imageDatasetPreprocessing.default, _causalNet5.PreprocessingMixins, _imageDatasetGenerator.default, _causalNet4.MemCacheMixins, _causalNet3.StorageMixins, _causalNet2.LoggerMixins]) {
+  class MnistDataset extends _causalNet.Platform.mixWith(_baseImgDataset.default, [_imageDatasetfetch.default, _imageDatasetPreprocessing.default, _causalNet5.PreprocessingMixins, _imageDatasetGenerator.default, _causalNet4.MemCacheMixins, _causalNet3.StorageMixins, _causalNet2.LoggerMixins]) {
     constructor(...args) {
       super(...args);
       this.F = new _function.default();
@@ -1076,9 +1076,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 /***/ }),
 
-/***/ "./src/imageDatasetFetch.mixins.js":
+/***/ "./src/imageDatasetfetch.mixins.js":
 /*!*****************************************!*\
-  !*** ./src/imageDatasetFetch.mixins.js ***!
+  !*** ./src/imageDatasetfetch.mixins.js ***!
   \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -1098,7 +1098,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   });
   _exports.default = void 0;
 
-  const ImageDatasetFetchMixins = BaseImageClass => class extends BaseImageClass {
+  const ImageDatasetfetchMixins = BaseImageClass => class extends BaseImageClass {
     async fetchLabelChunk(saveDir, labelChunk) {
       let labelChunkUrl = this.configuration.datasetUrl + labelChunk;
       let labelSavePath = saveDir + labelChunk;
@@ -1140,7 +1140,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
   };
 
-  var _default = ImageDatasetFetchMixins;
+  var _default = ImageDatasetfetchMixins;
   _exports.default = _default;
 });
 

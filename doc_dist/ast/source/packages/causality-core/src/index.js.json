@@ -283,10 +283,10 @@
             }
           },
           "extra": {
-            "rawValue": "./CausalNetCore",
-            "raw": "'./CausalNetCore'"
+            "rawValue": "./causalNetCore",
+            "raw": "'./causalNetCore'"
           },
-          "value": "./CausalNetCore"
+          "value": "./causalNetCore"
         }
       }
     ],
@@ -965,7 +965,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./CausalNetCore",
+      "value": "./causalNetCore",
       "start": 137,
       "end": 154,
       "loc": {

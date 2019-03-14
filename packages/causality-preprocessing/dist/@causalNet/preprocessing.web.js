@@ -465,8 +465,8 @@ const PreprocessingMixins = BasePipelineClass => class extends BasePipelineClass
   }
 
   setPreprocessingFunctions(preprocessingSampleFn, preprocessingLabelFn) {
-    causal_net_utils__WEBPACK_IMPORTED_MODULE_0__["Assert"].beInstanceOf(preprocessingSampleFn, Function);
-    causal_net_utils__WEBPACK_IMPORTED_MODULE_0__["Assert"].beInstanceOf(preprocessingLabelFn, Function);
+    causal_net_utils__WEBPACK_IMPORTED_MODULE_0__["assert"].beInstanceOf(preprocessingSampleFn, Function);
+    causal_net_utils__WEBPACK_IMPORTED_MODULE_0__["assert"].beInstanceOf(preprocessingLabelFn, Function);
     this.PreprocessingSampleFn = preprocessingSampleFn;
     this.PreprocessingLabelFn = preprocessingLabelFn;
   }

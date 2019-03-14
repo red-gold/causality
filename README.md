@@ -1,8 +1,8 @@
-***This project is immature and under active development, besides the core ideas, other specs, contents will be updated rapidly***
+***This project is immature and under active development. Contents will be updated rapidly***
 
-# Portable Deep learning model with Causality
+# Portable deep learning models with Causality
 
-Causality is a free and open source javascript library that allows building isomorphic machine learning pipeline. Your trained model can be deployed on client's devices via web environment without re-piping your code. 
+Causality is a free and open source javascript library that allows building isomorphic machine learning pipeline. Roundly speaking, your trained model can be deployed on client's devices via web environment without re-piping your code. 
 
 On top of Tensorflowjs, our set of reusable components handle data preprocessing, infer data representation, visualizing, training and evaluation on both node and web environment with the same APIs. Thus reduce engineering efforts for making production AI services. By using the same language, developers can simplify development setup, mitigate the communication cost, better coding pattern and share more ideas. 
 
