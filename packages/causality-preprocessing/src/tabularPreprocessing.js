@@ -1,7 +1,7 @@
 import { Function as BaseFunction } from 'causal-net.core';
-import { Platform } from 'causal-net.utils';
+import { platform } from 'causal-net.utils';
 import { ItemNormalizing, NullItemReplace } from './Tabular/index';
-class TabularPreprocessing extends Platform.mixWith(BaseFunction, 
+class TabularPreprocessing extends platform.mixWith(BaseFunction, 
     []){
     constructor(){
         super();

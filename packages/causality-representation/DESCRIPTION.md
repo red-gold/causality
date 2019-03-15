@@ -11,7 +11,7 @@ Node
 ### universalEmbedding
 - Provide methods for transforming tokens or representing sentence into single vector based [use](https://github.com/tensorflow/tfjs-models/tree/master/universal-sentence-encoder)
 
-[EXAMPLE ./examples/universalembedding.babel.js]
+[EXAMPLE ./examples/universalEmbedding.babel.js]
 
 ### RepresentationMixins
 - Mixins for mix with Pipeline class or dataset class.

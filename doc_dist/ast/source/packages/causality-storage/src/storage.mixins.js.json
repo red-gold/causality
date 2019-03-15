@@ -46,7 +46,7 @@
           {
             "type": "ImportSpecifier",
             "start": 9,
-            "end": 31,
+            "end": 29,
             "loc": {
               "start": {
                 "line": 1,
@@ -54,13 +54,13 @@
               },
               "end": {
                 "line": 1,
-                "column": 31
+                "column": 29
               }
             },
             "imported": {
               "type": "Identifier",
               "start": 9,
-              "end": 16,
+              "end": 14,
               "loc": {
                 "start": {
                   "line": 1,
@@ -68,24 +68,24 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 16
+                  "column": 14
                 },
-                "identifierName": "default"
+                "identifierName": "Store"
               },
-              "name": "default"
+              "name": "Store"
             },
             "local": {
               "type": "Identifier",
-              "start": 20,
-              "end": 31,
+              "start": 18,
+              "end": 29,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 20
+                  "column": 18
                 },
                 "end": {
                   "line": 1,
-                  "column": 31
+                  "column": 29
                 },
                 "identifierName": "BaseStorage"
               },
@@ -95,12 +95,12 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 39,
+          "start": 37,
           "end": 54,
           "loc": {
             "start": {
               "line": 1,
-              "column": 39
+              "column": 37
             },
             "end": {
               "line": 1,
@@ -108,10 +108,10 @@
             }
           },
           "extra": {
-            "rawValue": "./baseStorage",
-            "raw": "'./baseStorage'"
+            "rawValue": "causal-net.core",
+            "raw": "'causal-net.core'"
           },
-          "value": "./baseStorage"
+          "value": "causal-net.core"
         }
       },
       {
@@ -202,7 +202,7 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n * This indexDBStorage class is the default consistent storage based on \n * [leveldown](https://www.npmjs.com/package/leveldown) storage \n * with support file extends: png, csv, text by those corresponding mixins.\n * mixWith:\n *  - 'node': [LevelDownMixins, TextFileMixins, PNGFileMixins, CSVFileMixins],\n *  - 'web': [LevelJSMixins, TextFileMixins, PNGFileMixins, CSVFileMixins]\n * @class IndexDBStorage\n * @extends {  BaseStorage } \n * @example\n * import { StorageMixins, indexDBStorage } from 'causal-net.storage';\n * import { Platform } from 'causal-net.utils';\n * import { Tensor, Store } from 'causal-net.core';\n * \n * class SimplePipeline extends Platform.mixWith(Tensor, [StorageMixins]){\n *     constructor(){\n *         super();\n *         this.Storage = indexDBStorage;\n *     }\n * }\n * let pipeline = new SimplePipeline();\n * console.log(pipeline.Storage instanceof Store);\n ",
+            "value": "*\n * This indexDBStorage class is the default consistent storage based on \n * [leveldown](https://www.npmjs.com/package/leveldown) storage \n * with support file extends: png, csv, text by those corresponding mixins.\n * mixWith:\n *  - 'node': [LevelDownMixins, TextFileMixins, PNGFileMixins, CSVFileMixins],\n *  - 'web': [LevelJSMixins, TextFileMixins, PNGFileMixins, CSVFileMixins]\n * @class IndexDBStorage\n * @extends {  BaseStorage } \n * @example\n * import { StorageMixins, indexDBStorage } from 'causal-net.storage';\n * import { platform } from 'causal-net.utils';\n * import { Tensor, Store } from 'causal-net.core';\n * \n * class SimplePipeline extends platform.mixWith(Tensor, [StorageMixins]){\n *     constructor(){\n *         super();\n *         this.Storage = indexDBStorage;\n *     }\n * }\n * let pipeline = new SimplePipeline();\n * console.log(pipeline.Storage instanceof Store);\n ",
             "start": 99,
             "end": 992,
             "loc": {
@@ -2331,7 +2331,7 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\n * This indexDBStorage class is the default consistent storage based on \n * [leveldown](https://www.npmjs.com/package/leveldown) storage \n * with support file extends: png, csv, text by those corresponding mixins.\n * mixWith:\n *  - 'node': [LevelDownMixins, TextFileMixins, PNGFileMixins, CSVFileMixins],\n *  - 'web': [LevelJSMixins, TextFileMixins, PNGFileMixins, CSVFileMixins]\n * @class IndexDBStorage\n * @extends {  BaseStorage } \n * @example\n * import { StorageMixins, indexDBStorage } from 'causal-net.storage';\n * import { Platform } from 'causal-net.utils';\n * import { Tensor, Store } from 'causal-net.core';\n * \n * class SimplePipeline extends Platform.mixWith(Tensor, [StorageMixins]){\n *     constructor(){\n *         super();\n *         this.Storage = indexDBStorage;\n *     }\n * }\n * let pipeline = new SimplePipeline();\n * console.log(pipeline.Storage instanceof Store);\n ",
+              "value": "*\n * This indexDBStorage class is the default consistent storage based on \n * [leveldown](https://www.npmjs.com/package/leveldown) storage \n * with support file extends: png, csv, text by those corresponding mixins.\n * mixWith:\n *  - 'node': [LevelDownMixins, TextFileMixins, PNGFileMixins, CSVFileMixins],\n *  - 'web': [LevelJSMixins, TextFileMixins, PNGFileMixins, CSVFileMixins]\n * @class IndexDBStorage\n * @extends {  BaseStorage } \n * @example\n * import { StorageMixins, indexDBStorage } from 'causal-net.storage';\n * import { platform } from 'causal-net.utils';\n * import { Tensor, Store } from 'causal-net.core';\n * \n * class SimplePipeline extends platform.mixWith(Tensor, [StorageMixins]){\n *     constructor(){\n *         super();\n *         this.Storage = indexDBStorage;\n *     }\n * }\n * let pipeline = new SimplePipeline();\n * console.log(pipeline.Storage instanceof Store);\n ",
               "start": 99,
               "end": 992,
               "loc": {
@@ -2357,7 +2357,7 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\n * This indexDBStorage class is the default consistent storage based on \n * [leveldown](https://www.npmjs.com/package/leveldown) storage \n * with support file extends: png, csv, text by those corresponding mixins.\n * mixWith:\n *  - 'node': [LevelDownMixins, TextFileMixins, PNGFileMixins, CSVFileMixins],\n *  - 'web': [LevelJSMixins, TextFileMixins, PNGFileMixins, CSVFileMixins]\n * @class IndexDBStorage\n * @extends {  BaseStorage } \n * @example\n * import { StorageMixins, indexDBStorage } from 'causal-net.storage';\n * import { Platform } from 'causal-net.utils';\n * import { Tensor, Store } from 'causal-net.core';\n * \n * class SimplePipeline extends Platform.mixWith(Tensor, [StorageMixins]){\n *     constructor(){\n *         super();\n *         this.Storage = indexDBStorage;\n *     }\n * }\n * let pipeline = new SimplePipeline();\n * console.log(pipeline.Storage instanceof Store);\n ",
+      "value": "*\n * This indexDBStorage class is the default consistent storage based on \n * [leveldown](https://www.npmjs.com/package/leveldown) storage \n * with support file extends: png, csv, text by those corresponding mixins.\n * mixWith:\n *  - 'node': [LevelDownMixins, TextFileMixins, PNGFileMixins, CSVFileMixins],\n *  - 'web': [LevelJSMixins, TextFileMixins, PNGFileMixins, CSVFileMixins]\n * @class IndexDBStorage\n * @extends {  BaseStorage } \n * @example\n * import { StorageMixins, indexDBStorage } from 'causal-net.storage';\n * import { platform } from 'causal-net.utils';\n * import { Tensor, Store } from 'causal-net.core';\n * \n * class SimplePipeline extends platform.mixWith(Tensor, [StorageMixins]){\n *     constructor(){\n *         super();\n *         this.Storage = indexDBStorage;\n *     }\n * }\n * let pipeline = new SimplePipeline();\n * console.log(pipeline.Storage instanceof Store);\n ",
       "start": 99,
       "end": 992,
       "loc": {
@@ -2476,21 +2476,19 @@
     },
     {
       "type": {
-        "label": "default",
-        "keyword": "default",
-        "beforeExpr": true,
-        "startsExpr": false,
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
         "rightAssociative": false,
         "isLoop": false,
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "default",
+      "value": "Store",
       "start": 9,
-      "end": 16,
+      "end": 14,
       "loc": {
         "start": {
           "line": 1,
@@ -2498,7 +2496,7 @@
         },
         "end": {
           "line": 1,
-          "column": 16
+          "column": 14
         }
       }
     },
@@ -2515,16 +2513,16 @@
         "binop": null
       },
       "value": "as",
-      "start": 17,
-      "end": 19,
+      "start": 15,
+      "end": 17,
       "loc": {
         "start": {
           "line": 1,
-          "column": 17
+          "column": 15
         },
         "end": {
           "line": 1,
-          "column": 19
+          "column": 17
         }
       }
     },
@@ -2541,16 +2539,16 @@
         "binop": null
       },
       "value": "BaseStorage",
-      "start": 20,
-      "end": 31,
+      "start": 18,
+      "end": 29,
       "loc": {
         "start": {
           "line": 1,
-          "column": 20
+          "column": 18
         },
         "end": {
           "line": 1,
-          "column": 31
+          "column": 29
         }
       }
     },
@@ -2566,16 +2564,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 32,
-      "end": 33,
+      "start": 30,
+      "end": 31,
       "loc": {
         "start": {
           "line": 1,
-          "column": 32
+          "column": 30
         },
         "end": {
           "line": 1,
-          "column": 33
+          "column": 31
         }
       }
     },
@@ -2592,16 +2590,16 @@
         "binop": null
       },
       "value": "from",
-      "start": 34,
-      "end": 38,
+      "start": 32,
+      "end": 36,
       "loc": {
         "start": {
           "line": 1,
-          "column": 34
+          "column": 32
         },
         "end": {
           "line": 1,
-          "column": 38
+          "column": 36
         }
       }
     },
@@ -2618,13 +2616,13 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./baseStorage",
-      "start": 39,
+      "value": "causal-net.core",
+      "start": 37,
       "end": 54,
       "loc": {
         "start": {
           "line": 1,
-          "column": 39
+          "column": 37
         },
         "end": {
           "line": 1,
@@ -2843,7 +2841,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n * This indexDBStorage class is the default consistent storage based on \n * [leveldown](https://www.npmjs.com/package/leveldown) storage \n * with support file extends: png, csv, text by those corresponding mixins.\n * mixWith:\n *  - 'node': [LevelDownMixins, TextFileMixins, PNGFileMixins, CSVFileMixins],\n *  - 'web': [LevelJSMixins, TextFileMixins, PNGFileMixins, CSVFileMixins]\n * @class IndexDBStorage\n * @extends {  BaseStorage } \n * @example\n * import { StorageMixins, indexDBStorage } from 'causal-net.storage';\n * import { Platform } from 'causal-net.utils';\n * import { Tensor, Store } from 'causal-net.core';\n * \n * class SimplePipeline extends Platform.mixWith(Tensor, [StorageMixins]){\n *     constructor(){\n *         super();\n *         this.Storage = indexDBStorage;\n *     }\n * }\n * let pipeline = new SimplePipeline();\n * console.log(pipeline.Storage instanceof Store);\n ",
+      "value": "*\n * This indexDBStorage class is the default consistent storage based on \n * [leveldown](https://www.npmjs.com/package/leveldown) storage \n * with support file extends: png, csv, text by those corresponding mixins.\n * mixWith:\n *  - 'node': [LevelDownMixins, TextFileMixins, PNGFileMixins, CSVFileMixins],\n *  - 'web': [LevelJSMixins, TextFileMixins, PNGFileMixins, CSVFileMixins]\n * @class IndexDBStorage\n * @extends {  BaseStorage } \n * @example\n * import { StorageMixins, indexDBStorage } from 'causal-net.storage';\n * import { platform } from 'causal-net.utils';\n * import { Tensor, Store } from 'causal-net.core';\n * \n * class SimplePipeline extends platform.mixWith(Tensor, [StorageMixins]){\n *     constructor(){\n *         super();\n *         this.Storage = indexDBStorage;\n *     }\n * }\n * let pipeline = new SimplePipeline();\n * console.log(pipeline.Storage instanceof Store);\n ",
       "start": 99,
       "end": 992,
       "loc": {

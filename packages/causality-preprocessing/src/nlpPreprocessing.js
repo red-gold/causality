@@ -1,5 +1,5 @@
 import { Function as BaseFunction } from 'causal-net.core';
-import { Platform } from 'causal-net.utils';
+import { platform } from 'causal-net.utils';
 import { TokenTransformingMixins } from './NLP/index';
 /**
  * This NLPPreprocessing class provide methods for preprocessing text and output valid tokens.
@@ -11,7 +11,7 @@ import { TokenTransformingMixins } from './NLP/index';
  * [!EXAMPLE ../examples/nlpPreprocessing.babel.node.js]
  */
 
-class NLPPreprocessing extends Platform.mixWith(BaseFunction, 
+class NLPPreprocessing extends platform.mixWith(BaseFunction, 
     [ TokenTransformingMixins ]){
     constructor(){
         super();

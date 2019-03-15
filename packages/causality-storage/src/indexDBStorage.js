@@ -22,7 +22,10 @@ class IndexDBStorage extends platform.mixWith( BaseStorage,
                        { 'node': [LevelDownMixins, TextFileMixins, PNGFileMixins, CSVFileMixins],
                           'web': [LevelJSMixins, TextFileMixins, PNGFileMixins, CSVFileMixins] } ){
     
-
+    correctName(filePath){
+        filePath = '/' +filePath;
+        return filePath.replace(/\/{1,}/g, '/');
+    }
     /**
      * Batch operation with Array of ops
      * @param { String } key
@@ -55,6 +58,7 @@ class IndexDBStorage extends platform.mixWith( BaseStorage,
      * @memberof IndexDBStorage
      */
     async getFileList(filePath){
+        filePath = this.correctName(filePath);
         return await this.getItemList(filePath);
     }
 
@@ -66,6 +70,7 @@ class IndexDBStorage extends platform.mixWith( BaseStorage,
      * @memberof IndexDBStorage
      */
     async deleteFileByPrefix(filePath){
+        filePath = this.correctName(filePath);
         const DelOp = (key)=>({type: 'del', key: key});
         let fileList = await this.getFileList(filePath);
         let delFileOps = fileList.map(f=>DelOp(f));

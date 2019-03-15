@@ -1,10 +1,5 @@
-# causal-net.optimizer 
+# causal-net.models 
 
-This causal-net.optimizer is a sub-module for [causality](https://red-gold.github.io/causality-docs/) project.
-This module provide optimizer instances and optimizer mixins
+This causal-net.models is a sub-module for [causality](https://red-gold.github.io/causality-docs/) project.
 
-### causalNetSGDOptimizer
-- Provide SGD optimizing methods: adam
-
-### TrainerMixins
-- Mixins for mix with Pipeline class.
+![description](./DESCRIPTION.md)

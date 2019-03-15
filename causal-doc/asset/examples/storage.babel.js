@@ -1,7 +1,7 @@
 import { indexDBStorage } from 'causal-net.storage';
 (async ()=>{
     await indexDBStorage.writeFile('/temp','12345');
-    let content  = await indexDBStorage.readFile('temp');
+    let content  = await indexDBStorage.readFile('/temp');
     console.log({content});
     
     //get file list
@@ -10,8 +10,8 @@ import { indexDBStorage } from 'causal-net.storage';
     
     //fetch png image and save pixel data into file
     const url = 'https://avatars3.githubusercontent.com/u/43268620?s=200&v=4';
-    await indexDBStorage.fetchFile(url, 'icon');
-    const pixelArray = await indexDBStorage.readFile('icon');
+    await indexDBStorage.fetchPNGFile(url, 'icon');
+    const pixelArray = await indexDBStorage.readPNGFile('icon');
     console.log({ pixelArray });
 
     let ops = [
@@ -20,4 +20,6 @@ import { indexDBStorage } from 'causal-net.storage';
     //batch does not support 'get' type
     let batchResult = await indexDBStorage.batch(ops);
     console.log({batchResult});
-})();
+})().catch(err=>{
+    console.error(err);
+});

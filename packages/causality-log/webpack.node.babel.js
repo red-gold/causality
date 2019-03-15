@@ -10,6 +10,7 @@ const NodeConfig = merge(common, {
       library: Bundle.main,
       globalObject: 'this'
     },
-    externals:['causal-net.utils', 'cli-progress']
+    externals:[ 'causal-net.utils', 'cli-progress', 'd3',
+                'vivid.d3-node', 'canvas']
 });
 export default NodeConfig;

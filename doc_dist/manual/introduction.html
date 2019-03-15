@@ -46,6 +46,12 @@
 <li data-ice="manualNav" class="indent-h2" data-link="manual/introduction.html"><a href="manual/introduction.html#causal-net-sampling" data-ice="link">causal-net.sampling</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#causalnetsampling" data-ice="link">causalNetSampling</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#samplingmixins" data-ice="link">SamplingMixins</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/introduction.html"><a href="manual/introduction.html#causal-net-models" data-ice="link">causal-net.models</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#causalnetmodels" data-ice="link">causalNetModels</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#supervisedmodelsmixins" data-ice="link">SupervisedModelsMixins</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/introduction.html"><a href="manual/introduction.html#causal-net-memcache" data-ice="link">causal-net.memcache</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#memdowncache" data-ice="link">memDownCache</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#memcachemixins" data-ice="link">MemCacheMixins</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/introduction.html"><a href="manual/introduction.html#causal-net-storage" data-ice="link">causal-net.storage</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#indexdbstorage" data-ice="link">indexDBStorage</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#storagemixins" data-ice="link">StorageMixins</a></li>
@@ -59,6 +65,13 @@
 <li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#csv" data-ice="link">CSV</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#stream" data-ice="link">Stream</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#assert" data-ice="link">assert</a></li>
+</ul>
+  </div>
+<div data-ice="manual">
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1" data-link="manual/streamProcessingText8.babel.node.js.html"><a href="manual/streamProcessingText8.babel.node.js.html" data-ice="link">Tutorials</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/streamProcessingText8.babel.node.js.html"><a href="manual/streamProcessingText8.babel.node.js.html#stream-processing-with-text8-data" data-ice="link">Stream processing with text8 data</a></li>
 </ul>
   </div>
 </div>
@@ -110,8 +123,6 @@ console.log(causalNetCore.CoreFunction);
 <h3 id="store">Store</h3><ul>
 <li>Primivtive class for composing Store base class. This class is based on <a href="https://www.npmjs.com/package/levelup">levelup</a></li>
 </ul>
-<p>[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-datasets/DESCRIPTION.md]</p>
-<p>[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-preprocessing/DESCRIPTION.md]</p>
 <h2 id="causal-net-representation">causal-net.representation</h2><p>This module provide representation instances and representation mixins</p>
 <h3 id="causalnetembedding">causalNetEmbedding</h3><ul>
 <li>Provide methods for transforming tokens or representing sentence into single vector.</li>
@@ -143,7 +154,17 @@ import { termLogger } from &apos;causal-net.log&apos;;
 <h3 id="universalembedding">universalEmbedding</h3><ul>
 <li>Provide methods for transforming tokens or representing sentence into single vector based <a href="https://github.com/tensorflow/tfjs-models/tree/master/universal-sentence-encoder">use</a></li>
 </ul>
-<p>[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-representation/DESCRIPTION.md, /home/huynhnguyen/github/causality/packages/causality-representation/examples/universalembedding.babel.js]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { universalEmbedding, Log } from &apos;causal-net.representation&apos;;
+import { termLogger } from &apos;causal-net.log&apos;;
+(async ()=&gt;{
+    // termLogger.groupBegin();
+    await universalEmbedding.connect();
+    // termLogger.groupEnd();
+    let sentVec = await universalEmbedding.sentenceEncode([ &apos;this is test&apos; ])
+    sentVec.print();
+})();</code>
+</code></pre>
+<p><a href="./manual/./asset/examples/universalEmbedding.babel.js">Run code</a></p>
 <h3 id="representationmixins">RepresentationMixins</h3><ul>
 <li>Mixins for mix with Pipeline class or dataset class.</li>
 </ul>
@@ -203,17 +224,102 @@ let pipeline = new SimplePipeline();
 console.log(pipeline.Sampling);</code>
 </code></pre>
 <p><a href="./manual/./asset/examples/sampling.mixins.babel.js">Run code</a></p>
-<p>[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-models/DESCRIPTION.md]</p>
+<h2 id="causal-net-models">causal-net.models</h2><h3 id="causalnetmodels">causalNetModels</h3><ul>
+<li>causalNetModels provides common used models: </li>
+</ul>
+<p>Classification models</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { Log, Models, CausalNet } from &apos;../../src/index&apos;;
+const { causalNetModels } = Models;
+const { termLogger } = Log;
+let inputs = [[0.52, 1.12,  0.77],
+              [0.88, -1.08, 0.15],
+              [0.52, 0.06, -1.30],
+              [0.74, -2.49, 1.39]];
+let targets = [[0, 1], [0, 1], [0, 1], [0, 1]];
+const _NetConfig = {
+    HyperParameters: {SampleSize: 4},
+    NumClasses: 2,
+    Pipeline:[
+        {   Name:&apos;dense&apos;, Type: &apos;Tensor&apos;, 
+            Parameters: { Weight: [3, 2], Bias: [2]  },
+            Flow: [ { Op: &apos;dot&apos;, Parameter: &apos;Weight&apos;, Args: [] },
+                    { Op: &apos;add&apos;, Parameter: &apos;Bias&apos;,  Args: [] } ] 
+        },
+        {   Name:&apos;PipeOutput&apos;, Type: &apos;Tensor&apos;, 
+            Flow: [ { Op: &apos;reshape&apos;, Args: [[&apos;$SampleSize&apos;, -1]] } ] 
+        } 
+    ],
+    Model:  causalNetModels.classification() };
+
+console.log({NetConfig: _NetConfig});
+let parameters = {};
+
+let causalNet = new CausalNet(_NetConfig, parameters);
+
+(async ()=&gt;{
+    const DoBatchTrainSampleGenerator = (epochIdx)=&gt;([{idx:0, batchSize:4, data: [inputs, targets]}]);
+    let logTrain = await causalNet.train(DoBatchTrainSampleGenerator, 20);
+    termLogger.log(logTrain);
+    const DoBatchTestSampleGenerator = ()=&gt;([{idx:0, batchSize:4, data: [inputs, targets]}]);
+    let testResult = await causalNet.accuracyTest(DoBatchTestSampleGenerator);
+    termLogger.log({testResult});
+    await causalNet.saveParams(&apos;save_model.model&apos;);
+    await causalNet.loadParams(&apos;save_model.model&apos;);
+    testResult = await causalNet.accuracyTest(DoBatchTestSampleGenerator);
+    termLogger.log({testResult});
+    testResult = await causalNet.ensembleAccuracyTest(DoBatchTestSampleGenerator, [&apos;save_model.model&apos;]);
+    termLogger.log({testResult});
+    testResult = await causalNet.accuracyTest(DoBatchTestSampleGenerator, [&apos;save_model.model&apos;]);
+    termLogger.log({testResult});
+})().catch(err=&gt;{
+    console.error({err});
+});</code>
+</code></pre>
+<p><a href="./manual/./asset/examples/classification.babel.js">Run code</a></p>
+<h3 id="supervisedmodelsmixins">SupervisedModelsMixins</h3><ul>
+<li>Mixins for mix with Pipeline class for supervised models.</li>
+</ul>
 <p>[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-layers/DESCRIPTION.md]</p>
-<p>[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-memcache/DESCRIPTION.md]</p>
-<h2 id="causal-net-storage">causal-net.storage</h2><p>This model provides:</p>
+<h2 id="causal-net-memcache">causal-net.memcache</h2><h3 id="memdowncache">memDownCache</h3><ul>
+<li>memDownCache provides wrapper for <a href>memdown</a> caching.</li>
+</ul>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {memDownCache} from &apos;causal-net.memcache&apos;;
+import {termLogger} from &apos;causal-net.log&apos;;
+
+(async ()=&gt;{
+    await memDownCache.setItem(123, &apos;1223adfa&apos;);
+    termLogger.log({getItem: await memDownCache.getItem(123)});
+})();
+</code>
+</code></pre>
+<p><a href="./manual/./asset/examples/memDownCache.babel.js">Run code</a></p>
+<h3 id="memcachemixins">MemCacheMixins</h3><ul>
+<li>Mixins for mix with Pipeline class for memcache.</li>
+</ul>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {memDownCache, MemCacheMixins} from &apos;causal-net.memcache&apos;;
+import {termLogger} from &apos;causal-net.log&apos;;
+
+import { platform } from &apos;causal-net.utils&apos;;
+import { Tensor, Store } from &apos;causal-net.core&apos;;
+
+class SimplePipeline extends platform.mixWith(Tensor, [MemCacheMixins]){
+    constructor(){
+        super();
+        this.MemCache = memDownCache;
+    }
+}
+let pipeline = new SimplePipeline();
+termLogger.log(pipeline.MemCache instanceof Store);</code>
+</code></pre>
+<p><a href="./manual/./asset/examples/memCache.mixins.babel.js">Run code</a></p>
+<h2 id="causal-net-storage">causal-net.storage</h2><p>This module provides:</p>
 <h3 id="indexdbstorage">indexDBStorage</h3><ul>
-<li>Provide the isomorphic high performance key-value storage based on indexDB.</li>
+<li>The isomorphic high performance key-value storage based on indexDB.</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import { indexDBStorage } from &apos;causal-net.storage&apos;;
 (async ()=&gt;{
     await indexDBStorage.writeFile(&apos;/temp&apos;,&apos;12345&apos;);
-    let content  = await indexDBStorage.readFile(&apos;temp&apos;);
+    let content  = await indexDBStorage.readFile(&apos;/temp&apos;);
     console.log({content});
 
     //get file list
@@ -222,8 +328,8 @@ console.log(pipeline.Sampling);</code>
 
     //fetch png image and save pixel data into file
     const url = &apos;https://avatars3.githubusercontent.com/u/43268620?s=200&amp;v=4&apos;;
-    await indexDBStorage.fetchFile(url, &apos;icon&apos;);
-    const pixelArray = await indexDBStorage.readFile(&apos;icon&apos;);
+    await indexDBStorage.fetchPNGFile(url, &apos;icon&apos;);
+    const pixelArray = await indexDBStorage.readPNGFile(&apos;icon&apos;);
     console.log({ pixelArray });
 
     let ops = [
@@ -232,14 +338,29 @@ console.log(pipeline.Sampling);</code>
     //batch does not support &apos;get&apos; type
     let batchResult = await indexDBStorage.batch(ops);
     console.log({batchResult});
-})();
+})().catch(err=&gt;{
+    console.error(err);
+});
 </code>
 </code></pre>
 <p><a href="./manual/./asset/examples/storage.babel.js">Run code</a></p>
 <h3 id="storagemixins">StorageMixins</h3><ul>
 <li>Mixins storage for mix with Pipeline class.</li>
 </ul>
-<p>[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-storage/DESCRIPTION.md, /home/huynhnguyen/github/causality/packages/causality-storage/examples]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { StorageMixins, indexDBStorage } from &apos;causal-net.storage&apos;;
+import { platform } from &apos;causal-net.utils&apos;;
+import { Tensor, Store } from &apos;causal-net.core&apos;;
+
+class SimplePipeline extends platform.mixWith(Tensor, [StorageMixins]){
+    constructor(){
+        super();
+        this.Storage = indexDBStorage;
+    }
+}
+let pipeline = new SimplePipeline();
+console.log(pipeline.Storage instanceof Store);</code>
+</code></pre>
+<p><a href="./manual/./asset/examples/storage.mixins.babel.js">Run code</a></p>
 <h3 id="csvfilemixins">CSVFileMixins</h3><ul>
 <li>Mixins for read/write/fetch CSV file. </li>
 </ul>

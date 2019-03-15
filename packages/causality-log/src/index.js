@@ -1,3 +1,4 @@
-export {default as termLogger} from './termLog';
-export {default as BaseLog} from './baseLog';
-export {default as LoggerMixins} from './logger.mixins';
+export { default as termLogger } from './termLogger';
+
+export { default as LoggerMixins } from './logger.mixins';
+export { default as BaseLogger } from './baseLogger';

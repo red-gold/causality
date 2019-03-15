@@ -1,5 +1,223 @@
 [
   {
+    "name": "Store#getItem",
+    "filePath": "causality/packages/causality-core/src/store.js",
+    "lines": [
+      {
+        "lineNumber": 17,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 18,
+        "line": "     * Get item given the key"
+      },
+      {
+        "lineNumber": 19,
+        "line": "     * @param { String } key - key name"
+      },
+      {
+        "lineNumber": 20,
+        "line": "     * @param {boolean} [asBuffer=false] - return object or buffer array, default object"
+      },
+      {
+        "lineNumber": 21,
+        "line": "     * @returns { Object } item object "
+      },
+      {
+        "lineNumber": 22,
+        "line": "     * @memberof MemoryCache"
+      },
+      {
+        "lineNumber": 23,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 24,
+        "line": "    async getItem(key, asBuffer=false, noError=false){"
+      }
+    ],
+    "codeParams": [
+      "key",
+      "asBuffer",
+      "noError"
+    ],
+    "docParams": [
+      "key",
+      "asBuffer"
+    ]
+  },
+  {
+    "name": "Store#setItem",
+    "filePath": "causality/packages/causality-core/src/store.js",
+    "lines": [
+      {
+        "lineNumber": 45,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 46,
+        "line": "     * Set new item with the given key and value"
+      },
+      {
+        "lineNumber": 47,
+        "line": "     * @param { String } key - key name of item"
+      },
+      {
+        "lineNumber": 48,
+        "line": "     * @param { Object } data - value of item"
+      },
+      {
+        "lineNumber": 49,
+        "line": "     * @returns { Promise } - new key promise"
+      },
+      {
+        "lineNumber": 50,
+        "line": "     * @memberof MemoryCache"
+      },
+      {
+        "lineNumber": 51,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 52,
+        "line": "    async setItem(key, data, noError=false){"
+      }
+    ],
+    "codeParams": [
+      "key",
+      "data",
+      "noError"
+    ],
+    "docParams": [
+      "key",
+      "data"
+    ]
+  },
+  {
+    "name": "Store#delItem",
+    "filePath": "causality/packages/causality-core/src/store.js",
+    "lines": [
+      {
+        "lineNumber": 73,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 74,
+        "line": "     * Delete item given the item key"
+      },
+      {
+        "lineNumber": 75,
+        "line": "     * @param { String } key - key name to delete"
+      },
+      {
+        "lineNumber": 76,
+        "line": "     * @returns { Promise } deleted key promise"
+      },
+      {
+        "lineNumber": 77,
+        "line": "     * @memberof MemoryCache"
+      },
+      {
+        "lineNumber": 78,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 79,
+        "line": "    async delItem(key, noError=false){"
+      }
+    ],
+    "codeParams": [
+      "key",
+      "noError"
+    ],
+    "docParams": [
+      "key"
+    ]
+  },
+  {
+    "name": "Store#getItemList",
+    "filePath": "causality/packages/causality-core/src/store.js",
+    "lines": [
+      {
+        "lineNumber": 111,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 112,
+        "line": "     * Get the current items under the prefix path"
+      },
+      {
+        "lineNumber": 113,
+        "line": "     * @param { String } namePrefix"
+      },
+      {
+        "lineNumber": 114,
+        "line": "     * @returns { Array } list of item names"
+      },
+      {
+        "lineNumber": 115,
+        "line": "     * @memberof MemoryCache"
+      },
+      {
+        "lineNumber": 116,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 117,
+        "line": "    async getItemList(namePrefix, noError=false){"
+      }
+    ],
+    "codeParams": [
+      "namePrefix",
+      "noError"
+    ],
+    "docParams": [
+      "namePrefix"
+    ]
+  },
+  {
+    "name": "MemorizingMixins#write",
+    "filePath": "causality/packages/causality-memcache/src/memorizing.mixins.js",
+    "lines": [
+      {
+        "lineNumber": 25,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 26,
+        "line": "     * "
+      },
+      {
+        "lineNumber": 27,
+        "line": "     * @param { String|Number } memorySlotIndex - positive number for memory slot"
+      },
+      {
+        "lineNumber": 28,
+        "line": "     * @param { Array } memory value"
+      },
+      {
+        "lineNumber": 29,
+        "line": "     * @returns { Promise } memory slot index value"
+      },
+      {
+        "lineNumber": 30,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 31,
+        "line": "    async write(memorySlotIndex, value){"
+      }
+    ],
+    "codeParams": [
+      "memorySlotIndex",
+      "value"
+    ],
+    "docParams": [
+      "memorySlotIndex",
+      "memory"
+    ]
+  },
+  {
     "name": "RepresentationMixins#connect",
     "filePath": "causality/packages/causality-representation/src/representation.mixins.js",
     "lines": [
@@ -122,56 +340,56 @@
     "filePath": "causality/packages/causality-storage/src/indexDBStorage.js",
     "lines": [
       {
-        "lineNumber": 64,
-        "line": "        });"
-      },
-      {
-        "lineNumber": 65,
-        "line": "    }"
-      },
-      {
-        "lineNumber": 66,
-        "line": ""
-      },
-      {
-        "lineNumber": 67,
+        "lineNumber": 53,
         "line": "    /**"
       },
       {
-        "lineNumber": 68,
-        "line": "     * File item with match the file path prefix pattern and delete all"
+        "lineNumber": 54,
+        "line": "     * get list of file base on prefix"
       },
       {
-        "lineNumber": 69,
-        "line": "     * return list of deleted files"
+        "lineNumber": 55,
+        "line": "     * @param { String } filePath"
       },
       {
-        "lineNumber": 70,
-        "line": "     * @param { String } filePath - pattern of file path"
+        "lineNumber": 56,
+        "line": "     * @return { Promise } List of filenames "
       },
       {
-        "lineNumber": 71,
-        "line": "     * @returns { Promise } deleted files list promise"
-      },
-      {
-        "lineNumber": 72,
+        "lineNumber": 57,
         "line": "     * @memberof IndexDBStorage"
       },
       {
-        "lineNumber": 73,
+        "lineNumber": 58,
         "line": "     */"
       },
       {
-        "lineNumber": 74,
-        "line": "    async deleteFileByPrefix(filePath){"
+        "lineNumber": 59,
+        "line": "    async getFileList(filePath){"
       },
       {
-        "lineNumber": 75,
-        "line": "        const DelOp = (key)=>({type: 'del', key: key});"
+        "lineNumber": 60,
+        "line": "        filePath = this.correctName(filePath);"
       },
       {
-        "lineNumber": 76,
-        "line": "        let fileList = await this.getFileList(filePath);"
+        "lineNumber": 61,
+        "line": "        return await this.getItemList(filePath);"
+      },
+      {
+        "lineNumber": 62,
+        "line": "    }"
+      },
+      {
+        "lineNumber": 63,
+        "line": ""
+      },
+      {
+        "lineNumber": 64,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 65,
+        "line": "     * delete all files with name match prefix pattern "
       }
     ],
     "codeParams": [
@@ -212,23 +430,23 @@
     "filePath": "causality/packages/causality-storage/src/textFile.mixins.js",
     "lines": [
       {
-        "lineNumber": 10,
+        "lineNumber": 11,
         "line": "    /**"
       },
       {
-        "lineNumber": 11,
+        "lineNumber": 12,
         "line": "     * @param  {} filePath"
       },
       {
-        "lineNumber": 12,
+        "lineNumber": 13,
         "line": "     * @param  {} data"
       },
       {
-        "lineNumber": 13,
+        "lineNumber": 14,
         "line": "     */"
       },
       {
-        "lineNumber": 14,
+        "lineNumber": 15,
         "line": "    async writeFile(filePath, data){"
       }
     ],

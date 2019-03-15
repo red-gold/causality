@@ -14,7 +14,8 @@
               "index": "./causal-doc/index.md",
               "asset": "./causal-doc/asset",
               "files": [
-                "./causal-doc/overview/introduction.md"
+                "./causal-doc/overview/introduction.md",
+                "./causal-doc/tutorials/streamProcessingText8.babel.node.js.md"
               ]
             }
             ,

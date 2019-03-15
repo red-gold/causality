@@ -1,5 +1,5 @@
 import { Function as BaseFunction } from 'causal-net.core';
-import { Platform } from 'causal-net.utils';
+import { platform } from 'causal-net.utils';
 import { ColorTransformingMixins, ImageSplittingMixins } from './Image/index';
 
 /**
@@ -12,7 +12,7 @@ import { ColorTransformingMixins, ImageSplittingMixins } from './Image/index';
  * @example
  * [EXAMPLE ../examples/imagePreprocessing.babel.node.js]
  */
-class ImagePreprocessing extends Platform.mixWith(BaseFunction, [
+class ImagePreprocessing extends platform.mixWith(BaseFunction, [
         ColorTransformingMixins, 
         ImageSplittingMixins ]){
     constructor(){

@@ -1,18 +1,16 @@
+import {default as BaseLogger } from './baseLogger';
+import { assert } from 'causal-net.utils';
 const LoggerMixins = (BasedClass)=> class extends BasedClass{
-    constructor(){
-        super();
-        this.logger = console;
-    }
-    progress(progressMessage){
-        if(this.logger.progress){
-            this.logger.progress(progressMessage);
-        }
-    }
+    
     set Logger(logger){
+        assert.beInstanceOf(logger, BaseLogger);
         this.logger = logger;
     }
     
     get Logger(){
+        if(!this.logger){
+            throw Error('logger is not set');
+        }
         return this.logger;
     }
 };

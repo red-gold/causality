@@ -8,6 +8,8 @@ import { fetch } from 'causal-net.utils';
  * based on [use](https://github.com/tensorflow/tfjs-models/tree/master/universal-sentence-encoder)
  * @class UniversialEmbedding
  * @extends Tensor
+ * @example
+ * [EXAMPLE ../examples/universalEmbedding.babel.js]
  */
 class UniversialEmbedding extends platform.mixWith(Tensor, []){
     

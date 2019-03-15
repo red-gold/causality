@@ -46,6 +46,12 @@
 <li data-ice="manualNav" class="indent-h2" data-link="manual/introduction.html"><a href="manual/introduction.html#causal-net-sampling" data-ice="link">causal-net.sampling</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#causalnetsampling" data-ice="link">causalNetSampling</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#samplingmixins" data-ice="link">SamplingMixins</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/introduction.html"><a href="manual/introduction.html#causal-net-models" data-ice="link">causal-net.models</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#causalnetmodels" data-ice="link">causalNetModels</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#supervisedmodelsmixins" data-ice="link">SupervisedModelsMixins</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/introduction.html"><a href="manual/introduction.html#causal-net-memcache" data-ice="link">causal-net.memcache</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#memdowncache" data-ice="link">memDownCache</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#memcachemixins" data-ice="link">MemCacheMixins</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/introduction.html"><a href="manual/introduction.html#causal-net-storage" data-ice="link">causal-net.storage</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#indexdbstorage" data-ice="link">indexDBStorage</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#storagemixins" data-ice="link">StorageMixins</a></li>
@@ -61,12 +67,19 @@
 <li data-ice="manualNav" class="indent-h3" data-link="manual/introduction.html"><a href="manual/introduction.html#assert" data-ice="link">assert</a></li>
 </ul>
   </div>
+<div data-ice="manual">
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1" data-link="manual/streamProcessingText8.babel.node.js.html"><a href="manual/streamProcessingText8.babel.node.js.html" data-ice="link">Tutorials</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/streamProcessingText8.babel.node.js.html"><a href="manual/streamProcessingText8.babel.node.js.html#stream-processing-with-text8-data" data-ice="link">Stream processing with text8 data</a></li>
+</ul>
+  </div>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><div class="github-markdown">
   <div class="manual-user-index" data-ice="manualUserIndex"><p><strong><em>This project is immature and under active development. Contents will be updated rapidly</em></strong></p>
-<h1 id="portable-deep-learning-model-with-causality">Portable Deep learning model with Causality</h1><p><img src="./manual/asset/coffee-main.jpg" alt="Photo on Unsplash"></p>
+<h1 id="portable-deep-learning-models-with-causality">Portable deep learning models with Causality</h1><p><img src="./manual/asset/coffee-main.jpg" alt="Photo on Unsplash"></p>
 <p>Causality is a free and open source javascript library that allows building isomorphic machine learning pipeline. Roundly speaking, your trained model can be deployed on client&apos;s devices via web environment without re-piping your code. </p>
 <p>On top of Tensorflowjs, our set of reusable components handle data preprocessing, infer data representation, visualizing, training and evaluation on both node and web environment with the same APIs. Thus reduce engineering efforts for making production AI services. By using the same language, developers can simplify development setup, mitigate the communication cost, better coding pattern and share more ideas. </p>
 <p>Moreover, with AI models are loaded as client&apos; devices for performing inference, personal or sensitive data is not exposed to the service providers. We also invest in ensemble learning and the recent federated learning approach for distributed training while preserving data privacy without requiring any global data storage. </p>
@@ -92,7 +105,7 @@ console.log(causalNetCore.CoreFunction);
 <li>Primitive class for composing Function based class. This class is based on <a href="https://ramdajs.com/">Ramda</a></li>
 </ul><h3>Store</h3><ul>
 <li>Primivtive class for composing Store base class. This class is based on <a href="https://www.npmjs.com/package/levelup">levelup</a></li>
-</ul><p>[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-datasets/DESCRIPTION.md]</p><p>[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-preprocessing/DESCRIPTION.md]</p><h2>causal-net.representation</h2><p>This module provide representation instances and representation mixins</p><h3>causalNetEmbedding</h3><ul>
+</ul><h2>causal-net.representation</h2><p>This module provide representation instances and representation mixins</p><h3>causalNetEmbedding</h3><ul>
 <li>Provide methods for transforming tokens or representing sentence into single vector.</li>
 </ul><p>Node</p><pre><code class="lang-javascript"><code class="source-code prettyprint">import { causalNetEmbedding } from &apos;causal-net.representation&apos;;
 import { termLogger } from &apos;causal-net.log&apos;;
@@ -117,7 +130,16 @@ import { termLogger } from &apos;causal-net.log&apos;;
 });</code>
 </code></pre><p><a href="./manual/./asset/examples/causalNetEmbedding.babel.node.js">Run code</a></p><h3>universalEmbedding</h3><ul>
 <li>Provide methods for transforming tokens or representing sentence into single vector based <a href="https://github.com/tensorflow/tfjs-models/tree/master/universal-sentence-encoder">use</a></li>
-</ul><p>[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-representation/DESCRIPTION.md, /home/huynhnguyen/github/causality/packages/causality-representation/examples/universalembedding.babel.js]</p><h3>RepresentationMixins</h3><ul>
+</ul><pre><code class="lang-javascript"><code class="source-code prettyprint">import { universalEmbedding, Log } from &apos;causal-net.representation&apos;;
+import { termLogger } from &apos;causal-net.log&apos;;
+(async ()=&gt;{
+    // termLogger.groupBegin();
+    await universalEmbedding.connect();
+    // termLogger.groupEnd();
+    let sentVec = await universalEmbedding.sentenceEncode([ &apos;this is test&apos; ])
+    sentVec.print();
+})();</code>
+</code></pre><p><a href="./manual/./asset/examples/universalEmbedding.babel.js">Run code</a></p><h3>RepresentationMixins</h3><ul>
 <li>Mixins for mix with Pipeline class or dataset class.</li>
 </ul><pre><code class="lang-javascript"><code class="source-code prettyprint">import { RepresentationMixins, causalNetEmbedding } from &apos;causal-net.representation&apos;;
 import { platform } from &apos;causal-net.utils&apos;;
@@ -166,12 +188,88 @@ class SimplePipeline extends Platform.mixWith(Tensor, [SamplingMixins]){
 }
 let pipeline = new SimplePipeline();
 console.log(pipeline.Sampling);</code>
-</code></pre><p><a href="./manual/./asset/examples/sampling.mixins.babel.js">Run code</a></p><p>[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-models/DESCRIPTION.md]</p><p>[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-layers/DESCRIPTION.md]</p><p>[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-memcache/DESCRIPTION.md]</p><h2>causal-net.storage</h2><p>This model provides:</p><h3>indexDBStorage</h3><ul>
-<li>Provide the isomorphic high performance key-value storage based on indexDB.</li>
+</code></pre><p><a href="./manual/./asset/examples/sampling.mixins.babel.js">Run code</a></p><h2>causal-net.models</h2><h3>causalNetModels</h3><ul>
+<li>causalNetModels provides common used models: </li>
+</ul><p>Classification models</p><pre><code class="lang-javascript"><code class="source-code prettyprint">import { Log, Models, CausalNet } from &apos;../../src/index&apos;;
+const { causalNetModels } = Models;
+const { termLogger } = Log;
+let inputs = [[0.52, 1.12,  0.77],
+              [0.88, -1.08, 0.15],
+              [0.52, 0.06, -1.30],
+              [0.74, -2.49, 1.39]];
+let targets = [[0, 1], [0, 1], [0, 1], [0, 1]];
+const _NetConfig = {
+    HyperParameters: {SampleSize: 4},
+    NumClasses: 2,
+    Pipeline:[
+        {   Name:&apos;dense&apos;, Type: &apos;Tensor&apos;, 
+            Parameters: { Weight: [3, 2], Bias: [2]  },
+            Flow: [ { Op: &apos;dot&apos;, Parameter: &apos;Weight&apos;, Args: [] },
+                    { Op: &apos;add&apos;, Parameter: &apos;Bias&apos;,  Args: [] } ] 
+        },
+        {   Name:&apos;PipeOutput&apos;, Type: &apos;Tensor&apos;, 
+            Flow: [ { Op: &apos;reshape&apos;, Args: [[&apos;$SampleSize&apos;, -1]] } ] 
+        } 
+    ],
+    Model:  causalNetModels.classification() };
+
+console.log({NetConfig: _NetConfig});
+let parameters = {};
+
+let causalNet = new CausalNet(_NetConfig, parameters);
+
+(async ()=&gt;{
+    const DoBatchTrainSampleGenerator = (epochIdx)=&gt;([{idx:0, batchSize:4, data: [inputs, targets]}]);
+    let logTrain = await causalNet.train(DoBatchTrainSampleGenerator, 20);
+    termLogger.log(logTrain);
+    const DoBatchTestSampleGenerator = ()=&gt;([{idx:0, batchSize:4, data: [inputs, targets]}]);
+    let testResult = await causalNet.accuracyTest(DoBatchTestSampleGenerator);
+    termLogger.log({testResult});
+    await causalNet.saveParams(&apos;save_model.model&apos;);
+    await causalNet.loadParams(&apos;save_model.model&apos;);
+    testResult = await causalNet.accuracyTest(DoBatchTestSampleGenerator);
+    termLogger.log({testResult});
+    testResult = await causalNet.ensembleAccuracyTest(DoBatchTestSampleGenerator, [&apos;save_model.model&apos;]);
+    termLogger.log({testResult});
+    testResult = await causalNet.accuracyTest(DoBatchTestSampleGenerator, [&apos;save_model.model&apos;]);
+    termLogger.log({testResult});
+})().catch(err=&gt;{
+    console.error({err});
+});</code>
+</code></pre><p><a href="./manual/./asset/examples/classification.babel.js">Run code</a></p><h3>SupervisedModelsMixins</h3><ul>
+<li>Mixins for mix with Pipeline class for supervised models.</li>
+</ul><p>[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-layers/DESCRIPTION.md]</p><h2>causal-net.memcache</h2><h3>memDownCache</h3><ul>
+<li>memDownCache provides wrapper for <a href>memdown</a> caching.</li>
+</ul><pre><code class="lang-javascript"><code class="source-code prettyprint">import {memDownCache} from &apos;causal-net.memcache&apos;;
+import {termLogger} from &apos;causal-net.log&apos;;
+
+(async ()=&gt;{
+    await memDownCache.setItem(123, &apos;1223adfa&apos;);
+    termLogger.log({getItem: await memDownCache.getItem(123)});
+})();
+</code>
+</code></pre><p><a href="./manual/./asset/examples/memDownCache.babel.js">Run code</a></p><h3>MemCacheMixins</h3><ul>
+<li>Mixins for mix with Pipeline class for memcache.</li>
+</ul><pre><code class="lang-javascript"><code class="source-code prettyprint">import {memDownCache, MemCacheMixins} from &apos;causal-net.memcache&apos;;
+import {termLogger} from &apos;causal-net.log&apos;;
+
+import { platform } from &apos;causal-net.utils&apos;;
+import { Tensor, Store } from &apos;causal-net.core&apos;;
+
+class SimplePipeline extends platform.mixWith(Tensor, [MemCacheMixins]){
+    constructor(){
+        super();
+        this.MemCache = memDownCache;
+    }
+}
+let pipeline = new SimplePipeline();
+termLogger.log(pipeline.MemCache instanceof Store);</code>
+</code></pre><p><a href="./manual/./asset/examples/memCache.mixins.babel.js">Run code</a></p><h2>causal-net.storage</h2><p>This module provides:</p><h3>indexDBStorage</h3><ul>
+<li>The isomorphic high performance key-value storage based on indexDB.</li>
 </ul><pre><code class="lang-javascript"><code class="source-code prettyprint">import { indexDBStorage } from &apos;causal-net.storage&apos;;
 (async ()=&gt;{
     await indexDBStorage.writeFile(&apos;/temp&apos;,&apos;12345&apos;);
-    let content  = await indexDBStorage.readFile(&apos;temp&apos;);
+    let content  = await indexDBStorage.readFile(&apos;/temp&apos;);
     console.log({content});
 
     //get file list
@@ -180,8 +278,8 @@ console.log(pipeline.Sampling);</code>
 
     //fetch png image and save pixel data into file
     const url = &apos;https://avatars3.githubusercontent.com/u/43268620?s=200&amp;v=4&apos;;
-    await indexDBStorage.fetchFile(url, &apos;icon&apos;);
-    const pixelArray = await indexDBStorage.readFile(&apos;icon&apos;);
+    await indexDBStorage.fetchPNGFile(url, &apos;icon&apos;);
+    const pixelArray = await indexDBStorage.readPNGFile(&apos;icon&apos;);
     console.log({ pixelArray });
 
     let ops = [
@@ -190,11 +288,25 @@ console.log(pipeline.Sampling);</code>
     //batch does not support &apos;get&apos; type
     let batchResult = await indexDBStorage.batch(ops);
     console.log({batchResult});
-})();
+})().catch(err=&gt;{
+    console.error(err);
+});
 </code>
 </code></pre><p><a href="./manual/./asset/examples/storage.babel.js">Run code</a></p><h3>StorageMixins</h3><ul>
 <li>Mixins storage for mix with Pipeline class.</li>
-</ul><p>[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-storage/DESCRIPTION.md, /home/huynhnguyen/github/causality/packages/causality-storage/examples]</p><h3>CSVFileMixins</h3><ul>
+</ul><pre><code class="lang-javascript"><code class="source-code prettyprint">import { StorageMixins, indexDBStorage } from &apos;causal-net.storage&apos;;
+import { platform } from &apos;causal-net.utils&apos;;
+import { Tensor, Store } from &apos;causal-net.core&apos;;
+
+class SimplePipeline extends platform.mixWith(Tensor, [StorageMixins]){
+    constructor(){
+        super();
+        this.Storage = indexDBStorage;
+    }
+}
+let pipeline = new SimplePipeline();
+console.log(pipeline.Storage instanceof Store);</code>
+</code></pre><p><a href="./manual/./asset/examples/storage.mixins.babel.js">Run code</a></p><h3>CSVFileMixins</h3><ul>
 <li>Mixins for read/write/fetch CSV file. </li>
 </ul><h3>PNGFileMixins</h3><ul>
 <li>Mixins for read/write/fetch PNG file.</li>
@@ -308,6 +420,184 @@ catch(err){
 </code>
 </code></pre><p><a href="./manual/./asset/examples/assert.babel.js">Run code</a></p></div>
         <a data-ice="link" href="manual/introduction.html#sub-packages"></a>
+      </div>
+    </div>
+<div class="manual-card-wrap" data-ice="cards">
+      <div class="manual-card">
+        <div data-ice="card"><h1>Tutorials</h1><h2>Stream processing with text8 data</h2><p>Input raw text8 corpus file and return the occurent number of each tokens in corpus.</p><pre><code class="lang-javascript"><code class="source-code prettyprint">import * as Preprocessing from &apos;causal-net.preprocessing&apos;;
+import * as Log from &apos;causal-net.log&apos;;
+import * as Utils from &apos;causal-net.utils&apos;;
+import * as Storage from &apos;causal-net.storage&apos;;
+import * as fs from &apos;fs&apos;;
+var { indexDBStorage } = Storage;
+var { stream } = Utils;
+var { termLogger } = Log;
+var { nlpPreprocessing, tokenizerEN } = Preprocessing;</code>
+</code></pre><pre><code><code class="source-code prettyprint">&apos;use strict&apos;</code>
+</code></pre><p>create stream process</p><ul>
+<li>read chunks from file.</li>
+<li>transform each chunk.</li>
+<li>write transformed chunk into new files.</li>
+</ul><pre><code class="lang-javascript"><code class="source-code prettyprint">var remainingChars = &apos;&apos;, wordFreqCount = {}, lineIndex = 0;
+function tranformFn(chunkData, chunkEncoding, afterTransformFn){
+    let sampleText = chunkData + remainingChars;
+    let sampleLines = sampleText.split(&apos;\n&apos;);
+    let transformedData = [];
+    for(let line of sampleLines){
+        let tokens = tokenizerEN.tokenize(line);
+        wordFreqCount = nlpPreprocessing.wordFreqCount(tokens, wordFreqCount);
+        lineIndex += 1;
+        transformedData.push({lineIndex, tokens});
+    }
+    afterTransformFn(null, transformedData);
+};
+var transformer = stream.makeTransform(tranformFn);
+
+function writeTokens(transformedData, chunkEncoding, afterWriteFn){
+    const WriteTokensToFile = async (transformedData)=&gt;{
+        for(let {lineIndex, tokens} of transformedData){
+//             console.log({lineIndex});
+            await indexDBStorage.writeFile(`/corpus/line_${lineIndex}`, JSON.stringify(tokens));
+        }
+    }
+    WriteTokensToFile(transformedData).then(()=&gt;{
+        afterWriteFn();
+    })
+}
+var writer = stream.makeWritable(writeTokens);
+var characterCount = 0;
+(async ()=&gt;{
+    var corpusReader = fs.createReadStream(&apos;../datasets/text8/text8.txt&apos;);
+    const CorpusStreamer = stream.makePipeline([corpusReader, transformer, writer], (data)=&gt;{
+        characterCount += data.length;
+    });
+    termLogger.groupBegin(&apos;stream performance&apos;);
+    let result = await CorpusStreamer;
+    termLogger.groupEnd()
+    termLogger.log({ result, characterCount } );
+})();</code>
+</code></pre><pre><code><code class="source-code prettyprint">stream performance: begin at Fri Mar 15 2019 16:42:45 GMT+0700 (Indochina Time)
+stream performance: end after 8514 (ms)
+{ result: &apos;Success&apos;, characterCount: 100000000 }</code>
+</code></pre><pre><code class="lang-javascript"><code class="source-code prettyprint">termLogger.log({&apos;show 100 items&apos;: Object.entries(wordFreqCount).slice(0,100)});</code>
+</code></pre><pre><code><code class="source-code prettyprint">{ &apos;show 100 items&apos;:
+   [ [ &apos;anarchism&apos;, 303 ],
+     [ &apos;originated&apos;, 572 ],
+     [ &apos;as&apos;, 131819 ],
+     [ &apos;a&apos;, 325895 ],
+     [ &apos;term&apos;, 7220 ],
+     [ &apos;of&apos;, 593676 ],
+     [ &apos;abuse&apos;, 563 ],
+     [ &apos;first&apos;, 28809 ],
+     [ &apos;used&apos;, 22736 ],
+     [ &apos;against&apos;, 8431 ],
+     [ &apos;early&apos;, 10172 ],
+     [ &apos;working&apos;, 2270 ],
+     [ &apos;class&apos;, 3412 ],
+     [ &apos;radicals&apos;, 116 ],
+     [ &apos;including&apos;, 9630 ],
+     [ &apos;the&apos;, 1061363 ],
+     [ &apos;diggers&apos;, 25 ],
+     [ &apos;english&apos;, 11868 ],
+     [ &apos;revolution&apos;, 2029 ],
+     [ &apos;and&apos;, 416615 ],
+     [ &apos;sans&apos;, 68 ],
+     [ &apos;culottes&apos;, 6 ],
+     [ &apos;french&apos;, 8736 ],
+     [ &apos;whilst&apos;, 481 ],
+     [ &apos;is&apos;, 183158 ],
+     [ &apos;still&apos;, 7378 ],
+     [ &apos;in&apos;, 372203 ],
+     [ &apos;pejorative&apos;, 114 ],
+     [ &apos;way&apos;, 6432 ],
+     [ &apos;to&apos;, 316375 ],
+     [ &apos;describe&apos;, 1352 ],
+     [ &apos;any&apos;, 11804 ],
+     [ &apos;act&apos;, 3502 ],
+     [ &apos;that&apos;, 109508 ],
+     [ &apos;violent&apos;, 653 ],
+     [ &apos;means&apos;, 4165 ],
+     [ &apos;destroy&apos;, 466 ],
+     [ &apos;organization&apos;, 2374 ],
+     [ &apos;society&apos;, 4067 ],
+     [ &apos;it&apos;, 73335 ],
+     [ &apos;has&apos;, 37865 ],
+     [ &apos;also&apos;, 44358 ],
+     [ &apos;been&apos;, 25381 ],
+     [ &apos;taken&apos;, 3043 ],
+     [ &apos;up&apos;, 12446 ],
+     [ &apos;positive&apos;, 1254 ],
+     [ &apos;label&apos;, 646 ],
+     [ &apos;by&apos;, 111829 ],
+     [ &apos;self&apos;, 2879 ],
+     [ &apos;defined&apos;, 2449 ],
+     [ &apos;anarchists&apos;, 203 ],
+     [ &apos;word&apos;, 5678 ],
+     [ &apos;derived&apos;, 1701 ],
+     [ &apos;from&apos;, 72865 ],
+     [ &apos;greek&apos;, 4577 ],
+     [ &apos;without&apos;, 5660 ],
+     [ &apos;archons&apos;, 10 ],
+     [ &apos;ruler&apos;, 617 ],
+     [ &apos;chief&apos;, 2130 ],
+     [ &apos;king&apos;, 7457 ],
+     [ &apos;political&apos;, 6967 ],
+     [ &apos;philosophy&apos;, 2758 ],
+     [ &apos;belief&apos;, 1572 ],
+     [ &apos;rulers&apos;, 687 ],
+     [ &apos;are&apos;, 76523 ],
+     [ &apos;unnecessary&apos;, 146 ],
+     [ &apos;should&apos;, 5113 ],
+     [ &apos;be&apos;, 61283 ],
+     [ &apos;abolished&apos;, 399 ],
+     [ &apos;although&apos;, 9286 ],
+     [ &apos;there&apos;, 22706 ],
+     [ &apos;differing&apos;, 231 ],
+     [ &apos;interpretations&apos;, 395 ],
+     [ &apos;what&apos;, 8581 ],
+     [ &apos;this&apos;, 58827 ],
+     [ &apos;refers&apos;, 1570 ],
+     [ &apos;related&apos;, 3535 ],
+     [ &apos;social&apos;, 4307 ],
+     [ &apos;movements&apos;, 1002 ],
+     [ &apos;advocate&apos;, 331 ],
+     [ &apos;elimination&apos;, 216 ],
+     [ &apos;authoritarian&apos;, 185 ],
+     [ &apos;institutions&apos;, 1021 ],
+     [ &apos;particularly&apos;, 2881 ],
+     [ &apos;state&apos;, 12905 ],
+     [ &apos;anarchy&apos;, 109 ],
+     [ &apos;most&apos;, 25562 ],
+     [ &apos;use&apos;, 14011 ],
+     [ &apos;does&apos;, 5220 ],
+     [ &apos;not&apos;, 44030 ],
+     [ &apos;imply&apos;, 257 ],
+     [ &apos;chaos&apos;, 331 ],
+     [ &apos;nihilism&apos;, 42 ],
+     [ &apos;or&apos;, 68948 ],
+     [ &apos;anomie&apos;, 7 ],
+     [ &apos;but&apos;, 35356 ],
+     [ &apos;rather&apos;, 4605 ],
+     [ &apos;harmonious&apos;, 28 ],
+     [ &apos;anti&apos;, 3103 ],
+     [ &apos;place&apos;, 5345 ] ] }</code>
+</code></pre><p>After preprocessing, data is saved into files under <code>/copus/</code> folder</p><pre><code class="lang-javascript"><code class="source-code prettyprint">(async ()=&gt;{
+    termLogger.groupBegin(&apos;get list of preprocessing files&apos;)
+    let listFiles = await indexDBStorage.getFileList(&apos;/corpus/&apos;);
+    termLogger.groupEnd()
+    termLogger.groupBegin(&apos;read one file from indexDB&apos;)
+    let tokens = await indexDBStorage.readFile(listFiles[0]);
+    termLogger.groupEnd()
+    termLogger.log([ listFiles.length , JSON.parse(tokens).length]);
+})()    </code>
+</code></pre><pre><code><code class="source-code prettyprint">get list of preprocessing files: begin at Fri Mar 15 2019 16:42:56 GMT+0700 (Indochina Time)
+get list of preprocessing files: end after 194 (ms)
+read one file from indexDB: begin at Fri Mar 15 2019 16:42:56 GMT+0700 (Indochina Time)
+read one file from indexDB: end after 0 (ms)
+[ 3228, 1293 ]</code>
+</code></pre><pre><code class="lang-javascript"><code class="source-code prettyprint"></code>
+</code></pre></div>
+        <a data-ice="link" href="manual/streamProcessingText8.babel.node.js.html"></a>
       </div>
     </div>
 </div>

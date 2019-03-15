@@ -15,11 +15,6 @@ export default class Store{
         throw Error('implement required');
     }
 
-    correctName(filePath){
-        filePath = '/' +filePath;
-        return filePath.replace(/\/{1,}/g, '/');
-    }
-
     /**
      * Get item given the key
      * @param { String } key - key name
@@ -27,16 +22,20 @@ export default class Store{
      * @returns { Object } item object 
      * @memberof MemoryCache
      */
-    async getItem(key, asBuffer=false){
+    async getItem(key, asBuffer=false, noError=false){
         if(!this.store){
             throw Error('store is not connect');
         }
-        key = this.correctName(key);
         return new Promise((resolve, reject)=>{
             this.store.get(key, {asBuffer}, (err, data)=>{
                 if(err){
-                    this.logger.debug({key, err});
-                    reject('error read');
+                    if(noError){
+                        resolve({[key]: null});
+                    }
+                    else{
+                        this.logger.debug({key, err});
+                        reject('error read');
+                    }
                 }
                 else{
                     resolve({[key]: data});
@@ -51,16 +50,20 @@ export default class Store{
      * @returns { Promise } - new key promise
      * @memberof MemoryCache
      */
-    async setItem(key, data){
+    async setItem(key, data, noError=false){
         if(!this.store){
             throw Error('store is not connect');
         }
-        key = this.correctName(key);
         return new Promise((resolve, reject)=>{
             this.store.put(key, data, (err)=>{
                 if(err){
-                    this.logger.debug({key, err});
-                    reject('error write');
+                    if(noError){
+                        resolve({[key]: null});
+                    }
+                    else{
+                        this.logger.debug({key, err});
+                        reject('error write');
+                    }
                 }
                 else{
                     resolve({[key]: data});
@@ -74,16 +77,20 @@ export default class Store{
      * @returns { Promise } deleted key promise
      * @memberof MemoryCache
      */
-    async delItem(key){
+    async delItem(key, noError=false){
         if(!this.store){
             throw Error('store is not connect');
         }
-        key = this.correctName(key);
         return new Promise((resolve, reject)=>{
             this.store.del(key, (err)=>{
                 if(err){
-                    this.logger.debug({err});
-                    reject('error write');
+                    if(noError){
+                        resolve(null);
+                    }
+                    else{
+                        this.logger.debug(err);
+                        reject(`error delete ${key}`);
+                    }
                 }
                 else{
                     resolve(key);
@@ -93,28 +100,26 @@ export default class Store{
     }
     /**
      * Make name maching function based on prefix path
-     * @param { String } name - prefix name
+     * @param { String } pattern - prefix name
      * @returns { Function } name matching function
      * @memberof MemoryCache
      */
-    makeCheckItemNameFn(name){
-        var pattern = name;
+    makeCheckItemNameFn(pattern){
         var regex = new RegExp(`${pattern}.*`,'g');
         return (fileName)=>fileName.match(regex) || [];
     }
     
     /**
      * Get the current items under the prefix path
-     * @param { String } [namePath='/']
+     * @param { String } namePrefix
      * @returns { Array } list of item names
      * @memberof MemoryCache
      */
-    async getItemList(namePath='/'){
+    async getItemList(namePrefix, noError=false){
         if(!this.store){
             throw Error('store is not connect');
         }
-        namePath = this.correctName(namePath);
-        const NameTester = this.makeCheckItemNameFn(namePath);
+        const NameTester = this.makeCheckItemNameFn(namePrefix);
         return new Promise((resolve, reject)=>{
             let fileList = [];
             this.store.createKeyStream()
@@ -127,8 +132,13 @@ export default class Store{
                 .on('close', () => resolve(fileList) )
                 .on('end',  () => resolve(fileList) )
                 .on('error', (err) =>{ 
-                    this.logger.debug({ err });
-                    reject('error getFileList') ;
+                    if(noError){
+                        resolve(fileList);
+                    }
+                    else{
+                        this.logger.debug( err );
+                        reject(`error getItemList ${namePrefix}`);
+                    }
                 });
         });
     }

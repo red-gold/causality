@@ -31,7 +31,6 @@ Here are some machine learning concepts:
 
 [INCLUDE ../../packages/causality-core/DESCRIPTION.md]
 
-[INCLUDE ../../packages/causality-datasets/DESCRIPTION.md]
 
 [INCLUDE ../../packages/causality-preprocessing/DESCRIPTION.md]
 

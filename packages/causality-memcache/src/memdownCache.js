@@ -1,5 +1,5 @@
 import { platform } from 'causal-net.utils';
-import { default as BaseMemCache } from './baseMemCache';
+import { Store as BaseMemCache } from 'causal-net.core';
 import { default as MemorizingMixins } from './memorizing.mixins';
 /**
  * This MemdownCache provide memcache implement based on 
