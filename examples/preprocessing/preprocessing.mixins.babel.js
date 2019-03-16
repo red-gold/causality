@@ -1,6 +1,6 @@
 import { PreprocessingMixins, tokenizerEN, nlpPreprocessing } from 'causal-net.preprocessing';
-import { Platform } from 'causal-net.utils';
-import { Tensor } from 'causal-net.core';
+import { platform } from 'causal-net.utils';
+import { Function as BaseFunction } from 'causal-net.core';
 const PipeLineConfigure = {
     Preprocessing: {
         SampleFn: (sample)=>{
@@ -8,14 +8,12 @@ const PipeLineConfigure = {
         },
         LabelFn: (label)=>{
             return label;
-        },
-        ConnectFn: ()=>{
-            console.log('connect is called');
         }
     }
 }
 nlpPreprocessing.Tokenizer = tokenizerEN;
-class SimpleDataset extends Platform.mixWith(Tensor, [PreprocessingMixins]){
+class SimpleDataset extends platform.mixWith(BaseFunction, 
+    [PreprocessingMixins]){
     constructor(configure){
         super();
         this.setPreprocessingByConfig(configure);

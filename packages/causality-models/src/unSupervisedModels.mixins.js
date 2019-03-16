@@ -9,14 +9,15 @@ const UnSupervisedModelsMixins = (BasePipelineClass)=> class extends BasePipelin
         return this.modelLoss;
     }
     set Loss(loss){
+        assert.beTypeOf(, Function);
         this.modelLoss = loss;
         this.modelLoss.bind(this);
     }
 
-    get Predict(){
+    get Reconstruct(){
         return this.modelPredict;
     }
-    set Predict(predict){
+    set Reconstruct(predict){
         this.modelPredict = predict;
         this.modelPredict.bind(this);
     }

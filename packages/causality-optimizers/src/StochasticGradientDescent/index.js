@@ -1,1 +1,1 @@
-export { default as causalNetSGDOptimizer } from './CausalNetSGDOptimizer';
+export { default as causalNetSGDOptimizer } from './causalNetSGDOptimizer';

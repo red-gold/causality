@@ -30,10 +30,9 @@ const Runner = (value, nets, params)=>{
         return values[last];
     });
 }
-const _NetConfig = {
-    HyperParameters: {SampleSize:4},
-    Classes: 2,
-    Pipeline:[denseLayer]};
+const _NetConfig = {  HyperParameters: {SampleSize:4}, 
+                      Classes: 2,
+                      Pipeline:[denseLayer] };
 let causal = new CausalNet(_NetConfig);
 let output2 = causal.Runner(inputs, [denseLayer], params);
 console.log(output2.dataSync());

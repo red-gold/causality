@@ -38,6 +38,9 @@
     "causal-net.storage": "*",
     "causal-net.memcache": "*",
     "causal-net.log": "*",
+    "causal-net.sampling": "*",
+    "causal-net.layer": "*",
+    "causal-net.optimizers": "*",
     "causal-net.preprocessing": "*",
     "causal-net.datasets": "*"
   },

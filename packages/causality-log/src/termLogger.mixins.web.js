@@ -7,6 +7,10 @@ const LogWebMixins = (LogClass)=> class extends LogClass{
         documentEl.appendChild(node);
         this.frameEl = documentEl;
         this.loggerEl = documentEl.getElementsByTagName("ul")[0];
+        this.colorCode = { debug: '#f1f1f1',
+                             log: '#010101', 
+                            warn: '#eae26e', 
+                           error: '#ea6e78' };
     }
     scrollBottom(element=null){
         element = element || this.frameEl;
@@ -28,7 +32,7 @@ const LogWebMixins = (LogClass)=> class extends LogClass{
         node.appendChild(jsonNode);
         this.scrollBottom();
     }
-    log(message){
+    log(message, style=''){
         if(this.level >= this.AcceptedLevels['log']){
             return null;
         }
@@ -40,6 +44,7 @@ const LogWebMixins = (LogClass)=> class extends LogClass{
         let jsonNode = JsonView.JSONDisplay(message);
         var date = new Date();
         node.innerHTML = `<p style="font-size: 12px; text-align:right">${date}</p>`;
+        jsonNode.style.cssText += ';'+style;
         node.appendChild(jsonNode);
         this.loggerEl.appendChild(node);
         this.scrollBottom();
@@ -50,8 +55,25 @@ const LogWebMixins = (LogClass)=> class extends LogClass{
         if(this.level >= this.AcceptedLevels['debug']){
             return null;
         }
-        //no show on web screen;        
-        console.debug(message);
+        
+        let style = 'color:' + this.colorCode['debug'];
+        this.log(message, style);      
+    }
+
+    warn(message){
+        if(this.level >= this.AcceptedLevels['warn']){
+            return null;
+        }
+        let style = 'color:' + this.colorCode['warn'];
+        this.log(message, style);
+    }
+
+    error(message){
+        if(this.level >= this.AcceptedLevels['error']){
+            return null;
+        }
+        let style = 'color:' + this.colorCode['error'];
+        this.log(message, style);
     }
 };
 

@@ -29,11 +29,27 @@ const LogNodeMixins = (LogClass)=> class extends LogClass{
         this.processCounter = 0;
     }
     debug(message){
-        this.currentBar = false; 
+        
         if(this.level >= this.AcceptedLevels['debug']){
             return null;
         }
         console.debug(message);
+    }
+
+    warn(message){
+        
+        if(this.level >= this.AcceptedLevels['warn']){
+            return null;
+        }
+        console.warn(message);
+    }
+
+    error(message){
+        
+        if(this.level >= this.AcceptedLevels['error']){
+            return null;
+        }
+        console.error(message);
     }
 };
 

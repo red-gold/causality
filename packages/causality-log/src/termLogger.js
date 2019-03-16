@@ -7,17 +7,16 @@ import { platform } from 'causal-net.utils';
  * { mixWith : { 'node': [LogNodeMixins], 'web': [WebNodeMixins] } }
  * @class TermLogger
  * @extends BaseLogger
+ * @example
+ * [EXAMPLE ../examples/log.babel.js]
  */
 class TermLogger extends platform.mixWith(BaseLogger, 
         { node:[LogNodeMixins], 
           web:[LogWebMixins] } ){
     constructor(){
         super();
+        /**@private { Array } stack of groups */
         this.groupStack = [];
-    }
-
-    plot(data){
-
     }
     
     groupBegin(name){   

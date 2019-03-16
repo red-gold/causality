@@ -3,7 +3,7 @@
  * This class wrap [Ramda](https://ramdajs.com/) for providing Functional programming style method.
  * @class Function
  */
-class Function{
+class Function {
     constructor(){
         /**
          * @private { Object } Ramda instance
@@ -33,7 +33,7 @@ class Function{
      * @memberof Function
      */
     getIn(keys, item, defaultValue){
-        return R.pathOr(defaultValue, keys, item);
+        return this.R.pathOr(defaultValue, keys, item);
     }
     
     /**

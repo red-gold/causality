@@ -11,7 +11,8 @@ const NodeConfig = merge(common, {
       globalObject: 'this'
     },
     externals: [ 'causal-net.core', 'causal-net.utils', 'causal-net.log', 
-                 'causal-net.memcache', 'causal-net.storage', 
+                 'causal-net.memcache', 'causal-net.storage', 'causal-net.sampling', 
+                 'causal-net.layer', 'causal-net.optimizers', 
                  'causal-net.preprocessing', 'causal-net.datasets' ] 
 });
 export default NodeConfig;

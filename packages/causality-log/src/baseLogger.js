@@ -1,11 +1,11 @@
 /**
- * This class provided the 
+ * This BaseLogger class provided abstract class for extending new logger class
  * @class BaseLog
  */
 class BaseLogger{
     constructor(){
-        this.AcceptedLevels = {debug: 0, log:1, warning:2, error: 3};
-        this.rAcceptedLevels = {0:'debug', 1: 'log', 2: 'warning', 3: 'error'};
+        this.AcceptedLevels = {debug: 0, log:1, warn:2, error: 3};
+        this.rAcceptedLevels = {0:'debug', 1: 'log', 2: 'warn', 3: 'error'};
         this.level = this.AcceptedLevels['debug'];
     }
     set Level(level){
@@ -25,6 +25,10 @@ class BaseLogger{
     }
 
     log(message){
+        throw Error('implement required');
+    }
+    
+    warn(message){
         throw Error('implement required');
     }
     

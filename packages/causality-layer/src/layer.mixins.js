@@ -1,11 +1,11 @@
 import { assert } from 'causal-net.utils';
-import { Tensor } from 'causal-net.core';
+import { Tensor as BaseTensor } from 'causal-net.core';
 /**
  * This LayerMixins class provide mixin for building pipeline
  * @class CausalNetLayer
  * @extends BasePipelineClass
  * @example
- * 
+ * [EXAMPLE ../examples/layer.mixins.babel.js]
  */
 const LayerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     get Layer(){
@@ -15,7 +15,7 @@ const LayerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         this.layer;
     }
     set Layer(layer){
-        assert.beInstanceOf(layer, Tensor);
+        assert.beInstanceOf(layer, BaseTensor);
         this.layer = layer;
     }
 };

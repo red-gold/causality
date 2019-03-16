@@ -16,7 +16,7 @@ import {  PipelineBaseMixins,
           PipelineEnsembleEvaluatingMixins,
           PipelineParametersMixins,
           PipelineHyperParametersMixins,
-          Function } from './pipeline/index';
+          Function as PipelineFunction } from './pipeline/index';
 
 export default class CausalNet extends Platform.mixWith(Tensor, [
         StorageMixins,
