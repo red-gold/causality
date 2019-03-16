@@ -6,47 +6,26 @@ are seperated into different sub-packages under the `/packages/` folder. Each su
 Key design principles:
 - Isomorphic.
 - Make everything easy to extend.
-- None type to avoid [type tax](https://medium.com/javascript-scene/the-typescript-tax-132ff4cb175b). 
-- Data processing is formed by chaining functional blocks. 
+- Make everything open to view.
+- Make data processing as functional blocks. 
+
+We not use type script because we try to early debt from unpaid [type tax](https://medium.com/javascript-scene/the-typescript-tax-132ff4cb175b). 
 
 
-## Pipeline package
+
+## Pipeline
 Causality attempts to standardize the pipeline into those steps:
 - Sampling from raw data.
 - Preprocessing data.
 - Infering representation of data.
 - Training/ensemble training.
 - Evaluation/ensemble evaluation.
-
+## Project module view
 ![overview](./asset/block_diagram.png)
 
 Here are some machine learning concepts:
-- Parameters: Each model 
-- Hyper parameters: 
-- Layers:
-- Optimizers:
-- Sampling: 
-
-# Sub-packages
-
-[INCLUDE ../../packages/causality-core/DESCRIPTION.md]
-
-
-[INCLUDE ../../packages/causality-preprocessing/DESCRIPTION.md]
-
-[INCLUDE ../../packages/causality-representation/DESCRIPTION.md]
-
-[INCLUDE ../../packages/causality-sampling/DESCRIPTION.md]
-
-[INCLUDE ../../packages/causality-models/DESCRIPTION.md]
-
-[INCLUDE ../../packages/causality-layers/DESCRIPTION.md]
-
-[INCLUDE ../../packages/causality-memcache/DESCRIPTION.md]
-
-[INCLUDE ../../packages/causality-storage/DESCRIPTION.md]
-
-[INCLUDE ../../packages/causality-utils/DESCRIPTION.md]
-
-
-
+- Parameters: TBU
+- Hyper parameters: TBU
+- Layers: TBU
+- Optimizers: TBU
+- Sampling: TBU
