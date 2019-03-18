@@ -4,12 +4,12 @@ Causality intensively uses [mixin](https://en.wikipedia.org/wiki/Mixin) for comp
 are seperated into different sub-packages under the `/packages/` folder. Each sub-package exports at most one mixin for building pipeline, For example, causality-optimizer provide trainerMixins for optimizing parameters.
 
 Key design principles:
-- Isomorphic.
+- Make everything isomorphic.
 - Make everything easy to extend.
 - Make everything open to view.
 - Make data processing as functional blocks. 
 
-We not use type script because we try to early debt from unpaid [type tax](https://medium.com/javascript-scene/the-typescript-tax-132ff4cb175b). 
+We not use type script because we try to mitigate early technical debt from unpaid [type tax](https://medium.com/javascript-scene/the-typescript-tax-132ff4cb175b). 
 
 
 

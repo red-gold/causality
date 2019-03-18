@@ -1,2 +1,3 @@
-export { default as SingleLabelMixins } from './singleLabel.mixins';
-export { default as SequenceLabelsMixins } from './sequenceLabels.mixins';
+export { default as causalNetModels } from './causalNetSupervisedModels';
+export { default as BaseSupervisedModel } from './baseSupervisedModel';
+export { default as SingleLabelClassification } from './singleLableClassification';

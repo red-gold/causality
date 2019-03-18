@@ -1,70 +1,49 @@
 const UnSupervisedModelsMixins = (BasePipelineClass)=> class extends BasePipelineClass{
-    get Models(){
-        this.models;
-    }
-    set Models(models){
-        this.models = models;
-    }
+    
     get Loss(){
+        if(!this.modelLoss){
+            throw Error('Loss is not set');
+        }
         return this.modelLoss;
     }
-    set Loss(loss){
-        assert.beTypeOf(, Function);
-        this.modelLoss = loss;
-        this.modelLoss.bind(this);
-    }
-
-    get Reconstruct(){
-        return this.modelPredict;
-    }
-    set Reconstruct(predict){
-        this.modelPredict = predict;
-        this.modelPredict.bind(this);
+    
+    get Decode(){
+        if(!this.modelDecode){
+            throw Error('Predict is not set');
+        }
+        return this.modelDecode;
     }
 
     get Fit(){
+        if(!this.modelFit){
+            throw Error(`Fit is not set`);
+        }
         return this.modelFit;
     }
+
+    set Loss(loss){
+        this.modelLoss = loss;
+    }
+    
+    set Decode(decode){
+        this.modelDecode = decode;
+    }
+
     set Fit(fit){
-        this.modelFit = fit;
-        this.modelFit.bind(this);
+        this.modelDecode = fit;
+    }
+
+    set OneHotPredict(oneHotPredict){
+        this.modelOneHotPredict = oneHotPredict;
     }
 
     setModelByConfig(netConfig){
-        const {Loss, Encode, Decode, Fit} = netConfig.Model;
-        if(!Loss){
-            throw Error('Loss must be defind as a tensor function or acquire from CausalNet.models');
-        }
-        if(typeof(Loss) === 'function'){
-            this.Loss = Loss;
-        }
-        else{
-            throw Error('not knowning yet');
-        }
-        if(typeof(Fit) === 'function'){
-            this.Fit = Fit;
-        }
-        else{
-            throw Error('not knowning yet');
-        }
-        if(typeof(Predict) === 'function'){
-            this.Predict = Predict;
-        }
-        else{
-            throw Error('not knowning yet');
-        }
-        if(typeof(OneHotPredict) === 'function'){
-            this.OneHotPredict = OneHotPredict;
-        }
-        else{
-            throw Error('not knowning yet');
-        }
-        if(NumClasses > 0){
-            this.NumClasses = NumClasses;
-        }
-        else{
-            throw Error('NumClasses from netConfig must be non zero, positive number');
-        }
+        const model = netConfig.Model;
+        assert.beInstanceOf(model, BaseSupervisedModel);
+        this.Loss = Loss;
+        this.Fit = Fit;
+        this.Predict = Predict;
+        this.OneHotPredict = OneHotPredict;
     }
 };
 

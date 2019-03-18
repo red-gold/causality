@@ -2,6 +2,8 @@ import { Function } from 'causal-net.core';
 import { assert } from 'causal-net.utils';
 /**
  * This SamplingMixins class provide mixins for PipelineClass or DatasetClass
+ * @class SamplingMixins
+ * @extends BasePipelineClass
  * @example
  * [EXAMPLE ../examples/sampling.mixins.babel.js]
  */
