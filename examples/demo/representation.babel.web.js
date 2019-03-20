@@ -3,8 +3,9 @@ import { universalEmbedding } from 'causal-net.representation';
 (async ()=>{
     // termLogger.groupBegin();
     await universalEmbedding.connect();
-    alert('this is test');
     // termLogger.groupEnd();
     let sentVec = await universalEmbedding.sentenceEncode([ 'this is test' ]);
     sentVec.print();
+    let diffScore = await universalEmbedding.encodeMatching( 'this is a good day' , 'this is a terrible day' );
+    diffScore.print();  
 })();

@@ -16,7 +16,11 @@ const WordEmbeddingMixins = (BaseEmbeddingClass)=> class extends BaseEmbeddingCl
      * return the eucleudian distance between two representation vectors
      * @returns { Array } vec
      */
-    async encodeMatching(x, y){
+    async encodeMatching(sentence1, sentence2){
+        let x = await this.sentenceEncode([sentence1]);
+        x = x.reshape([-1]);
+        let y = await this.sentenceEncode([sentence2]);
+        y = y.reshape([-1]);
         return x.sub(y).norm().div(x.norm().mul(y.norm()).pow(0.5));
     }
     
