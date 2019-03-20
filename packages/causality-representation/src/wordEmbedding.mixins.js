@@ -9,7 +9,15 @@ const WordEmbeddingMixins = (BaseEmbeddingClass)=> class extends BaseEmbeddingCl
      * @returns { Array } vec
      */
     unknowVec(){
-        return this.F.zeroVec(this.VecSize);
+        return this.f.zeroVec(this.VecSize);
+    }
+
+    /**
+     * return the eucleudian distance between two representation vectors
+     * @returns { Array } vec
+     */
+    async encodeMatching(x, y){
+        return x.sub(y).norm().div(x.norm().mul(y.norm()).pow(0.5));
     }
     
     /**

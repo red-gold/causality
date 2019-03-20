@@ -14,6 +14,7 @@
     "start:web": "webpack --watch --info-verbosity verbose --config webpack.web.babel.js",
     "start:examples": "webpack-dev-server --open --config webpack.examples.babel.js",
     "build:examples": "webpack --config webpack.examples.babel.js",
+    "start:demos": "webpack-dev-server --open --config webpack.demo.babel.js",
     "start:node": "webpack --watch --info-verbosity verbose --config webpack.node.babel.js",
     "build:clean": "rimraf dist",
     "build:dev": "webpack --config webpack.dev.babel.js",

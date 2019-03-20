@@ -7,7 +7,7 @@ class CausalNetUnsupervisedModels extends platform.mixWith( Tensor, []){
     }
 
     autoEncoder(){
-        return AutoEncoder();
+        return new AutoEncoder();
     }
 }
 export default new CausalNetUnsupervisedModels();

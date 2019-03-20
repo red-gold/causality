@@ -6,7 +6,6 @@ import {default as AdamOptimizer} from './adamOptimizer';
  */
 class CausalNetSGDOptimizer{
     constructor(){
-
     }
     adam(optimizerParams){
         return new AdamOptimizer(optimizerParams); 

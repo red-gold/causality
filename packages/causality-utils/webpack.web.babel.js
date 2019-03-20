@@ -6,10 +6,10 @@ import common from './webpack.common.babel';
 const fakeFs = (context, request, callback)=>{
   if (/^fs$/.test(request)){
       console.log('found fs');
-      return callback(null, 'console');//console is exported instead of fs
+      return callback(null, 'null-loader');//console is exported instead of fs
   }
   callback();
-}
+};
 const WebConfig = merge(common, {
   output: {
     path: resolve(__dirname, 'dist'),

@@ -47,6 +47,9 @@
                   "./causal-doc/scripts/run_examples.js"]
             }
         },
+        { "name": "esdoc-publish-html-plugin", 
+          "option": 
+          { "template": "./causal-doc/template/"} },
         { "name": "./causal-doc/esdoc.plugin.js" }
   ]
 }

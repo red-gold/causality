@@ -325,32 +325,52 @@ let causalNet = new CausalNet(_NetConfig, parameters);
 <h2 id="causal-net-layer">causal-net.layer</h2><p>This module provides:</p>
 <h3 id="causalnetsgdoptimizer">causalNetSGDOptimizer</h3><ul>
 <li>Provide SGD optimizing methods: adam
-[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-layer/DESCRIPTION.md, /home/huynhnguyen/github/causality/packages/causality-layer/examples/examples/SGDOptimizer.babel.js]<h3 id="trainermixins">TrainerMixins</h3></li>
+[EXAMPLE  ERROR! /Users/huynh/github/causality/packages/causality-layer/DESCRIPTION.md, /Users/huynh/github/causality/packages/causality-layer/examples/examples/SGDOptimizer.babel.js]<h3 id="trainermixins">TrainerMixins</h3></li>
 <li>Mixins for mix with Pipeline class.
-[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-layer/DESCRIPTION.md, /home/huynhnguyen/github/causality/packages/causality-layer/examples/trainer.mixins.babel.js]</li>
+[EXAMPLE  ERROR! /Users/huynh/github/causality/packages/causality-layer/DESCRIPTION.md, /Users/huynh/github/causality/packages/causality-layer/examples/trainer.mixins.babel.js]</li>
 </ul>
-<h2 id="causal-net-optimizers">causal-net.optimizers</h2><p>This causal-net.optimizer is a sub-module for <a href="https://red-gold.github.io/causality-docs/">causality</a> project.
-This module provide optimizer instances and optimizer mixins</p>
+<h2 id="causal-net-optimizers">causal-net.optimizers</h2><p>This causal-net.optimizer provides: </p>
 <h3 id="causalnetsgdoptimizer">causalNetSGDOptimizer</h3><ul>
-<li>Provide SGD optimizing methods: adam
-[EXAMPLE  ERROR! /home/huynhnguyen/github/causality/packages/causality-optimizers/DESCRIPTION.md, /home/huynhnguyen/github/causality/packages/causality-optimizers/examples/examples/SGDOptimizer.babel.js]<h3 id="trainermixins">TrainerMixins</h3></li>
+<li>Provide SGD optimizing methods: adam</li>
+</ul>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { causalNetCore } from &quot;causal-net.core&quot;;
+import { causalNetSGDOptimizer } from &apos;causal-net.optimizers&apos;;
+
+var adam = causalNetSGDOptimizer.adam({learningRate: 0.01});
+
+const T = causalNetCore.CoreTensor;
+var a = T.variable(T.tensor([1,2,3,4]).reshape([2,2])); 
+var b = T.tensor([2,3,4,5]).reshape([2,2]);
+const FitFn = ()=&gt;{
+    return a.mul(b).mean();
+};
+console.log(adam.fit(FitFn));
+a.print();
+b.print();</code>
+</code></pre>
+<p><a href="./manual/./asset/examples/causalNetSGDOptimizers.babel.js">Run code</a></p>
+<h3 id="trainermixins">TrainerMixins</h3><ul>
 <li>Mixins for mix with Pipeline class.</li>
 </ul>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import { TrainerMixins, causalNetLayer } from &apos;causal-net.layer&apos;;
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { causalNetSGDOptimizer, TrainerMixins } from &apos;causal-net.optimizers&apos;;
 import { platform } from &apos;causal-net.utils&apos;;
 import { Tensor } from &apos;causal-net.core&apos;;
 const PipeLineConfigure = {
-
+    Trainer: {
+        Optimizer: causalNetSGDOptimizer.adam,
+        OptimizerParameters: {},
+        TrainableParameters: [],
+    }
 }
 class SimplePipeline extends platform.mixWith(Tensor, [TrainerMixins]){
     constructor(configure){
         super();
-        this.Layer = causalNetLayer;
+        this.Trainer = configure.Trainer;
     }
 }
 let pipeline = new SimplePipeline(PipeLineConfigure);
-pipeline.connect();
-console.log(pipeline.Layer instanceof Tensor);</code>
+console.log([ pipeline.Optimizer instanceof Tensor ]);
+console.log([ pipeline.OptimizerParameters, pipeline.TrainableParameters ]);</code>
 </code></pre>
 <p><a href="./manual/./asset/examples/trainer.mixins.babel.js">Run code</a></p>
 <h2 id="causal-net-memcache">causal-net.memcache</h2><h3 id="memdowncache">memDownCache</h3><ul>

@@ -1,3 +1,5 @@
+import { Tensor } from 'causal-net.core';
+import { assert } from 'causal-net.utils';
 const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     
     get Optimizer(){
@@ -7,33 +9,11 @@ const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         return this.optimizer;
     }
     
-    set Optimizer(optimizer){
-        if(!optimizer){
-            throw Error(`expect optimizer got ${optimizer}`);
-        }
-        this.optimizer = optimizer;
-    }
-    
     get OptimizerParameters(){
-        if(!this.optimizerParameters){
-            throw Error('optimizerParameters is not set');
-        }
         return this.optimizerParameters;
+        return this.Optimizer.Params;
     }
-    
-    set OptimizerParameters(optimizerParameters){
-        if(!optimizerParameters){
-            throw Error(`expect optimizerPameters got ${JSON.stringify(optimizerParameters)}`);
-        }
-        this.optimizerParameters = optimizerParameters;
-    }
-    
-    get Trainer(){
-        let optimizer = this.Optimizer;
-        let optimizerPameters = this.OptimizerParameters;
-        return optimizer(optimizerPameters);
-    }
-    
+
     get TrainableParameters(){
         if(!this.trainableParameters){
             throw Error('trainableParameters is not set');
@@ -41,10 +21,27 @@ const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         return this.trainableParameters;
     }
 
-    set TrainableParameters(trainableParameters){
-        if(!trainableParameters){
-            throw Error(`expect trainableParameters got ${trainableParameters}`);
+    set Trainer(trainer){
+        const { Optimizer, OptimizerParameters, TrainableParameters } = trainer;
+        this.OptimizerParameters = OptimizerParameters;
+        this.Optimizer = Optimizer;
+        if(TrainableParameters){
+            this.TrainableParameters = TrainableParameters;
         }
+    }
+
+    set Optimizer(optimizer){
+        let params = this.OptimizerParameters;
+        this.optimizer = optimizer(params);
+    }
+
+    set OptimizerParameters(optimizerParameters){
+        assert.beInstanceOf(optimizerParameters, Object);
+        this.optimizerParameters = optimizerParameters;
+    }
+
+    set TrainableParameters(trainableParameters){
+        assert.beInstanceOf(trainableParameters, Array);
         this.trainableParameters = trainableParameters;
     }
 
@@ -74,19 +71,8 @@ const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         return values.reduce((flatten,v)=>[...flatten, ...Flatten(v)],[]);
     }
 
-    
-    
     setTrainerByConfig(netConfig){
-        const Trainer = netConfig.Trainer;
-        if(!Trainer){
-            throw Error(`expect Trainer got ${Trainer}`);
-        }
-        const {Optimizer, OptimizerParameters, TrainableParameters} = Trainer;
-        this.Optimizer = Optimizer;
-        this.OptimizerParameters = OptimizerParameters;
-        if(TrainableParameters){
-            this.TrainableParameters = TrainableParameters;
-        }
+        this.Trainer = netConfig.Trainer;
     }
 };
 

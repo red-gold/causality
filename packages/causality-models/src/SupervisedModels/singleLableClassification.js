@@ -16,13 +16,14 @@ class SingleLabelClassification extends BaseSupervisedModel{
         return logProb;
     }
     
-    predict(pipelineOutTensor){
-        let logProb = this.fit(pipelineOutTensor);
+    predict(predictNetOutput){
+        let logProb = this.fit(predictNetOutput);
         let predictedClass = logProb.argMax(1);
         return predictedClass;
     }
-    oneHotPredict(pipelineOutTensor){
-        let predictedClass = this.predict(pipelineOutTensor);
+
+    oneHotPredict(predictNetOutput){
+        let predictedClass = this.predict(predictNetOutput);
         let oneHotPredict = this.T.oneHot(predictedClass, this.numClass);
         return oneHotPredict;
     }

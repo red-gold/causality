@@ -5,7 +5,7 @@ import { MemCacheMixins, memDownCache } from 'causal-net.memcache';
 import { default as WordEmbeddingMixins } from './wordEmbedding.mixins';
 import { default as ChunkLookUpMixins } from './Lookup/chunkLookup.mixins';
 import { default as TokenLookUpMixins } from './Lookup/tokenLookup.mixins';
-import { default as Function } from './function';
+import { default as functor } from './functor';
 /**
  * This CausalNetEmbedding provide methods for transform raw tokenized sentence into 
  * its single vector representation
@@ -31,7 +31,7 @@ class CausalNetEmbedding extends platform.mixWith(Tensor,
         this.fetch = fetch;
         this.Storage = indexDBStorage;   //store configure
         this.MemCache = memDownCache;    //store chunks
-        this.F = new Function();
+        this.f = functor;
         this.embeddingSavePath = '/embedding/';
         this.embeddingDescriptionPath = this.embeddingSavePath + 'description.json';
     }
