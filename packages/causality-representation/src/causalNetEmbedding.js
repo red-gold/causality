@@ -1,10 +1,11 @@
-import { Tensor } from 'causal-net.core';
+import { Tensor as BaseTensor } from 'causal-net.core';
 import { platform, fetch, jsonUtils } from 'causal-net.utils';
 import { StorageMixins, indexDBStorage } from 'causal-net.storage';
 import { MemCacheMixins, memDownCache } from 'causal-net.memcache';
 import { default as WordEmbeddingMixins } from './wordEmbedding.mixins';
 import { default as ChunkLookUpMixins } from './Lookup/chunkLookup.mixins';
 import { default as TokenLookUpMixins } from './Lookup/tokenLookup.mixins';
+import { default as VectorMetricMixins } from './vectorMetrics.mixins';
 import { default as functor } from './functor';
 /**
  * This CausalNetEmbedding provide methods for transform raw tokenized sentence into 
@@ -16,15 +17,16 @@ import { default as functor } from './functor';
  *             ChunkLookUpMixins,
  *             WordEmbeddingMixins ])}
  * @class CausalNetEmbedding
- * @extends  Tensor
+ * @extends  BaseTensor
  * @example
  * [EXAMPLE ../examples/causalNetEmbedding.babel.node.js]
  */
-class CausalNetEmbedding extends platform.mixWith(Tensor, 
+class CausalNetEmbedding extends platform.mixWith(BaseTensor, 
         [   StorageMixins, 
             MemCacheMixins,
             TokenLookUpMixins,
             ChunkLookUpMixins,
+            VectorMetricMixins,
             WordEmbeddingMixins ]){
     constructor(){
         super();

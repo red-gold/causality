@@ -4,23 +4,22 @@ class AutoEncoder extends BaseUnsupervisedModel{
         this.encodeSize;
     }
 
-    encode(encodeNetOuput){
-        return encodeNetOuput;
+    encode(pipelineOutTensor){
+        return pipelineOutTensor;
     }
 
-    decode(decodeNetOutput){
-        return decodeNetOutput;
+    decode(pipelineOutTensor){
+        return pipelineOutTensor
     }
 
 
-    fit(decodeNetOutput, inputTensor){
-        let decodeOuput = this.decode(decodeNetOutput);
-        let reconstructError = decodeOuput.sub(inputTensor);
+    fit(pipelineOutTensor, inputTensor){
+        let reconstructError = this.decode(pipelineOutTensor).sub(inputTensor);
         return reconstructError;
     }
     
-    loss(decodeNetOutput, inputTensor){
-        let reconstructError = this.fit(decodeNetOutput, inputTensor);
+    loss(pipelineOutTensor, inputTensor){
+        let reconstructError = this.fit(pipelineOutTensor, inputTensor);
         let squareError = reconstructError.pow(2);
         let loss = squareError.mean();
         return loss;
