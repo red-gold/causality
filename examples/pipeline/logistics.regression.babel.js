@@ -1,0 +1,46 @@
+import { default as SimpleNet } from './simplePipeline.babel';
+import { Log, Optimizer } from '../../src/index';
+const { termLogger } = Log;
+let inputs = [[0.52, 1.12,  0.77],
+              [0.88, -1.08, 0.15],
+              [0.52, 0.06, -1.30],
+              [0.74, -2.49, 1.39]];
+let targets = [ [0, 1], 
+                [0, 1], 
+                [0, 1], 
+                [0, 1] ];
+const _NetConfig = {
+    HyperParameters: {SampleSize: 4},
+    Classes: 2,
+    Pipeline:[
+        {   Name:'dense', Type: 'Tensor', 
+            Parameters: { Weight: [3, 2], Bias: [2]  },
+            Flow: [ { Op: 'dot', Parameter: 'Weight', Args: [] },
+                    { Op: 'add', Parameter: 'Bias',  Args: [] } ] 
+        },
+        {   Name:'PipeOutput', Type: 'Tensor', 
+            Flow: [ { Op: 'reshape', Args: [['$SampleSize', -1]] } ] 
+        } 
+    ] };
+let parameters = {};
+
+let causalNet = new SimpleNet(_NetConfig, parameters);
+
+(async ()=>{
+    const BatchTrainSampleGenerator = (epochIdx)=>([{idx:0, batchSize:4, data: [inputs, targets]}]);
+    let logTrain = await causalNet.train(BatchTrainSampleGenerator, 20);
+    termLogger.log(logTrain);
+    const BatchTestSampleGenerator = ()=>([{idx:0, batchSize:4, data: [inputs, targets]}]);
+    let testResult = await causalNet.test(BatchTestSampleGenerator);
+    termLogger.log({testResult});
+    await causalNet.saveParams('save_model.model');
+    await causalNet.loadParams('save_model.model');
+    testResult = await causalNet.test(BatchTestSampleGenerator);
+    termLogger.log({testResult});
+    testResult = await causalNet.ensembleTest(BatchTestSampleGenerator, ['save_model.model']);
+    termLogger.log({testResult});
+    testResult = await causalNet.ensembleTest(BatchTestSampleGenerator, ['save_model.model']);
+    termLogger.log({testResult});
+})().catch(err=>{
+    console.error({err});
+});

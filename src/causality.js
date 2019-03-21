@@ -1,71 +1,53 @@
-var isNode = require('is-node');
+import { Tensor } from 'causal-net.core';
+import { Platform } from 'causal-net.utils';
+import { LoggerMixins, termLogger } from 'causal-net.log';
+import { StorageMixins, indexDBStorage } from 'causal-net.storage';
+import { LayerMixins, causalNetLayer } from 'causal-net.layer';
+import { SupervisedModelsMixins, causalNetModels } from 'causal-net.models';
+import { TrainerMixins } from 'causal-net.optimizers';
 
-if(isNode){
-    var R = require('ramda');
-    var fs = require('fs-extra');
-    var tf = require('@tensorflow/tfjs');
-    require('@tensorflow/tfjs-node');
-}
-class Causality{
-    constructor(configure={}){
-        this.params = {w: tf.variable(tf.randomNormal([3,3])), 
-                       b: tf.variable(tf.randomNormal([3,3]))}
-    }
+import {  PipelineBaseMixins,
+          PipelineRunnerMixins,
+          PipelinePredictingMixins,
+          PipelineTrainingMixins,
+          PipelineEvaluatingMixins,
+          PipelineEnsemblePredictingMixins,
+          PipelineEnsembleTrainingMixins,
+          PipelineEnsembleEvaluatingMixins,
+          PipelineParametersMixins,
+          PipelineHyperParametersMixins,
+          Function as PipelineFunction } from './pipeline/index';
 
-    make_predict(data){
-        const {w,b} = this.params;
-        const predict = tf.tidy(()=>{
-                return w.dot(data).add(b);
-            });
-        return { predict };
-    }
-
-    loss(data){
-        let {predict} = this.make_predict(data);
-        let _loss = predict.sub(data).pow(tf.scalar(2)).mean();
-        return _loss; 
-    };
-
-    train(data, n_iters=10, lr=0.2){
-        const optimizer = tf.train.sgd(lr);
-        for(let iter of R.range(0,n_iters)){
-            optimizer.minimize(()=>{
-                let l = this.loss(data);
-                l.print();
-                return l;
-            });
-        }
-        return 
-    };
-    async get_params(){
-        const w = await Promise
-                    .all(R.map((v)=>v.data())
-                        (R.values(this.params)));
-        return R.fromPairs(R.__)
-                    (R.addIndex(R.map)
-                        ((k,i)=>[k, w[i]])(R.keys(this.params)));
-    }
-    async save_params(fileName){
-        const w = await this.get_params();
-        console.log(w);
-        return fs.writeJSON(fileName, w);
-    }
-}
-
-if(typeof require !== 'undefined' && require.main === module){
-    let data = tf.tensor([0, 1, 0,
-                          1, 1, 1,
-                          0, 1, 0], shape=[3,3]);
-    let causality = new Causality();
-    let {predict} = causality.make_predict(data);
-    predict.print();
-    causality.train(data);
-    
-    causality.get_params()
-        .then((w)=>{
-            console.log(w);
-        })
-        .catch(()=>{
-            console.log('save fail');
-        });
+export default class CausalNet extends Platform.mixWith(Tensor, [
+        StorageMixins,
+        LoggerMixins,
+        PipelineBaseMixins,
+        PipelineHyperParametersMixins,
+        PipelineParametersMixins,
+        LayerMixins,
+        SupervisedModelsMixins,
+        TrainerMixins,
+        PipelineRunnerMixins,
+        PipelinePredictingMixins,
+        PipelineTrainingMixins,
+        PipelineEvaluatingMixins,
+        PipelineEnsemblePredictingMixins,
+        PipelineEnsembleTrainingMixins,
+        PipelineEnsembleEvaluatingMixins
+    ]){
+    constructor(netConfig, parameters={}){
+        super();
+        this.F = new Function();
+        this.R = this.F.CoreFunction;
+        this.setBasePipelineByConfig(netConfig);
+        this.setHyperParametersByConfig(netConfig);
+        this.setModelByConfig(netConfig);
+        this.Parameters = parameters;
+        this.setTrainerByConfig(netConfig);
+        this.Storage = indexDBStorage;
+        this.saveModelDir = '/saveModel/';
+        this.Logger = termLogger;
+        this.Layer = causalNetLayer;
+        this.Models = causalNetModels;
+    }  
 }

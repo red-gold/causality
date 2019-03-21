@@ -1,0 +1,1 @@
+export { default as WordContextModelMixins } from './wordContextsModels.mixins';
