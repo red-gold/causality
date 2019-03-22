@@ -1,11 +1,6 @@
 import { universalEmbedding } from 'causal-net.representation';
 import { termLogger } from 'causal-net.log';
-(async ()=>{
-    termLogger.groupBegin('loading model from google tensorflow.hub');
-    universalEmbedding.connect().then(()=>{
-        termLogger.groupEnd();
-    });
-})();
+
 const compareSentences = async (sentenceA, sentenceB)=>{
     termLogger.groupBegin('compare sentences');
     let resultScore = await universalEmbedding.encodeMatching( sentenceA , sentenceB );
@@ -14,11 +9,17 @@ const compareSentences = async (sentenceA, sentenceB)=>{
     termLogger.groupEnd();
 };
 
-$('#compare-text').click(()=>{
+$('#compare-text').click((event)=>{
+    event.preventDefault(); 
     let sentenceA = $('#sentenceA').val();
     let sentenceB = $('#sentenceB').val();
     compareSentences(sentenceA.trim(), sentenceB.trim());
 });
-$( document ).ready(function() {
-    console.log( "ready!" );
-});
+
+(async ()=>{
+    termLogger.connect(document.getElementById('logger'));
+    termLogger.groupBegin('loading model from google tensorflow.hub');
+    universalEmbedding.connect().then(()=>{
+        termLogger.groupEnd();
+    });
+})();

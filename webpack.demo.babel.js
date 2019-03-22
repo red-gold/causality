@@ -5,6 +5,9 @@ const DemoConfig = {
     entry: {
         'representation-demo': './examples/demo/representation.babel.web.js'
     },
+    output: {
+        path: resolve(__dirname, 'demo_dist')
+    },
     mode: 'development',
     devtool: 'inline-source-map',
     module: {
@@ -22,9 +25,6 @@ const DemoConfig = {
         }
         ],
     },	
-    output: {
-        path: resolve(__dirname, 'doc_dist')
-    },
     optimization: {
         splitChunks: {
             cacheGroups: {
@@ -38,6 +38,12 @@ const DemoConfig = {
         }
     },
     plugins: [
+        new HtmlWebpackPlugin({
+            title: 'demo main page',
+            chunks: [],
+            filename: 'index.html',
+            template: './examples/demo/index.html'
+        }),
         new HtmlWebpackPlugin({
             title: 'representation demo',
             chunks: ['representation-demo','vendors'],

@@ -1,7 +1,7 @@
 {
-  "coverage": "25.66%",
-  "expectCount": 526,
-  "actualCount": 135,
+  "coverage": "25.8%",
+  "expectCount": 527,
+  "actualCount": 136,
   "files": {
     "causality/packages/causality-core/src/causalNetCore.js": {
       "expectCount": 7,
@@ -130,8 +130,8 @@
       "expectCount": 3,
       "actualCount": 1,
       "undocumentLines": [
-        12,
-        17
+        11,
+        16
       ]
     },
     "causality/packages/causality-layer/src/layer.mixins.js": {
@@ -147,7 +147,7 @@
       "expectCount": 2,
       "actualCount": 1,
       "undocumentLines": [
-        2
+        1
       ]
     },
     "causality/packages/causality-log/src/baseLogger.js": {
@@ -327,7 +327,7 @@
         7,
         11,
         16,
-        22
+        21
       ]
     },
     "causality/packages/causality-models/src/UnSupervisedModels/baseUnsupervisedModel.js": {
@@ -561,18 +561,18 @@
       "expectCount": 18,
       "actualCount": 6,
       "undocumentLines": [
-        49,
         51,
-        52,
         53,
         54,
         55,
         56,
-        79,
-        93,
-        103,
-        106,
-        140
+        57,
+        58,
+        81,
+        95,
+        105,
+        108,
+        142
       ]
     },
     "causality/packages/causality-representation/src/functor.js": {
@@ -596,16 +596,21 @@
       "expectCount": 7,
       "actualCount": 2,
       "undocumentLines": [
-        24,
-        30,
-        33,
-        42,
-        50
+        25,
+        31,
+        34,
+        43,
+        51
       ]
     },
+    "causality/packages/causality-representation/src/vectorMetrics.mixins.js": {
+      "expectCount": 2,
+      "actualCount": 2,
+      "undocumentLines": []
+    },
     "causality/packages/causality-representation/src/wordEmbedding.mixins.js": {
-      "expectCount": 5,
-      "actualCount": 5,
+      "expectCount": 4,
+      "actualCount": 4,
       "undocumentLines": []
     },
     "causality/packages/causality-representation/src/wordEmbeddingFunctor.mixins.js": {

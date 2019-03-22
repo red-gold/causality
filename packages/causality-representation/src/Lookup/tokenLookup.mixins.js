@@ -14,8 +14,8 @@ const TokenLookUpMixins = (BaseWordEmbeddingClass)=> class extends BaseWordEmbed
         };
     }
     /**
-     *
-     * @param { String } token - 
+     * Update token look up
+     * @param { String } token - token 
      * @param { Array } vec - vector representation of token
      */
     async updateTokenLookUp(token, vec){

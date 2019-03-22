@@ -11,7 +11,7 @@ let inputs = [ [0.52, 0.03],
                [1.12, 0.02] ];
 let value = T.tensor(inputs);
 let output = denseLayer.Net(value, params);
-console.log(output.dataSync());
+console.log(await output.data());
 
 const Runner = (value, dnet, params)=>{
     return T.tidy(()=>{

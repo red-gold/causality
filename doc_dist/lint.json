@@ -269,31 +269,31 @@
     "filePath": "causality/packages/causality-representation/src/wordEmbedding.mixins.js",
     "lines": [
       {
-        "lineNumber": 22,
+        "lineNumber": 14,
         "line": "    /**"
       },
       {
-        "lineNumber": 23,
+        "lineNumber": 15,
         "line": "     * return the vectors of tokenized sentences"
       },
       {
-        "lineNumber": 24,
+        "lineNumber": 16,
         "line": "     * This function require sentence to be tokenized via preprocessing"
       },
       {
-        "lineNumber": 25,
+        "lineNumber": 17,
         "line": "     * @param { Array } tokens - array of string tokens of sentence"
       },
       {
-        "lineNumber": 26,
+        "lineNumber": 18,
         "line": "     * @returns { Tensor } encoded sentences"
       },
       {
-        "lineNumber": 27,
+        "lineNumber": 19,
         "line": "     */"
       },
       {
-        "lineNumber": 28,
+        "lineNumber": 20,
         "line": "    async sentenceEncode(sentences){"
       }
     ],
