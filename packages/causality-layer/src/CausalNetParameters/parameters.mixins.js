@@ -1,5 +1,43 @@
-const PipelineParametersMixins = (PipelineClass)=> class extends PipelineClass{ 
-    get Parameters(){
+const NetParametersMixins = (BaseParameterClass)=> class extends BaseParameterClass{ 
+    
+    get PredictParameters(){
+        if(!this.parameters || !this.parameters.encode){
+            throw Error('parameters is not set');
+        }
+        return this.parameters.encode;
+    }
+    
+    get EncodeParameters(){
+        if(!this.parameters || !this.parameters.encode){
+            throw Error('parameters is not set');
+        }
+        return this.parameters.encode;
+    }
+    
+    get DecodeParameters(){
+        if(!this.parameters || !this.parameters.decode){
+            throw Error('parameters is not set');
+        }
+        return this.parameters.decode;
+    }
+    
+    set PredictParameters(predictParameters){
+        return this.parameters.predict = predictParameters;
+    }
+    
+    set EncodeParameters(encodeParameters){
+        return this.parameters.encode = encodeParameters;
+    }
+    
+    set DecodeParameters(decodeParameters){
+        return this.parameters.decode = decodeParameters;
+    }
+    
+    get SaveModelDir(){
+        return 'saveModel/';
+    }
+    
+    exportParameters(){
         if(!this.parameters){
             throw Error('parameter must be set');
         }
@@ -9,16 +47,11 @@ const PipelineParametersMixins = (PipelineClass)=> class extends PipelineClass{
             return params;
         })();
     }
-    set Parameters(params){
-        if(!this.pipeline){
-            throw Error('pipeline is not defined and must be set from basePipeline');
-        }
-        this.parameters = this.setOrInitParams(this.pipeline, params);
-    }
+    
     async extractParamFromTensorDict(params, fn){
         const F = this.F, R = this.R;
         const Traveller = async (params, fn)=>{
-            if(F.isTensor(params)){
+            if(this.isTensor(params)){
                 return await fn(params);
             }
             else{
@@ -66,21 +99,24 @@ const PipelineParametersMixins = (PipelineClass)=> class extends PipelineClass{
     }
 
     async getSavedParams(){
-        let fileList = await this.storage.getFileList(this.saveModelDir);
-        return fileList.map(fileName=>fileName.replace(this.saveModelDir,''));
+        const Storage = this.Storage, SaveDir = this.SaveModelDir;
+        let fileList = await Storage.getFileList(SaveDir);
+        return fileList.map(fileName=>fileName.replace(SaveDir,''));
     }
 
     async saveParams(fileName){
-        const params = await this.Parameters;
-        await this.storage.writeFile(this.saveModelDir + fileName, JSON.stringify(params));
+        let params = await this.Parameters;
+        const SaveDir = this.SaveModelDir;
+        await this.storage.writeFile(SaveDir + fileName, JSON.stringify(params));
         return params;
     }
     async loadParams(fileName){
-        let strParams = await this.storage.readFile(this.saveModelDir+fileName);
+        const SaveDir = this.SaveModelDir;
+        let strParams = await this.storage.readFile(SaveDir+fileName);
         let params = JSON.parse(strParams);
         this.Parameters = params;
         return await this.Parameters;
     }
 };
 
-export default PipelineParametersMixins;
+export default NetParametersMixins;

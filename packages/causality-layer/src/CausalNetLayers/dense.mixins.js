@@ -14,9 +14,10 @@ const DenseLayerMixins = (PipelineClass)=> class extends PipelineClass{
             Name: name, Type: 'Layer',
             Parameters: { Weight: [inputSize, outputSize], Bias: [outputSize] },
             Net: function(value, params){
+                    let trace = {};
                     let {Weight, Bias} = params;
                     let result = value.dot(Weight).add(Bias);
-                    return result;
+                    return { result, trace };
                 }
             };
     }

@@ -15,5 +15,5 @@ const PipelineConfig = {
 
 class SimplePipeline extends LayerMixins{}
 
-let pipeline = n
+let pipeline = 
 

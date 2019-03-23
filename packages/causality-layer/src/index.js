@@ -1,2 +1,3 @@
-export { default as causalNetLayer } from './causalNetLayer';
-export { default as LayerMixins } from './layer.mixins';
+export { causalNetLayers, LayerMixins } from './CausalNetLayers/index';
+export { causalNetRunner, RunnerMixins } from './CausalNetRunner/index';
+export { default as NetMixins } from './net.mixins';

@@ -1,24 +1,11 @@
-import { assert } from 'causal-net.utils';
-import { Tensor as BaseTensor } from 'causal-net.core';
 /**
- * This LayerMixins class provide mixin for building pipeline
+ * This RunnerMixins class provide mixin for building pipeline
  * @class CausalNetLayer
  * @extends BasePipelineClass
  * @example
  * [EXAMPLE ../examples/layer.mixins.babel.js]
  */
-const LayerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
-    get Layer(){
-        if(!this.layer){
-            throw Error('layer is not set');
-        }
-        this.layer;
-    }
-    set Layer(layer){
-        let {}
-        this.layer = layer;
-    }
-
+const RunnerMixins = (BaseRunnerClass)=> class extends BaseRunnerClass{
     runOpFlow(value, flow, parameters){
         const R = this.R;
         const OpsRunner = R.addIndex(R.reduce)(R.__,{result: value, trace: {}}, flow);
@@ -37,8 +24,7 @@ const LayerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     }
 
     runOpLayer(value, net, parameters){
-        let result = net(value, parameters);
-        let trace = {};
+        let { result, trace } = net(value, parameters);
         return {result, trace};
     }
     runLayer(value, layerConfigure, layerParameters){
@@ -56,16 +42,16 @@ const LayerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
             throw Error('type must be either Layer or Tensor');
         }
     }
-    
+
     tracing(traces, name, trace){
         if(traces){
             traces.push({[name]: trace});
         }
     }
-    run(samples, traces=[]){
+    run(layers, samples, parameters, traces=[]){
         let pipeValue = {PipeInput: samples}, lastLayer = 'PipeInput';
-        for(let layer of this.pipeline){
-            let layerOutput = this.runLayer(pipeValue[lastLayer], layer, this.parameters[layer.Name]);
+        for(let layer of layers){
+            let layerOutput = this.runLayer(pipeValue[lastLayer], layer, parameters[layer.Name]);
             pipeValue[layer.Name] = layerOutput[layer.Name];
             lastLayer = layer.Name;
             this.tracing(traces, layer.Name, layerOutput.trace);
@@ -75,4 +61,4 @@ const LayerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     }
 };
 
-export default LayerMixins;
+export default RunnerMixins;

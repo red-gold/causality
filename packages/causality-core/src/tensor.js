@@ -18,4 +18,8 @@ export default class Tensor{
     get CoreTensor(){
         return this.T;
     }
+
+    isTensor(object){
+       return object instanceof this.T.Tensor; 
+    }
 }
