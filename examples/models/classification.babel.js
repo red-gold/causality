@@ -9,7 +9,7 @@ let targets = [[0, 1], [0, 1], [0, 1], [0, 1]];
 const _NetConfig = {
     HyperParameters: {SampleSize: 4},
     NumClasses: 2,
-    Net:{Predict: [ {   Name:'dense', Type: 'Tensor', 
+    Layers:{Predict: [ {   Name:'dense', Type: 'Tensor', 
                         Parameters: { Weight: [3, 2], Bias: [2]  },
                         Flow: [ { Op: 'dot', Parameter: 'Weight', Args: [] },
                                 { Op: 'add', Parameter: 'Bias',  Args: [] } ] 

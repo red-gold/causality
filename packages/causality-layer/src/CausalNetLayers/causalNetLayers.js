@@ -15,8 +15,10 @@ class CausalNetLayers extends platform.mixWith(BaseTensor,
         this.layerNames = [];
     }
     nameGenerator(layerType){
-        layerIdx = this.layerNames.length; 
-        return layerType + '/' + layerIdx;
+        const layerIdx = this.layerNames.length; 
+        let newName = layerType + '/' + layerIdx;
+        this.layerNames.push(newName);
+        return newName;
     }
 }
 

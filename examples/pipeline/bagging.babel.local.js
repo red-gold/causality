@@ -9,6 +9,7 @@ const _NetConfig = {
             Label:()=>{},
             Sample:()=>{}
         },
+        
         TrainData:()=>{},
         TestData:()=>{},
         ValidateData:()=>{}

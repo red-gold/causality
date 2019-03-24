@@ -12,8 +12,8 @@ class CausalNetCore{
         this.F = new Functor();
         this.T = new Tensor();
     }
-    get CoreFunction(){
-        return this.F.CoreFunction; 
+    get CoreFunctor(){
+        return this.F.CoreFunctor; 
     }
 
     get CoreTensor(){

@@ -18,7 +18,8 @@
   },
   "dependencies": {
     "@tensorflow/tfjs": "^0.14.1",
-    "@tensorflow/tfjs-tsne": "^0.2.0"
+    "@tensorflow/tfjs-tsne": "^0.2.0",
+    "causal-net.storage": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

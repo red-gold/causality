@@ -1,11 +1,10 @@
 /**
- * This RunnerMixins class provide mixin for building pipeline
- * @class CausalNetLayer
- * @extends BasePipelineClass
- * @example
- * [EXAMPLE ../examples/layer.mixins.babel.js]
+ * This RunnerMixins class provide methods for runner class.
+ * @class RunnerMixins
+ * @extends BaseRunnerClass
  */
-const RunnerMixins = (BaseRunnerClass)=> class extends BaseRunnerClass{
+const RunnerMixins = ( BaseRunnerClass )=> class extends BaseRunnerClass{
+    
     runOpFlow(value, flow, parameters){
         const R = this.R;
         const OpsRunner = R.addIndex(R.reduce)(R.__,{result: value, trace: {}}, flow);
@@ -29,7 +28,6 @@ const RunnerMixins = (BaseRunnerClass)=> class extends BaseRunnerClass{
     }
     runLayer(value, layerConfigure, layerParameters){
         const {Name, Type, Flow, Net} = layerConfigure;
-        this.logger.debug({Name, Type, Flow, Net});
         if(Type === 'Tensor'){
             let {result, trace} = this.runOpFlow(value, Flow, layerParameters);
             return {[Name]: result, trace};
@@ -48,7 +46,7 @@ const RunnerMixins = (BaseRunnerClass)=> class extends BaseRunnerClass{
             traces.push({[name]: trace});
         }
     }
-    run(layers, samples, parameters, traces=[]){
+    run(layers, samples, parameters, traces=null){
         let pipeValue = {PipeInput: samples}, lastLayer = 'PipeInput';
         for(let layer of layers){
             let layerOutput = this.runLayer(pipeValue[lastLayer], layer, parameters[layer.Name]);
@@ -56,7 +54,9 @@ const RunnerMixins = (BaseRunnerClass)=> class extends BaseRunnerClass{
             lastLayer = layer.Name;
             this.tracing(traces, layer.Name, layerOutput.trace);
         }
-        this.logger.debug({traces});
+        if(traces){
+            this.logger.debug({traces});
+        }
         return pipeValue[lastLayer];
     }
 };

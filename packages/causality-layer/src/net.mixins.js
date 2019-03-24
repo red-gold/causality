@@ -1,6 +1,6 @@
 /**
  * This NetMixins class provide mixin for building pipeline
- * @class CausalNetLayer
+ * @class NetMixins
  * @extends BasePipelineClass
  * @example
  * [EXAMPLE ../examples/net.mixins.babel.js]
@@ -9,8 +9,8 @@ const NetMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     getNetFromConfig(pipelineConfig){
         const { Net } = pipelineConfig;
         const { Layers, Parameters } = Net;
-        this.NetRunner.Layers = Layers;
-        this.NetParameters.setOrInitParams(Parameters, Layers);
+        this.NetLayers = Layers;
+        this.NetParameters.setOrInitParams(Layers, Parameters);
     }
     set NetParameters(parameters){
         this.netParameters = parameters;
@@ -31,28 +31,38 @@ const NetMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         return this.netRunner;
     }
 
-    netPredict(samples, traces=[]){
+    set NetLayers(layers){
+        console.log({layers});
+        this.netLayers = layers;
+    }
+
+    get NetLayers(){
+        if(!this.netLayers){
+            throw Error('netLayers is not set');
+        }
+        return this.netLayers;
+    }
+
+    netPredict(samples, traces=null){
         const NetRunner = this.NetRunner, NetParameters = this.NetParameters;
-        let predictLayers = NetRunner.PredictLayers;
+        let predictLayers = this.NetLayers.Predict;
         let predictParameters = NetParameters.PredictParameters;
-        let runner = this.NetRunner;
-        return runner.run(predictLayers, samples, predictParameters, traces);
+        
+        return NetRunner.run(predictLayers, samples, predictParameters, traces);
     }
 
-    netEncode(samples, traces=[]){
+    netEncode(samples, traces=null){
         const NetRunner = this.NetRunner, NetParameters = this.NetParameters;
-        let encodeLayers = NetRunner.EncodeLayers;
+        let encodeLayers = this.NetLayers.Encode;
         let encodeParameters = NetParameters.EncodeParameters;
-        let runner = this.NetRunner;
-        return runner.run(encodeLayers, samples, encodeParameters, traces);
+        return NetRunner.run(encodeLayers, samples, encodeParameters, traces);
     }
 
-    netDecode(samples, traces=[]){
+    netDecode(samples, traces=null){
         const NetRunner = this.NetRunner, NetParameters = this.NetParameters;
-        let decodeLayers = NetRunner.DecodeLayers;
+        let decodeLayers = this.NetLayers.Decode;
         let decodeParameters = NetParameters.DecodeParameters;
-        let runner = this.NetRunner;
-        return runner.run(decodeLayers, samples, decodeParameters, traces);
+        return NetRunner.run(decodeLayers, samples, decodeParameters, traces);
     }
 };
 
