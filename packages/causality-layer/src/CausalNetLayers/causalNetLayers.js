@@ -9,7 +9,8 @@ import { default as LayerMixins } from './layer.mixins';
  * @extends BaseTensor
  */
 class CausalNetLayers extends platform.mixWith(BaseTensor, 
-    [ LayerMixins, DenseMixins ] ){
+    [ LayerMixins, 
+      DenseMixins ] ){
     constructor(){
         super();
         this.layerNames = [];

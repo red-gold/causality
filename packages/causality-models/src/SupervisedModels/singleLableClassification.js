@@ -11,27 +11,39 @@ class SingleLabelClassification extends BaseSupervisedModel{
         }
     }
     
-    fit(pipelineOutTensor){
-        let logProb = pipelineOutTensor.sub(pipelineOutTensor.logSumExp(1, true));
-        return logProb;
+    get Fit(){
+        return (inputTensor, netRunners)=>{
+            let outPutTensor = netRunners.PredictRunner(inputTensor);
+            let logProb = outPutTensor.sub(outPutTensor.logSumExp(1, true));
+            return logProb;
+        };
     }
     
-    predict(predictNetOutput){
-        let logProb = this.fit(predictNetOutput);
-        let predictedClass = logProb.argMax(1);
-        return predictedClass;
+    get Predict(){
+        const Fit = this.Fit;
+        return (inputTensor, netRunner)=>{
+            let logProb = Fit(inputTensor, netRunner);
+            let predictedClass = logProb.argMax(1);
+            return predictedClass;
+        };
     }
 
-    oneHotPredict(predictNetOutput){
-        let predictedClass = this.predict(predictNetOutput);
-        let oneHotPredict = this.T.oneHot(predictedClass, this.numClass);
-        return oneHotPredict;
+    OneHotPredict(){
+        const Predict = this.Predict;
+        return (inputTensor, netRunner)=>{
+            let predictedClass = Predict(inputTensor, netRunner);
+            let oneHotPredict = this.T.oneHot(predictedClass, this.numClass);
+            return oneHotPredict;
+        };
     }
-    loss(pipelineOutTensor, labelTensor){
-        let logProb = this.fit(pipelineOutTensor);
-        let likelihood = logProb.neg().mul(labelTensor);
-        let loss = likelihood.sum(1).mean();
-        return loss;
+    Loss(){
+        const Fit = this.Fit;
+        return (inputTensor, labelTensor, netRunner)=>{
+            let logProb = Fit(inputTensor, netRunner);
+            let likelihood = logProb.neg().mul(labelTensor);
+            let loss = likelihood.sum(1).mean();
+            return loss;
+        };
     }
 }
 export default SingleLabelClassification;

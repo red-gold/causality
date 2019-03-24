@@ -22,7 +22,7 @@ const LayerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     
     get PredictLayers(){
         if(!this.predictLayers){
-            throw Error('predictLayers1 is not set');
+            throw Error('predictLayers is not set');
         }
         this.predictLayers;
     }

@@ -4,7 +4,24 @@
  * @extends BaseRunnerClass
  */
 const RunnerMixins = ( BaseRunnerClass )=> class extends BaseRunnerClass{
-    
+    set NetParameters(parameters){
+        this.netParameters = parameters;
+    }
+    set NetLayers(netLayers){
+        this.netLayers = netLayers;
+    }
+    get NetParameters(){
+        if(!this.netParameters){
+            throw Error('netParameters is not set');
+        }
+        return this.netParameters;
+    }
+    get NetLayers(){
+        if(!this.netLayers){
+            throw Error('netLayers is not set');
+        }
+        return this.netLayers;
+    }
     runOpFlow(value, flow, parameters){
         const R = this.R;
         const OpsRunner = R.addIndex(R.reduce)(R.__,{result: value, trace: {}}, flow);
@@ -58,6 +75,28 @@ const RunnerMixins = ( BaseRunnerClass )=> class extends BaseRunnerClass{
             this.logger.debug({traces});
         }
         return pipeValue[lastLayer];
+    }
+
+    get PredictRunner(){
+        let predictLayers = this.NetLayers.Predict;
+        let predictParameters = this.NetParameters.PredictParameters;
+        return (samples)=>{
+            return this.run(predictLayers, samples, predictParameters);
+        };
+    }
+    get EncodeRunner(){
+        let encodeLayers = this.NetLayers.Encode;
+        let encodeParameters = this.NetParameters.EncodeParameters;
+        return (samples)=>{
+            return this.run(encodeLayers, samples, encodeParameters);
+        };
+    }
+    get DecodeRunner(){
+        let decodeLayers = this.NetLayers.Decode;
+        let decodeParameters = this.NetParameters.DecodeParameters;
+        return (samples)=>{
+            return this.run(decodeLayers, samples, decodeParameters);
+        };
     }
 };
 

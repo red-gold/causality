@@ -4,6 +4,7 @@ class BaseSupervisedModel extends Tensor{
         super();
         this.modelName = '';
     }
+
     fit(){
         throw Error('implement required');
     }

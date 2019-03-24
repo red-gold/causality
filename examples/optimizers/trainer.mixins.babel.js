@@ -2,10 +2,18 @@ import { causalNetSGDOptimizer, TrainerMixins } from 'causal-net.optimizers';
 import { platform } from 'causal-net.utils';
 import { Tensor } from 'causal-net.core';
 const PipeLineConfigure = {
-    Trainer: {
-        Optimizer: causalNetSGDOptimizer.adam,
-        OptimizerParameters: {},
-        TrainableParameters: [],
+    Net:{
+        HyperParameters: {SampleSize:10},
+        Parameters: {},
+        Layer: { Predict: [], Encode: [], Decode: [] },
+        Model: { 
+            Fit: ()=>{}, 
+            Loss: ()=>{}
+        },
+        Optimizer: {
+            Method: ()=>{},
+            OptimizerParameters:{}
+        }
     }
 }
 class SimplePipeline extends platform.mixWith(Tensor, [TrainerMixins]){

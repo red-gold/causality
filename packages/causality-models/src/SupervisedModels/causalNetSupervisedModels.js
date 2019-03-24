@@ -5,8 +5,10 @@ class CausalNetModels extends platform.mixWith( Tensor, [] ){
     constructor(){
         super();
     }
+    
     classification(numClass){
-        return new SingleLabelClassification(numClass);
+        this.model = new SingleLabelClassification(numClass);
+        return this.model;
     }
 }
 export default new CausalNetModels();

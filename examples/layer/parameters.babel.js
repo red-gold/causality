@@ -16,4 +16,3 @@ import { causalNetLayers } from 'causal-net.layer';
     console.log(await causalNetParameters.getSavedParamList());
     console.log(await causalNetParameters.loadParams('save0'));
 })();
-// console.log({'parameters': causalNetParameters.Parameters});
