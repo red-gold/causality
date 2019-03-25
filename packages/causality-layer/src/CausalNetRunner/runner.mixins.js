@@ -77,21 +77,21 @@ const RunnerMixins = ( BaseRunnerClass )=> class extends BaseRunnerClass{
         return pipeValue[lastLayer];
     }
 
-    get PredictRunner(){
+    get Predictor(){
         let predictLayers = this.NetLayers.Predict;
         let predictParameters = this.NetParameters.PredictParameters;
         return (samples)=>{
             return this.run(predictLayers, samples, predictParameters);
         };
     }
-    get EncodeRunner(){
+    get Encoder(){
         let encodeLayers = this.NetLayers.Encode;
         let encodeParameters = this.NetParameters.EncodeParameters;
         return (samples)=>{
             return this.run(encodeLayers, samples, encodeParameters);
         };
     }
-    get DecodeRunner(){
+    get Decoder(){
         let decodeLayers = this.NetLayers.Decode;
         let decodeParameters = this.NetParameters.DecodeParameters;
         return (samples)=>{

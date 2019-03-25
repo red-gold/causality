@@ -2,6 +2,16 @@ import { Tensor } from 'causal-net.core';
 import { assert } from 'causal-net.utils';
 const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     
+    get Trainer(){
+        const T = this.T;
+        return (sampleTensor, labelTensor, Loss=this.LossModel, Optimizer=this.Optimizer)=>{
+            const LossFn = ()=>{
+                return T.tidy( ()=>{ return Loss(sampleTensor, labelTensor); } );
+            };
+            return Optimizer.fit(LossFn);
+        };
+    }
+
     get Optimizer(){
         if(!this.optimizer){
             throw Error('optimizer is not set');
@@ -9,70 +19,52 @@ const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         return this.optimizer;
     }
     
-    get OptimizerParameters(){
-        return this.optimizerParameters;
-        return this.Optimizer.Params;
-    }
-
-    get TrainableParameters(){
-        if(!this.trainableParameters){
-            throw Error('trainableParameters is not set');
-        }
-        return this.trainableParameters;
-    }
-
-    set Trainer(trainer){
-        const { Optimizer, OptimizerParameters, TrainableParameters } = trainer;
-        this.OptimizerParameters = OptimizerParameters;
-        this.Optimizer = Optimizer;
-        if(TrainableParameters){
-            this.TrainableParameters = TrainableParameters;
-        }
-    }
 
     set Optimizer(optimizer){
-        let params = this.OptimizerParameters;
-        this.optimizer = optimizer(params);
+        this.optimizer = optimizer;
     }
 
-    set OptimizerParameters(optimizerParameters){
-        assert.beInstanceOf(optimizerParameters, Object);
-        this.optimizerParameters = optimizerParameters;
+    get TrainData(){
+        if(!this.trainData){
+            throw Error('trainData is not set');
+        }
+        return this.trainData;
+    }
+    set TrainData(trainData){
+        this.trainData = trainData;
     }
 
-    set TrainableParameters(trainableParameters){
-        assert.beInstanceOf(trainableParameters, Array);
-        this.trainableParameters = trainableParameters;
+    train(numIter=10){
+        for(let iter of new Array(numIter).map((d,i)=>i)){
+            return 0;
+        }
     }
 
-    flattenParams(params){
-        const R = this.R, F = this.F;
-        const MapValues = (objOrArray)=>Array.isArray(objOrArray)?objOrArray:Object.values(objOrArray);
-        const Flatten = (pv)=>{
-            if(F.isTensor(pv)){
-                return pv;
-            }
-            else{
-                let values = MapValues(pv);
-                let flatten = values.reduce((flatten, v)=>{
-                    let res = Flatten(v);
-                    if(R.is(Array, res)){
-                        flatten = [...flatten, ...res];
-                    }
-                    else{
-                        flatten = [...flatten, res];
-                    }
-                    return flatten;
-                }, []);
-                return flatten;
-            }
-        };
-        let values = MapValues(params);
-        return values.reduce((flatten,v)=>[...flatten, ...Flatten(v)],[]);
+    test(){
+
     }
 
-    setTrainerByConfig(netConfig){
-        this.Trainer = netConfig.Trainer;
+    setByConfig(pipelineConfig){
+        if(super.setByConfig){
+            super.setByConfig(pipelineConfig);
+        }
+        this.logger.groupBegin('set Trainer by config');
+        const Net = pipelineConfig.Net;
+        if(!Net){
+            throw Error(`Net is not set in ${JSON.stringify(pipelineConfig)}`);
+        }
+        const { Optimizer } = Net;
+        if(!Optimizer){
+            throw Error(`Model is not set in ${JSON.stringify(Net)}`);
+        }
+        this.Optimizer = Optimizer;
+        if(!pipelineConfig.Dataset){
+            throw Error(`Dataset is not set in ${JSON.stringify(pipelineConfig)}`);
+        }
+        this.TrainData = pipelineConfig.Dataset.TrainData;
+        this.TestData = pipelineConfig.Dataset.TestData;
+        this.ValidateData = pipelineConfig.Dataset.ValidateData;
+        this.logger.groupEnd();
     }
 };
 

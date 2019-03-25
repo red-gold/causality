@@ -1,7 +1,6 @@
 import { Tensor as BaseTensor } from 'causal-net.core';
 import { platform } from 'causal-net.utils';
 import { default as DenseMixins } from './dense.mixins';
-import { default as LayerMixins } from './layer.mixins';
 /**
  * This CausalNetLayer class provide common use layers
  * { mixWith: [ LayerMixins, DenseMixins ] }
@@ -9,8 +8,7 @@ import { default as LayerMixins } from './layer.mixins';
  * @extends BaseTensor
  */
 class CausalNetLayers extends platform.mixWith(BaseTensor, 
-    [ LayerMixins, 
-      DenseMixins ] ){
+    [ DenseMixins ] ){
     constructor(){
         super();
         this.layerNames = [];

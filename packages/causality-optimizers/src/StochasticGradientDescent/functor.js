@@ -1,4 +1,4 @@
-import { Function as BaseFunctor } from 'causal-net.core';
+import { Functor as BaseFunctor } from 'causal-net.core';
 class Functor extends BaseFunctor{
     constructor(){
         super();

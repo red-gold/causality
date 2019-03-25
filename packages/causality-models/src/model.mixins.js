@@ -1,97 +1,70 @@
 const UnSupervisedModelsMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     
-    get Loss(){
-        if(!this.modelLoss){
-            throw Error('Loss is not set');
+
+    get LossModel(){
+        if(!this.netModel){
+            throw Error('netModel is not set');
         }
-        return this.modelLoss;
+        return this.netModel.Loss;
+    }
+
+    get FitModel(){
+        if(!this.netModel){
+            throw Error('netModel is not set');
+        }
+        return this.netModel.Fit;
     }
     
-    get Decode(){
-        if(!this.modelDecode){
-            throw Error('Predict is not set');
+    get OneHotPredictModel(){
+        if(!this.netModel){
+            throw Error('netModel is not set');
         }
-        return this.modelDecode;
+        return this.netModel.OneHotPredict;
     }
 
-    get Encode(){
-        if(!this.modelEncode){
-            throw Error('Predict is not set');
+    get PredictModel(){
+        if(!this.netModel){
+            throw Error('netModel is not set');
         }
-        return this.modelEncode;
+        return this.netModel.Predict;
     }
 
-    get Fit(){
-        if(!this.modelFit){
-            throw Error(`Fit is not set`);
+    get EncodeModel(){
+        if(!this.netModel){
+            throw Error('netModel is not set');
         }
-        return this.modelFit;
+        return this.netModel.Encode;
     }
 
-    set Loss(loss){
-        this.modelLoss = loss;
-    }
-    
-    set Decode(decode){
-        this.modelDecode = decode;
-    }
-
-    set Encode(encode){
-        this.modelEncode = encode;
-    }
-
-    set Fit(fit){
-        this.modelFit = fit;
-    }
-
-    get OneHotPredict(){
-        if(!this.modelOneHotPredict){
-            throw Error('modelOneHotPredict is not set');
+    get DecodeModel(){
+        if(!this.netModel){
+            throw Error('netModel is not set');
         }
-        return this.modelOneHotPredict;
+        return this.netModel.Decode;
     }
 
-    set OneHotPredict(oneHotPredict){
-        this.modelOneHotPredict = oneHotPredict;
-    }
-
-    get Predict(){
-        if(!this.modelPredict){
-            throw Error('modelPredict is not set');
-        }
-        return this.modelPredict;
-    }
-
-    set Predict(predict){
-        this.modelPredict = predict;
-    }
     
 
-    netPredict(inputTensor){
-        console.log({modelPredict: this.modelPredict});
-        const PredictRunner = this.NetRunner.PredictRunner;
-        return this.modelPredict(inputTensor, { PredictRunner });
+    set Model(model){        
+        this.netModel = model;
+        this.netModel.Net = this.Net;
     }
 
-    netEncode(inputTensor){
-        let encodeRunner = this.EncodeRunner;
-        return this.Encode(inputTensor, encodeRunner);
-    }
-
-    netDecode(inputTensor){
-        let decodeRunner = this.DecodeRunner;
-        return this.Decode(inputTensor, decodeRunner);
-    }
-
-    getModelFromConfig(netConfig){
-        const { Loss, Fit, Predict, OneHotPredict, Encode, Decode } = netConfig.Net.Model;
-        console.log({ Loss, Fit, Predict, OneHotPredict, Encode, Decode });
-        this.Loss = Loss;
-        this.Fit = Fit;
-        this.Predict = Predict;
-        this.OneHotPredict = OneHotPredict;
-        this.Encode = Encode;
-        this.Decode = Decode;
+    setByConfig(pipelineConfig){
+        if(super.setByConfig){
+            super.setByConfig(pipelineConfig);
+        }
+        this.logger.groupBegin('set Model by config');
+        const Net = pipelineConfig.Net;
+        if(!Net){
+            throw Error(`Net is not set in ${JSON.stringify(pipelineConfig)}`);
+        }
+        const { Model } = Net;
+        if(!Model){
+            throw Error(`Model is not set in ${JSON.stringify(Net)}`);
+        }
+        this.Model = Model;
+        this.logger.groupEnd();
     }
 };
 

@@ -1,4 +1,4 @@
-import { Function as BaseFunctor } from 'causal-net.core';
+import { Functor as BaseFunctor } from 'causal-net.core';
 import { platform } from 'causal-net.utils';
 import { default as WordEmbeddingFunctorMixins } from './wordEmbeddingFunctor.mixins';
 /**

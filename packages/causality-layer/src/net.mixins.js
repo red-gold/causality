@@ -6,29 +6,44 @@
  * [EXAMPLE ../examples/net.mixins.babel.js]
  */
 const NetMixins = (BasePipelineClass)=> class extends BasePipelineClass{
-    getNetFromConfig(pipelineConfig){
+    setByConfig(pipelineConfig){
+        if(super.setByConfig){
+            super.setByConfig(pipelineConfig);
+        }
+        this.logger.groupBegin('set Net by config');
         const { Net } = pipelineConfig;
-        const { Layers, Parameters } = Net;        
-        this.NetParameters.setOrInitParams(Layers, Parameters);
-        this.NetRunner.NetLayers = Layers;
-        this.NetRunner.NetParameters = this.NetParameters;
+        const { Layers, Parameters } = Net; 
+        this.Layers = Layers;       
+        this.Parameters.setOrInitParams(Layers, Parameters);
+        this.logger.groupEnd();
     }
-    set NetParameters(parameters){
+
+    set Layers(layers){
+        this.netLayers = layers;
+    }
+
+    get Layers(){
+        if(!this.netLayers){
+            throw Error('netLayers is not set');
+        }
+        return this.netLayers;
+    }
+
+    set Parameters(parameters){
         this.netParameters = parameters;
     }
-    get NetParameters(){
+    get Parameters(){
         if(!this.netParameters){
             throw Error('netRunner is not set');
         }
         return this.netParameters;
     }
-    set NetRunner(runner){
+    set Net(runner){
         this.netRunner = runner;
     }
-    get NetRunner(){
-        if(!this.netRunner){
-            throw Error('netRunner is not set');
-        }
+    get Net(){
+        this.netRunner.NetLayers = this.Layers;
+        this.netRunner.NetParameters = this.Parameters;
         return this.netRunner;
     }
 };

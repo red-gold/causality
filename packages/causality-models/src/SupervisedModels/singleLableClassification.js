@@ -10,10 +10,15 @@ class SingleLabelClassification extends BaseSupervisedModel{
             throw Error(`expect numclass, get ${numClass}`);
         }
     }
+
+    set Net(net){
+        let { Predictor } = net;
+        this.net = { Predictor };
+    }
     
     get Fit(){
-        return (inputTensor, netRunners)=>{
-            let outPutTensor = netRunners.PredictRunner(inputTensor);
+        return (inputTensor, net=this.net)=>{
+            let outPutTensor = net.Predictor(inputTensor);
             let logProb = outPutTensor.sub(outPutTensor.logSumExp(1, true));
             return logProb;
         };
@@ -28,7 +33,7 @@ class SingleLabelClassification extends BaseSupervisedModel{
         };
     }
 
-    OneHotPredict(){
+    get OneHotPredict(){
         const Predict = this.Predict;
         return (inputTensor, netRunner)=>{
             let predictedClass = Predict(inputTensor, netRunner);
@@ -36,7 +41,7 @@ class SingleLabelClassification extends BaseSupervisedModel{
             return oneHotPredict;
         };
     }
-    Loss(){
+    get Loss(){
         const Fit = this.Fit;
         return (inputTensor, labelTensor, netRunner)=>{
             let logProb = Fit(inputTensor, netRunner);

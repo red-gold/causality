@@ -15,22 +15,22 @@ import { causalNetCore } from 'causal-net.core';
     console.log(causalNetParameters.setOrInitParams(Net.Layers, Net.Parameters));
     causalNetRunner.NetLayers = Net.Layers;
     causalNetRunner.NetParameters = causalNetParameters;
-    let predictInfer = causalNetRunner.run(Net.Layers.Predict, T.tensor([[1,2,3,4]]), 
+    let predictLayer = causalNetRunner.run(Net.Layers.Predict, T.tensor([[1,2,3,4]]), 
                             causalNetParameters.PredictParameters);
-    predictInfer.print();
-    const PredictRunner = causalNetRunner.PredictRunner;
-    predictInfer = PredictRunner(T.tensor([[1,2,3,4]]));
-    predictInfer.print();
-    let encodeInfer = causalNetRunner.run(Net.Layers.Encode, T.tensor([[1,2,3,4]]), 
+    predictLayer.print();
+    const PredictRunner = causalNetRunner.Predictor;
+    predictLayer = PredictRunner(T.tensor([[1,2,3,4]]));
+    predictLayer.print();
+    let encodeLayer = causalNetRunner.run(Net.Layers.Encode, T.tensor([[1,2,3,4]]), 
                             causalNetParameters.EncodeParameters);
-    encodeInfer.print();
-    const EncodeRunner = causalNetRunner.EncodeRunner;
-    encodeInfer = EncodeRunner( T.tensor([[1,2,3,4]]) );
-    encodeInfer.print();
-    let decodeInfer = causalNetRunner.run(Net.Layers.Decode, T.tensor([[1,2,3,4]]), 
+    encodeLayer.print();
+    const EncodeRunner = causalNetRunner.Encoder;
+    encodeLayer = EncodeRunner( T.tensor([[1,2,3,4]]) );
+    encodeLayer.print();
+    let decodeLayer = causalNetRunner.run(Net.Layers.Decode, T.tensor([[1,2,3,4]]), 
                             causalNetParameters.DecodeParameters);
-    decodeInfer.print();
-    const DecodeRunner = causalNetRunner.DecodeRunner;
-    decodeInfer = DecodeRunner( T.tensor([[1,2,3,4]]) );
-    decodeInfer.print();
+    decodeLayer.print();
+    const DecodeRunner = causalNetRunner.Decoder;
+    decodeLayer = DecodeRunner( T.tensor([[1,2,3,4]]) );
+    decodeLayer.print();
 })();
