@@ -5,6 +5,14 @@ class BaseSupervisedModel extends Tensor{
         this.modelName = '';
     }
 
+    set LayerRunner(runner){
+        throw Error('implement required');
+    }
+
+    get LayerRunner(){
+        throw Error('implement required');
+    }
+
     fit(){
         throw Error('implement required');
     }

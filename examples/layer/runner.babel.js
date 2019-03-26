@@ -1,5 +1,6 @@
 import { causalNetParameters, causalNetLayers, causalNetRunner } from 'causal-net.layer';
 import { causalNetCore } from 'causal-net.core';
+
 (async ()=>{
     const T = causalNetCore.CoreTensor;
 
@@ -19,6 +20,7 @@ import { causalNetCore } from 'causal-net.core';
                             causalNetParameters.PredictParameters);
     predictLayer.print();
     const PredictRunner = causalNetRunner.Predictor;
+    console.log(PredictRunner);
     predictLayer = PredictRunner(T.tensor([[1,2,3,4]]));
     predictLayer.print();
     let encodeLayer = causalNetRunner.run(Net.Layers.Encode, T.tensor([[1,2,3,4]]), 

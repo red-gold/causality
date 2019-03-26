@@ -72,6 +72,22 @@ class Functor {
         };
         return R.reduce(Unzip,[[], []],pairs);
     }
+
+    /**
+     * Return an array with the given range
+     * @param { Array } size - array of pairs to unzip
+     * @returns { [Array] } - arrays from [beginAt, ...size]
+     * @memberof Functor
+     */
+    range(size, beginIdx=0){
+        const R = this.R;
+        return R.range(beginIdx, size);
+    }
+
+    enumerate(array){
+        const R = this.R;
+        return R.addIndex(R.map)((v,i)=>([i,v]))(array);
+    }    
 }
 
 export default Functor;

@@ -9,23 +9,18 @@ const _NetConfig = {
             Label:()=>{},
             Sample:()=>{}
         },
-        
         TrainData:()=>{},
         TestData:()=>{},
         ValidateData:()=>{}
     },
     Net:{
-        HyperParameters: {SampleSize:10},
         Parameters: {},
         Layer: { Predict: [], Encode: [], Decode: [] },
         Model: { 
                 Fit: ()=>{}, 
                 Loss: ()=>{}
             },
-        Optimizer: {
-                Method: ()=>{},
-                OptimizerParameters:{}
-            }
+        Optimizer: ()=>{},
     }
 };
     // Pipeline:[

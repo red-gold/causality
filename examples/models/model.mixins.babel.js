@@ -1,23 +1,22 @@
 import { causalNetModels, ModelMixins } from 'causal-net.models';
-import { causalNetParameters, causalNetLayers, causalNetRunner, NetMixins } from 'causal-net.layer';
+import { causalNetParameters, causalNetLayers, causalNetRunner, LayerRunnerMixins } from 'causal-net.layer';
 import { causalNetCore } from 'causal-net.core';
 import { platform } from 'causal-net.utils';
 import { Tensor } from 'causal-net.core';
 import { termLogger } from 'causal-net.log';
 
-class SimplePipeline extends platform.mixWith(Tensor, [NetMixins, ModelMixins]){
-    constructor(netParameters, netRunner, logger){
+class SimplePipeline extends platform.mixWith(Tensor, [LayerRunnerMixins, ModelMixins]){
+    constructor(netRunner, logger){
         super();
         this.logger = logger;
-        this.Parameters = netParameters;
-        this.Net = netRunner;
+        this.LayerRunner = netRunner;
     }
 }
 const T = causalNetCore.CoreTensor;
 (async ()=>{
     const PipeLineConfigure = {
         Net: { 
-                Parameters: { Predict: null, Encode: null, Decode: null },
+                Parameters: causalNetParameters.InitParameters(),
                 Layers: { 
                     Predict: [  causalNetLayers.dense(4, 3), 
                                 causalNetLayers.dense(3, 2)], 
@@ -28,20 +27,19 @@ const T = causalNetCore.CoreTensor;
         }
     };
 
-    let pipeline = new SimplePipeline( causalNetParameters, 
-                            causalNetRunner, termLogger);
+    let pipeline = new SimplePipeline( causalNetRunner, termLogger);
     pipeline.setByConfig(PipeLineConfigure);
-    const { Predictor } = pipeline.Net;
+    const { Predictor } = pipeline.LayerRunner;
     let predictInfer = Predictor(T.tensor([[1,2,3,4]]));
     predictInfer.print();
     predictInfer = pipeline.PredictModel(T.tensor([[1,2,3,4]]));
     predictInfer.print();
-    
-    let modelOneHotPredict = pipeline.OneHotPredictModel(T.tensor([[1,2,3,4]]).asType('float32'));
+    let inputTensor = T.tensor([[1,2,3,4]]).asType('float32');
+    let modelOneHotPredict = pipeline.OneHotPredictModel(inputTensor);
     modelOneHotPredict.print();
-    let fit = pipeline.FitModel(T.tensor([[1,2,3,4]]).asType('float32'));
+    let fit = pipeline.FitModel(inputTensor);
     fit.print();
-    let modelLoss = pipeline.LossModel(T.tensor([[1,2,3,4]]).asType('float32'), 
+    let modelLoss = pipeline.LossModel(inputTensor, 
                              T.tensor([[0, 1]]).asType('float32'));
     modelLoss.print();
 })().catch(err=>{

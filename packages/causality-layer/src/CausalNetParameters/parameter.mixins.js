@@ -99,8 +99,7 @@ const ParameterMixins = (BaseParameterClass)=> class extends BaseParameterClass{
     }
 
     importParameters(paramObject){
-        const T = this.T, R = this.R, F = this.F;
-        console.log({paramObject});
+        const T = this.T, F = this.F;
         let predictParamObject = F.getIn(['Predict'], paramObject, {});
         let encodeParamObject  = F.getIn(['Encode'], paramObject, {});
         let decodeParamObject  = F.getIn(['Decode'], paramObject, {});
@@ -121,9 +120,16 @@ const ParameterMixins = (BaseParameterClass)=> class extends BaseParameterClass{
         this.DecodeParameters  = SetOrInit( DecodeSize, decodeParamObject ); 
     }
 
+    InitParameters(paramObject={}){
+        return (layers)=>{
+            return this.setOrInitParams(layers, paramObject);
+        };
+    }
+
     setOrInitParams(layers, paramObject){
         this.initParamSizesByLayers(layers);
         this.importParameters(paramObject);
+        return this;
     }
 
     async getSavedParamList(){

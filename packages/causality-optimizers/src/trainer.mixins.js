@@ -1,10 +1,9 @@
-import { Tensor } from 'causal-net.core';
-import { assert } from 'causal-net.utils';
 const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     
     get Trainer(){
         const T = this.T;
-        return (sampleTensor, labelTensor, Loss=this.LossModel, Optimizer=this.Optimizer)=>{
+        const Loss=this.LossModel, Optimizer=this.Optimizer;
+        return (sampleTensor, labelTensor)=>{
             const LossFn = ()=>{
                 return T.tidy( ()=>{ return Loss(sampleTensor, labelTensor); } );
             };
@@ -24,46 +23,51 @@ const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         this.optimizer = optimizer;
     }
 
-    get TrainData(){
-        if(!this.trainData){
-            throw Error('trainData is not set');
+    get TrainDataGenerator(){
+        if(!this.trainDataGenerator){
+            throw Error('TrainDataGenerator is not set');
         }
-        return this.trainData;
+        return this.trainDataGenerator;
     }
-    set TrainData(trainData){
-        this.trainData = trainData;
-    }
-
-    train(numIter=10){
-        for(let iter of new Array(numIter).map((d,i)=>i)){
-            return 0;
-        }
+    set TrainDataGenerator(TrainDataGenerator){
+        this.trainDataGenerator = TrainDataGenerator;
     }
 
-    test(){
-
+    async train(numEpochs, batchSize){
+        
+        const F = this.F, R = this.F.CoreFunctor, T = this.T;
+        const TrainDataGenerator = this.TrainDataGenerator, Trainer = this.Trainer;
+        let losses = [], logger = this.logger;
+        return new Promise(async (resolve, reject)=>{
+            logger.progressBegin(numEpochs);
+            for(let epochIdx of F.range(numEpochs)){
+                const trainData = TrainDataGenerator(batchSize);
+                let iterLosses = [];
+                for await (let { samples, labels } of trainData){
+                    let sampleTensor = T.tensor(samples).asType('float32');
+                    let labelTensor = T.tensor(labels).asType('float32');
+                    let loss = Trainer(sampleTensor, labelTensor);
+                    iterLosses.push(await loss.data());
+                }
+                losses.push(R.mean(iterLosses));
+                iterLosses = [];
+                logger.progressUpdate({epochIdx, losses, numEpochs});
+            }
+            logger.progressEnd();
+            resolve({losses});
+        });
     }
+
 
     setByConfig(pipelineConfig){
         if(super.setByConfig){
             super.setByConfig(pipelineConfig);
         }
         this.logger.groupBegin('set Trainer by config');
-        const Net = pipelineConfig.Net;
-        if(!Net){
-            throw Error(`Net is not set in ${JSON.stringify(pipelineConfig)}`);
-        }
-        const { Optimizer } = Net;
-        if(!Optimizer){
-            throw Error(`Model is not set in ${JSON.stringify(Net)}`);
-        }
+        const { Optimizer } = pipelineConfig.Net;
         this.Optimizer = Optimizer;
-        if(!pipelineConfig.Dataset){
-            throw Error(`Dataset is not set in ${JSON.stringify(pipelineConfig)}`);
-        }
-        this.TrainData = pipelineConfig.Dataset.TrainData;
-        this.TestData = pipelineConfig.Dataset.TestData;
-        this.ValidateData = pipelineConfig.Dataset.ValidateData;
+        Optimizer.LayerRunner = this.LayerRunner;
+        this.TrainDataGenerator = pipelineConfig.Dataset.TrainDataGenerator;
         this.logger.groupEnd();
     }
 };

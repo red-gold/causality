@@ -1,6 +1,4 @@
 const UnSupervisedModelsMixins = (BasePipelineClass)=> class extends BasePipelineClass{
-    
-
     get LossModel(){
         if(!this.netModel){
             throw Error('netModel is not set');
@@ -43,11 +41,17 @@ const UnSupervisedModelsMixins = (BasePipelineClass)=> class extends BasePipelin
         return this.netModel.Decode;
     }
 
+
+    get Model(){
+        if(!this.netModel){
+            throw Error('netModel is not set');
+        }
+        return this.netModel;
+    }
     
 
     set Model(model){        
         this.netModel = model;
-        this.netModel.Net = this.Net;
     }
 
     setByConfig(pipelineConfig){
@@ -55,14 +59,11 @@ const UnSupervisedModelsMixins = (BasePipelineClass)=> class extends BasePipelin
             super.setByConfig(pipelineConfig);
         }
         this.logger.groupBegin('set Model by config');
-        const Net = pipelineConfig.Net;
-        if(!Net){
-            throw Error(`Net is not set in ${JSON.stringify(pipelineConfig)}`);
-        }
-        const { Model } = Net;
+        const { Model } = pipelineConfig.Net;
         if(!Model){
-            throw Error(`Model is not set in ${JSON.stringify(Net)}`);
+            throw Error(`Model is not set in ${JSON.stringlify(pipelineConfig)}`);
         }
+        Model.LayerRunner = this.LayerRunner;
         this.Model = Model;
         this.logger.groupEnd();
     }
