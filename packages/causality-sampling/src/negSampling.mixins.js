@@ -1,5 +1,3 @@
-import random from "random/dist/random";
-
 const NegativeSamplingMixins = (BaseSamplingClass)=> class extends BaseSamplingClass{
     /**
      * Perform negative sampling given the select prob of ids and list of positive samples

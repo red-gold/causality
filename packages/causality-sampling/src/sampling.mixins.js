@@ -1,4 +1,4 @@
-import { Function } from 'causal-net.core';
+import { Functor } from 'causal-net.core';
 import { assert } from 'causal-net.utils';
 /**
  * This SamplingMixins class provide mixins for PipelineClass or DatasetClass
@@ -23,7 +23,7 @@ const SamplingMixins = (BasePipelineClass)=> class extends BasePipelineClass{
      * @readonly
      */
     set Sampling(sampling){
-        assert.beInstanceOf(sampling, Function);
+        assert.beInstanceOf(sampling, Functor);
         this.sampling = sampling;
     }
 };
