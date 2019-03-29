@@ -28,12 +28,12 @@ class CausalNetEmbedding extends platform.mixWith(BaseTensor,
             ChunkLookUpMixins,
             VectorMetricMixins,
             WordEmbeddingMixins ]){
-    constructor(){
+    constructor(fetch, storage, cache, functor){
         super();
         this.fetch = fetch;
-        this.Storage = indexDBStorage;   //store configure
-        this.MemCache = memDownCache;    //store chunks
-        this.f = functor;
+        this.Storage = storage;   //store configure
+        this.MemCache = cache;    //store chunks
+        this.F = functor;
         this.embeddingSavePath = '/embedding/';
         this.embeddingDescriptionPath = this.embeddingSavePath + 'description.json';
     }
@@ -119,4 +119,4 @@ class CausalNetEmbedding extends platform.mixWith(BaseTensor,
     }
 }
 
-export default new CausalNetEmbedding();
+export default new CausalNetEmbedding(fetch, indexDBStorage, memDownCache, functor);

@@ -1,50 +1,20 @@
 const PreprocessingMixins = (BasePipelineClass) => class extends BasePipelineClass{
-    
-    set Reader(reader){
-
+    set Preprocessing(preprocessing){
+        this.preprocessing = preprocessing;
     }
-
-    get Reader(){
-
-    }
-
-    set Transfomer(transformer){
-
-    }
-
-    get Transfomer(transformer){
-
-    }
-
-    set Keeper(keeper){
-
-    }
-
-    get Keeper(){
-        if(!this.streamKeeper){
-            throw Error('streamKeeper is not set');
+    get Preprocessing(){
+        if(!this.preprocessing){
+            throw Error('preprocessing is not set');
         }
-        return this.streamKeeper;
-    }
-
-    async preprocessingStream(){
-        return new Promise(){
-
-        }
-    }
-
-    TrainDataGenerator(){
-
-    }
-
-    TestDataGenerator(){
-
-    }
-    
-    setByConfig(configure){
-        const { SampleFn, LabelFn } = configure.Preprocessing;
-        this.PreprocessingSampleFn = SampleFn;
-        this.PreprocessingLabelFn = LabelFn;
+        return this.preprocessing;
+    }    
+    setByConfig(pipelineConfig){
+        const { SampleTransformer, LabelTransformer } = pipelineConfig.Dataset.Preprocessing;
+        this.Preprocessing.SampleTransformer = SampleTransformer;
+        this.Preprocessing.LabelTransformer = LabelTransformer;
+        pipelineConfig.Dataset.TrainDataGenerator = this.preprocessing.TrainDataGenerator;
+        pipelineConfig.Dataset.TestDataGenerator = this.preprocessing.TestDataGenerator;
+        return pipelineConfig;
     }
 };
 

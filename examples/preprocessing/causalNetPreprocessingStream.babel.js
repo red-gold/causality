@@ -1,6 +1,5 @@
 import { causalNetPreprocessingStream } from 'causal-net.preprocessing';
 import { causalNetCore, Functor } from 'causal-net.core';
-import { stream } from 'causal-net.utils';
 
 (async ()=>{
     const R = causalNetCore.CoreFunctor;
