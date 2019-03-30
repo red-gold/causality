@@ -1,13 +1,15 @@
 import { EventEmitter } from 'events';
 import { Functor } from 'causal-net.core';
-import { platform } from 'causal-net.utils';
+import { platform, jsonUtils } from 'causal-net.utils';
 
 class CausalNetDataSource extends platform.mixWith(EventEmitter, []){
     constructor(functor){
+        super();
         this.F = functor;
     }
     async connect(descriptionLink){
-        this.description = this.query(descriptionLink);
+        this.description = await this.query(descriptionLink);
+        return this.description;
     }
 
     /**
@@ -24,6 +26,25 @@ class CausalNetDataSource extends platform.mixWith(EventEmitter, []){
         else{
             return await jsonUtils.readJSON(link);
         }
+    }
+
+    get DataChunk(){
+        return this.dataChunks;
+    }
+
+    set DataChunk(chunkList){
+        this.dataChunks = chunkList;
+    }
+
+    selectChunks(numChunks=null){
+        let chunkList = [];
+        if(!numChunks){
+            chunkList = this.description.chunkList;
+        }
+        else{
+            
+        }
+        
     }
 };
 let functor = new Functor();
