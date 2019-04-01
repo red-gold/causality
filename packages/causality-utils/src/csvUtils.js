@@ -1,3 +1,4 @@
+import { default as  fetch } from './fetch';
 import { default as CSV } from 'csv-parser';
 /**
  * This CSVUtils class use [csv-parser](https://www.npmjs.com/package/csv-parser)

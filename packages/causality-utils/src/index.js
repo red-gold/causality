@@ -6,3 +6,4 @@ export { default as assert } from './assert';
 export { default as pngUtils } from './pngUtils';
 export { default as csvUtils } from './csvUtils';
 export { default as jsonUtils } from './jsonUtils';
+export { default as bufferUtils } from './bufferUtils';

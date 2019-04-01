@@ -10,9 +10,7 @@ import { default as ImageDatasetGeneratorMixins } from './imageDatasetGenerator.
 import { PreprocessingMixins, imagePreprocessing } from 'causal-net.preprocessing';
 
 export default class MnistDataset extends Platform.mixWith(BaseImgDataset, 
-        [ ImageDatasetfetchMixins,
-          ImageDatasetPreprocessingMixins,
-          PreprocessingMixins,
+        [ PreprocessingMixins,
           ImageDatasetGeneratorMixins,
           MemCacheMixins,
           StorageMixins,
@@ -23,12 +21,7 @@ export default class MnistDataset extends Platform.mixWith(BaseImgDataset,
         this.F = new Function();
         this.Storage = indexDBStorage;
         this.MemCache = memDownCache;
-        const PreprocessingSample = async (masterSampleBuffer, sampleSize)=>{
-            return await imagePreprocessing.imageSplit(masterSampleBuffer, sampleSize);
-        };
-        const PreprocessingLabel = async (masterLabelBuffer, labelSize)=>{
-            return await imagePreprocessing.imageSplit(masterLabelBuffer, labelSize);
-        };
+        
         this.setPreprocessingFunctions(PreprocessingSample, PreprocessingLabel);
     }
 };
