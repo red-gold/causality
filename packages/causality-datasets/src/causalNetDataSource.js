@@ -1,10 +1,10 @@
-import { EventEmitter } from 'events';
+import { Event } from 'causal-net.core';
 import { default as functor } from './functor';
 import { platform, jsonUtils } from 'causal-net.utils';
 import { causalNetSampling, SamplingMixins } from 'causal-net.sampling';
 import { PNGReaderMixins, BufferReaderMixins } from './Readers/init';
 
-class CausalNetDataSource extends platform.mixWith( EventEmitter, [
+class CausalNetDataSource extends platform.mixWith( Event, [
     SamplingMixins, PNGReaderMixins, BufferReaderMixins ] ){
     
     constructor(functor, sampling){
@@ -57,7 +57,8 @@ class CausalNetDataSource extends platform.mixWith( EventEmitter, [
         const LabelChunkName = description.LabelChunkName;
         let chunkList= description.ChunkList;
         this.dataChunks = chunkList.map( cidx=> {
-                return {  Sample: SampleChunkName.replace('{}', cidx),
+                return {  ChunkName: cidx,
+                          Sample: SampleChunkName.replace('{}', cidx),
                           Label: LabelChunkName.replace('{}', cidx)  };
             });
     }
@@ -80,10 +81,30 @@ class CausalNetDataSource extends platform.mixWith( EventEmitter, [
         return this.R.splitEvery(sampleSize, data);
     }
 
-    selectChunks(numChunks){
+    chunkSelect(numChunks){
         let chunkList = this.DataChunks;
-        let selectChunks = this.Sampling.subSampling(numChunks, chunkList, false);
-        return selectChunks;
+        this.selectedChunks = this.Sampling.subSampling(numChunks, chunkList, false);
+        return this.selectedChunks;
+    }
+
+    read(){
+        if(!this.selectedChunks){
+            throw Error('selectChunks is not call');
+        }
+        let selectedChunks = this.selectedChunks;
+        const SampleReader = this.SampleReader;
+        const LabelReader = this.LabelReader;
+        return new Promise(async (resolve, reject)=>{
+            for(let { Sample, Label, ChunkName } of selectedChunks ){
+                let sampleData = await SampleReader(Sample);
+                let labelData = await LabelReader(Label);
+                if(sampleData.length !== labelData.length){
+                    reject('lengths of sample and label are not the same');
+                }
+                await this.emit('data', { 'Sample': sampleData, 'Label': labelData,  ChunkName });
+            }
+            resolve(selectedChunks.length);
+        });
     }
 };
 

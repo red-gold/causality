@@ -1,9 +1,8 @@
-import { EventEmitter } from 'events';
-import { Functor } from 'causal-net.core';
+import { Event, Functor } from 'causal-net.core';
 import { platform } from 'causal-net.utils';
 import { indexDBStorage, StorageMixins } from 'causal-net.storage';
 import { termLogger } from 'causal-net.log';
-class CausalNetPreprocessingStream extends platform.mixWith(EventEmitter, 
+class CausalNetPreprocessingStream extends platform.mixWith(Event, 
     [ StorageMixins ]){
     constructor(preprocessingStorage, functor, logger){
         super();
@@ -32,26 +31,33 @@ class CausalNetPreprocessingStream extends platform.mixWith(EventEmitter,
     }
     get SampleTransformer(){
         if(!this.sampleFn){
-            throw Error('sampleFn is not set');
+            throw Error('SampleTransformer is not set');
         }
         return this.sampleFn;
     }
     get LabelTransformer(){
         if(!this.labelFn){
-            throw Error('labelFn is not set');
+            throw Error('LabelTransformer is not set');
         }
         return this.labelFn;
     }
     get DataHandler(){
+        if(!this.dataHandler){
+            throw Error('DataHandler is not set');
+        }
+        this.dataHandler;
+    }
+
+    setDataHandler(){
         const Enumerate = this.F.enumerate;
         //console.log(Enumerate([0,2,4]));//TODO: fix this failure
         const SampleTransformer = this.SampleTransformer;
         const LabelTransformer = this.LabelTransformer;
         const Storage = this.Storage;
-        return (data)=>{
+        this.dataHandler = (data)=>{
             return new Promise(async (resolve, reject)=>{
                 let chunkName = data.ChunkName;
-                if(!chunkName){
+                if(chunkName === undefined){
                     reject(`chunkName is not defined`);
                 }
                 if(data.Sample){
@@ -76,6 +82,7 @@ class CausalNetPreprocessingStream extends platform.mixWith(EventEmitter,
                 resolve(true);
             }); 
         };
+        this.on('data', this.dataHandler);
     }
     
     splitDataset(trainSize=0.9){

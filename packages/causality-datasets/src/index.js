@@ -1,2 +1,2 @@
 export { default as causalNetDataSource } from './causalNetDataSource';
-//export {default as MNIST} from './MNIST.ImgDataset';
+export { default as DataSourceMixins } from './dataSource.mixins';
