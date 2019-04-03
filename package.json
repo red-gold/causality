@@ -44,7 +44,8 @@
     "causal-net.layer": "*",
     "causal-net.optimizers": "*",
     "causal-net.preprocessing": "*",
-    "causal-net.datasets": "*"
+    "causal-net.datasets": "*",
+    "causal-net.deployment": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

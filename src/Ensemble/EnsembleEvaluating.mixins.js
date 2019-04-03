@@ -1,4 +1,4 @@
-const PipelineEnsembleEvaluatingMixins = (PipelineClass)=> class extends PipelineClass{ 
+const EnsembleEvaluatingMixins = (BasePipelineClass)=> class extends BasePipelineClass{ 
     async ensembleAccuracyTest(TestSampleGeneratorFn, modelList){
         const T = this.T;
         const testSampleGenerator = TestSampleGeneratorFn();
@@ -17,4 +17,4 @@ const PipelineEnsembleEvaluatingMixins = (PipelineClass)=> class extends Pipelin
         return {accuracy, pass};             
     }
 };
-export default PipelineEnsembleEvaluatingMixins;
+export default EnsembleEvaluatingMixins;
