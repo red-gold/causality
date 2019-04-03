@@ -46,7 +46,7 @@ import { causalNet } from '../../src/index';
         }
     };
     causalNet.setByConfig(PipeLineConfigure);
-    causalNet.deploy().then(res=>console.log(res));
+    causalNet.deploy().then(deployResult=>console.log({deployResult}));
     console.log(await causalNet.train(10, 1));
     console.log(await causalNet.test(10));
 })().catch(err=>{

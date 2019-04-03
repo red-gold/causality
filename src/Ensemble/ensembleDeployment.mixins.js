@@ -2,9 +2,8 @@ const EnsembleDeploymentMixins = (BasePipelineClass)=> class extends BasePipelin
    
 
     get EnsembleInferencer(){
-        const ModelLense = ()=>{
-            return { EnsemblePredict: this.EnsembleModelPredict };
-        };
+        const ModelLense = ()=>({ EnsemblePredict: this.EnsembleModelPredict });
+        
         const T = this.T;
         return async (input)=>{
             let { EnsemblePredict } = input;
@@ -25,7 +24,6 @@ const EnsembleDeploymentMixins = (BasePipelineClass)=> class extends BasePipelin
         }
         this.Logger.groupBegin('set ensemble deployment by config');
         this.Deployment.EnsembleInferencer = this.EnsembleInferencer;
-        
         this.Logger.groupEnd();
         return pipelineConfig;
     }

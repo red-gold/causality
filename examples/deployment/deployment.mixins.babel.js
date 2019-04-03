@@ -74,7 +74,6 @@ console.log(DummyData(1));
     predictInfer.print();
     pipeline.deploy().then(res=>console.log(res));
     console.log(await pipeline.train(100, 1));
-    
 })().catch(err=>{
     console.error({err});
 });

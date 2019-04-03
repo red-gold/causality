@@ -33,7 +33,9 @@ import { causalNet } from '../../src/index';
             Emitter: async ()=>{
                 return new Promise((resolve, reject)=>{
                     setTimeout(()=>{
-                        let data = (emitCounter < 3)?{Predict: [0,1,2,3], EnsemblePredict: [0,1,2,3]}:null;
+                        let data = (emitCounter < 3)
+                                        ?{Predict: [0,1,2,3], EnsemblePredict: [0,1,2,3]}
+                                        :null;
                         emitCounter += 1;
                         console.log({ emitter: data});
                         resolve(data);

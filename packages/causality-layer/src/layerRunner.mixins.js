@@ -7,15 +7,29 @@
  */
 const LayerRunnerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     async saveParams(fileName){
-        return await this.LayerRunner.NetParameters.saveParams(fileName);
+        await this.LayerRunner.NetParameters.saveParams(fileName);
+        return this;
     }
     async loadParams(fileName){
-        return await this.LayerRunner.NetParameters.loadParams(fileName);
+        this.LayerRunner.NetParameters = await this.LayerRunner.NetParameters.loadParams(fileName);
+        return this;
     }
 
     async getSavedParamList(){
         return await this.LayerRunner.NetParameters.getSavedParamList();
     }
+
+    get ParameterInitializer(){
+        if(!this.parameterInitializer){
+            throw Error('ParameterInitializer is not set');
+        }
+        return this.parameterInitializer;
+    }
+
+    set ParameterInitializer(parameterInitializer){
+        this.parameterInitializer = parameterInitializer;
+    }
+
 
     setByConfig(pipelineConfig){
         if(super.setByConfig){
@@ -24,8 +38,9 @@ const LayerRunnerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         this.Logger.groupBegin('set LayerRunner by config');
         const { Net } = pipelineConfig;
         const { Layers, Parameters } = Net; 
-        this.LayerRunner.NetLayers = Layers;       
-        this.LayerRunner.NetParameters = Parameters(Layers);
+        this.LayerRunner.NetLayers = Layers;
+        this.ParameterInitializer = Parameters;       
+        this.LayerRunner.NetParameters = this.ParameterInitializer(Layers);
         this.Logger.groupEnd();
     }
 

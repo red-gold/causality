@@ -150,7 +150,7 @@ const ParameterMixins = (BaseParameterClass)=> class extends BaseParameterClass{
         let strParams = await Storage.readFile(SaveDir+fileName);
         let params = JSON.parse(strParams);
         this.importParameters(params);
-        return await this.Parameters;
+        return this;
     }
 };
 

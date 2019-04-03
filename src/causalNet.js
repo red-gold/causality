@@ -2,14 +2,31 @@ import { DataSourceMixins } from 'causal-net.datasets';
 import { PreprocessingMixins, causalNetPreprocessingStream } from 'causal-net.preprocessing';
 import { TrainerMixins, EvaluatorMixins } from 'causal-net.optimizers';
 import { ModelMixins } from 'causal-net.models';
-import { causalNetRunner, LayerRunnerMixins, causalNetParameter } from 'causal-net.layer';
+import { causalNetRunner, LayerRunnerMixins } from 'causal-net.layer';
 import { Tensor } from 'causal-net.core';
 import { platform } from 'causal-net.utils';
 import { causalNetDeployment, DeploymentMixins } from 'causal-net.deployment';
 import { termLogger, LoggerMixins } from 'causal-net.log';
 import { default as functor } from './functor';
 import { EnsembleTrainerMixins, EnsembleModelMixins, EnsembleDeploymentMixins } from './Ensemble/index';
-
+/**
+ * The CausalNet class is the prebuilt pipeline with methods for 
+ * processing data/train/evaluate/deploy/ensemble deploy
+ * { mixWith: [ 
+ *         DataSourceMixins,
+ *         PreprocessingMixins,
+ *         LayerRunnerMixins, 
+ *         ModelMixins, 
+ *         EvaluatorMixins,
+ *         TrainerMixins, 
+ *         LoggerMixins,
+ *         DeploymentMixins,
+ *         EnsembleTrainerMixins,
+ *         EnsembleModelMixins, 
+ *         EnsembleDeploymentMixins ] }
+ * @class CausalNet
+ * @extends Tensor
+ */
 class CausalNet extends platform.mixWith(Tensor, [ 
         DataSourceMixins,
         PreprocessingMixins,
@@ -22,7 +39,17 @@ class CausalNet extends platform.mixWith(Tensor, [
         EnsembleTrainerMixins,
         EnsembleModelMixins, 
         EnsembleDeploymentMixins ]){
-    constructor( functor, logger, streamPreprocessing, netParameters, netRunner, streamDeployment){
+    /**
+     *Creates an instance of CausalNet.
+     * @param { Functor } functor
+     * @param { Log } logger
+     * @param { Preprocess } streamPreprocessing
+     * @param { } netParameters
+     * @param {*} netRunner
+     * @param {*} streamDeployment
+     * @memberof CausalNet
+     */
+    constructor( functor, logger, streamPreprocessing, netRunner, streamDeployment){
         super();
         this.F = functor;
         this.R = this.F.CoreFunctor;
@@ -30,13 +57,11 @@ class CausalNet extends platform.mixWith(Tensor, [
         this.Preprocessing = streamPreprocessing;
         this.LayerRunner = netRunner;        
         this.Deployment = streamDeployment;
-        this.Parameters = netParameters;
     }
 }
 
 export default new  CausalNet(  functor, 
                                 termLogger, 
                                 causalNetPreprocessingStream, 
-                                causalNetParameter,
                                 causalNetRunner, 
                                 causalNetDeployment );

@@ -79,22 +79,25 @@ const RunnerMixins = ( BaseRunnerClass )=> class extends BaseRunnerClass{
 
     get Predictor(){
         let predictLayers = this.NetLayers.Predict;
-        let predictParameters = this.NetParameters.PredictParameters;
+        const PredictParametersLense = ()=>this.NetParameters.PredictParameters;
         return (samples)=>{
+            let predictParameters = PredictParametersLense();
             return this.run(predictLayers, samples, predictParameters);
         };
     }
     get Encoder(){
         let encodeLayers = this.NetLayers.Encode;
-        let encodeParameters = this.NetParameters.EncodeParameters;
+        const EncodeParametersLense = ()=>this.NetParameters.EncodeParameters;
         return (samples)=>{
+            let encodeParameters = EncodeParametersLense();
             return this.run(encodeLayers, samples, encodeParameters);
         };
     }
     get Decoder(){
         let decodeLayers = this.NetLayers.Decode;
-        let decodeParameters = this.NetParameters.DecodeParameters;
+        const DecodeParametersLense = ()=>this.NetParameters.EncodeParameters;
         return (samples)=>{
+            let decodeParameters = DecodeParametersLense();
             return this.run(decodeLayers, samples, decodeParameters);
         };
     }
