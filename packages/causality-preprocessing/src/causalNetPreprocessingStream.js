@@ -49,8 +49,8 @@ class CausalNetPreprocessingStream extends platform.mixWith(Event,
     }
 
     setDataHandler(){
-        const Enumerate = this.F.enumerate;
-        //console.log(Enumerate([0,2,4]));//TODO: fix this failure
+        const Enumerate = (val)=>this.F.enumerate(val);
+        // console.log(Enumerate([0,2,4]));//TODO: fix this failure
         const SampleTransformer = this.SampleTransformer;
         const LabelTransformer = this.LabelTransformer;
         const Storage = this.Storage;

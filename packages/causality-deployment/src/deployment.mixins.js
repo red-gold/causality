@@ -43,7 +43,7 @@ const DeploymentMixins = (BasePipelineClass)=> class extends BasePipelineClass {
         if(super.setByConfig){
             super.setByConfig(pipelineConfig);
         }
-        this.Logger.groupBegin('deployment');
+        this.Logger.groupBegin('set deployment by config');
         const { Emitter, Listener } = pipelineConfig.Deployment;
         this.Deployment.Emitter = Emitter;
         this.Deployment.Listener = Listener;

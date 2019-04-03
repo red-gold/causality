@@ -1,8 +1,10 @@
 import { Functor as BaseFunctor } from 'causal-net.core';
-class Functor extends BaseFunctor{
+import { platform } from 'causal-net.utils';
+
+class ParameterFunctor extends platform.mixWith(BaseFunctor, [  ] ){
     constructor(){
         super();
     }
 }
 
-export default new Functor();
+export default new ParameterFunctor();

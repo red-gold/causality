@@ -1,5 +1,5 @@
 {
-  "private": true,
+  "private": true,  
   "name": "causal-net",
   "version": "0.0.2",
   "main": "dist/@causalNet/pipeline.node.js",

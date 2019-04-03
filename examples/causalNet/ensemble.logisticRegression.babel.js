@@ -1,43 +1,59 @@
-import { Log, Optimizers, CausalNet } from '../../src/index';
-const { termLogger } = Log;
-const { causalNetSGDOptimizer } = Optimizers;
-let inputs = [[0.52, 1.12,  0.77],
-              [0.88, -1.08, 0.15],
-              [0.52, 0.06, -1.30],
-              [0.74, -2.49, 1.39]];
-let targets = [[0, 1], [0, 1], [0, 1], [0, 1]];
-const DenseLayer = (name, inputSize, outputSize)=>{
-        return { 
-            Name: name, Type: 'Layer',
-            Parameters: { Weight: [inputSize, outputSize], Bias: [outputSize] },
-            Net: function(value, params){
-                    let {Weight, Bias} = params;
-                    let result = value.dot(Weight).add(Bias);
-                    return result;
-                }
-            };
-    };
-let denseLayer = DenseLayer('dense1', 3, 2);
-console.log({denseLayer});
-console.log({causalNetSGDOptimizer});
-const _NetConfig = {
-        HyperParameters: {SampleSize:4},
-        Classes: 2,
-        Pipeline:[ denseLayer ],
-        Trainer: { 
-                Optimizer: causalNetSGDOptimizer.adam,  
-                OptimizerParameters: { learningRate: 0.01 }
-            }
-    };
-let parameters = {};
-let causalNet = new CausalNet(_NetConfig, parameters);
+import { causalNetSGDOptimizer } from 'causal-net.optimizers';
+import { causalNetModels } from 'causal-net.models';
+import { causalNetParameters, causalNetLayers } from 'causal-net.layer';
+import { causalNet } from '../../src/index';
+
+
 (async ()=>{
-    const DoBatchTrainSampleGenerator = (epochIdx)=>([{idx:0, batchSize:4, data: [inputs, targets]}]);
-    let logTrain = await causalNet.train(DoBatchTrainSampleGenerator, 20);
-    termLogger.log(logTrain);
-    const DoBatchTestSampleGenerator = ()=>([{idx:0, batchSize:4, data: [inputs, targets]}]);
-    let testResult = await causalNet.test(DoBatchTestSampleGenerator);
-    termLogger.log({testResult});
+    const DummyData = (batchSize)=>{
+        let samples = [ [0,1,2,3], 
+                        [0,1,2,3], 
+                        [0,1,2,3] ];
+        let labels  = [ [1,0], 
+                        [1,0], 
+                        [1,0] ];
+        return [{samples, labels}];
+    };
+    let emitCounter = 0;
+    const PipeLineConfigure = {
+        Dataset: {
+            TrainDataGenerator: DummyData,
+            TestDataGenerator: DummyData
+        },
+        Net: { 
+                Parameters: causalNetParameters.InitParameters(),
+                Layers: { 
+                    Predict: [  causalNetLayers.dense(4, 3), 
+                                causalNetLayers.dense(3, 2)]
+                },
+                Model: causalNetModels.classification(2),
+                Optimizer: causalNetSGDOptimizer.adam({learningRate: 0.01})
+        },
+        Deployment: {
+            Emitter: async ()=>{
+                return new Promise((resolve, reject)=>{
+                    setTimeout(()=>{
+                        let data = (emitCounter < 3)?{Predict: [0,1,2,3], EnsemblePredict: [0,1,2,3]}:null;
+                        emitCounter += 1;
+                        console.log({ emitter: data});
+                        resolve(data);
+                    }, 1000);
+                });
+            },
+            Listener: async (infer)=>{
+                console.log({ Listener: infer});
+            }
+        }
+    };
+    causalNet.setByConfig(PipeLineConfigure);
+    
+    console.log(causalNet.parameters);
+    let models = ['Model1', 'Model2', 'Model3'];
+    for(let model of models){
+        console.log(await causalNet.ensembleTrain(2, 1, model));
+    }
+    causalNet.EnsembleModels = models;
+    causalNet.deploy().then(res=>console.log(res));
 })().catch(err=>{
     console.error({err});
 });

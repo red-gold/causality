@@ -15,12 +15,14 @@ class Assert{
      *Creates an instance of assert.
      * @memberof assert
      */
-    constructor(){
+    constructor(assert, generateSchema, Validator){
         /** 
          * @private 
          * @type { Object } assert
         */
         this.assert = assert;
+        this.generateSchema = generateSchema;
+        this.Validator = Validator;
     }
     /**
      * Try to check if the sample pattern matchs with input value pattern. 
@@ -63,4 +65,4 @@ class Assert{
     }
 } 
 
-export default new Assert();
+export default new Assert(assert, generateSchema, Validator);

@@ -4,7 +4,7 @@ import { default as NodeStreamMixins } from './fetchStreamMixins.node';
 import { default as WebStreamMixins } from './fetchStreamMixins.web';
 
 class Basefetch{
-    constructor(){
+    constructor(fetch){
         this.fetch = fetch;
     }
 }
@@ -17,8 +17,8 @@ class Basefetch{
  * @extends Basefetch
  */
 class Fetch extends platform.mixWith(Basefetch, {'node': [NodeStreamMixins], 'web':[WebStreamMixins]}){
-    constructor(){
-        super();
+    constructor(fetch){
+        super(fetch);
     }
     /**
      * fetch text content given the url
@@ -54,4 +54,4 @@ class Fetch extends platform.mixWith(Basefetch, {'node': [NodeStreamMixins], 'we
     }
 }
 
-export default new Fetch();
+export default new Fetch(fetch);

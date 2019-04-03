@@ -1,19 +1,19 @@
 import { causalNetSGDOptimizer } from 'causal-net.optimizers';
 import { causalNetModels } from 'causal-net.models';
 import { causalNetParameters, causalNetLayers } from 'causal-net.layer';
-import { causalNet } from 'causal-net';
+import { causalNet } from '../../src/index';
 
-const DummyData = (batchSize)=>{
-    let samples = [ [0,1,2,3], 
-                    [0,1,2,3], 
-                    [0,1,2,3] ];
-    let labels  = [ [1,0], 
-                    [1,0], 
-                    [1,0] ];
-    return [{samples, labels}];
-};
 
 (async ()=>{
+    const DummyData = (batchSize)=>{
+        let samples = [ [0,1,2,3], 
+                        [0,1,2,3], 
+                        [0,1,2,3] ];
+        let labels  = [ [1,0], 
+                        [1,0], 
+                        [1,0] ];
+        return [{samples, labels}];
+    };
     let emitCounter = 0;
     const PipeLineConfigure = {
         Dataset: {
@@ -45,13 +45,10 @@ const DummyData = (batchSize)=>{
             }
         }
     };
-
     causalNet.setByConfig(PipeLineConfigure);
-    let predictInfer = causalNet.PredictModel( T.tensor([[1,2,3,4]]) );
-    predictInfer.print();
     causalNet.deploy().then(res=>console.log(res));
-    console.log(await causalNet.train(100, 1));
-    console.log(await causalNet.test(100));
+    console.log(await causalNet.train(10, 1));
+    console.log(await causalNet.test(10));
 })().catch(err=>{
     console.error({err});
 });

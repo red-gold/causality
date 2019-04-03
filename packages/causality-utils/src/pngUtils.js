@@ -6,7 +6,7 @@ import { PNG } from 'pngjs3';
  * @class pngUtils
  */
 class PNGUtils{
-    constructor(){
+    constructor(PNG){
         this.png = PNG;
         this.fs = require('fs');
     }
@@ -81,4 +81,4 @@ class PNGUtils{
         });
     }
 }
-export default new PNGUtils();
+export default new PNGUtils(PNG);

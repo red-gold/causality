@@ -22,7 +22,7 @@ class Platform{
      *Creates an instance of platform.
      * @memberof Platform
      */
-    constructor(){
+    constructor(platform){
         this.platform = platform;
         if(typeof process !== 'undefined' && process.pid) {
             this.pid = process.pid;
@@ -73,4 +73,4 @@ class Platform{
     }
 };
 
-export default new Platform();
+export default new Platform(platform);

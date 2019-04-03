@@ -8,8 +8,9 @@ import { default as json5 } from 'json5';
  * @class JSONUtils
  */
 class JSONUtils{
-    constructor(){
+    constructor(json5, fetch){
         this.json = json5;
+        this.fetch = fetch;
         this.fs = require('fs');
     }
     /**
@@ -79,4 +80,4 @@ class JSONUtils{
         });
     }
 }
-export default new JSONUtils();
+export default new JSONUtils(json5, fetch);

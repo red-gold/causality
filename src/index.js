@@ -1,1 +1,1 @@
-export { default as CausalNet } from './causalNet';
+export { default as causalNet } from './causalNet';

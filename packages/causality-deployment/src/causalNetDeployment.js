@@ -26,6 +26,9 @@ class CausalNetDeployment extends platform.mixWith( Event, [] ){
         this.on('inferencer', (infer)=>{
             this.deployListener(infer);
         });
+        this.on('ensembleInferencer', (infer)=>{
+            this.deployListener(infer);
+        });
     }
     
     get Listener(){
@@ -39,7 +42,9 @@ class CausalNetDeployment extends platform.mixWith( Event, [] ){
         this.deployInferencer = inferencer;
         this.on('emitter', async (emitValue)=>{
             let inferValue = await this.deployInferencer(emitValue);
-            this.emit('inferencer', inferValue);
+            if(inferValue && inferValue !== {}){
+                this.emit('inferencer', inferValue);
+            }
         });
     }
 
@@ -48,6 +53,24 @@ class CausalNetDeployment extends platform.mixWith( Event, [] ){
             throw Error('Inferencer is not set');
         }
         return this.deployInferencer;
+    }
+
+    set EnsembleInferencer(ensembleInferencer){
+        
+        this.deployEnsembleInferencer = ensembleInferencer;
+        this.on('emitter', async (emitValue)=>{
+            let inferValue = await this.deployEnsembleInferencer(emitValue);
+            if(inferValue && inferValue !== {}){
+                this.emit('ensembleInferencer', inferValue);
+            }
+        });
+    }
+
+    get EnsembleInferencer(){
+        if(!this.deployEnsembleInferencer){
+            throw Error('EnsembleInferencer is not set');
+        }
+        return this.deployEnsembleInferencer;
     }
 
     async deploy(){

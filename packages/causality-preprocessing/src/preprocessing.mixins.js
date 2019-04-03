@@ -17,14 +17,16 @@ const PreprocessingMixins = (BasePipelineClass) => class extends BasePipelineCla
         if(super.setByConfig){
             super.setByConfig(pipelineConfig);
         }
-        const { SampleTransformer, LabelTransformer } = pipelineConfig.Dataset.Preprocessing;
+        const { Preprocessing } = pipelineConfig.Dataset;
         this.Logger.groupBegin('preprocessing');
-        this.Preprocessing.SampleTransformer = SampleTransformer;
-        this.Preprocessing.LabelTransformer = LabelTransformer;
-        this.Preprocessing.setDataHandler();
-        pipelineConfig.TrainDataGenerator = this.Preprocessing.TrainDataGenerator;
-        pipelineConfig.TestDataGenerator = this.Preprocessing.TestDataGenerator;
-        
+        if(this.DataSource && Preprocessing){
+            const { SampleTransformer, LabelTransformer } = Preprocessing;
+            this.Preprocessing.SampleTransformer = SampleTransformer;
+            this.Preprocessing.LabelTransformer = LabelTransformer;
+            this.Preprocessing.setDataHandler();
+            pipelineConfig.TrainDataGenerator = this.Preprocessing.TrainDataGenerator;
+            pipelineConfig.TestDataGenerator = this.Preprocessing.TestDataGenerator;
+        }
         this.Logger.groupEnd();
         return pipelineConfig;
     }

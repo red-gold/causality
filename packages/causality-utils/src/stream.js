@@ -7,7 +7,7 @@ import stream from 'readable-stream';
  * [EXAMPLE ../examples/stream.babel.js]
  */
 class Stream{
-    constructor(){
+    constructor(stream){
     
         /** @private { readable-stream } */
         this.stream = stream;
@@ -87,4 +87,4 @@ class Stream{
     }
 };
 
-export default new Stream();
+export default new Stream(stream);

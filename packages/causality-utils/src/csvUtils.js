@@ -7,8 +7,9 @@ import { default as CSV } from 'csv-parser';
  * @class CSVUtils
  */
 class CSVUtils{
-    constructor(){
+    constructor(CSV, fetch){
         this.csv = CSV;
+        this.fetch = fetch;
         this.fs = require('fs');
     }
     /**
@@ -63,4 +64,4 @@ class CSVUtils{
         });
     }
 }
-export default new CSVUtils();
+export default new CSVUtils(CSV, fetch);

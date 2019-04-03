@@ -6,6 +6,17 @@
  * [EXAMPLE ../examples/net.mixins.babel.js]
  */
 const LayerRunnerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
+    async saveParams(fileName){
+        return await this.LayerRunner.NetParameters.saveParams(fileName);
+    }
+    async loadParams(fileName){
+        return await this.LayerRunner.NetParameters.loadParams(fileName);
+    }
+
+    async getSavedParamList(){
+        return await this.LayerRunner.NetParameters.getSavedParamList();
+    }
+
     setByConfig(pipelineConfig){
         if(super.setByConfig){
             super.setByConfig(pipelineConfig);
