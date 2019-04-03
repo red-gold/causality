@@ -1,9 +1,9 @@
 {
-  "name": "causal-net.datasets",
+  "name": "causal-net.deployment",
   "version": "0.0.61",
-  "description": "the datasets class",
-  "main": "dist/@causalNet/datasets.node.js",
-  "browser": "dist/@causalNet/datasets.web.js",
+  "description": "the deployment class",
+  "main": "dist/@causalNet/deployment.node.js",
+  "browser": "dist/@causalNet/deployment.web.js",
   "author": "nguyenhuynh200188@gmail.com",
   "license": "MIT",
   "module": "src/index.js",

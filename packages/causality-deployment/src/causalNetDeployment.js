@@ -1,6 +1,6 @@
 import { Event } from 'causal-net.core';
 import { default as functor } from './functor';
-import { platform } from 'causal-net.utils';
+import { platform, assert } from 'causal-net.utils';
 
 class CausalNetDeployment extends platform.mixWith( Event, [] ){
     
@@ -15,45 +15,53 @@ class CausalNetDeployment extends platform.mixWith( Event, [] ){
     }
 
     get Emitter(){
+        if(!this.deployEmitter){
+            throw Error('Emitter is not set');
+        }
         return this.deployEmitter;
     }
 
     set Listener(listener){
         this.deployListener = listener;
         this.on('inferencer', (infer)=>{
-            this.deployEmitter(infer);
-        })
+            this.deployListener(infer);
+        });
     }
     
     get Listener(){
+        if(!this.deployListener){
+            throw Error('Listener is not set');
+        }
         return this.deployListener;
     }
 
     set Inferencer(inferencer){
         this.deployInferencer = inferencer;
-        this.on('emitter', (emitValue)=>{
-            let inferValue = this.deployInferencer(emitValue);
+        this.on('emitter', async (emitValue)=>{
+            let inferValue = await this.deployInferencer(emitValue);
             this.emit('inferencer', inferValue);
         });
     }
 
     get Inferencer(){
+        if(!this.deployInferencer){
+            throw Error('Inferencer is not set');
+        }
         return this.deployInferencer;
     }
 
     async deploy(){
         return new Promise(async (resolve, reject)=>{
             let counter = 0;
-            while(true){
-                let emitValue = await this.Emitter();
+            let emitValue = await this.Emitter();
+            while(emitValue !== null){
                 this.emit('emitter', emitValue);
-                if(emitValue === null){
-                    resolve(counter);
-                }
                 counter += 1;
+                emitValue = await this.Emitter();
             }
+            resolve(counter);
         });
     }
-};
+}
 
 export default new CausalNetDeployment(functor);

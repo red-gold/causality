@@ -58,14 +58,14 @@ const UnSupervisedModelsMixins = (BasePipelineClass)=> class extends BasePipelin
         if(super.setByConfig){
             super.setByConfig(pipelineConfig);
         }
-        this.logger.groupBegin('set Model by config');
+        this.Logger.groupBegin('set Model by config');
         const { Model } = pipelineConfig.Net;
         if(!Model){
             throw Error(`Model is not set in ${JSON.stringlify(pipelineConfig)}`);
         }
         Model.LayerRunner = this.LayerRunner;
         this.Model = Model;
-        this.logger.groupEnd();
+        this.Logger.groupEnd();
     }
 };
 

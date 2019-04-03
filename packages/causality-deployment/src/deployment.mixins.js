@@ -14,29 +14,29 @@ const DeploymentMixins = (BasePipelineClass)=> class extends BasePipelineClass {
     get Inferencer(){
         const ModelLense = ()=>{
             return this.Model;
-        }
+        };
         const T = this.T;
         return async (input)=>{
-            let {Predict, Encode, Decode} = input;
+            let { Predict, Encode, Decode } = input;
             let infer = {};
             const Model = ModelLense();
-            if(Predict !== undefined){
-                let inputTensor = T.tensor(input).asType('float32').reshape([1, -1]);
+            if(Predict){
+                let inputTensor = T.tensor(Predict).asType('float32').reshape([1, -1]);
                 let predictTensor = Model.Predict(inputTensor);
                 infer.Predict = await predictTensor.data();
             }
-            if(Encode !== undefined){
-                let inputTensor = T.tensor(input).asType('float32').reshape([1, -1]);
-                let predictTensor = Model.Encode(inputTensor);
-                infer.Encode = await predictTensor.data();
+            if(Encode){
+                let inputTensor = T.tensor(Encode).asType('float32').reshape([1, -1]);
+                let encodeTensor = Model.Encode(inputTensor);
+                infer.Encode = await encodeTensor.data();
             }
-            if(Decode !== undefined){
-                let inputTensor = T.tensor(input).asType('float32').reshape([1, -1]);
-                let predictTensor = Model.Encode(inputTensor);
-                infer.Decode = await predictTensor.data();
+            if(Decode){
+                let inputTensor = T.tensor(Decode).asType('float32').reshape([1, -1]);
+                let decodeTensor = Model.Encode(inputTensor);
+                infer.Decode = await decodeTensor.data();
             }
             return infer;
-        }
+        };
     }
 
     setByConfig(pipelineConfig){

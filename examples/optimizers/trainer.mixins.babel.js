@@ -4,18 +4,19 @@ import { causalNetParameters, causalNetLayers, causalNetRunner, LayerRunnerMixin
 import { causalNetCore, Functor } from 'causal-net.core';
 import { platform } from 'causal-net.utils';
 import { Tensor } from 'causal-net.core';
-import { termLogger } from 'causal-net.log';
+import { termLogger, LoggerMixins } from 'causal-net.log';
 
 class SimplePipeline extends platform.mixWith(Tensor, [ 
         LayerRunnerMixins, 
         ModelMixins, 
         EvaluatorMixins,
+        LoggerMixins,
         TrainerMixins]){
     constructor( netRunner, functor, logger){
         super();
         this.F = functor;
         this.LayerRunner = netRunner;
-        this.logger = logger;
+        this.Log = logger;
     }
 }
 const T = causalNetCore.CoreTensor;

@@ -10,12 +10,12 @@ const LayerRunnerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         if(super.setByConfig){
             super.setByConfig(pipelineConfig);
         }
-        this.logger.groupBegin('set LayerRunner by config');
+        this.Logger.groupBegin('set LayerRunner by config');
         const { Net } = pipelineConfig;
         const { Layers, Parameters } = Net; 
         this.LayerRunner.NetLayers = Layers;       
         this.LayerRunner.NetParameters = Parameters(Layers);
-        this.logger.groupEnd();
+        this.Logger.groupEnd();
     }
 
     set LayerRunner(runner){

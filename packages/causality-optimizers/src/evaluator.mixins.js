@@ -33,9 +33,9 @@ const EvaluatorMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         if(super.setByConfig){
             super.setByConfig(pipelineConfig);
         }
-        this.logger.groupBegin('set Evaluator by config');
+        this.Logger.groupBegin('set Evaluator by config');
         this.TestDataGenerator = pipelineConfig.Dataset.TestDataGenerator;
-        this.logger.groupEnd();
+        this.Logger.groupEnd();
     }
 };
 

@@ -37,7 +37,7 @@ const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         
         const F = this.F, R = this.F.CoreFunctor, T = this.T;
         const TrainDataGenerator = this.TrainDataGenerator, Trainer = this.Trainer;
-        let losses = [], logger = this.logger;
+        let losses = [], logger = this.Logger;
         return new Promise(async (resolve, reject)=>{
             logger.progressBegin(numEpochs);
             for(let epochIdx of F.range(numEpochs)){
@@ -63,12 +63,12 @@ const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         if(super.setByConfig){
             super.setByConfig(pipelineConfig);
         }
-        this.logger.groupBegin('set Trainer by config');
+        this.Logger.groupBegin('set Trainer by config');
         const { Optimizer } = pipelineConfig.Net;
         this.Optimizer = Optimizer;
         Optimizer.LayerRunner = this.LayerRunner;
         this.TrainDataGenerator = pipelineConfig.Dataset.TrainDataGenerator;
-        this.logger.groupEnd();
+        this.Logger.groupEnd();
     }
 };
 
