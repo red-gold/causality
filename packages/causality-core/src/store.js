@@ -1,14 +1,13 @@
 /**
- * class Store is the primitive class for composing higher store class.
+ * class Store is the primitive class for composing higher storage class.
  * This class wrap [levelup](https://www.tensorflow.org/js) 
  * for connect with abstract-leveldown compliant stores.
  * @class Store
  */
 export default class Store{
+    
     constructor(){
         this.levelup = require('levelup');
-        this.store = null;
-        this.logger = console;
     }
     
     async connect(){

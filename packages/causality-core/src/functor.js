@@ -1,7 +1,8 @@
 /**
- * class Functor is the primitive class for composing higher class.
+ * class Functor is the primitive class for composing higher functor based class.
  * This class wrap [Ramda](https://ramdajs.com/) for providing Functional programming style method.
- * @class Functor
+ * @example
+ * [EXAMPLE ../examples/functor.babel.js]
  */
 class Functor {
     constructor(){

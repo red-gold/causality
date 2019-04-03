@@ -25,7 +25,8 @@ import { EnsembleTrainerMixins, EnsembleModelMixins, EnsembleDeploymentMixins } 
  *         EnsembleModelMixins, 
  *         EnsembleDeploymentMixins ] }
  * @class CausalNet
- * @extends Tensor
+ * @extends { Tensor }
+ * [EXAMPLE ../examples/causalNet/ensemble.logisticRegression.babel.js]
  */
 class CausalNet extends platform.mixWith(Tensor, [ 
         DataSourceMixins,
@@ -43,10 +44,10 @@ class CausalNet extends platform.mixWith(Tensor, [
      *Creates an instance of CausalNet.
      * @param { Functor } functor
      * @param { Log } logger
-     * @param { Preprocess } streamPreprocessing
-     * @param { } netParameters
-     * @param {*} netRunner
-     * @param {*} streamDeployment
+     * @param { Functor } streamPreprocessing
+     * @param { Tensor } netParameters
+     * @param { Tensor } netRunner
+     * @param { Event } streamDeployment
      * @memberof CausalNet
      */
     constructor( functor, logger, streamPreprocessing, netRunner, streamDeployment){

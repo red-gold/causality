@@ -2,14 +2,20 @@
 This package provides:
 
 ### causalNetCore
-- Allow acess to core function and core tensor instance.
+- Allow acess to core functor and core tensor instance.
 [EXAMPLE ./examples/core.babel.js]
 
 ### Tensor
 - Primitive class for composing Tensor based class. This class is based on [tensorflowjs](https://js.tensorflow.org/)
+[EXAMPLE ./examples/tensor.babel.js]
 
-### Function
-- Primitive class for composing Function based class. This class is based on [Ramda](https://ramdajs.com/)
+### Functor
+- Primitive class for composing Functor based class. This class is based on [Ramda](https://ramdajs.com/)
+[EXAMPLE ./examples/functor.babel.js]
 
 ### Store
 - Primivtive class for composing Store base class. This class is based on [levelup](https://www.npmjs.com/package/levelup)
+
+### Event
+- Primivtive class for composing Event base class. 
+[EXAMPLE ./examples/event.babel.js]

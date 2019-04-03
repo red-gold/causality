@@ -4,6 +4,8 @@ Causality provides sub-package plugins for build up pipeline as follows:
 
 [INCLUDE ../../packages/causality-core/DESCRIPTION.md]
 
+[INCLUDE ../../packages/causality-datasets/DESCRIPTION.md]
+
 [INCLUDE ../../packages/causality-log/DESCRIPTION.md]
 
 [INCLUDE ../../packages/causality-preprocessing/DESCRIPTION.md]

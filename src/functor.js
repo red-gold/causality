@@ -1,10 +1,14 @@
 import { Functor as BaseFunctor } from 'causal-net.core';
 import { platform } from 'causal-net.utils';
-
-class ParameterFunctor extends platform.mixWith(BaseFunctor, [  ] ){
+/**
+ * This Functor class provides common used data processing methods for pipeline
+ * @class Functor
+ * @extends BaseFunctor
+ */
+class Functor extends platform.mixWith(BaseFunctor, [] ){
     constructor(){
         super();
     }
 }
 
-export default new ParameterFunctor();
+export default new Functor();

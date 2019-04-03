@@ -3,10 +3,22 @@ import { default as functor } from './functor';
 import { platform, jsonUtils } from 'causal-net.utils';
 import { causalNetSampling, SamplingMixins } from 'causal-net.sampling';
 import { PNGReaderMixins, BufferReaderMixins } from './Readers/init';
-
+/**
+ * This CausalNetDataSource class provides standard implementation for pipeline Source.
+ * { mixWith: [ SamplingMixins, PNGReaderMixins, BufferReaderMixins ]}
+ * @class CausalNetDataSource
+ * @extends Event
+ * @example
+ * [EXAMPLE ../examples/causalNetDataSource.js]
+ */
 class CausalNetDataSource extends platform.mixWith( Event, [
     SamplingMixins, PNGReaderMixins, BufferReaderMixins ] ){
-    
+    /**
+     *Creates an instance of CausalNetDataSource.
+     * @param {Functor} functor
+     * @param {Functor} sampling
+     * @memberof CausalNetDataSource
+     */
     constructor(functor, sampling){
         super();
         this.F = functor;

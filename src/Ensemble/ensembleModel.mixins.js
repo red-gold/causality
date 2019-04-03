@@ -1,4 +1,10 @@
-const EnsembleModelMixins = (PipelineClass)=> class extends PipelineClass{ 
+/**
+ * The EnsembleModelMixins class is the mixis class for ensemble model caller
+ * @class EnsembleModelMixins
+ * @extends {BasePipelineClass}
+ */
+const EnsembleModelMixins = (BasePipelineClass)=> class extends BasePipelineClass{ 
+
     get EnsembleModelPredict(){
         const FitModel = this.FitModel;
         const T = this.T;
@@ -19,6 +25,7 @@ const EnsembleModelMixins = (PipelineClass)=> class extends PipelineClass{
     set EnsembleModels(modelist){
         this.ensembleModels = modelist;
     }
+
     get EnsembleModels(){
         if(!this.ensembleModels){
             throw Error('EnsembleModels is not set');

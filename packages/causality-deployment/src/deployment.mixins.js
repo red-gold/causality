@@ -12,14 +12,14 @@ const DeploymentMixins = (BasePipelineClass)=> class extends BasePipelineClass {
     }
 
     get Inferencer(){
-        const ModelLense = ()=>{
+        const ModelLenses = ()=>{
             return this.Model;
         };
         const T = this.T;
         return async (input)=>{
             let { Predict, Encode, Decode } = input;
             let infer = {};
-            const Model = ModelLense();
+            const Model = ModelLenses();
             if(Predict){
                 let inputTensor = T.tensor(Predict).asType('float32').reshape([1, -1]);
                 let predictTensor = Model.Predict(inputTensor);

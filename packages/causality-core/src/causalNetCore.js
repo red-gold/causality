@@ -1,7 +1,7 @@
 import { default as Tensor } from './tensor';
 import { default as Functor } from './functor';
 /**
- * This class CausalNetCore provide access to core function and core tensor
+ * CausalNetCore class provides access to core function and core tensor
  *
  * @class CausalNetCore
  * @example
@@ -9,14 +9,14 @@ import { default as Functor } from './functor';
  */
 class CausalNetCore{
     constructor(){
-        this.F = new Functor();
-        this.T = new Tensor();
     }
     get CoreFunctor(){
+        this.F = new Functor();
         return this.F.CoreFunctor; 
     }
 
     get CoreTensor(){
+        this.T = new Tensor();
         return this.T.CoreTensor; 
     }
 }

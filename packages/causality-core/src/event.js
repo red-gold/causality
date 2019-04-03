@@ -1,9 +1,15 @@
 import { EventEmitter } from 'events';
-
+/**
+ * class Event is the primitive class for composing higher event-based class. 
+ * @export {EventEmitter}
+ * @class Event
+ * @extends {EventEmitter}
+ * @example
+ * [EXAMPLE ../examples/event.babel.js]
+ */
 export default class Event extends EventEmitter{
     constructor(){
         super();
-        this.logger = console;
     }
 
     async emit(name, data){
