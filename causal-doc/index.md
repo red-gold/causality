@@ -14,14 +14,7 @@ Researchers can utilize built-in datasets and the prebuilt pipelines to prototyp
 
 The commercial version of this library, Moderator, is our effort for moderating social network contents heading to protecting community culture. The AI moderator, which is built up by community voted training data, transparently prevent bad contents from propagating, and re-ranking relevant contents prior to client views without revealing any personal preference. The Causality, Moderator alongside with React Social Network are the ideas from our startup, Red Gold, for building a smarter social network with community culture respect and transparent AI moderator.
 
-Example:
-
-Building a simple Logistic regression model with dummy dataset
+For example, we can build a simple Logistic regression model with dummy dataset
 
 [EXAMPLE ../examples/causalNet/logisticsRegression.babel.js]
-
-and the ensemble version
-
-[EXAMPLE ../examples/causalNet/ensemble.logisticRegression.babel.js]
-
 

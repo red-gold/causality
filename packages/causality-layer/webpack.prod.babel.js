@@ -9,5 +9,5 @@ const TerserJS = new TerserPlugin({
 });
 WebConfig.mode = 'production';
 WebConfig.devtool = 'source-map';
-WebConfig.optimization.minimizer = [TerserJS];
+WebConfig.optimization = { minimizer: [TerserJS] };
 module.exports = [NodeConfig, WebConfig];

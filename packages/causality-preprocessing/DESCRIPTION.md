@@ -1,13 +1,12 @@
 ## causal-net.preprocessing 
 
-This causal-net.preprocessing is a sub-module for [causality](https://red-gold.github.io/causality-docs/) project.
-This module provide preprocessing instances and preprocessing mixins
+This module provide  standard preprocessing instances for image/text data and preprocessing mixins for pipeline
 
 ### nlpPreprocessing
-- Provide methods for text processing: tokenize, filter, count word frequency.
+Provide methods for text processing: tokenize, filter, count word frequency.
 
 ### imagePreprocessing 
-- Provide method for image processing: split, transform color
+Provide method for image processing: split, transform color
 
 ### PreprocessingMixins
-- Mixins for mix with Pipeline class or dataset class.
+Mixins for mix with Pipeline class or dataset class.

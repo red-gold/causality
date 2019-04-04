@@ -25,7 +25,8 @@ import { EnsembleTrainerMixins, EnsembleModelMixins, EnsembleDeploymentMixins } 
  *         EnsembleModelMixins, 
  *         EnsembleDeploymentMixins ] }
  * @class CausalNet
- * @extends { Tensor }
+ * @extends {Tensor}
+ * @example
  * [EXAMPLE ../examples/causalNet/ensemble.logisticRegression.babel.js]
  */
 class CausalNet extends platform.mixWith(Tensor, [ 

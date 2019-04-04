@@ -1,4 +1,4 @@
-const UnSupervisedModelsMixins = (BasePipelineClass)=> class extends BasePipelineClass{
+const ModelMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     get LossModel(){
         if(!this.netModel){
             throw Error('netModel is not set');
@@ -69,4 +69,4 @@ const UnSupervisedModelsMixins = (BasePipelineClass)=> class extends BasePipelin
     }
 };
 
-export default UnSupervisedModelsMixins;
+export default ModelMixins;

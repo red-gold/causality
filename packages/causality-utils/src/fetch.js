@@ -13,7 +13,7 @@ class Basefetch{
  * This isomorphic fetch class is mixed with:
  * - NodeStreamMixins  
  * - WebStreamMixins
- * @class fetch
+ * @class Fetch
  * @extends Basefetch
  */
 class Fetch extends platform.mixWith(Basefetch, {'node': [NodeStreamMixins], 'web':[WebStreamMixins]}){

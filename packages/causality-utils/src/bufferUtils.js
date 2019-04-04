@@ -6,6 +6,7 @@ import { default as  fetch } from './fetch';
  * @class BufferUtils
  */
 class BufferUtils{
+    
     constructor(fetch){
         this.fetch = fetch;
         this.fs = require('fs');

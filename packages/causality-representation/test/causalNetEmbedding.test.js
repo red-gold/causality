@@ -1,5 +1,5 @@
-import { default as CausalNetEmbedding } from '../src/causalNetEmbedding';
-/** @test { CausalNetEmbedding } */
-test('UniversalEmbedding instance should be okay', async ()=>{
-    expect(CausalNetEmbedding).toBeDefined();
+import { causalNetEmbedding } from '../src/index';
+/** @test {CausalNetEmbedding} */
+test('CausalNetEmbedding instance should be okay', async ()=>{
+    expect(causalNetEmbedding).toBeDefined();
 })

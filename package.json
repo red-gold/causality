@@ -1,7 +1,7 @@
 {
   "private": true,  
   "name": "causal-net",
-  "version": "0.0.2",
+  "version": "0.0.8",
   "main": "dist/@causalNet/pipeline.node.js",
   "module": "dist/@causalNet/pipeline.node.js",
   "browser": "dist/@causalNet/pipeline.web.js",
@@ -23,16 +23,7 @@
     "build:doc": "rimraf ./doc_dist/; esdoc -c esdoc.config.json;build:demos;cp -r ./demo_dist ./doc_dist/prebuilt-demos",
     "start:doc": "rimraf ./doc_dist/; esdoc -c esdoc.config.json;build:demos;cp -r ./demo_dist ./doc_dist/prebuilt-demos; cd doc_dist/; xdg-open http://127.0.0.1:8080/index.html; simple_server;",
     "test": "jest",
-    "test:report": "jest --coverage",
-    "doc": "jsdoc -c jsdoc.json",
-    "build:all": "yarn build-utils && yarn build-core && yarn build-memcache && yarn build-dataset",
-    "build-utils": "cd packages/causality-utils; yarn build",
-    "build-core": "cd packages/causality-core; yarn build",
-    "build-dataset": "cd packages/causality-dataset; yarn build",
-    "build-memcache": "cd packages/causality-memcache; yarn build"
-  },
-  "jest": {
-    "testEnvironment": "node"
+    "test:report": "jest --coverage"
   },
   "dependencies": {
     "causal-net.core": "*",

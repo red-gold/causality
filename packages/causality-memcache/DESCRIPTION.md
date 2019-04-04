@@ -1,10 +1,13 @@
 ## causal-net.memcache 
 
 ### memDownCache
-- memDownCache provides wrapper for [memdown]() caching.
+
+This class a implementation for memory caching on top of [memdown](https://www.npmjs.com/package/memdown) which can be accessed via **memDownCache**.
 
 [EXAMPLE ./examples/memDownCache.babel.js]
 
 ### MemCacheMixins
-- Mixins for mix with Pipeline class for memcache.
+
+This mixins class provides attributes: **MemCache**.
+
 [EXAMPLE ./examples/memCache.mixins.babel.js]

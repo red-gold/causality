@@ -1,5 +1,4 @@
 const PreprocessingMixins = (BasePipelineClass) => class extends BasePipelineClass{
-    
     get Preprocessing(){
         if( !this.streamPreprocessing ){
             throw Error('streamPreprocessing is not set');
@@ -10,8 +9,6 @@ const PreprocessingMixins = (BasePipelineClass) => class extends BasePipelineCla
     set Preprocessing(streamPreprocessing){
         this.streamPreprocessing = streamPreprocessing;
     }
-
-    
 
     setByConfig(pipelineConfig){
         if(super.setByConfig){

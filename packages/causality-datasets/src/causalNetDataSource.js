@@ -4,7 +4,7 @@ import { platform, jsonUtils } from 'causal-net.utils';
 import { causalNetSampling, SamplingMixins } from 'causal-net.sampling';
 import { PNGReaderMixins, BufferReaderMixins } from './Readers/init';
 /**
- * This CausalNetDataSource class provides standard implementation for pipeline Source.
+ * This CausalNetDataSource class provides a standard implementation for pipeline Source.
  * { mixWith: [ SamplingMixins, PNGReaderMixins, BufferReaderMixins ]}
  * @class CausalNetDataSource
  * @extends Event

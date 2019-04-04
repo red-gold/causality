@@ -4,10 +4,12 @@ import { StorageMixins, indexDBStorage } from 'causal-net.storage';
 import { default as ParameterMixins } from './parameter.mixins';
 import { default as parameterfunctor } from './parameterFunctor';
 /**
- * This CausalNetLayer class provide common use layers
- * { mixWith: [ DenseMixins ] }
- * @class CausalNetLayer
+ * This class is a standard implementation for model parameters which can be accessed via **causalNetParameters** instance
+ * { mixWith: [StorageMixins, ParameterMixins] }
+ * @class CausalNetParameters
  * @extends BaseTensor
+ * @example
+ * [EXAMPLE ../example/parameters.babel.js]
  */
 class CausalNetParameters extends platform.mixWith(BaseTensor, [StorageMixins, ParameterMixins] ){
     constructor(storage, parameterfunctor){

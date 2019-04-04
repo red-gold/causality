@@ -1,3 +1,13 @@
+/**
+ * This mixin class provides attributes: **Optimizer**, **Trainer**, **TrainDataGenerator**, 
+ * methods **train**, handle **Optimizer** setting of pipelineConfig.Net
+ * and **TrainDataGenerator** setting of pipelineConfig.Dataset.
+ *
+ * @class TrainerMixins
+ * @extends {BasePipelineClass}
+ * @example
+ * [EXAMPLE ../examples/trainer.mixins.babel.js]
+ */
 const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     
     get Trainer(){

@@ -2,10 +2,12 @@ import { Tensor as BaseTensor } from 'causal-net.core';
 import { platform } from 'causal-net.utils';
 import { default as DenseMixins } from './dense.mixins';
 /**
- * This CausalNetLayer class provide common use layers
+ * This class provides common used layers which can be accessed via **causalNetLayers** instance.
  * { mixWith: [ LayerMixins, DenseMixins ] }
- * @class CausalNetLayer
+ * @class CausalNetLayers
  * @extends BaseTensor
+ * @example
+ * [EXAMPLE ../examples/dense.layer.js]
  */
 class CausalNetLayers extends platform.mixWith(BaseTensor, 
     [ DenseMixins ] ){

@@ -14,10 +14,9 @@ const EnsembleDeploymentMixins = (BasePipelineClass)=> class extends BasePipelin
         return async (input)=>{
             let { EnsemblePredict } = input;
             let infer = {};
-            const Model = ModelLenses();
             if(EnsemblePredict){
                 let inputTensor = T.tensor(EnsemblePredict).asType('float32').reshape([1, -1]);
-                let predictTensor = await Model.EnsemblePredict(inputTensor);
+                let predictTensor = await ModelLenses().EnsemblePredict(inputTensor);
                 infer.EnsemblePredict = await predictTensor.data();
             }
             return infer;

@@ -1,7 +1,7 @@
 import { Functor } from 'causal-net.core';
 import { assert } from 'causal-net.utils';
 /**
- * This SamplingMixins class provide mixins for PipelineClass or DatasetClass
+ * This mixin class provide attributes: **Sampling**.
  * @class SamplingMixins
  * @extends BasePipelineClass
  * @example

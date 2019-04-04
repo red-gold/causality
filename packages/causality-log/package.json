@@ -25,9 +25,6 @@
     "svg2png": "^4.1.1",
     "vivid.d3-node": "^0.0.2"
   },
-  "jest": {
-    "testEnvironment": "node"
-  },
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.2.0",

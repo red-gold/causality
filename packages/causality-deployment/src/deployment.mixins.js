@@ -1,3 +1,10 @@
+/**
+ * This mixin class provides attributes: **Deployment**, **Inferencer**, and handle Deployment setting of pipelineConfig.
+ * @class DeploymentMixins
+ * @extends BasePipelineClass
+ * @example
+ * [EXAMPLE ../examples/causalNetDeployment.babel.js]
+ */
 const DeploymentMixins = (BasePipelineClass)=> class extends BasePipelineClass {
    
     set Deployment(deployment){

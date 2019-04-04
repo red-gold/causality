@@ -1,19 +1,22 @@
 ## causal-net.representation
 
-This module provide representation instances and representation mixins
+This module provides:
 
-### causalNetEmbedding 
-- Provide methods for transforming tokens or representing sentence into single vector.
+### CausalNetEmbedding 
+
+This class provide standard implements for text to vecs transformation. Which can be accessed via causalNetEmbedding
 
 Node
 [EXAMPLE ./examples/causalNetEmbedding.babel.node.js]
 
-### universalEmbedding
-- Provide methods for transforming tokens or representing sentence into single vector based [use](https://github.com/tensorflow/tfjs-models/tree/master/universal-sentence-encoder)
+### UniversalEmbedding
+
+This class provide standard implements for text to vecs transformation into single vector based on [use](https://github.com/tensorflow/tfjs-models/tree/master/universal-sentence-encoder) which can be accesed via universalEmbedding
 
 [EXAMPLE ./examples/universalEmbedding.babel.js]
 
 ### RepresentationMixins
-- Mixins for mix with Pipeline class or dataset class.
+
+This mixin class provides attributes: **Prepresentation**.
 
 [EXAMPLE ./examples/embeddingMixins.babel.node.js]

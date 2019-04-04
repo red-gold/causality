@@ -1,11 +1,14 @@
 ## causal-net.datasets 
 This package provides:
 
-### causalNetDataSource
-- This CausalNetDataSource class provides standard implementation for pipeline Source.
+### CausalNetDataSource
+
+This class is a standard implementation for pipeline Source which can be accessed via **causalNetDataSource** instance.
+
 [EXAMPLE ./examples/causalNetDataSource.js]
 
 ### DatasetMixins
-- This DataSourceMixins class provides DataSourceReader attibute, source reading methods for pipeline
-and getting Source in pipelineConfig
+
+This mixin class provides attibutea: **DataSourceReader** , methods: **reading** and handle Source setting in pipelineConfig
+
 [EXAMPLE ./examples/dataset.mixins.babel.js]

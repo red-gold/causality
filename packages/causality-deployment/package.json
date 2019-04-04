@@ -24,9 +24,6 @@
     "causal-net.memcache":"*",
     "causal-net.preprocessing":"*"
   },
-  "jest": {
-    "testEnvironment": "node"
-  },
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.2.0",

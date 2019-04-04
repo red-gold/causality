@@ -1,16 +1,15 @@
 ## causal-net.log 
 
-This causal-net.log is a sub-module for [causality](https://red-gold.github.io/causality-docs/) project.
-This module provide log instance and sampling mixins
+This module provides:
 
-### termLogger 
+### TermLogger 
 
-- Provide isomomorphic logger instance to replace console.log.
+This class is isomomorphic logger which can be accessed via **termLogger**.
 
 [EXAMPLE ./examples/log.babel.js]
 
 ### LoggerMixins
 
-- Mixins function for mix with the main class to acquire logger.
+This Mixins class provides attributes: **Logger**.
 
 [EXAMPLE ./examples/logger.mixins.babel.js]

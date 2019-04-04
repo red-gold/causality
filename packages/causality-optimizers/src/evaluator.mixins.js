@@ -1,3 +1,12 @@
+/**
+ * This mixin class provides methods: **test** and 
+ * handle **TestDataGenerator** setting of pipelineConfig.Dataset.
+ *
+ * @class EvaluatorMixins
+ * @extends {BasePipelineClass}
+ * @example
+ * [EXAMPLE ../examples/trainer.mixins.babel.js]
+ */
 const EvaluatorMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     
     get TestDataGenerator(){

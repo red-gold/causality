@@ -1,9 +1,10 @@
 /**
- * This NetMixins class provide mixin for building pipeline
- * @class NetMixins
+ * This mixin class provide attributes: **ParameterInitializer**, **LayerRunner**, 
+ * and handle **Net** setting of pipelineConfig 
+ * @class LayerRunnerMixins
  * @extends BasePipelineClass
  * @example
- * [EXAMPLE ../examples/net.mixins.babel.js]
+ * [EXAMPLE ../examples/layerRunner.mixins.babel.js]
  */
 const LayerRunnerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     async saveParams(fileName){

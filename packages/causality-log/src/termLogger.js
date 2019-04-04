@@ -23,6 +23,7 @@ class TermLogger extends platform.mixWith(BaseLogger,
         let group = {name, beginTime: new Date()};
         this.groupStack.push(group);
         let indentSpace = '';
+        this.log('**********************************');
         this.log(`${indentSpace}${group.name}: begin at ${group.beginTime}`);
     }
     groupEnd(){
@@ -30,6 +31,7 @@ class TermLogger extends platform.mixWith(BaseLogger,
             let group = this.groupStack.pop();
             let indentSpace = '';
             this.log(`${indentSpace}${group.name}: end after ${(new Date() - group.beginTime)} (ms)`);
+            this.log('**********************************');
         }
     }
 }

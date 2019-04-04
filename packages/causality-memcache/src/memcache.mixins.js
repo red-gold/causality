@@ -1,4 +1,8 @@
-
+/**
+ * This mixins class provides attributes: **MemCache**.
+ * @class MemCacheMixins
+ * @extends {BaseClass}
+ */
 const MemCacheMixins = (BaseClass)=> class extends BaseClass{
     /**
      * This methods return summary about items of the current memcache 

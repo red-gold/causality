@@ -1,7 +1,7 @@
 import { Tensor } from 'causal-net.core'; 
 import { assert } from 'causal-net.utils';
 /**
- * This RepresentationMixins provide mixins for composing pipeline with representation transform for text
+ * This mixin class provides attributes: **Representation**.
  * @class RepresentationMixins
  * @extends  BasePipelineClass
  * @example

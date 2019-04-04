@@ -1,10 +1,13 @@
 import {default as AdamOptimizer} from './adamOptimizer';
 /**
- * This CausalNetSGDOptimizer provide SGD optimizers based on Tensorflowjs optimizer
+ * This class provides optimizing methods which can be accessed via **causalNetSGDOptimizer** instance.
  *
  * @class CausalNetSGDOptimizer
+ * @extends {Tensor}
+ * @example
+ * [EXAMPLE ../examples/causalNetSGDOptimizers.babel.js]
  */
-class CausalNetSGDOptimizer{
+class CausalNetSGDOptimizer extends platform.mixWith(BaseTensor, [SGDFitParamsMixins]){
     constructor(){
     }
     adam(optimizerParams){

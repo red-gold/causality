@@ -1,4 +1,3 @@
-[]
-# causal-net.core 
+# causal-net.datasets 
 
-This causal-net.core is a sub-module for [causality](https://red-gold.github.io/causality-docs/) project.
+This causal-net.datasets is a sub-module for [causality](https://red-gold.github.io/causality-docs/) project.

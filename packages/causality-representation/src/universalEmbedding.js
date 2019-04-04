@@ -1,17 +1,18 @@
 import { platform, fetch } from 'causal-net.utils';
 import { Tensor } from 'causal-net.core';
 import { default as VectorMetricMixins } from './vectorMetrics.mixins';
+
 /**
- *
- * This UniversialEmbedding provide methods for transform sentences into 
+ * This UniversalEmbedding provide methods for transform sentences into 
  * its single vector representation 
  * based on [use](https://github.com/tensorflow/tfjs-models/tree/master/universal-sentence-encoder)
- * @class UniversialEmbedding
- * @extends Tensor
+ * 
+ * @class UniversalEmbedding
+ * @extends {Tensor}
  * @example
  * [EXAMPLE ../examples/universalEmbedding.babel.js]
  */
-class UniversialEmbedding extends platform.mixWith(Tensor, 
+class UniversalEmbedding extends platform.mixWith(Tensor, 
     [ VectorMetricMixins ]){
     
     constructor(){
@@ -40,4 +41,4 @@ class UniversialEmbedding extends platform.mixWith(Tensor,
         return embeddings;
     }
 }
-export default new UniversialEmbedding();
+export default new UniversalEmbedding();

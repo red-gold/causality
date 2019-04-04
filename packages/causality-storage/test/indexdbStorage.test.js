@@ -6,8 +6,8 @@ test('indexdb write file should be okay', async ()=>{
 })
 /** @test {IndexDBStorage} */
 test('indexdb read file should be okay', async ()=>{
-    let writePath = await indexDBStorage.writeFile('temp','12345');
-    let data = await indexDBStorage.readFile(writePath);    
+    let item = await indexDBStorage.writeFile('temp','12345');
+    let data = await indexDBStorage.readFile('temp');    
     expect(data).toBe('12345');
 })
 /** @test {IndexDBStorage} */
@@ -29,13 +29,13 @@ test('indexdb batch write should be okay', async ()=>{
 })
 /** @test {IndexDBStorage} */
 test('indexdb list file should be okay', async ()=>{
-    let fileList = await indexDBStorage.getFileList('/');
+    let fileList = await indexDBStorage.getFileList('/list/');
     console.log({fileList});
     expect(fileList).toBeDefined();
 })
 /** @test {IndexDBStorage} */
 test('indexdb delete by prefix should be okay', async ()=>{
-    let writePath = await indexDBStorage.deleteFileByPrefix('/');
+    let writePath = await indexDBStorage.deleteFileByPrefix('/list/');
     console.log({writePath});
     expect(writePath).toBeDefined();
 })

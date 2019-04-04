@@ -3,11 +3,14 @@
 This causal-net.sampling is a sub-module for [causality](https://red-gold.github.io/causality-docs/) project.
 This module provide sampling instance and sampling mixins
 
-### causalNetSampling 
-- Provide sampling instance with various sampling methods.
+### CausalNetSampling 
+
+This class provide common used sampling methods which can be accessed via **causalNetSampling** instance.
 
 [EXAMPLE ./examples/causalNetSampling.babel.js]
 
 ### SamplingMixins
-- Mixins Mixins for mix with Pipeline class or dataset class.
+
+This mixin class provide attributes: **Sampling**.
+
 [EXAMPLE ./examples/sampling.mixins.babel.js]

@@ -8,6 +8,7 @@ export default class Store{
     
     constructor(){
         this.levelup = require('levelup');
+        this.logger = console;
     }
     
     async connect(){
@@ -19,7 +20,6 @@ export default class Store{
      * @param { String } key - key name
      * @param {boolean} [asBuffer=false] - return object or buffer array, default object
      * @returns { Object } item object 
-     * @memberof MemoryCache
      */
     async getItem(key, asBuffer=false, noError=false){
         if(!this.store){

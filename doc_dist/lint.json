@@ -45,28 +45,24 @@
     "filePath": "causality/packages/causality-core/src/store.js",
     "lines": [
       {
-        "lineNumber": 16,
+        "lineNumber": 17,
         "line": "    /**"
       },
       {
-        "lineNumber": 17,
+        "lineNumber": 18,
         "line": "     * Get item given the key"
       },
       {
-        "lineNumber": 18,
+        "lineNumber": 19,
         "line": "     * @param { String } key - key name"
       },
       {
-        "lineNumber": 19,
+        "lineNumber": 20,
         "line": "     * @param {boolean} [asBuffer=false] - return object or buffer array, default object"
       },
       {
-        "lineNumber": 20,
-        "line": "     * @returns { Object } item object "
-      },
-      {
         "lineNumber": 21,
-        "line": "     * @memberof MemoryCache"
+        "line": "     * @returns { Object } item object "
       },
       {
         "lineNumber": 22,
@@ -381,55 +377,55 @@
     "filePath": "causality/packages/causality-storage/src/indexDBStorage.js",
     "lines": [
       {
-        "lineNumber": 53,
+        "lineNumber": 52,
         "line": "    /**"
       },
       {
-        "lineNumber": 54,
+        "lineNumber": 53,
         "line": "     * get list of file base on prefix"
       },
       {
-        "lineNumber": 55,
+        "lineNumber": 54,
         "line": "     * @param { String } filePath"
       },
       {
-        "lineNumber": 56,
+        "lineNumber": 55,
         "line": "     * @return { Promise } List of filenames "
       },
       {
-        "lineNumber": 57,
+        "lineNumber": 56,
         "line": "     * @memberof IndexDBStorage"
       },
       {
-        "lineNumber": 58,
+        "lineNumber": 57,
         "line": "     */"
       },
       {
-        "lineNumber": 59,
+        "lineNumber": 58,
         "line": "    async getFileList(filePath){"
       },
       {
-        "lineNumber": 60,
+        "lineNumber": 59,
         "line": "        filePath = this.correctName(filePath);"
       },
       {
-        "lineNumber": 61,
+        "lineNumber": 60,
         "line": "        return await this.getItemList(filePath);"
       },
       {
-        "lineNumber": 62,
+        "lineNumber": 61,
         "line": "    }"
       },
       {
-        "lineNumber": 63,
+        "lineNumber": 62,
         "line": ""
       },
       {
-        "lineNumber": 64,
+        "lineNumber": 63,
         "line": "    /**"
       },
       {
-        "lineNumber": 65,
+        "lineNumber": 64,
         "line": "     * delete all files with name match prefix pattern "
       }
     ],
@@ -502,35 +498,35 @@
     "filePath": "causality/packages/causality-utils/src/bufferUtils.js",
     "lines": [
       {
-        "lineNumber": 24,
+        "lineNumber": 25,
         "line": "    /**"
       },
       {
-        "lineNumber": 25,
+        "lineNumber": 26,
         "line": "     * write buffer content from given content"
       },
       {
-        "lineNumber": 26,
+        "lineNumber": 27,
         "line": "     * @todo enhance reject case"
       },
       {
-        "lineNumber": 27,
+        "lineNumber": 28,
         "line": "     * @param { URL } url - url for csv content"
       },
       {
-        "lineNumber": 28,
+        "lineNumber": 29,
         "line": "     * @returns { Promise } - data promise with data if success"
       },
       {
-        "lineNumber": 29,
+        "lineNumber": 30,
         "line": "     * @memberof BufferUtils"
       },
       {
-        "lineNumber": 30,
+        "lineNumber": 31,
         "line": "     */"
       },
       {
-        "lineNumber": 31,
+        "lineNumber": 32,
         "line": "    async writeBuffer(data, filePath){"
       }
     ],
@@ -547,35 +543,35 @@
     "filePath": "causality/packages/causality-utils/src/bufferUtils.js",
     "lines": [
       {
-        "lineNumber": 48,
+        "lineNumber": 49,
         "line": "    /**"
       },
       {
-        "lineNumber": 49,
+        "lineNumber": 50,
         "line": "     * fetch buffer content from given url"
       },
       {
-        "lineNumber": 50,
+        "lineNumber": 51,
         "line": "     * @todo enhance reject case"
       },
       {
-        "lineNumber": 51,
+        "lineNumber": 52,
         "line": "     * @param { URL } url - url for csv content"
       },
       {
-        "lineNumber": 52,
+        "lineNumber": 53,
         "line": "     * @returns { Promise } - data promise with data if success"
       },
       {
-        "lineNumber": 53,
+        "lineNumber": 54,
         "line": "     * @memberof BufferUtils"
       },
       {
-        "lineNumber": 54,
+        "lineNumber": 55,
         "line": "     */"
       },
       {
-        "lineNumber": 55,
+        "lineNumber": 56,
         "line": "    readBuffer(filePath){"
       }
     ],

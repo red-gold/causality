@@ -10,9 +10,8 @@ import { default as LevelJSMixins } from './indexDBStorage.mixins.web';
  * This indexDBStorage class is the default consistent storage based on 
  * [leveldown](https://www.npmjs.com/package/leveldown) storage 
  * with support file extends: png, csv, text by those corresponding mixins.
- * mixWith:
- *  - 'node': [LevelDownMixins, TextFileMixins, PNGFileMixins, CSVFileMixins],
- *  - 'web': [LevelJSMixins, TextFileMixins, PNGFileMixins, CSVFileMixins]
+ * { mixWith: { 'node': [LevelDownMixins, TextFileMixins, PNGFileMixins, CSVFileMixins],
+ *              'web': [LevelJSMixins, TextFileMixins, PNGFileMixins, CSVFileMixins] } }
  * @class IndexDBStorage
  * @extends {  BaseStorage } 
  * @example

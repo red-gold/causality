@@ -1,7 +1,14 @@
 import { Event } from 'causal-net.core';
 import { default as functor } from './functor';
-import { platform, assert } from 'causal-net.utils';
-
+import { platform } from 'causal-net.utils';
+/**
+ * The implementation for event-based model deployment which is supplied 
+ * to pipeline class instance as **Deployment** attribute. Pipeline class must be mixed with DeploymentMixins.
+ * @class CausalNetDeployment
+ * @extends Event
+ * @example
+ * [EXAMPLE ../examples/causalNetDeployment.babel.js]
+ */
 class CausalNetDeployment extends platform.mixWith( Event, [] ){
     
     constructor(functor){

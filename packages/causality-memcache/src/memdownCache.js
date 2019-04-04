@@ -2,10 +2,10 @@ import { platform } from 'causal-net.utils';
 import { Store as BaseMemCache } from 'causal-net.core';
 import { default as MemorizingMixins } from './memorizing.mixins';
 /**
- * This MemdownCache provide memcache implement based on 
- * [memdown](https://www.npmjs.com/package/memdown)
+ * This class provides storage implementation for memory caching on top of
+ * [memdown](https://www.npmjs.com/package/memdown) which can be accessed via **memDownCache**.
  * { mixWith: [ MemorizingMixins ] }
- * @class MemoryCache
+ * @class MemdownCache
  * @extends BaseMemCache
  */
 class MemdownCache extends platform.mixWith( BaseMemCache,

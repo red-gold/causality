@@ -5,7 +5,7 @@ import { default as SubSamplingMixins } from './subSampling.mixins';
 import { default as NegSamplingMixins } from './negSampling.mixins';
 
 /**
- * This CausalNetSampling class provides sampling methods
+ * This class provides common used sampling methods which can be accessed via **causalNetSampling**.
  * mixwith:
  * [ SubSamplingMixins, NegSamplingMixins ]
  * @class CausalNetSampling

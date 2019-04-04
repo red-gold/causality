@@ -5,6 +5,7 @@ test('platform must return', ()=>{
     /** @test {Platform#instance} */
     expect(machine).toBeDefined();
 });
+/** @test {Platform} */
 test('platform mix should works', ()=>{
     class A{
         constructor(){

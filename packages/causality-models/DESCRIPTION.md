@@ -1,10 +1,16 @@
 ## causal-net.models 
 
-### causalNetModels
-- causalNetModels provides common used models: 
+### CausalNetModels
 
-Classification models
-[EXAMPLE ./examples/classification.babel.js]
+This class provides common used models which can be accessed via **causalNetModels** instance.
 
-### SupervisedModelsMixins
-- Mixins for mix with Pipeline class for supervised models.
+- Classification models
+[EXAMPLE ./examples/singleLabelClassification.babel.js]
+
+### ModelMixins
+
+This mixin class provides attributes: **Model**, **LossModel**, **FitModel**, **OneHotPredictModel**, **PredictModel** and handle **Model** setting of pipelineConfig.Net.
+
+[EXAMPLE ./examples/model.mixins.babel.js]
+
+

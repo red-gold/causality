@@ -21,9 +21,6 @@
     "causal-net.core": "*",
     "causal-net.utils": "*"
   },
-  "jest": {
-    "testEnvironment": "node"
-  },
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
