@@ -1,4 +1,6 @@
 import {indexDBStorage} from '../src/index';
+const timeout = 10000;//10 s to avoid
+beforeEach(()=>{}, timeout);
 /** @test {IndexDBStorage} */
 test('indexdb write file should be okay', async ()=>{
     let writePath = await indexDBStorage.writeFile('temp','12345');

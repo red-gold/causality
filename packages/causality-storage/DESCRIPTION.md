@@ -7,6 +7,7 @@ This module provides:
 The isomorphic high performance key-value storage based on indexDB.
 
 [EXAMPLE ./examples/storage.babel.js]
+
 ### StorageMixins
 
 This mixins class provides **Storage** attribute.

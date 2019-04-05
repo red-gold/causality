@@ -1,4 +1,5 @@
-![Photo by Iker Urteaga on Unsplash](./asset/iker-urteaga-246955-unsplash.jpg)
+![Photo by Josh Applegate on Unsplash](./asset/josh-applegate-1479284-unsplash.jpg)
+
 # Introduction
 
 Key design principles:

@@ -1,3 +1,5 @@
 const babelJest = require('babel-jest');
+const path = require('path');
 const fs = require('fs');
-module.exports = babelJest.createTransformer(JSON.parse(fs.readFileSync('./.babelrc')));
+babelPath = path.resolve(__dirname, '.babelrc');
+module.exports = babelJest.createTransformer(JSON.parse(fs.readFileSync(babelPath)));

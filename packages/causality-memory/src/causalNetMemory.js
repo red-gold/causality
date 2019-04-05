@@ -1,5 +1,11 @@
 import { Tensor, causalNetCore } from 'causal-net.core';
 import { memDownCache } from 'causal-net.memcache';
+/**
+ * This class is under experimented
+ * @experiment
+ * @class CausalNetMemory
+ * @extends {Tensor}
+ */
 class CausalNetMemory extends Tensor{
     constructor(){
         super();
