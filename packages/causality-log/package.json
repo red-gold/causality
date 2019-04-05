@@ -1,6 +1,6 @@
 {
   "name": "causal-net.log",
-  "version": "0.0.5",
+  "version": "0.0.954",
   "description": "this is log class",
   "main": "dist/@causalNet/log.node.js",
   "module": "dist/@causalNet/log.node.js",
