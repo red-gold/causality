@@ -1,6 +1,6 @@
 {
   "name": "causal-net.deployment",
-  "version": "0.0.954",
+  "version": "0.1.0",
   "description": "the deployment class",
   "main": "dist/@causalNet/deployment.node.js",
   "browser": "dist/@causalNet/deployment.web.js",
