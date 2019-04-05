@@ -1,6 +1,6 @@
 {
   "name": "causal-net.utils",
-  "version": "0.0.954",
+  "version": "0.1.0",
   "description": "this is utils function",
   "main": "dist/@causalNet/utils.node.js",
   "browser": "dist/@causalNet/utils.web.js",
