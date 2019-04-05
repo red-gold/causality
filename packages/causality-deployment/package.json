@@ -1,6 +1,6 @@
 {
   "name": "causal-net.deployment",
-  "version": "0.0.61",
+  "version": "0.0.954",
   "description": "the deployment class",
   "main": "dist/@causalNet/deployment.node.js",
   "browser": "dist/@causalNet/deployment.web.js",
@@ -17,12 +17,12 @@
     "build:prod": "webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
-    "causal-net.core":"*",
-    "causal-net.utils":"*",
-    "causal-net.log":"*",
-    "causal-net.storage":"*",
-    "causal-net.memcache":"*",
-    "causal-net.preprocessing":"*"
+    "causal-net.core": "*",
+    "causal-net.log": "*",
+    "causal-net.memcache": "*",
+    "causal-net.preprocessing": "*",
+    "causal-net.storage": "*",
+    "causal-net.utils": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
