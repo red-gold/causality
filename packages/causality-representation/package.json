@@ -1,6 +1,6 @@
 {
   "name": "causal-net.representation",
-  "version": "0.0.954",
+  "version": "0.1.0",
   "description": "this is representation class",
   "main": "dist/@causalNet/representation.node.js",
   "module": "dist/@causalNet/representation.node.js",
