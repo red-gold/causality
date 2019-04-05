@@ -1,6 +1,6 @@
 {
   "name": "causal-net.models",
-  "version": "0.0.954",
+  "version": "0.1.0",
   "description": "this is models class",
   "main": "dist/@causalNet/models.node.js",
   "module": "dist/@causalNet/models.node.js",
