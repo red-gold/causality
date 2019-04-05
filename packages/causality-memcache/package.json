@@ -1,6 +1,6 @@
 {
   "name": "causal-net.memcache",
-  "version": "0.0.92",
+  "version": "0.0.95",
   "description": "this is memcache class",
   "main": "dist/@causalNet/memcache.node.js",
   "module": "dist/@causalNet/memcache.node.js",
