@@ -1,6 +1,6 @@
 {
   "name": "causal-net.preprocessing",
-  "version": "0.0.5",
+  "version": "0.0.954",
   "description": "this is preprocessing class",
   "main": "dist/@causalNet/preprocessing.node.js",
   "module": "dist/@causalNet/preprocessing.node.js",
@@ -18,8 +18,8 @@
     "build:prod-maxheap": "node --max_old_space_size=8096 /usr/local/bin/webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
-    "causal-net.utils": "*",
-    "causal-net.core": "*"
+    "causal-net.core": "*",
+    "causal-net.utils": "*"
   },
   "jest": {
     "testEnvironment": "node"
