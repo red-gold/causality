@@ -1,6 +1,6 @@
 {
   "name": "causal-net.memory",
-  "version": "0.0.954",
+  "version": "0.1.0",
   "description": "this is memory class",
   "main": "dist/@causalNet/memory.node.js",
   "module": "dist/@causalNet/memory.node.js",
