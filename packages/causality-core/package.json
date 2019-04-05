@@ -1,6 +1,6 @@
 {
   "name": "causal-net.core",
-  "version": "0.0.954",
+  "version": "0.1.0",
   "description": "the base class of computing oprators, tensors and base class",
   "main": "dist/@causalNet/core.node.js",
   "browser": "dist/@causalNet/core.web.js",
