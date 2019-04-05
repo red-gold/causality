@@ -1,6 +1,6 @@
 {
   "name": "causal-net.datasets",
-  "version": "0.0.954",
+  "version": "0.1.0",
   "description": "the datasets class",
   "main": "dist/@causalNet/datasets.node.js",
   "browser": "dist/@causalNet/datasets.web.js",
