@@ -1,6 +1,6 @@
 {
   "name": "causal-net.datasets",
-  "version": "0.0.61",
+  "version": "0.0.954",
   "description": "the datasets class",
   "main": "dist/@causalNet/datasets.node.js",
   "browser": "dist/@causalNet/datasets.web.js",
@@ -17,12 +17,12 @@
     "build:prod": "webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
-    "causal-net.core":"*",
-    "causal-net.utils":"*",
-    "causal-net.log":"*",
-    "causal-net.storage":"*",
-    "causal-net.memcache":"*",
-    "causal-net.preprocessing":"*"
+    "causal-net.core": "*",
+    "causal-net.log": "*",
+    "causal-net.memcache": "*",
+    "causal-net.preprocessing": "*",
+    "causal-net.storage": "*",
+    "causal-net.utils": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
