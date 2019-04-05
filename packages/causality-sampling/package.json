@@ -1,6 +1,6 @@
 {
   "name": "causal-net.sampling",
-  "version": "0.0.92",
+  "version": "0.0.95",
   "description": "this is sampling function",
   "main": "dist/@causalNet/sampling.node.js",
   "browser": "dist/@causalNet/sampling.web.js",
