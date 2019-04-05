@@ -1,0 +1,9 @@
+{
+  "name": "causal-net.web-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "machina": "^4.0.2"
+  }
+}

@@ -1,15 +1,30 @@
-import d3 from 'd3';
+import * as d3 from 'd3';
+import fs from 'fs';
 import { default as D3N } from 'vivid.d3-node';
 import { default as canvasModule } from 'canvas';
 import { default as svg2png } from 'svg2png';
+console.log({d3});
 class Vivid{
     constructor(){
+    }
+
+    connect(){
+
+    }
+
+    json2css(objectStyle){
+        return Object.entries(objectStyle).reduce((acc1, cur1) => {
+                return `${acc1}\n\n${cur1[0]} ` + 
+                    Object.keys(cur1[1])
+                        .reduce((acc2, cur2) => 
+                            `${acc2}\n\t${cur2}: ${cur1[1][cur2]};`, '{') + '\n}'
+            }, '');
     }
     
     genBasePlot(){
         const margin = {top: 20, right: 20, bottom: 30, left: 40, color: 10},
-            width  = 960 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
+              width  = 960 - margin.left - margin.right,
+              height = 500 - margin.top - margin.bottom;
         var styles = '';
         var options = { styles, canvasModule, d3 };
         const plot = new D3N(options);
@@ -20,7 +35,7 @@ class Vivid{
         return { SVG, xMap, yMap, plot, margin, width, height };
     }
 
-    line(data, ...args){
+    line({data, tilte, style}){
 
     }
 
@@ -34,10 +49,21 @@ class Vivid{
         return fs.writeFileSync(outputPath, buffer);
     }
 
-    scatter(data, name, ...args){
-        var { SVG, xMap, yMap, plot, margin, width, height } = this.genBasePlot();
+    async show(figName, svgChart){
+        return await this.export2png(figName, svgChart);
+    }
 
-        xMap.domain(d3.extent(data, ([d0, d1])=>d0));
+    getDomain(){
+
+    }
+
+    scatter({data, title, domain, style}){
+        var { SVG, xMap, yMap, plot, margin, width, height } = this.genBasePlot();
+        var allpoints = (Array.isArray(data)?
+                            data:
+                            Object.values(data).reduce(s,d=>[...s,...d],[]);
+        let {X, Y} = domain;
+                            xMap.domain(d3.extent(data, ([d0, d1])=>d0));
         yMap.domain(d3.extent(data, ([d0, d1])=>d1));
         var xAxis = d3.axisBottom(xMap);
         var yAxis = d3.axisLeft(yMap);
@@ -66,8 +92,19 @@ class Vivid{
                     .axis path, .axis line {
                         fill: none; stroke: #000; shape-rendering: crispEdges; }
                     .dot { stroke: #000; }`;
-        this.export2png(name, plot);
+        this.show(title, plot);
     }
 }
-
+let vivid = new Vivid();
+const style = { "body": {"font": "11px"} };
+vivid.scatter(
+    { data: 
+        {
+          'X': [[0,0],[1,0],[0,1]],
+          'Y': [[-1,-1],[-1,0],[0,-1]],
+        }, 
+      'xRange': [-2,2],
+      'yRange': [-2,2],
+      'title': 'test.png', 
+      style } );
 export default new Vivid();

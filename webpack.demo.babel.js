@@ -3,7 +3,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const DemoConfig = {
     entry: {
-        'representation-demo': './examples/demo/representation.babel.web.js'
+        'representation-demo': './demo/representation.babel.web.js'
     },
     output: {
         path: resolve(__dirname, 'demo_dist')
