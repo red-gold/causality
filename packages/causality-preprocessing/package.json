@@ -1,6 +1,6 @@
 {
   "name": "causal-net.preprocessing",
-  "version": "0.0.954",
+  "version": "0.1.0",
   "description": "this is preprocessing class",
   "main": "dist/@causalNet/preprocessing.node.js",
   "module": "dist/@causalNet/preprocessing.node.js",
