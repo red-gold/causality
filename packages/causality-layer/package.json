@@ -1,6 +1,6 @@
 {
   "name": "causal-net.layer",
-  "version": "0.0.5",
+  "version": "0.0.954",
   "description": "the layer class",
   "main": "dist/@causalNet/layer.node.js",
   "browser": "dist/@causalNet/layer.web.js",
