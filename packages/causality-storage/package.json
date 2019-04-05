@@ -1,6 +1,6 @@
 {
   "name": "causal-net.storage",
-  "version": "0.0.5",
+  "version": "0.0.954",
   "description": "this is storage class",
   "main": "dist/@causalNet/storage.node.js",
   "module": "dist/@causalNet/storage.node.js",
