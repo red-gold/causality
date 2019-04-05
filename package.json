@@ -1,7 +1,7 @@
 {
-  "private": true,  
+  "private": true,
   "name": "causal-net",
-  "version": "0.0.8",
+  "version": "0.0.81",
   "main": "dist/@causalNet/pipeline.node.js",
   "module": "dist/@causalNet/pipeline.node.js",
   "browser": "dist/@causalNet/pipeline.web.js",
@@ -27,16 +27,16 @@
   },
   "dependencies": {
     "causal-net.core": "*",
-    "causal-net.utils": "*",
-    "causal-net.storage": "*",
-    "causal-net.memcache": "*",
-    "causal-net.log": "*",
-    "causal-net.sampling": "*",
+    "causal-net.datasets": "*",
+    "causal-net.deployment": "*",
     "causal-net.layer": "*",
+    "causal-net.log": "*",
+    "causal-net.memcache": "*",
     "causal-net.optimizers": "*",
     "causal-net.preprocessing": "*",
-    "causal-net.datasets": "*",
-    "causal-net.deployment": "*"
+    "causal-net.sampling": "*",
+    "causal-net.storage": "*",
+    "causal-net.utils": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
