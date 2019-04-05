@@ -1,6 +1,6 @@
 {
   "name": "causal-net.memcache",
-  "version": "0.0.5",
+  "version": "0.0.92",
   "description": "this is memcache class",
   "main": "dist/@causalNet/memcache.node.js",
   "module": "dist/@causalNet/memcache.node.js",
@@ -17,9 +17,9 @@
     "build:prod": "webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
-    "memdown": "^3.0.0",
     "causal-net.core": "*",
-    "causal-net.utils": "*"
+    "causal-net.utils": "*",
+    "memdown": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
