@@ -3,7 +3,8 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const DemoConfig = {
     entry: {
-        'representation-demo': './demo/representation.babel.web.js'
+        'representation-demo': './demo/src/respresentation.js',
+        'mnist-demo': './demo/src/mnist.js'
     },
     output: {
         path: resolve(__dirname, 'demo_dist')
@@ -17,6 +18,10 @@ const DemoConfig = {
             test: /\.js$/,
             exclude: [/node_modules/,/dist/],
             loader: 'eslint-loader',
+        },
+        {
+            test: /\.css$/,
+            use: ['style-loader', 'css-loader'],
         },
         {
             test: /\.js$/,
@@ -42,13 +47,25 @@ const DemoConfig = {
             title: 'demo main page',
             chunks: [],
             filename: 'index.html',
-            template: './examples/demo/index.html'
+            template: './demo/templates/index.html'
         }),
         new HtmlWebpackPlugin({
             title: 'representation demo',
             chunks: ['representation-demo','vendors'],
             filename: 'representation.html',
-            template: './examples/demo/representation.html'
+            template: './demo/templates/representation.html'
+        }),
+        new HtmlWebpackPlugin({
+            title: 'digits classification demo',
+            chunks: ['mnist-demo','vendors'],
+            filename: 'mnist.html',
+            template: './demo/templates/mnist.html'
+        }),
+        new HtmlWebpackPlugin({
+            title: '20 newsgroup classification  demo',
+            chunks: ['vendors'],
+            filename: '20newsgroup.html',
+            template: './demo/templates/20newsgroup.html'
         })
     ]
 };

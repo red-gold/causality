@@ -1,0 +1,65 @@
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" >
+    </head>
+    <style>
+        .content{
+            width: 1400px;
+            margin: auto;
+        }
+        .information{
+            margin: 15px;
+            padding: 10px;
+            border: 1px solid #dfdfdf;
+            border-radius: 5px;
+            background:#ffff0094;
+        }
+        #logger{
+            height: 700px;
+            overflow: scroll;
+        }
+        body{
+            background: #1e2c40;
+            color: white;
+        }
+        #information-session{
+            font-size: 14px;
+            color: #dfdfdf;
+            padding: 20px 5px 10px 5px;
+        }
+        #model-training{
+
+        }
+        #model-session legend{
+            color: white;
+        }
+        
+    </style>
+    <body>
+        <div id="content" class="pure-g content">
+            <div id="information-session" class="pure-u-1">
+                <span>This is ensemble demo for training MNIST dataset and deploying on browser.</span>
+            </div>
+            <div id="model-session" class="pure-u-6-24">
+                <form id="model-training" class="pure-form pure-form-stacked">
+                    <fieldset>
+                        <legend align="right">train set ratio</legend>
+                        <input type="range"  min="0" max="100" value="90" class="pure-input-1" />
+                        <legend align="right" ></legend>
+                        <button id="compare-text" class="pure-button">train</button>
+                        <legend align="right">ensemble</legend>
+                    </fieldset>
+                </form>
+                <form id="model-deployment" class="pure-form pure-form-stacked">
+                    <fieldset>
+                        
+                    </fieldset>
+                </form>
+            </div>
+            <div id="logger-session" class="pure-u-18-24">
+                <div id="logger"></div>
+            </div>
+        </div>
+    </body>
+</html>

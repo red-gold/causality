@@ -9,12 +9,12 @@ const compareSentences = async (sentenceA, sentenceB)=>{
     termLogger.groupEnd();
 };
 
-$('#compare-text').click((event)=>{
-    event.preventDefault(); 
-    let sentenceA = $('#sentenceA').val();
-    let sentenceB = $('#sentenceB').val();
-    compareSentences(sentenceA.trim(), sentenceB.trim());
-});
+// $('#compare-text').click((event)=>{
+//     event.preventDefault(); 
+//     let sentenceA = $('#sentenceA').val();
+//     let sentenceB = $('#sentenceB').val();
+//     compareSentences(sentenceA.trim(), sentenceB.trim());
+// });
 
 (async ()=>{
     termLogger.connect(document.getElementById('logger'));

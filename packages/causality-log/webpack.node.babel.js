@@ -2,6 +2,7 @@ import { resolve } from 'path';
 import Bundle from './bundle.json';
 import merge from 'webpack-merge';
 import common from './webpack.common.babel';
+import {default as nodeExternals} from 'webpack-node-externals';
 const NodeConfig = merge(common, {
     output: {
       path: resolve(__dirname, 'dist'),
@@ -10,7 +11,7 @@ const NodeConfig = merge(common, {
       library: Bundle.main,
       globalObject: 'this'
     },
-    externals:[ 'causal-net.utils', 'cli-progress', 'd3',
+    externals:[ 'causal-net.utils', 'cli-progress', 'd3', nodeExternals(), 'svg2png',
                 'vivid.d3-node', 'canvas']
 });
 export default NodeConfig;

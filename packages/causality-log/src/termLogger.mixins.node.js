@@ -12,6 +12,9 @@ const LogNodeMixins = (LogClass)=> class extends LogClass{
         }
         console.log(message);
     }
+    plot(data){
+        
+    }
     progressBegin(range){
         this.processCounter += 1;
         this.currentBar = new cliProgress.Bar({}, cliProgress.Presets.shades_classic);
