@@ -23,6 +23,10 @@ const fakePackage = (context, request, callback)=>{
     console.log('found fs');
     return callback(null, 'null-loader');//console is exported instead of fs
   }
+  if (/^open$/.test(request)){
+    console.log('found open');
+    return callback(null, 'null-loader');//console is exported instead of fs
+  }
   callback();
 };
 const WebConfig = merge(common, {

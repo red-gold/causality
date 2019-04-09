@@ -1,7 +1,7 @@
 import { termLogger, vivid } from 'causal-net.log';
 (async ()=>{
-    termLogger.connect('#logger');    
-    vivid.connect('#logger');
+    termLogger.connect();
+    vivid.connect();
     termLogger.groupBegin('this is log');
     termLogger.log('this is log');
     let plotData = {
@@ -16,7 +16,7 @@ import { termLogger, vivid } from 'causal-net.log';
                 'yLabel': 'y unit',
                 'title': 'test', 
                 style: { "body": {"font": "11px"} } };
-    termLogger.plot(plotData);
+    vivid.scatter(plotData);
     const makeImageData = (offset, width=28, height=28)=>{
         let imageData = [];
         for (var x=0; x<width; x++) {
@@ -38,6 +38,7 @@ import { termLogger, vivid } from 'causal-net.log';
         return imageData;
     };
     let data = makeImageData(0);
+    vivid.png({type: 'png', data, width:28, height:28, title:'test2'});
     termLogger.plot({type: 'png', data, width:28, height:28});
     plotData = {
         type: 'line',
@@ -49,8 +50,9 @@ import { termLogger, vivid } from 'causal-net.log';
         'yRange': [-2,2],
         'xLabel': 'x unit',
         'yLabel': 'y unit',
-        'title': 'test', 
+        'title': 'test3', 
         style: { "body": {"font": "11px"} } };
-    termLogger.plot(plotData);
+    // termLogger.plot(plotData);
+    vivid.line(plotData);
     termLogger.groupEnd('this is log');
-})();
+})().catch(console.error);
