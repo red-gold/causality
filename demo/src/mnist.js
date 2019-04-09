@@ -1,4 +1,5 @@
 import { termLogger, vivid } from 'causal-net.log';
+
 (async ()=>{
     termLogger.connect('#logger');    
     vivid.connect('#logger');

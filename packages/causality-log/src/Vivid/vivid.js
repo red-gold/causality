@@ -27,10 +27,28 @@ class Vivid extends platform.mixWith(BasePlot,
                               '.dot' : { 'stroke': '#000' } };
     }
 
+    png({data, width, height, title, plotId}){
+        let canvas = this.makeCanvasNode({width, height});
+        let context = canvas.getContext?canvas.getContext('2d'):canvas.node().getContext("2d");
+        let imagedata = context.createImageData(width, height);
+        for (var x=0; x<width; x++) {
+            for (var y=0; y<height; y++) {
+                var pixelindex = (y * width + x) * 4;
+                imagedata.data[pixelindex]   = data[pixelindex];
+                imagedata.data[pixelindex+1] = data[pixelindex+1];
+                imagedata.data[pixelindex+2] = data[pixelindex+2];
+                imagedata.data[pixelindex+3] = data[pixelindex+3];
+            }
+        }
+        context.putImageData(imagedata, 0, 0);
+        title = title?title:'unname';
+        plotId = plotId?plotId:title.replace(/\s/g,'_') + '.png';
+        return plotId;
+    }
+
     basePlot({kwdata, width, height, xLabel, yLabel, style}){
         const d3 = this.d3;
         style = style!==undefined?style:{};
-        console.log([style, this.defaultStyle]);
         style = Object.assign({}, this.defaultStyle, style);
         let cssStyle = this.json2css(style);
         width  = width | this.DefaultWidth;
@@ -40,7 +58,7 @@ class Vivid extends platform.mixWith(BasePlot,
               plotHeight = height - plotMargin.top - plotMargin.bottom;
         
         
-        var svg = this.makeSVGnode({width, height});
+        var svg = this.makeSVGnode({width, height, styles: cssStyle});
         
         svg = svg.append("g")
                     .attr("transform", 
@@ -55,7 +73,8 @@ class Vivid extends platform.mixWith(BasePlot,
         var yAxis = d3.axisLeft(yMap);
         var color = d3.scaleOrdinal(d3.schemeCategory10);
         kwdata.map(([x,y,name])=>color(name));
-        console.log({ xLabel, yLabel });    
+        xLabel = xLabel?xLabel:'x axis';
+        yLabel = yLabel?yLabel:'y axis';
         svg.append("g").attr("class", "x axis")
             .attr("transform", "translate(0," + plotHeight + ")").call(xAxis)
             .append("text").attr("class", "label")
@@ -80,27 +99,6 @@ class Vivid extends platform.mixWith(BasePlot,
         this.plotStyle = cssStyle;
         return  { svg, xMap, yMap, color };
     }
-
-    
-
-    png({data, width, height, title}){
-        let canvas = this.makeCanvasNode({width, height});
-        console.log({canvas});
-        let context = canvas.node().getContext("2d");
-        let imagedata = context.createImageData(width, height);
-        for (var x=0; x<width; x++) {
-            for (var y=0; y<height; y++) {
-                var pixelindex = (y * width + x) * 4;
-                imagedata.data[pixelindex]   = data[pixelindex];
-                imagedata.data[pixelindex+1] = data[pixelindex+1];
-                imagedata.data[pixelindex+2] = data[pixelindex+2];
-                imagedata.data[pixelindex+3] = data[pixelindex+3];
-            }
-        }
-        context.putImageData(imagedata, 0, 0);
-        this.show({title});
-    }
-
-    
 }
-export default new Vivid(d3);
+let vivid = new Vivid(d3);
+export default vivid;

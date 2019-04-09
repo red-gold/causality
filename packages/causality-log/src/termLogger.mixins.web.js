@@ -22,7 +22,7 @@ const LogWebMixins = (LogClass)=> class extends LogClass{
     plot(data){
         const Plot = this.Plot;
         if(!data.type){
-            throw Error(`plot type is not defined in ${JSON.stringlify(data)}`);
+            throw Error(`plot type is not defined in ${JSON.stringify(data)}`);
         }
         let node = document.createElement("li");
         node.style.cssText = 'border-bottom: 1px solid #dedede;';
@@ -41,6 +41,11 @@ const LogWebMixins = (LogClass)=> class extends LogClass{
         }
         Plot[data.type](data);
         return plotId;
+    }
+
+    async show(option={}){
+        let {plotId} = option;
+        return await this.Plot.show(option);
     }
 
     progress(processMessage){

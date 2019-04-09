@@ -1,5 +1,5 @@
 const ScatterChartMixins = (BasePlotClass)=> class extends BasePlotClass{
-    async scatter({data, title, xRange, yRange, xLabel, yLabel, style, width, height}){
+    scatter({data, title, xRange, yRange, xLabel, yLabel, style, width, height, plotId}){
         let kwdata = Array.isArray(data)?
                 data.map(d=>[...d,'data']):
                 Object.entries(data).reduce((s,[k, data])=>[...s, ...data.map(d=>[...d, k])],[]);
@@ -12,7 +12,9 @@ const ScatterChartMixins = (BasePlotClass)=> class extends BasePlotClass{
             .attr("cy", ([x,y, name])=>yMap(y))
             .attr("r", 5)
             .attr("fill", ([x,y,name])=>color(name));
-        return await this.show({title});
+        title = title?title:'unname';
+        plotId = plotId?plotId:title.replace(/\s/g,'_') + '.png';
+        return plotId;
     }
 };
 

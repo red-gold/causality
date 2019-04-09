@@ -1,5 +1,5 @@
 const LineChartMixins = (BasePlotClass)=> class extends BasePlotClass{
-    async line({data, title, xRange, yRange, xLabel, yLabel, style, width, height}){
+    line({data, title, xRange, yRange, xLabel, yLabel, style, width, height, plotId}){
         const d3 = this.d3;
         style = style!==undefined?style:{};
         const defaultStyle = {'.line':{ fill: 'none', 'stroke-width': '2px'}};
@@ -36,8 +36,9 @@ const LineChartMixins = (BasePlotClass)=> class extends BasePlotClass{
             .attr("cy", function([x,y]) { return yMap(y); })
             .attr("fill", function([x,y,name]) { return color(name); })
             .attr("r", 5);
-        
-        return await this.show({title});
+        title = title?title:'unname';
+        plotId = plotId?plotId:title.replace(/\s/g,'_') + '.png';
+        return plotId;
     }
 };
 
