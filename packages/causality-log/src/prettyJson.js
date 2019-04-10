@@ -173,7 +173,7 @@ export default class JsonView{
             case 'string':
               valueElement = document.createElement(styleOptions.stringValue.tag);
               valueElement.style.cssText = styleOptions.stringValue.style;
-              valueElement.appendChild(document.createTextNode('"' + value + '"'));
+              valueElement.appendChild(document.createTextNode('' + value + ''));
               break;
             case 'number':
               valueElement = document.createElement(styleOptions.numberValue.tag);

@@ -1,6 +1,8 @@
 {
     "workspaces": [
-        "packages/*"
+        "packages/*",
+        "notebooks/",
+        "web-app-demos/"
     ], 
     "name": "causal-net", 
     "license": "MIT", 
@@ -22,17 +24,14 @@
         "causal-net.log": "*"
     }, 
     "scripts": {
-        "start:examples": "webpack-dev-server --open --config webpack.examples.babel.js", 
         "build:prod": "webpack --config webpack.prod.babel.js", 
         "start:doc": "rimraf ./doc_dist/; esdoc -c esdoc.config.json;build:demos;cp -r ./demo_dist ./doc_dist/prebuilt-demos; cd doc_dist/; xdg-open http://127.0.0.1:8080/index.html; simple_server;", 
         "build:doc": "rimraf ./doc_dist/; esdoc -c esdoc.config.json;build:demos;cp -r ./demo_dist ./doc_dist/prebuilt-demos", 
         "build:examples": "webpack --config webpack.examples.babel.js", 
-        "start:demos": "webpack-dev-server --open --config webpack.demo.babel.js", 
         "start:node": "webpack --watch --info-verbosity verbose --config webpack.node.babel.js", 
         "build:clean": "rimraf dist", 
         "start:web": "webpack --watch --info-verbosity verbose --config webpack.web.babel.js", 
         "test": "jest", 
-        "build:demos": "webpack --config webpack.demo.babel.js", 
         "test:report": "jest --coverage", 
         "build:dev": "webpack --config webpack.dev.babel.js"
     }, 

@@ -1,7 +1,9 @@
 import {default as JsonView} from './prettyJson';
 const LogWebMixins = (LogClass)=> class extends LogClass{
-    connect(documentEl=null){
-        documentEl = documentEl||document.body;
+    connect(target=null){
+        
+        let documentEl = target?document.getElementById(target.replace('#','')):document.body;
+        this.target = target;
         let node = document.createElement("ul");
         node.style.cssText = "list-style-type: none;";
         documentEl.appendChild(node);
@@ -16,6 +18,36 @@ const LogWebMixins = (LogClass)=> class extends LogClass{
         element = element || this.frameEl;
         element.scrollTop = element.scrollHeight - element.clientHeight;
     }
+
+    plot(data){
+        const Plot = this.Plot;
+        if(!data.type){
+            throw Error(`plot type is not defined in ${JSON.stringify(data)}`);
+        }
+        let node = document.createElement("li");
+        node.style.cssText = 'border-bottom: 1px solid #dedede;';
+        var date = new Date();
+        node.innerHTML = `<p style="font-size: 12px; text-align:right">${date}</p>`;
+        let { plotId } = data;
+        if(!plotId){
+            this.plotCounter = this.plotCounter!==undefined?this.plotCounter+1:0;
+            plotId = `plot-${this.plotCounter}`;
+            node.setAttribute("id", plotId);
+            this.loggerEl.appendChild(node);
+            Plot.connect('#'+plotId);
+        }
+        else{
+            Plot.connect('#'+plotId);
+        }
+        Plot[data.type](data);
+        return plotId;
+    }
+
+    async show(option={}){
+        let {plotId} = option;
+        return await this.Plot.show(option);
+    }
+
     progress(processMessage){
         // let node = this.loggerEl.getElementsByTagName("li:nth-last-of-type(1)");
         let LINodes = this.loggerEl.getElementsByTagName("li");

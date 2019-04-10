@@ -1,0 +1,89 @@
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" >
+    </head>
+    <script  id="datasetDescription" type="application/json">
+        {"source":"http://storage.googleapis.com/moderatordev-223307.appspot.com/MNIST_dataset/"}
+    </script>
+    <style>
+        .content{
+            width: 1400px;
+            margin: auto;
+        }
+        .information{
+            margin: 15px;
+            padding: 10px;
+            border: 1px solid #dfdfdf;
+            border-radius: 5px;
+            background:#ffff0094;
+        }
+        #logger{
+            height: 700px;
+            overflow-y: scroll;
+        }
+        body{
+            background: #1e2c40;
+            color: white;
+        }
+        #information-session{
+            font-size: 14px;
+            color: #dfdfdf;
+            padding: 20px 5px 10px 5px;
+        }
+        #model-training{
+
+        }
+        #model-session legend{
+            color: white;
+        }
+        span, input {
+            height: 25px;
+            vertical-align: -webkit-baseline-middle;
+        }
+        
+    </style>
+    <body>
+        <div id="content" class="pure-g content">
+            <div id="information-session" class="pure-u-1">
+                <span>This is ensemble demo for training MNIST dataset and deploying on browser.</span>
+            </div>
+            <div id="model-session" class="pure-u-6-24">
+                <form id="model-training" class="pure-form pure-form-stacked">
+                    <fieldset>
+                        <legend align="right">
+                            <span>Set num of chunk</span>
+                            <input  id="SetNumChunk" type="range"  min="1" max="10" value="2"/>
+                        </legend>
+                        <p>
+                            in preprocessing step, data is fetch in seperated chunks.
+                            Each chunk will be processed and store prior to train.
+                        </p>
+                        <legend align="right">
+                            <button id="FetchChunk" class="pure-button">Fetch chunk</button>
+                        </legend>    
+                        <legend align="right">
+                            <span>Set train ratio</span>
+                            <input  id="setTrainRatio" type="range"  min="0" max="90" value="90"/>
+                        </legend>
+                        <p>
+                            In train step, data is split into train and test set by random choice respect to predefined ratio (). 
+                            The train set is used for optimzing model parameters and evaluate vith test set.
+                        </p>
+                        <legend align="right" >
+                            <button id="TrainData" class="pure-button">Train</button>
+                            <button id="TestData" class="pure-button">Test</button>
+                        </legend>    
+                        <legend align="right" >Ensemble</legend>
+                    </fieldset>
+                </form>
+                <form id="model-deployment" class="pure-form pure-form-stacked">
+                    <canvas></canvas>
+                </form>
+            </div>
+            <div id="logger-session" class="pure-u-18-24">
+                <div id="logger"></div>
+            </div>
+        </div>
+    </body>
+</html>

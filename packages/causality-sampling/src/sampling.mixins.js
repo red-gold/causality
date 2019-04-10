@@ -3,11 +3,11 @@ import { assert } from 'causal-net.utils';
 /**
  * This mixin class provide attributes: **Sampling**.
  * @class SamplingMixins
- * @extends BasePipelineClass
+ * @extends BaseClass
  * @example
  * [EXAMPLE ../examples/sampling.mixins.babel.js]
  */
-const SamplingMixins = (BasePipelineClass)=> class extends BasePipelineClass{
+const SamplingMixins = (BaseClass)=> class extends BaseClass{
     /**
      * get current random instance
      */

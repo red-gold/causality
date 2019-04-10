@@ -12,6 +12,26 @@ const LogNodeMixins = (LogClass)=> class extends LogClass{
         }
         console.log(message);
     }
+    plot(data){
+        const Plot = this.Plot;
+        if(!data.type){
+            throw Error(`plot type is not defined in ${JSON.stringify(data)}`);
+        }
+        let { plotId } = data;
+        if(!plotId){
+            this.plotCounter = this.plotCounter!==undefined?this.plotCounter+1:0;
+            plotId = `plot-${this.plotCounter}`;
+            data.plotId = plotId;
+        }
+        Plot[data.type](data);
+        return plotId;
+    }
+    
+    async show(option={}){
+        let {plotId} = option;
+        return await this.Plot.show(option);
+    }
+
     progressBegin(range){
         this.processCounter += 1;
         this.currentBar = new cliProgress.Bar({}, cliProgress.Presets.shades_classic);
