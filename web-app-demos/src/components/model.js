@@ -1,9 +1,9 @@
 import React  from "react";
-import ReactDOM from "react-dom";
 import Button from '@material-ui/core/Button';
 import Slider from '@material-ui/lab/Slider';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import { causalNet } from 'causal-net';
 const styles = theme => ({
     'model > *':{
         'margin-bottom': 5
@@ -28,6 +28,7 @@ class Model extends React.Component {
       this.testModelHandler = this.testModelHandler.bind(this);
       this.setChunkHandler = this.setChunkHandler.bind(this);
       this.BaseLink = props.BaseLink;
+      
       console.log(this.BaseLink);
     }
     
@@ -41,7 +42,7 @@ class Model extends React.Component {
 
     }
     trainModelHandler(event){
-        console.log('train click');
+        
     }
     testModelHandler(event){
         console.log('test click');

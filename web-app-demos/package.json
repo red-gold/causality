@@ -10,13 +10,20 @@
   "dependencies": {
     "@material-ui/core": "^3.9.3",
     "@material-ui/lab": "^3.0.0-alpha.30",
-    "jquery": "^3.3.1",
-    "lodash": "^4.17.11",
-    "machina": "^4.0.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^3.3.1"
+    "causal-net":"*",
+    "causal-net.deployment": "*", 
+    "causal-net.storage": "*", 
+    "causal-net.layer": "*", 
+    "causal-net.core": "*", 
+    "causal-net.datasets": "*", 
+    "causal-net.memcache": "*", 
+    "causal-net.preprocessing": "*", 
+    "causal-net.optimizers": "*", 
+    "causal-net.utils": "*", 
+    "causal-net.sampling": "*", 
+    "causal-net.log": "*"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.4.0",

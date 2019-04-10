@@ -23,4 +23,4 @@ import { vivid } from 'causal-net.log';
     let data = makeImageData(0);
     let plotId = vivid.png({type: 'png', data, width:28, height:28, title:'test2'});
     await vivid.show({plotId});
-})().catch(console.error);
+})();

@@ -1,7 +1,8 @@
 import { causalNetSGDOptimizer } from 'causal-net.optimizers';
 import { causalNetModels } from 'causal-net.models';
 import { causalNetParameters, causalNetLayers } from 'causal-net.layer';
-import { causalNet } from '../../src/index';
+import { causalNet } from 'causal-net';
+import { termLogger } from 'causal-net.log';
 
 
 (async ()=>{
@@ -51,9 +52,19 @@ import { causalNet } from '../../src/index';
     
     console.log(causalNet.parameters);
     let models = ['Model1', 'Model2', 'Model3'];
+    let losses = {};
     for(let model of models){
-        console.log(await causalNet.ensembleTrain(2, 1, model));
+        let result = await causalNet.ensembleTrain(2, 1, model);
+        losses = {...losses, ...{[model]: result[model]['losses']}};
     }
+    console.log({losses});
+    let plotId = termLogger.plot({ 
+                      type:'line', data: losses, 
+                      width: 200, height: 200, 
+                      xLabel: '# of iter', 
+                      yLabel: 'loss'});
+    await termLogger.show({plotId});
+    console.log(await causalNet.test(10));
     causalNet.EnsembleModels = models;
     causalNet.deploy().then(res=>console.log(res));
 })().catch(err=>{

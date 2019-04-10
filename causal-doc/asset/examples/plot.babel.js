@@ -56,4 +56,4 @@ import { termLogger, vivid } from 'causal-net.log';
     plotId = termLogger.plot(plotData);
     await termLogger.show({plotId});
     termLogger.groupEnd('this is log');
-})().catch(console.error);
+})();

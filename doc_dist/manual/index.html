@@ -123,8 +123,8 @@
 <pre><code><code class="source-code prettyprint">import { causalNetSGDOptimizer } from &apos;causal-net.optimizers&apos;;
 import { causalNetModels } from &apos;causal-net.models&apos;;
 import { causalNetParameters, causalNetLayers } from &apos;causal-net.layer&apos;;
-import { causalNet } from &apos;../../src/index&apos;;
-
+import { causalNet } from &apos;causal-net&apos;;
+import { termLogger } from &apos;causal-net.log&apos;;
 
 (async ()=&gt;{
     const DummyData = (batchSize)=&gt;{
@@ -169,7 +169,12 @@ import { causalNet } from &apos;../../src/index&apos;;
     };
     causalNet.setByConfig(PipeLineConfigure);
     causalNet.deploy().then(deployResult=&gt;console.log({deployResult}));
-    console.log(await causalNet.train(10, 1));
+    let loss = await causalNet.train(10, 1);
+    let plotId = termLogger.plot({ type:&apos;line&apos;, data: loss, 
+                      width: 200, height: 200, 
+                      xLabel: &apos;# of iter&apos;, 
+                      yLabel: &apos;loss&apos;});
+    await termLogger.show({plotId});
     console.log(await causalNet.test(10));
 })().catch(err=&gt;{
     console.error({err});
@@ -194,8 +199,8 @@ import { causalNet } from &apos;../../src/index&apos;;
 </ul><p>For example, we can build a simple Logistic regression model with dummy dataset</p><pre><code><code class="source-code prettyprint">import { causalNetSGDOptimizer } from &apos;causal-net.optimizers&apos;;
 import { causalNetModels } from &apos;causal-net.models&apos;;
 import { causalNetParameters, causalNetLayers } from &apos;causal-net.layer&apos;;
-import { causalNet } from &apos;../../src/index&apos;;
-
+import { causalNet } from &apos;causal-net&apos;;
+import { termLogger } from &apos;causal-net.log&apos;;
 
 (async ()=&gt;{
     const DummyData = (batchSize)=&gt;{
@@ -240,7 +245,12 @@ import { causalNet } from &apos;../../src/index&apos;;
     };
     causalNet.setByConfig(PipeLineConfigure);
     causalNet.deploy().then(deployResult=&gt;console.log({deployResult}));
-    console.log(await causalNet.train(10, 1));
+    let loss = await causalNet.train(10, 1);
+    let plotId = termLogger.plot({ type:&apos;line&apos;, data: loss, 
+                      width: 200, height: 200, 
+                      xLabel: &apos;# of iter&apos;, 
+                      yLabel: &apos;loss&apos;});
+    await termLogger.show({plotId});
     console.log(await causalNet.test(10));
 })().catch(err=&gt;{
     console.error({err});
@@ -248,7 +258,8 @@ import { causalNet } from &apos;../../src/index&apos;;
 </code></pre><p>and the ensemble version</p><pre><code><code class="source-code prettyprint">import { causalNetSGDOptimizer } from &apos;causal-net.optimizers&apos;;
 import { causalNetModels } from &apos;causal-net.models&apos;;
 import { causalNetParameters, causalNetLayers } from &apos;causal-net.layer&apos;;
-import { causalNet } from &apos;../../src/index&apos;;
+import { causalNet } from &apos;causal-net&apos;;
+import { termLogger } from &apos;causal-net.log&apos;;
 
 
 (async ()=&gt;{
@@ -298,9 +309,19 @@ import { causalNet } from &apos;../../src/index&apos;;
 
     console.log(causalNet.parameters);
     let models = [&apos;Model1&apos;, &apos;Model2&apos;, &apos;Model3&apos;];
+    let losses = {};
     for(let model of models){
-        console.log(await causalNet.ensembleTrain(2, 1, model));
+        let result = await causalNet.ensembleTrain(2, 1, model);
+        losses = {...losses, ...{[model]: result[model][&apos;losses&apos;]}};
     }
+    console.log({losses});
+    let plotId = termLogger.plot({ 
+                      type:&apos;line&apos;, data: losses, 
+                      width: 200, height: 200, 
+                      xLabel: &apos;# of iter&apos;, 
+                      yLabel: &apos;loss&apos;});
+    await termLogger.show({plotId});
+    console.log(await causalNet.test(10));
     causalNet.EnsembleModels = models;
     causalNet.deploy().then(res=&gt;console.log(res));
 })().catch(err=&gt;{
@@ -693,7 +714,7 @@ termLogger.groupEnd();
     plotId = termLogger.plot(plotData);
     await termLogger.show({plotId});
     termLogger.groupEnd(&apos;this is log&apos;);
-})().catch(console.error);</code>
+})();</code>
 </code></pre><p><a href="./manual/./asset/examples/plot.babel.js">Run code</a></p><h3>Vivid</h3><p>This class is provide common used plots which can be accessed via <strong>vivid</strong>.</p><p>Line chart</p><pre><code class="lang-javascript"><code class="source-code prettyprint">import { vivid } from &apos;causal-net.log&apos;;
 (async ()=&gt;{
     let plotData = {
@@ -711,7 +732,7 @@ termLogger.groupEnd();
     let plotId = vivid.line(plotData);
     await vivid.show({plotId});
     termLogger.groupEnd(&apos;this is log&apos;);
-})().catch(console.error);</code>
+})();</code>
 </code></pre><p><a href="./manual/./asset/examples/vivid.line.babel.js">Run code</a></p><p>Scatter chart</p><pre><code class="lang-javascript"><code class="source-code prettyprint">import { vivid } from &apos;causal-net.log&apos;;
 (async ()=&gt;{
     let plotData = {
@@ -728,7 +749,7 @@ termLogger.groupEnd();
                 style: { &quot;body&quot;: {&quot;font&quot;: &quot;11px&quot;} } };
     let plotId = vivid.scatter(plotData);
     await vivid.show({plotId});
-})().catch(console.error);</code>
+})();</code>
 </code></pre><p><a href="./manual/./asset/examples/vivid.scatter.babel.js">Run code</a></p><p>PNG </p><pre><code class="lang-javascript"><code class="source-code prettyprint">import { vivid } from &apos;causal-net.log&apos;;
 (async ()=&gt;{
     const makeImageData = (offset, width=28, height=28)=&gt;{
@@ -754,7 +775,7 @@ termLogger.groupEnd();
     let data = makeImageData(0);
     let plotId = vivid.png({type: &apos;png&apos;, data, width:28, height:28, title:&apos;test2&apos;});
     await vivid.show({plotId});
-})().catch(console.error);</code>
+})();</code>
 </code></pre><p><a href="./manual/./asset/examples/vivid.png.babel.js">Run code</a></p><h3>LoggerMixins</h3><p>This Mixins class provides attributes: <strong>Logger</strong>.</p><pre><code class="lang-javascript"><code class="source-code prettyprint">import { LoggerMixins, termLogger, BaseLogger } from &apos;causal-net.log&apos;;
 import { platform } from &apos;causal-net.utils&apos;;
 import { Tensor } from &apos;causal-net.core&apos;;

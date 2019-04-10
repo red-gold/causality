@@ -3,6 +3,55 @@
   "expectCount": 609,
   "actualCount": 167,
   "files": {
+    "causality/packages/causality/src/Ensemble/ensembleDeployment.mixins.js": {
+      "expectCount": 4,
+      "actualCount": 4,
+      "undocumentLines": []
+    },
+    "causality/packages/causality/src/Ensemble/ensembleEvaluator.mixins.js": {
+      "expectCount": 2,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2
+      ]
+    },
+    "causality/packages/causality/src/Ensemble/ensembleModel.mixins.js": {
+      "expectCount": 5,
+      "actualCount": 1,
+      "undocumentLines": [
+        8,
+        25,
+        26,
+        29
+      ]
+    },
+    "causality/packages/causality/src/Ensemble/ensembleTrainer.mixins.js": {
+      "expectCount": 2,
+      "actualCount": 2,
+      "undocumentLines": []
+    },
+    "causality/packages/causality/src/causalNet.js": {
+      "expectCount": 9,
+      "actualCount": 2,
+      "undocumentLines": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        65
+      ]
+    },
+    "causality/packages/causality/src/functor.js": {
+      "expectCount": 3,
+      "actualCount": 1,
+      "undocumentLines": [
+        9,
+        14
+      ]
+    },
     "causality/packages/causality-core/src/causalNetCore.js": {
       "expectCount": 7,
       "actualCount": 1,
@@ -942,55 +991,6 @@
       "undocumentLines": [
         32,
         112
-      ]
-    },
-    "causality/src/Ensemble/ensembleDeployment.mixins.js": {
-      "expectCount": 4,
-      "actualCount": 4,
-      "undocumentLines": []
-    },
-    "causality/src/Ensemble/ensembleEvaluator.mixins.js": {
-      "expectCount": 2,
-      "actualCount": 0,
-      "undocumentLines": [
-        1,
-        2
-      ]
-    },
-    "causality/src/Ensemble/ensembleModel.mixins.js": {
-      "expectCount": 5,
-      "actualCount": 1,
-      "undocumentLines": [
-        8,
-        25,
-        26,
-        29
-      ]
-    },
-    "causality/src/Ensemble/ensembleTrainer.mixins.js": {
-      "expectCount": 2,
-      "actualCount": 2,
-      "undocumentLines": []
-    },
-    "causality/src/causalNet.js": {
-      "expectCount": 9,
-      "actualCount": 2,
-      "undocumentLines": [
-        116,
-        117,
-        118,
-        119,
-        120,
-        121,
-        125
-      ]
-    },
-    "causality/src/functor.js": {
-      "expectCount": 3,
-      "actualCount": 1,
-      "undocumentLines": [
-        9,
-        14
       ]
     }
   }

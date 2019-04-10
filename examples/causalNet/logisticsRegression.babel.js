@@ -1,8 +1,8 @@
 import { causalNetSGDOptimizer } from 'causal-net.optimizers';
 import { causalNetModels } from 'causal-net.models';
 import { causalNetParameters, causalNetLayers } from 'causal-net.layer';
-import { causalNet } from '../../src/index';
-
+import { causalNet } from 'causal-net';
+import { termLogger } from 'causal-net.log';
 
 (async ()=>{
     const DummyData = (batchSize)=>{
@@ -47,7 +47,12 @@ import { causalNet } from '../../src/index';
     };
     causalNet.setByConfig(PipeLineConfigure);
     causalNet.deploy().then(deployResult=>console.log({deployResult}));
-    console.log(await causalNet.train(10, 1));
+    let loss = await causalNet.train(10, 1);
+    let plotId = termLogger.plot({ type:'line', data: loss, 
+                      width: 200, height: 200, 
+                      xLabel: '# of iter', 
+                      yLabel: 'loss'});
+    await termLogger.show({plotId});
     console.log(await causalNet.test(10));
 })().catch(err=>{
     console.error({err});

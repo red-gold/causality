@@ -14,4 +14,4 @@ import { vivid } from 'causal-net.log';
                 style: { "body": {"font": "11px"} } };
     let plotId = vivid.scatter(plotData);
     await vivid.show({plotId});
-})().catch(console.error);
+})();

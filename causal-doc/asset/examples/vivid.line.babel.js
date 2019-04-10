@@ -15,4 +15,4 @@ import { vivid } from 'causal-net.log';
     let plotId = vivid.line(plotData);
     await vivid.show({plotId});
     termLogger.groupEnd('this is log');
-})().catch(console.error);
+})();

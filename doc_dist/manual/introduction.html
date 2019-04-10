@@ -130,8 +130,8 @@
 <pre><code><code class="source-code prettyprint">import { causalNetSGDOptimizer } from &apos;causal-net.optimizers&apos;;
 import { causalNetModels } from &apos;causal-net.models&apos;;
 import { causalNetParameters, causalNetLayers } from &apos;causal-net.layer&apos;;
-import { causalNet } from &apos;../../src/index&apos;;
-
+import { causalNet } from &apos;causal-net&apos;;
+import { termLogger } from &apos;causal-net.log&apos;;
 
 (async ()=&gt;{
     const DummyData = (batchSize)=&gt;{
@@ -176,7 +176,12 @@ import { causalNet } from &apos;../../src/index&apos;;
     };
     causalNet.setByConfig(PipeLineConfigure);
     causalNet.deploy().then(deployResult=&gt;console.log({deployResult}));
-    console.log(await causalNet.train(10, 1));
+    let loss = await causalNet.train(10, 1);
+    let plotId = termLogger.plot({ type:&apos;line&apos;, data: loss, 
+                      width: 200, height: 200, 
+                      xLabel: &apos;# of iter&apos;, 
+                      yLabel: &apos;loss&apos;});
+    await termLogger.show({plotId});
     console.log(await causalNet.test(10));
 })().catch(err=&gt;{
     console.error({err});
@@ -185,7 +190,8 @@ import { causalNet } from &apos;../../src/index&apos;;
 <pre><code><code class="source-code prettyprint">import { causalNetSGDOptimizer } from &apos;causal-net.optimizers&apos;;
 import { causalNetModels } from &apos;causal-net.models&apos;;
 import { causalNetParameters, causalNetLayers } from &apos;causal-net.layer&apos;;
-import { causalNet } from &apos;../../src/index&apos;;
+import { causalNet } from &apos;causal-net&apos;;
+import { termLogger } from &apos;causal-net.log&apos;;
 
 
 (async ()=&gt;{
@@ -235,9 +241,19 @@ import { causalNet } from &apos;../../src/index&apos;;
 
     console.log(causalNet.parameters);
     let models = [&apos;Model1&apos;, &apos;Model2&apos;, &apos;Model3&apos;];
+    let losses = {};
     for(let model of models){
-        console.log(await causalNet.ensembleTrain(2, 1, model));
+        let result = await causalNet.ensembleTrain(2, 1, model);
+        losses = {...losses, ...{[model]: result[model][&apos;losses&apos;]}};
     }
+    console.log({losses});
+    let plotId = termLogger.plot({ 
+                      type:&apos;line&apos;, data: losses, 
+                      width: 200, height: 200, 
+                      xLabel: &apos;# of iter&apos;, 
+                      yLabel: &apos;loss&apos;});
+    await termLogger.show({plotId});
+    console.log(await causalNet.test(10));
     causalNet.EnsembleModels = models;
     causalNet.deploy().then(res=&gt;console.log(res));
 })().catch(err=&gt;{

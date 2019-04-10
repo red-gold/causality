@@ -36,6 +36,24 @@ class NewsGroup extends React.Component {
       super(props);
       this.state = {value: 'coconut'};
       this.BaseLink = 'http://http://0.0.0.0:5000/MNIST_dataset/';
+      causalNet.setByConfig(PipeLineConfigure);
+    
+      console.log(causalNet.parameters);
+      let models = ['Model1', 'Model2', 'Model3'];
+      
+      causalNet.EnsembleModels = models;
+      causalNet.deploy().then(res=>console.log(res));
+    }
+    connect(){
+      
+    }
+    fetchData(){
+
+    }
+    trainHander(){
+      // for(let model of models){
+      //     console.log(await causalNet.ensembleTrain(2, 1, model));
+      // }
     }
     render() {
       const { classes } = this.props;

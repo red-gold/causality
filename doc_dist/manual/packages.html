@@ -542,7 +542,7 @@ termLogger.groupEnd();
     plotId = termLogger.plot(plotData);
     await termLogger.show({plotId});
     termLogger.groupEnd(&apos;this is log&apos;);
-})().catch(console.error);</code>
+})();</code>
 </code></pre>
 <p><a href="./manual/./asset/examples/plot.babel.js">Run code</a></p>
 <h3 id="vivid">Vivid</h3><p>This class is provide common used plots which can be accessed via <strong>vivid</strong>.</p>
@@ -564,7 +564,7 @@ termLogger.groupEnd();
     let plotId = vivid.line(plotData);
     await vivid.show({plotId});
     termLogger.groupEnd(&apos;this is log&apos;);
-})().catch(console.error);</code>
+})();</code>
 </code></pre>
 <p><a href="./manual/./asset/examples/vivid.line.babel.js">Run code</a></p>
 <p>Scatter chart</p>
@@ -584,7 +584,7 @@ termLogger.groupEnd();
                 style: { &quot;body&quot;: {&quot;font&quot;: &quot;11px&quot;} } };
     let plotId = vivid.scatter(plotData);
     await vivid.show({plotId});
-})().catch(console.error);</code>
+})();</code>
 </code></pre>
 <p><a href="./manual/./asset/examples/vivid.scatter.babel.js">Run code</a></p>
 <p>PNG </p>
@@ -613,7 +613,7 @@ termLogger.groupEnd();
     let data = makeImageData(0);
     let plotId = vivid.png({type: &apos;png&apos;, data, width:28, height:28, title:&apos;test2&apos;});
     await vivid.show({plotId});
-})().catch(console.error);</code>
+})();</code>
 </code></pre>
 <p><a href="./manual/./asset/examples/vivid.png.babel.js">Run code</a></p>
 <h3 id="loggermixins">LoggerMixins</h3><p>This Mixins class provides attributes: <strong>Logger</strong>.</p>
