@@ -3,9 +3,9 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const DemoConfig = {
     entry: {
-        'representation-demo': './demo/src/respresentation.js',
-        'mnist-demo': './demo/src/mnist.js',
-        '20newsgroup-demo': './demo/src/20newsgroup.js'
+        'representation-demo': './src/respresentation.js',
+        'mnist-demo': './src/mnist.js',
+        '20newsgroup-demo': './src/20newsgroup.js'
     },
     output: {
         path: resolve(__dirname, 'demo_dist')
@@ -48,25 +48,25 @@ const DemoConfig = {
             title: 'demo main page',
             chunks: [],
             filename: 'index.html',
-            template: './demo/templates/index.html'
+            template: './templates/index.html'
         }),
         new HtmlWebpackPlugin({
             title: 'representation demo',
             chunks: ['representation-demo','vendors'],
             filename: 'representation.html',
-            template: './demo/templates/representation.html'
+            template: './templates/representation.html'
         }),
         new HtmlWebpackPlugin({
             title: 'digits classification demo',
             chunks: ['mnist-demo','vendors'],
             filename: 'mnist.html',
-            template: './demo/templates/mnist.html'
+            template: './templates/mnist.html'
         }),
         new HtmlWebpackPlugin({
             title: '20 newsgroup classification  demo',
             chunks: ['20newsgroup-demo','vendors'],
             filename: '20newsgroup.html',
-            template: './demo/templates/20newsgroup.html'
+            template: './templates/20newsgroup.html'
         })
     ]
 };

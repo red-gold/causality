@@ -51,8 +51,8 @@ class Vivid extends platform.mixWith(BasePlot,
         style = style!==undefined?style:{};
         style = Object.assign({}, this.defaultStyle, style);
         let cssStyle = this.json2css(style);
-        width  = width | this.DefaultWidth;
-        height = height | this.DefaultHeight;
+        width  = width?width : this.DefaultWidth;
+        height = height?height : this.DefaultHeight;
         const plotMargin = {top: 20, right: 20, bottom: 30, left: 40},
               plotWidth  = width - plotMargin.left - plotMargin.right,
               plotHeight = height - plotMargin.top - plotMargin.bottom;

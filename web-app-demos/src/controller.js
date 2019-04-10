@@ -3,7 +3,6 @@ var machina = require('machina')(lodash);
 var vehicleSignal = new machina.Fsm( {
  
     initialize: function( options ) {
-        // your setup code goes here...
     },
  
     namespace: "vehicle-signal",
@@ -107,3 +106,4 @@ var vehicleSignal = new machina.Fsm( {
 vehicleSignal.pedestrianWaiting();
 // Once the FSM is in the "red" state, we can reset it to "green" by calling:
 vehicleSignal.reset();
+export default vehicleSignal
