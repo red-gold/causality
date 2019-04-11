@@ -10,25 +10,26 @@
   "dependencies": {
     "@material-ui/core": "^3.9.3",
     "@material-ui/lab": "^3.0.0-alpha.30",
+    "causal-net": "*",
+    "causal-net.core": "*",
+    "causal-net.datasets": "*",
+    "causal-net.deployment": "*",
+    "causal-net.layer": "*",
+    "causal-net.log": "*",
+    "causal-net.memcache": "*",
+    "causal-net.optimizers": "*",
+    "causal-net.preprocessing": "*",
+    "causal-net.sampling": "*",
+    "causal-net.storage": "*",
+    "causal-net.utils": "*",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "causal-net":"*",
-    "causal-net.deployment": "*", 
-    "causal-net.storage": "*", 
-    "causal-net.layer": "*", 
-    "causal-net.core": "*", 
-    "causal-net.datasets": "*", 
-    "causal-net.memcache": "*", 
-    "causal-net.preprocessing": "*", 
-    "causal-net.optimizers": "*", 
-    "causal-net.utils": "*", 
-    "causal-net.sampling": "*", 
-    "causal-net.log": "*"
+    "react-dom": "^16.8.6"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/preset-react": "^7.0.0",
     "css-loader": "^2.1.1",
-    "style-loader": "^0.23.1"
+    "style-loader": "^0.23.1",
+    "webpack-dev-server": "^3.3.1"
   }
 }

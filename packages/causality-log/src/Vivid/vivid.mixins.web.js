@@ -5,6 +5,9 @@ const VividWebMixins = (BaseVividClass)=> class extends BaseVividClass{
         console.log(target);
         if(typeof target === 'string' && target.startsWith('#')){
             this.d3n = this.d3.select(target);
+            let { width } = this.d3n.node().getBoundingClientRect();
+            this.DefaultWidth = width - 40;
+            this.DefaultWidth = width*0.8;
         }
         else{
             throw Error(`cannot connect to ${target}`);

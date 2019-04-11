@@ -1,9 +1,9 @@
 const PlotMixins = (BaseLogClass)=> class extends BaseLogClass{
-    connect(channel){
+    connect(target){
         if(super.connect){
-            super.connect(channel);
+            super.connect(target);
         }
-        this.Plot.connect(channel);
+        this.Plot.connect(target);
     }
 
     set Plot(plot){

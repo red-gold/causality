@@ -49,8 +49,6 @@ class CausalNetPreprocessingStream extends platform.mixWith(Event,
     }
 
     setDataHandler(){
-        const Enumerate = (val)=>this.F.enumerate(val);
-        // console.log(Enumerate([0,2,4]));//TODO: fix this failure
         const SampleTransformer = this.SampleTransformer;
         const LabelTransformer = this.LabelTransformer;
         const Storage = this.Storage;
@@ -61,9 +59,9 @@ class CausalNetPreprocessingStream extends platform.mixWith(Event,
                     reject(`chunkName is not defined`);
                 }
                 if(data.Sample){
-                    let samples = SampleTransformer(data.Sample);
                     let identity = '';
-                    for(let [idx, sample] of this.F.enumerate(samples)){
+                    for(let [idx, sample] of this.F.enumerate(data.Sample)){
+                        sample = SampleTransformer(sample);
                         identity = chunkName + '/' + idx;
                         await Storage.setItem('preprocessing/sample/' + identity, JSON.stringify(sample));
                         this.preprocessingData.samples.push(identity);
@@ -71,9 +69,9 @@ class CausalNetPreprocessingStream extends platform.mixWith(Event,
                     }
                 }
                 if(data.Label){
-                    let labels = LabelTransformer(data.Label);
                     let identity = '';
-                    for(let [idx, label] of this.F.enumerate(labels)){
+                    for(let [idx, label] of this.F.enumerate(data.Label)){
+                        label = LabelTransformer(label);
                         identity = chunkName + '/' + idx;
                         await Storage.setItem('preprocessing/label/' + identity, JSON.stringify(label));
                         this.preprocessingData.labels.push(identity);
@@ -110,8 +108,13 @@ class CausalNetPreprocessingStream extends platform.mixWith(Event,
                         labelPath = 'preprocessing/label/' + labelPath;
                         let sampleItem = await Storage.getItem(samplePath);
                         let labelItem = await Storage.getItem(labelPath);
-                        samples = [...samples, JSON.parse(sampleItem[samplePath])];
-                        labels = [...labels, JSON.parse(labelItem[labelPath])];
+                        //TODO: fix this issue of unalign format of item
+                        let sample = JSON.parse(sampleItem[samplePath]);
+                        sample = (sample.data)?sample.data:sample;
+                        let label = JSON.parse(labelItem[labelPath]);
+                        label = (label.data)?label.data:label;
+                        samples.push(sample);
+                        labels.push(label);
                     }
                     nextIndex += 1;
                     
@@ -125,21 +128,20 @@ class CausalNetPreprocessingStream extends platform.mixWith(Event,
             };
         return batchGenerator;
     }
-    get TrainDataGenerator(){
-        const TrainSet = this.TrainSet;
-        const R = this.F.CoreFunctor;
+    makeTrainDataGenerator(){
         return (batchSize)=>{
+            const TrainSet = this.TrainSet;
+            const R = this.F.CoreFunctor;
             //TODO: perform permutate
             let batchData = R.splitEvery(batchSize, TrainSet);
-            
             return this.makeBatchGenerator(batchData);
         };
         
     }
-    get TestDataGenerator(){
-        const TestSet = this.TestSet;
-        const R = this.F.CoreFunctor;
+    makeTestDataGenerator(){
         return (batchSize)=>{
+            const TestSet = this.TestSet;
+            const R = this.F.CoreFunctor;
             //TODO: perform permutate
             let batchData = R.splitEvery(batchSize, TestSet);
             return this.makeBatchGenerator(batchData);

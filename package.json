@@ -11,6 +11,7 @@
     "version": "0.1.0", 
     "private": true, 
     "dependencies": {
+        "causal-net": "*", 
         "causal-net.deployment": "*", 
         "causal-net.storage": "*", 
         "causal-net.layer": "*", 

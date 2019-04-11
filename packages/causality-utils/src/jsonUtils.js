@@ -80,4 +80,6 @@ class JSONUtils{
         });
     }
 }
-export default new JSONUtils(json5, fetch);
+
+const jsonUtils = new JSONUtils(json5, fetch);
+export default jsonUtils;

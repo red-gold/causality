@@ -87,4 +87,5 @@ class Stream{
     }
 };
 
-export default new Stream(stream);
+const streamUtils = new Stream(stream);
+export default streamUtils;

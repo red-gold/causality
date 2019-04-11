@@ -9,6 +9,7 @@ import { causalNetDeployment, DeploymentMixins } from 'causal-net.deployment';
 import { termLogger, LoggerMixins } from 'causal-net.log';
 import { default as functor } from './functor';
 import { EnsembleTrainerMixins, EnsembleModelMixins, EnsembleDeploymentMixins } from './Ensemble/index';
+
 /**
  * The CausalNet class is the prebuilt pipeline with methods for 
  * processing data/train/evaluate/deploy/ensemble deploy

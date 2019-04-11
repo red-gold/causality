@@ -3,6 +3,7 @@ import { default as functor } from './functor';
 import { platform, jsonUtils } from 'causal-net.utils';
 import { causalNetSampling, SamplingMixins } from 'causal-net.sampling';
 import { PNGReaderMixins, BufferReaderMixins } from './Readers/init';
+import { termLogger, LoggerMixins } from 'causal-net.log';
 /**
  * This CausalNetDataSource class provides a standard implementation for pipeline Source.
  * { mixWith: [ SamplingMixins, PNGReaderMixins, BufferReaderMixins ]}
@@ -12,26 +13,35 @@ import { PNGReaderMixins, BufferReaderMixins } from './Readers/init';
  * [EXAMPLE ../examples/causalNetDataSource.js]
  */
 class CausalNetDataSource extends platform.mixWith( Event, [
-    SamplingMixins, PNGReaderMixins, BufferReaderMixins ] ){
+    SamplingMixins, PNGReaderMixins, LoggerMixins, BufferReaderMixins ] ){
     /**
      *Creates an instance of CausalNetDataSource.
      * @param {Functor} functor
      * @param {Functor} sampling
      * @memberof CausalNetDataSource
      */
-    constructor(functor, sampling){
+    constructor(functor, logger, sampling){
         super();
         this.F = functor;
         this.R = functor.CoreFunctor;
+        this.Logger = logger;
         this.Sampling = sampling;
     }
 
     async connect(baseLink){
+        if(!baseLink){
+            throw Error(`expect baseLink get ${JSON.stringify(baseLink)}`);
+        }
         let descriptionLink = baseLink + '/dataset.summary.json';
+
+        this.Logger.groupBegin('query datasource');
+        this.Logger.log({descriptionLink});
+        
         this.description = await this.query(descriptionLink);
         this.description.BaseLink = baseLink;
         this.setChunks(this.description);
         this.setDataReader(this.description);
+        this.Logger.groupEnd();
         return this.description;
     }
     
@@ -45,7 +55,7 @@ class CausalNetDataSource extends platform.mixWith( Event, [
      */
     async query(link){
         if(link.startsWith('http')){
-            return await jsonUtils.fetchJson(link);
+            return await jsonUtils.fetchJSON(link);
         }
         else{
             return await jsonUtils.readJSON(link);
@@ -65,10 +75,11 @@ class CausalNetDataSource extends platform.mixWith( Event, [
     }
 
     setChunks(description){
-        const SampleChunkName = description.SampleChunkName;
-        const LabelChunkName = description.LabelChunkName;
-        let chunkList= description.ChunkList;
-        this.dataChunks = chunkList.map( cidx=> {
+        const { SampleChunkName, LabelChunkName, ChunkList } = description;
+        if(!SampleChunkName || !LabelChunkName || !ChunkList ){
+            throw Error(`expect {SampleChunkName, LabelChunkName, ChunkList} get ${JSON.stringify(description)}`);
+        }
+        this.dataChunks = ChunkList.map( cidx=> {
                 return {  ChunkName: cidx,
                           Sample: SampleChunkName.replace('{}', cidx),
                           Label: LabelChunkName.replace('{}', cidx)  };
@@ -113,6 +124,7 @@ class CausalNetDataSource extends platform.mixWith( Event, [
                 if(sampleData.length !== labelData.length){
                     reject('lengths of sample and label are not the same');
                 }
+                console.log({'read': [sampleData.length, labelData.length]});
                 await this.emit('data', { 'Sample': sampleData, 'Label': labelData,  ChunkName });
             }
             resolve(selectedChunks.length);
@@ -120,4 +132,4 @@ class CausalNetDataSource extends platform.mixWith( Event, [
     }
 };
 
-export default new CausalNetDataSource(functor, causalNetSampling);
+export default new CausalNetDataSource(functor, termLogger, causalNetSampling);

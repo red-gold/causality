@@ -60,13 +60,13 @@ const DemoConfig = {
             title: 'digits classification demo',
             chunks: ['mnist-demo','vendors'],
             filename: 'mnist.html',
-            template: './templates/mnist.html'
+            template: './templates/causality.html'
         }),
         new HtmlWebpackPlugin({
             title: '20 newsgroup classification  demo',
             chunks: ['20newsgroup-demo','vendors'],
             filename: '20newsgroup.html',
-            template: './templates/20newsgroup.html'
+            template: './templates/causality.html'
         })
     ]
 };

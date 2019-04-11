@@ -8,21 +8,9 @@ const WebConfig = merge(common, {
     path: resolve(__dirname, 'dist'),
     libraryTarget: 'umd',
     filename: '[name].web.js',
-    library: Bundle.main,
-    globalObject: 'this'
+    library: Bundle.main
   },
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            chunks: 'all'
-        }
-      }
-    }
-  },
-  externals: ['causal-net.core', 'causal-net.utils', 'causal-net.storage', 
+  externals: ['causal-net.core', 'causal-net.utils', 'causal-net.storage','causal-net.log', 
               'causal-net.preprocessing', 'causal-net.memcache']
 });
 

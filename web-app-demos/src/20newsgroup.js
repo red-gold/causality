@@ -4,6 +4,10 @@ import { default as Logger } from './components/logger';
 import { default as Model } from './components/model';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import { causalNet } from 'causal-net'; 
+import { termLogger } from 'causal-net.log'; 
+
+import { PipeLineConfigure, Connector } from './pipeline/20newsgroup.pipeline';
 const styles = theme => ({
   logger:{
     height: 600,
@@ -32,31 +36,39 @@ const styles = theme => ({
   
 });
 class NewsGroup extends React.Component {
+    state = {
+      pipelineState: false,
+    }
     constructor(props) {
       super(props);
-      this.state = {value: 'coconut'};
-      this.BaseLink = 'http://http://0.0.0.0:5000/MNIST_dataset/';
-      causalNet.setByConfig(PipeLineConfigure);
-    
-      console.log(causalNet.parameters);
-      let models = ['Model1', 'Model2', 'Model3'];
-      
-      causalNet.EnsembleModels = models;
-      causalNet.deploy().then(res=>console.log(res));
-    }
-    connect(){
-      
-    }
-    fetchData(){
+      this.BaseLink = 'http://0.0.0.0:5000/MNIST_dataset/';
+      this.componentDidMount = this.componentDidMount.bind(this);  
+      this.fetchData = this.fetchData.bind(this);
 
     }
-    trainHander(){
-      // for(let model of models){
-      //     console.log(await causalNet.ensembleTrain(2, 1, model));
-      // }
+    async componentDidMount() {
+      
+      // causalNet.setByConfig(PipeLineConfigure);
+      // termLogger.log(causalNet.Parameters);
+      // let models = ['Model1', 'Model2', 'Model3'];
+      
+      // causalNet.EnsembleModels = models;
+      // causalNet.deploy().then(res=>console.log(res));
+    }
+    plotRef(plot){
+      return plot;
+    }
+    async trainHander(){
+      let models = ['Model1', 'Model2', 'Model3'];
+      let losses = {};
+      for(let model of models){
+          let result = await causalNet.ensembleTrain(2, 1, model);
+          losses = {...losses, ...{[model]: result[model]['losses']}};
+      }
     }
     render() {
       const { classes } = this.props;
+      const { pipelineState } = this.state;
         return (
           <div>
             <Grid container spacing={16} justify="center" className={classes.layout}>
@@ -66,10 +78,14 @@ class NewsGroup extends React.Component {
                 </p>
               </Grid>
               <Grid item sm={6} className={classes.card}>
-                <Model BaseLink={this.BaseLink}/>
+                <Model BaseLink={this.BaseLink}
+                  pipelineState={pipelineState}
+                  trainHander={this.trainHander}
+                  testHander={this.testHander}
+                  fetchData={this.fetchData}/>
               </Grid>
               <Grid item sm={6} className={classes.card}>
-                <Logger className={classes.logger}/>
+                <Logger className={classes.logger} plotRef={this.plotRef}/>
               </Grid>
               
             </Grid>            

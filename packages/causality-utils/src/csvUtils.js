@@ -1,5 +1,6 @@
 import { default as  fetch } from './fetch';
 import { default as CSV } from 'csv-parser';
+import { default as stream } from './stream';
 /**
  * This CSVUtils class use [csv-parser](https://www.npmjs.com/package/csv-parser)
  * for csv parsing and transform csv data from fetch.
@@ -27,11 +28,13 @@ class CSVUtils{
      * @returns { Promise } - data promise with data if success
      * @memberof csvUtils
      */
-    fetchCSV(url){
+    async fetchCSV(url){
         return new Promise(async (resolve, reject)=>{
             let reader = await fetch.streamData(url);
             let data = [];
             let csv = CSV();
+            let csvHeaders = [];
+            csv.on('headers', (headers) => csvHeaders=headers);
             csv.on('end', ()=>{
                 resolve(data);
             });
@@ -42,26 +45,61 @@ class CSVUtils{
         });
     }
 
-    writeCSV(data, columns, filePath){
-        throw Error('implement required');
+    async writeCSV(header, data, filePath){
+        const fs = this.fs;        
+        if(!fs.createWriteStream){
+            throw Error('method is not supported');
+        }
+        return new Promise((resolve, reject)=>{
+            let reader = stream.makeReadable();
+            reader.pipe(fs.createWriteStream(filePath))
+                    .on('close', ()=>{ resolve(filePath); })
+                    .on('error', ()=>{ reject(`error or read png data from file ${filePath}`); });
+            let strHeader = header.join(',');
+            reader.push(strHeader);
+            data.forEach(row=>{ 
+                let strRow = '\n'+header.map(h=>row[h]).join(',');
+                reader.push(strRow);
+            });
+            reader.push(null);
+        });
     }
 
-    readCSV(filePath){
+    async readCSV(filePath){
         const fs = this.fs, CSV = this.csv;
         if(!fs.createReadStream){
             throw Error('method is not supported');
         }
-        return new Promise(async (resolve, reject)=>{
+        return new Promise((resolve, reject)=>{
             let data = [];
             let csv = CSV();
-            csv.on('end', ()=>{
-                resolve(data);
-            });
+            let csvHeaders = [];
+            csv.on('headers', (headers) => csvHeaders=headers);
+            csv.on('end', ()=>{resolve(data);});
             csv.on('data',(row)=>{
-                data.push(row);
+                data.push(csvHeaders.reduce((s,h)=>{
+                    s[h]=row[h];
+                    return s;
+                },{}));
             });
             fs.createReadStream(filePath).pipe(csv);
         });
+    }
+
+    async chunkCSV(filePath, recordPerChunk, destFilePattern){
+        let data = await this.readCSV(filePath);
+        let headers = Object.keys(data[0]), writeCounter = 0;
+        const writeFile = async (headers, data)=>{
+            let outFile = destFilePattern.replace('{}', writeCounter);
+            await this.writeCSV(headers, data, outFile);
+            writeCounter += 1;
+            return writeCounter;
+        };
+        for(let chunkIdx=0, len=data.length; chunkIdx<len; chunkIdx+=recordPerChunk) {
+            let chunkData = data.slice(chunkIdx,chunkIdx+recordPerChunk);
+            await writeFile(headers, chunkData);
+        };
+        return writeCounter;
     }
 }
 export default new CSVUtils(CSV, fetch);

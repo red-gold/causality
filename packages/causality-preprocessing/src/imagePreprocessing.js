@@ -1,6 +1,6 @@
 import { Functor as BaseFunctor } from 'causal-net.core';
 import { platform } from 'causal-net.utils';
-import { ColorTransformingMixins, ImageSplittingMixins } from './Image/index';
+import { ColorTransformingMixins, ImageSplittingMixins, ImageScalingMixins } from './Image/index';
 
 /**
  * This ImagePreprocessing provide methods for preprocessing image data
@@ -14,7 +14,8 @@ import { ColorTransformingMixins, ImageSplittingMixins } from './Image/index';
  */
 class ImagePreprocessing extends platform.mixWith(BaseFunctor, [
         ColorTransformingMixins, 
-        ImageSplittingMixins ]){
+        ImageSplittingMixins,
+        ImageScalingMixins ]){
     constructor(){
         super();
     }

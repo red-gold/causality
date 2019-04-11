@@ -15,7 +15,10 @@ const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         const Loss=this.LossModel, Optimizer=this.Optimizer;
         return (sampleTensor, labelTensor)=>{
             const LossFn = ()=>{
-                return T.tidy( ()=>{ return Loss(sampleTensor, labelTensor); } );
+                return T.tidy( ()=>{ 
+                    Loss(sampleTensor, labelTensor);
+                    return Loss(sampleTensor, labelTensor); 
+                } );
             };
             return Optimizer.fit(LossFn);
         };
@@ -51,9 +54,9 @@ const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         return new Promise(async (resolve, reject)=>{
             logger.progressBegin(numEpochs);
             for(let epochIdx of F.range(numEpochs)){
-                const trainData = TrainDataGenerator(batchSize);
+                const TrainData = TrainDataGenerator(batchSize);
                 let iterLosses = [];
-                for await (let { samples, labels } of trainData){
+                for await (let { samples, labels } of TrainData){
                     let sampleTensor = T.tensor(samples).asType('float32');
                     let labelTensor = T.tensor(labels).asType('float32');
                     let loss = Trainer(sampleTensor, labelTensor);

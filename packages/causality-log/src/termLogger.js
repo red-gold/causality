@@ -37,4 +37,6 @@ class TermLogger extends platform.mixWith(BaseLogger,
         }
     }
 }
-export default new TermLogger(vivid);
+
+let termLogger = new TermLogger(vivid);
+export default termLogger;

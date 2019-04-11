@@ -4,7 +4,7 @@ const jestBase = require('./jest.base.config.js');
 module.exports = {
   ...jestBase,    
   "projects": [
-    "<rootDir>",
+    "<rootDir>/packages/causality/jest.config.js",
     "<rootDir>/packages/causality-core/jest.config.js",
     "<rootDir>/packages/causality-datasets/jest.config.js",
     "<rootDir>/packages/causality-deployment/jest.config.js",

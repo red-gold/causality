@@ -10,12 +10,20 @@ const ColorTransformingMixins = (PreprocessingClass) => class extends Preprocess
      * @param { Number } channelSize
      * @return { Array } image data after transform
      */
-    blackWhiteTransform(sampleBuffer, channelSize){
+    blackWhiteTransform(sampleBuffer){
         const BlackWhiteFn = (pixel)=>{
             let pixelValue = (pixel[0] + pixel[1] +pixel[2])/3;
             return ~~pixelValue;
         };
-        return this.colorTransform(BlackWhiteFn, sampleBuffer, channelSize);
+        return this.colorTransform(BlackWhiteFn, sampleBuffer, 4);
+    }
+
+    oneBitTransform(sampleBuffer){
+        const BlackWhiteFn = (pixel)=>{
+            let pixelValue = (pixel[0] + pixel[1] +pixel[2])/3;
+            return pixelValue>127?1:0;
+        };
+        return this.colorTransform(BlackWhiteFn, sampleBuffer, 4);
     }
 };
 

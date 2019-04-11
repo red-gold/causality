@@ -1,11 +1,8 @@
 import { causalNetSGDOptimizer } from 'causal-net.optimizers';
 import { causalNetModels } from 'causal-net.models';
 import { causalNetParameters, causalNetLayers } from 'causal-net.layer';
-
-
-
-
-    const DummyData = (batchSize)=>{
+import { causalNetDataSource } from 'causal-net.datasets';
+const DummyData = (batchSize)=>{
         let samples = [ [0,1,2,3], 
                         [0,1,2,3], 
                         [0,1,2,3] ];
@@ -23,11 +20,10 @@ const PipeLineConfigure = {
         Net: { 
                 Parameters: causalNetParameters.InitParameters(),
                 Layers: { 
-                    Predict: [  causalNetLayers.dense(4, 3), 
-                                causalNetLayers.dense(3, 2)]
+                    Predict: [  causalNetLayers.dense(28*28*4,10) ]
                 },
                 Model: causalNetModels.classification(2),
-                Optimizer: causalNetSGDOptimizer.adam({learningRate: 0.01})
+                Optimizer: causalNetSGDOptimizer.adam({learningRate: 0.1})
         },
         Deployment: {
             Emitter: async ()=>{
@@ -47,4 +43,8 @@ const PipeLineConfigure = {
             }
         }
     };
-export default PipeLineConfigure;
+const Connector = async ({sourceLink})=>{
+    let description = await causalNetDataSource.connect(sourceLink);
+    return {sourceLink: description};
+};
+export { PipeLineConfigure, Connector };

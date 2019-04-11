@@ -50,7 +50,7 @@ import { termLogger } from 'causal-net.log';
     };
     causalNet.setByConfig(PipeLineConfigure);
     
-    console.log(causalNet.parameters);
+    console.log(causalNet.Parameters);
     let models = ['Model1', 'Model2', 'Model3'];
     let losses = {};
     for(let model of models){

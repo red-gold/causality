@@ -20,7 +20,8 @@ class BufferUtils{
      * @memberof BufferUtils
      */
     async fetchBuffer(url){
-        return await new Buffer.from(fetch.fetchData(url));
+        let data = await fetch.fetchData(url);
+        return await new Buffer.from(data);
     }
 
     /**

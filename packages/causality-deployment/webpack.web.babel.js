@@ -11,17 +11,6 @@ const WebConfig = merge(common, {
     library: Bundle.main,
     globalObject: 'this'
   },
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            chunks: 'all'
-        }
-      }
-    }
-  },
   externals: ['causal-net.core', 'causal-net.utils', 'causal-net.storage', 
               'causal-net.preprocessing', 'causal-net.memcache']
 });

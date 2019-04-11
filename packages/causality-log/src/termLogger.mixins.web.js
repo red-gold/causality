@@ -1,7 +1,6 @@
 import {default as JsonView} from './prettyJson';
 const LogWebMixins = (LogClass)=> class extends LogClass{
     connect(target=null){
-        
         let documentEl = target?document.getElementById(target.replace('#','')):document.body;
         this.target = target;
         let node = document.createElement("ul");
@@ -24,17 +23,20 @@ const LogWebMixins = (LogClass)=> class extends LogClass{
         if(!data.type){
             throw Error(`plot type is not defined in ${JSON.stringify(data)}`);
         }
-        let node = document.createElement("li");
-        node.style.cssText = 'border-bottom: 1px solid #dedede;';
-        var date = new Date();
-        node.innerHTML = `<p style="font-size: 12px; text-align:right">${date}</p>`;
+        
+        
         let { plotId } = data;
         if(!plotId){
             this.plotCounter = this.plotCounter!==undefined?this.plotCounter+1:0;
             plotId = `plot-${this.plotCounter}`;
+            let node = document.createElement("li");
+            node.style.cssText = 'border-bottom: 1px solid #dedede;';
+            var date = new Date();
+            node.innerHTML = `<p style="font-size: 12px; text-align:right">${date}</p>`;
             node.setAttribute("id", plotId);
             this.loggerEl.appendChild(node);
             Plot.connect('#'+plotId);
+            this.scrollBottom();
         }
         else{
             Plot.connect('#'+plotId);
@@ -44,11 +46,12 @@ const LogWebMixins = (LogClass)=> class extends LogClass{
     }
 
     async show(option={}){
-        let {plotId} = option;
         return await this.Plot.show(option);
     }
 
-    progress(processMessage){
+    progressBegin(range){
+    }
+    progressUpdate(processMessage){
         // let node = this.loggerEl.getElementsByTagName("li:nth-last-of-type(1)");
         let LINodes = this.loggerEl.getElementsByTagName("li");
         let node = LINodes[LINodes.length-1];
@@ -64,12 +67,16 @@ const LogWebMixins = (LogClass)=> class extends LogClass{
         node.appendChild(jsonNode);
         this.scrollBottom();
     }
+    progressEnd(){
+
+    }
     log(message, style=''){
+        
         if(this.level >= this.AcceptedLevels['log']){
             return null;
         }
         if(!this.loggerEl || !this.loggerEl.appendChild){
-            this.connect();
+            throw Error(`cannot print log`);
         }
         let node = document.createElement("li");
         node.style.cssText = 'border-bottom: 1px solid #dedede;';       

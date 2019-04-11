@@ -6,6 +6,7 @@ import fetchStream from 'fetch-readablestream';
  * @param { Class } FetchClass
  * @returns { Class } FetchClass - class with extended methods
  */
+import { default as streamUtils } from './stream';
 const WebStreamMixins = (FetchClass)=> class extends FetchClass{ 
     /**
      * Stream content given the url
@@ -19,7 +20,7 @@ const WebStreamMixins = (FetchClass)=> class extends FetchClass{
             reject("Bad response from server");
         }
         const streamReader = response.body.getReader();
-        let reader = Stream.makeReadable();
+        let reader = streamUtils.makeReadable();
         const recusiveRead = ()=>{
             return new Promise((resolve, reject)=>{
                 streamReader.read().then(({ value, done })=>{

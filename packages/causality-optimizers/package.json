@@ -8,7 +8,7 @@
   "author": "nguyenhuynh200188@gmail.com",
   "license": "MIT",
   "scripts": {
-    "start:web": "webpack-dev-server --open --config webpack.web.babel.js",
+    "start:web": "webpack --watch --open --config webpack.web.babel.js",
     "start:node": "webpack --watch --info-verbosity verbose --config webpack.node.babel.js",
     "build:clean": "rimraf dist",
     "test": "jest",
