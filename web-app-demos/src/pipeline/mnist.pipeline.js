@@ -3,29 +3,18 @@ import { causalNetModels } from 'causal-net.models';
 import { causalNetParameters, causalNetLayers } from 'causal-net.layer';
 import { causalNetDataSource } from 'causal-net.datasets';
 import { imagePreprocessing } from 'causal-net.preprocessing';
+import { termLogger } from 'causal-net.log';
+let promiseEmitter = {};
 
-const DummyData = (batchSize)=>{
-        let samples = [ [0,1,2,3], 
-                        [0,1,2,3], 
-                        [0,1,2,3] ];
-        let labels  = [ [1,0], 
-                        [1,0], 
-                        [1,0] ];
-        return [{samples, labels}];
-    };
-let dataEmitter = ()=>{};
-let dataListerner = ()=>{};
 const PipeLineConfigure = {
         Dataset: { 
             Source: causalNetDataSource,
             Preprocessing:{
                 SampleTransformer: (data)=>{
                     data = imagePreprocessing.oneBitTransform(data);
-                    console.log(data);
                     return data;
                 },
                 LabelTransformer: (data)=>{
-                    console.log({'receive label to transform': data});
                     return data;
                 }
             } 
@@ -39,25 +28,23 @@ const PipeLineConfigure = {
                 Optimizer: causalNetSGDOptimizer.adam({learningRate: 0.01})
         },
         Deployment: {
-            Emitter: async ()=>{
-                return new Promise(async (resolve, reject)=>{
-                    let data = await dataEmitter();
-                    console.log({ emitter: data});
-                    resolve(data);
-                });
+            Emitter: async ()=> {
+                let image = await new Promise((resolve, reject)=>{
+                                            promiseEmitter.resolve = resolve;
+                                            promiseEmitter.reject = reject;
+                                        });
+                let rescaledImage = imagePreprocessing.imageResize(image, [150, 150], [28, 28]);
+                let data = imagePreprocessing.oneBitTransform(rescaledImage);
+                return {Predict: data};
             },
-            Listener: async (infer)=>{
-                console.log({ Listener: infer});
-                dataListerner(infer);
-            }
+            Listener: null
         }
     };
-const Connector = async ({sourceLink, emitter, listener})=>{
+const Connector = async ({sourceLink, listener})=>{
     console.log('connector is call');
     await causalNetDataSource.connect(sourceLink);
     let dataChunks = causalNetDataSource.DataChunks;
-    dataEmitter = emitter;
-    dataListerner = listener;
-    return {dataChunks};
+    PipeLineConfigure.Deployment.Listener = listener;
+    return {dataChunks, promiseEmitter};
 };
 export { PipeLineConfigure, Connector };

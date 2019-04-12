@@ -2,12 +2,15 @@ import ReactDOM from "react-dom";
 import React  from "react";
 import { default as Logger } from './components/logger';
 import { default as Model } from './components/model';
+import { default as Parameters } from './components/parameters';
+import { default as CanvasInput } from './components/canvasInput';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { causalNet } from 'causal-net'; 
 import { termLogger } from 'causal-net.log'; 
-
-import { PipeLineConfigure, Connector } from './pipeline/20newsgroup.pipeline';
+import { indexDBStorage } from 'causal-net.storage'; 
+import TextField from '@material-ui/core/TextField';
+import { PipeLineConfigure, Connector } from './pipeline/mnist.pipeline';
 const styles = theme => ({
   logger:{
     height: 600,
@@ -35,63 +38,154 @@ const styles = theme => ({
   }
   
 });
-class NewsGroup extends React.Component {
+class MNIST extends React.Component {
     state = {
-      pipelineState: false,
+      onWaiting: false,
+      dataPreprocessed: false,
+      saveModels: [],
+      dataChunks: 0,
     }
     constructor(props) {
-      super(props);
-      this.BaseLink = 'http://0.0.0.0:5000/MNIST_dataset/';
-      this.componentDidMount = this.componentDidMount.bind(this);  
-      this.fetchData = this.fetchData.bind(this);
+        super(props);
+        this.componentDidMount = this.componentDidMount.bind(this);  
+        this.dataEmit = this.dataEmit.bind(this);
+        this.fetchChunks = this.fetchChunks.bind(this);
+        this.train = this.train.bind(this);
+        this.test = this.test.bind(this);
+        this.ensembleTrain = this.ensembleTrain.bind(this);
+        this.getSaveList = this.getSaveList.bind(this);
+        this.setEnsembleModels = this.setEnsembleModels.bind(this);
+        this.resetStorage = this.resetStorage.bind(this);
+        this.modelListener = this.modelListener.bind(this);
+    }
+    componentDidMount() {
+        this.setState({onWaiting: true});
+        const init = async()=>{
+            termLogger.connect('#logger');
+            const sourceLink = 'http://0.0.0.0:5000/MNIST_dataset/';
+            let {dataChunks, promiseEmitter} = 
+              await Connector({ sourceLink, listener: this.modelListener });
+            causalNet.setByConfig(PipeLineConfigure);
+            this.promiseEmitter = promiseEmitter;
+            causalNet.deploy();            
+            this.setState({ dataChunks: dataChunks.length, 
+                            onWaiting: false});
+            
+        };
+        init().then(()=>this.getSaveList());
+    }
 
+    resetStorage(){
+      console.log('reset storage');
+      this.setState({onWaiting: true});
+      indexDBStorage.deleteFileByPrefix('/').then((deletedFiles)=>{
+        console.log({deletedFiles});
+        this.setState({onWaiting: true});
+      });
     }
-    async componentDidMount() {
-      
-      // causalNet.setByConfig(PipeLineConfigure);
-      // termLogger.log(causalNet.Parameters);
-      // let models = ['Model1', 'Model2', 'Model3'];
-      
-      // causalNet.EnsembleModels = models;
-      // causalNet.deploy().then(res=>console.log(res));
+
+    getSaveList(){
+      this.setState({onWaiting: true});
+      causalNet.getSavedParamList().then(saveList=>{  
+        saveList = saveList.map(model=>({name: model, selected: false}));    
+        this.setState({saveModels: saveList, onWaiting: false});
+      });
     }
-    plotRef(plot){
-      return plot;
+
+    fetchChunks(numChunks){
+      this.setState({onWaiting: true});
+      causalNet.read(numChunks).then((fetchResult)=>{
+        this.setState({onWaiting: false, dataPreprocessed: true});
+        termLogger.log({'fetch result': fetchResult});
+      });
     }
-    async trainHander(){
-      let models = ['Model1', 'Model2', 'Model3'];
-      let losses = {};
-      for(let model of models){
-          let result = await causalNet.ensembleTrain(2, 1, model);
-          losses = {...losses, ...{[model]: result[model]['losses']}};
+    train(trainRatio, numEpochs=10, batchSize=50){
+      this.setState({onWaiting: true});
+      let [train, test] = causalNet.splitDataset(trainRatio);
+      termLogger.log({train: train.length, test: test.length});
+      causalNet.train(numEpochs, batchSize).then((trainResult)=>{
+          termLogger.plot({
+              type:'line', data: trainResult, 
+              xLabel: 'epoch', yLabel: 'loss'});
+          this.setState({onWaiting: false});
+      });
+    }
+    ensembleTrain(trainRatio, numEpochs=10, batchSize=50){
+      this.setState({onWaiting: true});
+      let [train, test] = causalNet.splitDataset(trainRatio);
+      termLogger.log({train: train.length, test: test.length});
+      this.c = this.c?this.c+1:0;
+      causalNet.ensembleTrain(numEpochs, batchSize, 'model_'+this.c).then((trainResult)=>{
+        termLogger.plot({ type:'line', data: trainResult, 
+                          xLabel: 'epoch', yLabel: 'loss' });
+        this.setState({onWaiting: false});
+      });
+    }
+    test(batchSize=10){
+      this.setState({onWaiting: true});
+      causalNet.test(batchSize).then(testResult=>{
+        termLogger.log(testResult);
+        this.setState({onWaiting: true});
+      });
+    }
+    
+    setEnsembleModels(modelList, modelIdx, state){
+      modelList[modelIdx].selected = state;
+      let selectModels = modelList
+            .filter(({selected})=>selected)
+            .map(({name})=>name);
+      causalNet.EnsembleModels = selectModels;
+      this.setState({saveModels: modelList});
+    }
+
+    dataEmit(image){
+        termLogger.plot({type: 'png', data: image, width: 150, height: 150});
+        this.promiseEmitter.resolve(image);
+    }
+
+    modelListener(infer){
+      const { Predict } = infer;
+      if(Predict){
+        termLogger.log({Predict: Predict[0]});
+        this.setState({Predict: Predict[0]});
       }
     }
+
     render() {
-      const { classes } = this.props;
-      const { pipelineState } = this.state;
+        const { classes } = this.props;
+        const { dataPreprocessed, onWaiting, dataChunks, saveModels } = this.state;
+        let handlers = { fetchChunkHandler: this.fetchChunks, 
+                         splitDataHandler: this.splitData, 
+                         trainHandler: this.train, 
+                         ensembleTrainHandler: this.ensembleTrain,
+                         setEnsembleModels: this.setEnsembleModels,
+                         resetStorageHandler: this.resetStorage,
+                         testHandler: this.test };
         return (
           <div>
             <Grid container spacing={16} justify="center" className={classes.layout}>
               <Grid item sm={12} className={classes.card}>
                 <p>
-                  This is ensemble demo for training classification model with 20newsgroup text dataset.
+                  This is ensemble demo for training digit recognition model with MNIST image dataset.
                 </p>
               </Grid>
               <Grid item sm={6} className={classes.card}>
                 <Model BaseLink={this.BaseLink}
-                  pipelineState={pipelineState}
-                  trainHander={this.trainHander}
-                  testHander={this.testHander}
-                  fetchData={this.fetchData}/>
+                  pipelineState={{onWaiting, dataPreprocessed}}
+                  dataChunks={dataChunks} 
+                  saveModels={saveModels}
+                  handlers={handlers} />
+                <Parameters/>
+                <textarea dataEmit={this.dataEmit}/>
               </Grid>
               <Grid item sm={6} className={classes.card}>
-                <Logger className={classes.logger} plotRef={this.plotRef}/>
+                <Logger className={classes.logger}/>
               </Grid>
-              
             </Grid>            
           </div>
         );
     }
 }
-const NewsGroupDemo = withStyles(styles)(NewsGroup);
-ReactDOM.render(<NewsGroupDemo/>, document.getElementById("content"));
+
+const MNISTDemo = withStyles(styles)(MNIST);
+ReactDOM.render(<MNISTDemo/>, document.getElementById("content"));

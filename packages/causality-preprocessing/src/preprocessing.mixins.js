@@ -31,6 +31,8 @@ const PreprocessingMixins = (BasePipelineClass) => class extends BasePipelineCla
             }
             this.Preprocessing.SampleTransformer = SampleTransformer;
             this.Preprocessing.LabelTransformer = LabelTransformer;
+            this.Preprocessing.SampleTransformer = this.Preprocessing.SampleTransformer.bind(this);
+            this.Preprocessing.LabelTransformer = this.Preprocessing.LabelTransformer.bind(this);
             this.Preprocessing.setDataHandler();
             this.DataSourceReader.pipe(this.Preprocessing);
             pipelineConfig.Dataset.TrainDataGenerator = this.Preprocessing.makeTrainDataGenerator();

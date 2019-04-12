@@ -61,7 +61,7 @@ class CausalNetPreprocessingStream extends platform.mixWith(Event,
                 if(data.Sample){
                     let identity = '';
                     for(let [idx, sample] of this.F.enumerate(data.Sample)){
-                        sample = SampleTransformer(sample);
+                        sample = await SampleTransformer(sample);
                         identity = chunkName + '/' + idx;
                         await Storage.setItem('preprocessing/sample/' + identity, JSON.stringify(sample));
                         this.preprocessingData.samples.push(identity);
@@ -71,7 +71,7 @@ class CausalNetPreprocessingStream extends platform.mixWith(Event,
                 if(data.Label){
                     let identity = '';
                     for(let [idx, label] of this.F.enumerate(data.Label)){
-                        label = LabelTransformer(label);
+                        label = await LabelTransformer(label);
                         identity = chunkName + '/' + idx;
                         await Storage.setItem('preprocessing/label/' + identity, JSON.stringify(label));
                         this.preprocessingData.labels.push(identity);

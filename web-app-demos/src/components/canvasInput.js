@@ -20,9 +20,10 @@ class CanvasInput extends React.Component {
 
     componentDidMount() {
         let canvas = this.canvasRef.current;
-        const {left, top} = canvas.getBoundingClientRect();
-        this.canvasLeft = left - 60;
-        this.canvasTop = top;
+        const {left, top, x, y} = canvas.getBoundingClientRect();
+        console.log({left, top, x, y});
+        this.canvasLeft = x;
+        this.canvasTop = y;
     }
 
     draw(event, begin, end, onDraw){
@@ -51,7 +52,6 @@ class CanvasInput extends React.Component {
         if(end && onDraw){
             this.setState({onDraw:false});
             let data = context.getImageData(0, 0, 150, 150).data;
-            console.log(data);
             context = canvas.getContext('2d');
             context.clearRect(0, 0, 150, 150);
             if(this.props.dataEmit){

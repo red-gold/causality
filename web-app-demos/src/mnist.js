@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { causalNet } from 'causal-net'; 
 import { termLogger } from 'causal-net.log'; 
-import { imagePreprocessing } from 'causal-net.preprocessing';
+import { indexDBStorage } from 'causal-net.storage'; 
 import { PipeLineConfigure, Connector } from './pipeline/mnist.pipeline';
 const styles = theme => ({
   logger:{
@@ -37,15 +37,11 @@ const styles = theme => ({
   }
   
 });
-class NewsGroup extends React.Component {
+class MNIST extends React.Component {
     state = {
-      pipelineState: {
-        dataPreprocessed: false, 
-        trainSplitted: false, 
-        chunksFetched: false, 
-        connected: false, 
-        onWaiting: false
-      },
+      onWaiting: false,
+      dataPreprocessed: false,
+      saveModels: [],
       dataChunks: 0,
     }
     constructor(props) {
@@ -57,73 +53,111 @@ class NewsGroup extends React.Component {
         this.test = this.test.bind(this);
         this.ensembleTrain = this.ensembleTrain.bind(this);
         this.getSaveList = this.getSaveList.bind(this);
+        this.setEnsembleModels = this.setEnsembleModels.bind(this);
+        this.resetStorage = this.resetStorage.bind(this);
+        this.modelListener = this.modelListener.bind(this);
     }
     componentDidMount() {
-        this.setState({pipelineState: {onWaiting: true}});
+        this.setState({onWaiting: true});
         const init = async()=>{
             termLogger.connect('#logger');
             const sourceLink = 'http://0.0.0.0:5000/MNIST_dataset/';
-            let {dataChunks} = await Connector({sourceLink});
+            let {dataChunks, promiseEmitter} = 
+              await Connector({ sourceLink, listener: this.modelListener });
             causalNet.setByConfig(PipeLineConfigure);
+            this.promiseEmitter = promiseEmitter;
+            causalNet.deploy();            
             this.setState({ dataChunks: dataChunks.length, 
-                            pipelineState: {onWaiting: false}});
+                            onWaiting: false});
+            
         };
-        init();
+        init().then(()=>this.getSaveList());
+    }
+
+    resetStorage(){
+      console.log('reset storage');
+      this.setState({onWaiting: true});
+      indexDBStorage.deleteFileByPrefix('/').then((deletedFiles)=>{
+        console.log({deletedFiles});
+        this.setState({onWaiting: true});
+      });
     }
 
     getSaveList(){
-        causalNet.getSavedParamList().then(saveList=>{
-            this.setState({saveList: saveList});
-        });
+      this.setState({onWaiting: true});
+      causalNet.getSavedParamList().then(saveList=>{  
+        saveList = saveList.map(model=>({name: model, selected: false}));    
+        this.setState({saveModels: saveList, onWaiting: false});
+      });
     }
 
     fetchChunks(numChunks){
-        this.setState({pipelineState: {onWaiting: true}});
-        causalNet.read(numChunks).then((fetchResult)=>{
-            this.setState({pipelineState: {onWaiting: false}});
-            termLogger.log({'fetch result': fetchResult});
-        });
+      this.setState({onWaiting: true});
+      causalNet.read(numChunks).then((fetchResult)=>{
+        this.setState({onWaiting: false, dataPreprocessed: true});
+        termLogger.log({'fetch result': fetchResult});
+      });
     }
     train(trainRatio, numEpochs=10, batchSize=50){
-        this.setState({pipelineState: {onWaiting: true}});
-        let [train, test] = causalNet.splitDataset(trainRatio);
-        termLogger.log({train: train.length, test: test.length});
-        causalNet.train(numEpochs, batchSize).then((trainResult)=>{
-            termLogger.plot({
-                type:'line', data: trainResult, 
-                xLabel: 'epoch', yLabel: 'loss'});
-            this.setState({pipelineState: {onWaiting: false}});
-        });
-        
+      this.setState({onWaiting: true});
+      let [train, test] = causalNet.splitDataset(trainRatio);
+      termLogger.log({train: train.length, test: test.length});
+      causalNet.train(numEpochs, batchSize).then((trainResult)=>{
+          termLogger.plot({
+              type:'line', data: trainResult, 
+              xLabel: 'epoch', yLabel: 'loss'});
+          this.setState({onWaiting: false});
+      });
     }
     ensembleTrain(trainRatio, numEpochs=10, batchSize=50){
-        this.setState({pipelineState: {onWaiting: true}});
-        let [train, test] = causalNet.splitDataset(trainRatio);
-        termLogger.log({train: train.length, test: test.length});
-        this.c = this.c?this.c+1:0;
-        causalNet.ensembleTrain(numEpochs, batchSize, 'model_'+this.c).then((trainResult)=>{
-            termLogger.log(trainResult);
-            this.setState({pipelineState: {onWaiting: false}});
-        });
+      this.setState({onWaiting: true});
+      let [train, test] = causalNet.splitDataset(trainRatio);
+      termLogger.log({train: train.length, test: test.length});
+      this.c = this.c?this.c+1:0;
+      causalNet.ensembleTrain(numEpochs, batchSize, 'model_'+this.c).then((trainResult)=>{
+        termLogger.plot({ type:'line', data: trainResult, 
+                          xLabel: 'epoch', yLabel: 'loss' });
+        this.setState({onWaiting: false});
+      });
     }
     test(batchSize=10){
-        this.setState({pipelineState: {onWaiting: true}});
-        causalNet.test(batchSize).then(testResult=>{
-            termLogger.log(testResult);
-            this.setState({pipelineState: {onWaiting: false}});
-        });
+      this.setState({onWaiting: true});
+      causalNet.test(batchSize).then(testResult=>{
+        termLogger.log(testResult);
+        this.setState({onWaiting: true});
+      });
     }
-    dataEmit(data){
-        let resdata = imagePreprocessing.imageResize(data, [150, 150], [28, 28]);
-        termLogger.plot({type:'png', data: resdata, width: 28, height: 28});
+    
+    setEnsembleModels(modelList, modelIdx, state){
+      modelList[modelIdx].selected = state;
+      let selectModels = modelList
+            .filter(({selected})=>selected)
+            .map(({name})=>name);
+      causalNet.EnsembleModels = selectModels;
+      this.setState({saveModels: modelList});
     }
+
+    dataEmit(text){
+        this.promiseEmitter.resolve(text);
+    }
+
+    modelListener(infer){
+      const { Predict } = infer;
+      if(Predict){
+        termLogger.log({Predict: Predict[0]});
+        this.setState({Predict: Predict[0]});
+      }
+    }
+
     render() {
         const { classes } = this.props;
-        const { pipelineState, dataChunks } = this.state;
+        const { dataPreprocessed, onWaiting, dataChunks, saveModels } = this.state;
         let handlers = { fetchChunkHandler: this.fetchChunks, 
                          splitDataHandler: this.splitData, 
                          trainHandler: this.train, 
                          ensembleTrainHandler: this.ensembleTrain,
+                         setEnsembleModels: this.setEnsembleModels,
+                         resetStorageHandler: this.resetStorage,
                          testHandler: this.test };
         return (
           <div>
@@ -135,8 +169,9 @@ class NewsGroup extends React.Component {
               </Grid>
               <Grid item sm={6} className={classes.card}>
                 <Model BaseLink={this.BaseLink}
-                  pipelineState={pipelineState}
-                  dataChunks={dataChunks}
+                  pipelineState={{onWaiting, dataPreprocessed}}
+                  dataChunks={dataChunks} 
+                  saveModels={saveModels}
                   handlers={handlers} />
                 <Parameters/>
                 <CanvasInput dataEmit={this.dataEmit}/>
@@ -144,11 +179,11 @@ class NewsGroup extends React.Component {
               <Grid item sm={6} className={classes.card}>
                 <Logger className={classes.logger}/>
               </Grid>
-              
             </Grid>            
           </div>
         );
     }
 }
-const NewsGroupDemo = withStyles(styles)(NewsGroup);
-ReactDOM.render(<NewsGroupDemo/>, document.getElementById("content"));
+
+const MNISTDemo = withStyles(styles)(MNIST);
+ReactDOM.render(<MNISTDemo/>, document.getElementById("content"));

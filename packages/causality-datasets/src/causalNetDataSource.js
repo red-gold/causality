@@ -2,7 +2,7 @@ import { Event } from 'causal-net.core';
 import { default as functor } from './functor';
 import { platform, jsonUtils } from 'causal-net.utils';
 import { causalNetSampling, SamplingMixins } from 'causal-net.sampling';
-import { PNGReaderMixins, BufferReaderMixins } from './Readers/init';
+import { PNGReaderMixins, BufferReaderMixins, CSVReaderMixins } from './Readers/init';
 import { termLogger, LoggerMixins } from 'causal-net.log';
 /**
  * This CausalNetDataSource class provides a standard implementation for pipeline Source.
@@ -74,6 +74,10 @@ class CausalNetDataSource extends platform.mixWith( Event, [
         return this.labelReader;
     }
 
+    get DataReader(){
+        return this.dataReader;
+    }
+
     setChunks(description){
         const { SampleChunkName, LabelChunkName, ChunkList } = description;
         if(!SampleChunkName || !LabelChunkName || !ChunkList ){
@@ -89,12 +93,25 @@ class CausalNetDataSource extends platform.mixWith( Event, [
     setDataReader(description){
         const SampleType = description.SampleType;
         const LabelType = description.LabelType;
+        const DataType = description.DataType;
         const BaseLink = description.BaseLink;
         if(SampleType === 'Image/PNG'){
             this.sampleReader = this.makePNGReader(BaseLink);
         }
         if(LabelType === 'Buffer/OneHot'){
             this.labelReader = this.makeBufferReader(BaseLink);
+        }
+        if(SampleType === 'Text/CSV'){
+            const SampleAttributes = description.DataLabel;
+            this.sampleReader = this.makeCSVReader(BaseLink, SampleAttributes, null);
+        }
+        if(LabelType === 'Text/CSV'){
+            this.labelReader = this.makeCSVReader(BaseLink, null, LabelAttributes);
+        }
+        if(DataType === 'Text/CSV'){
+            const SampleAttributes = description.DataLabel;
+            const LabelAttributes = description.DataLabel;
+            this.dataReader = this.makeCSVReader(BaseLink, SampleAttributes, LabelAttributes);
         }
     }
 
@@ -117,10 +134,17 @@ class CausalNetDataSource extends platform.mixWith( Event, [
         let selectedChunks = this.selectedChunks;
         const SampleReader = this.SampleReader;
         const LabelReader = this.LabelReader;
+        const DataReader = this.DataReader;
         return new Promise(async (resolve, reject)=>{
             for(let { Sample, Label, ChunkName } of selectedChunks ){
-                let sampleData = await SampleReader(Sample);
-                let labelData = await LabelReader(Label);
+                if(Sample === Label){
+                    var [sampleData, labelData] = await DataReader(Sample);
+                }
+                else{
+                    var sampleData = await SampleReader(Sample);
+                    var labelData = await LabelReader(Label);
+                }
+                
                 if(sampleData.length !== labelData.length){
                     reject('lengths of sample and label are not the same');
                 }

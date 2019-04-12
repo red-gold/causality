@@ -54,20 +54,4 @@ for sp in subPackages:
     print('publish success: {} version {}'.format(sp, new_version))
     print('...................')
 
-print('publish: causalNet')
-package['private'] = False
-del package['workspaces']
-with open('package.json','w') as f:
-    json.dump(package, f, indent=4)
-try: 
-    subprocess.check_call(['yarn', 'publish', '--new-version', '{}'.format(new_version)])
-except:
-    pass #sometime publish yeild error even success
-print('...................')
-print('publish success to version {}'.format(new_version))
-#restore private
-package['private'] = True
-package['workspaces'] = workspaces
-package['version'] = new_version
-with open('package.json','w') as f:
-    json.dump(package, f, indent=4)
+
