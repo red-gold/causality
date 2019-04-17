@@ -17,8 +17,6 @@
     "build:prod": "webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
-    "@tensorflow/tfjs": "^0.14.1",
-    "@tensorflow/tfjs-tsne": "^0.2.0",
     "causal-net.storage": "*"
   },
   "devDependencies": {

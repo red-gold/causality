@@ -17,11 +17,10 @@
     "build:prod-maxheap": "node --max_old_space_size=8096 /usr/local/bin/webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
-    "@tensorflow-models/universal-sentence-encoder": "^0.0.4",
-    "@tensorflow/tfjs": "1.0.0-alpha3",
     "causal-net.core": "*",
     "causal-net.storage": "*",
     "causal-net.utils": "*",
+    "tfjs-models.use-embedding": "^0.0.4-rv4",
     "tsne-js": "^1.0.3"
   },
   "devDependencies": {

@@ -3,7 +3,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const DemoConfig = {
     entry: {
-        'representation-demo': './src/respresentation.js',
+        'representation-demo': './src/representation.js',
         'mnist-demo': './src/mnist.js',
         '20newsgroup-demo': './src/20newsgroup.js'
     },
@@ -54,7 +54,7 @@ const DemoConfig = {
             title: 'representation demo',
             chunks: ['representation-demo','vendors'],
             filename: 'representation.html',
-            template: './templates/representation.html'
+            template: './templates/causality.html'
         }),
         new HtmlWebpackPlugin({
             title: 'digits classification demo',

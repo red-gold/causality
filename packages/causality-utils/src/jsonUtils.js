@@ -63,7 +63,7 @@ class JSONUtils{
      * @returns { Promise } - data promise with data if success
      * @memberof JSONUtils
      */
-    readJSON(filePath){
+    async readJSON(filePath){
         const fs = this.fs, json = this.json;
         if(!fs.readFile){
             throw Error('method is not supported');
@@ -78,6 +78,15 @@ class JSONUtils{
                 }
             });
         });
+    }
+
+    async queryJSON(link){
+        if(link.startsWith('http')){
+            return await this.fetchJSON(link);
+        }
+        else{
+            return await this.readJSON(link);
+        }
     }
 }
 

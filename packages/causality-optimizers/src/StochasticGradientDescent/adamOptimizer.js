@@ -9,6 +9,7 @@ export default class AdamOptimizer extends platform.mixWith(BaseTensor,
         let DefaultParameters = {beta1: 0.1, beta2: 0.2, epsilon:0.03};
         const {learningRate, beta1, beta2, epsilon} = functor.mergeParams(optimizerParams, DefaultParameters);
         this.params = { learningRate, beta1, beta2, epsilon };
+        console.log({'this is adam': this.T.train.adam});
         this.trainer = this.T.train.adam(learningRate, beta1, beta2, epsilon);
     }
 

@@ -7,9 +7,8 @@
  */
 export default class Tensor{
     constructor(){
-        this.T = require('@tensorflow/tfjs');
-        require('@tensorflow/tfjs-node');
-        require('@tensorflow/tfjs-node-gpu');
+        this.T = require('@tensorflow/tfjs-node');
+        // require('@tensorflow/tfjs-node-gpu');
     }
     /**
      * This method return the core tensor instance

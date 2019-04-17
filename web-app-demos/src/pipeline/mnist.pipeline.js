@@ -29,13 +29,13 @@ const PipeLineConfigure = {
         },
         Deployment: {
             Emitter: async ()=> {
-                let image = await new Promise((resolve, reject)=>{
+                let {data, size} = await new Promise((resolve, reject)=>{
                                             promiseEmitter.resolve = resolve;
                                             promiseEmitter.reject = reject;
                                         });
-                let rescaledImage = imagePreprocessing.imageResize(image, [150, 150], [28, 28]);
-                let data = imagePreprocessing.oneBitTransform(rescaledImage);
-                return {Predict: data};
+                let rescaledImage = imagePreprocessing.imageResize(data, size, [28, 28]);
+                let sdata = imagePreprocessing.oneBitTransform(rescaledImage);
+                return {Predict: sdata};
             },
             Listener: null
         }

@@ -137,8 +137,9 @@ class MNIST extends React.Component {
       this.setState({saveModels: modelList});
     }
 
-    dataEmit(text){
-        this.promiseEmitter.resolve(text);
+    dataEmit({data, size}){
+        termLogger.plot({type:'png', data: data, width: size[0], height:size[1]});
+        this.promiseEmitter.resolve({data, size});
     }
 
     modelListener(infer){

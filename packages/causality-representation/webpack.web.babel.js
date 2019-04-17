@@ -12,8 +12,7 @@ const WebConfig = merge(common, {
     globalObject: 'this'
   },
   externals:[ 'causal-net.utils', 'causal-net.core', 'causal-net.storage', 'causal-net.memcache',
-              '@tensorflow/tfjs', 
-              '@tensorflow-models/universal-sentence-encoder', 'tsne-js']
+              'tfjs-models.use-embedding', 'tsne-js']
 });
 
 export default WebConfig;

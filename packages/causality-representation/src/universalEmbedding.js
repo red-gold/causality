@@ -20,16 +20,16 @@ class UniversalEmbedding extends platform.mixWith(Tensor,
         /**
          * @private { TensorModel } 
          */
-        this.use = require('@tensorflow-models/universal-sentence-encoder');
+        this.use = require('tfjs-models.use-embedding');
         this.model = null;
     }
     
-    async connect(){
+    async connect(link){
         if(global){
             //TODO: make better with platform
             global.fetch = fetch.fetch;
         }
-        this.model = await this.use.load();
+        this.model = await this.use.load(link);
         return this;
     }
 

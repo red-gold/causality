@@ -1,16 +1,15 @@
 import ReactDOM from "react-dom";
-import React  from "react";
+import React from "react";
 import { default as Logger } from './components/logger';
-import { default as Model } from './components/model';
-import { default as Parameters } from './components/parameters';
-import { default as CanvasInput } from './components/canvasInput';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { causalNet } from 'causal-net'; 
 import { termLogger } from 'causal-net.log'; 
+import { causalNet } from 'causal-net'; 
 import { indexDBStorage } from 'causal-net.storage'; 
 import TextField from '@material-ui/core/TextField';
-import { PipeLineConfigure, Connector } from './pipeline/mnist.pipeline';
+import { PipeLineConfigure, Connector } from './pipeline/20newsgroup.pipeline';
+
+import { default as Model } from './components/model';
 const styles = theme => ({
   logger:{
     height: 600,
@@ -38,12 +37,13 @@ const styles = theme => ({
   }
   
 });
-class MNIST extends React.Component {
+class News20Group extends React.Component {
     state = {
       onWaiting: false,
       dataPreprocessed: false,
       saveModels: [],
       dataChunks: 0,
+      inputText: ''
     }
     constructor(props) {
         super(props);
@@ -57,11 +57,12 @@ class MNIST extends React.Component {
         this.setEnsembleModels = this.setEnsembleModels.bind(this);
         this.resetStorage = this.resetStorage.bind(this);
         this.modelListener = this.modelListener.bind(this);
+        this.keyPress = this.keyPress.bind(this);
     }
     componentDidMount() {
         this.setState({onWaiting: true});
         const init = async()=>{
-            termLogger.connect('#logger');
+          termLogger.connect('#logger');
             const sourceLink = 'http://0.0.0.0:5000/MNIST_dataset/';
             let {dataChunks, promiseEmitter} = 
               await Connector({ sourceLink, listener: this.modelListener });
@@ -138,10 +139,17 @@ class MNIST extends React.Component {
       this.setState({saveModels: modelList});
     }
 
-    dataEmit(image){
-        termLogger.plot({type: 'png', data: image, width: 150, height: 150});
-        this.promiseEmitter.resolve(image);
+    dataEmit(e){
+        this.setState({ inputText: e.target.value });
+        
     }
+
+    keyPress(e){
+      if(e.keyCode == 13){
+        termLogger.log({'input new text': e.target.value});
+        this.promiseEmitter.resolve(e.target.value);
+      }
+   }
 
     modelListener(infer){
       const { Predict } = infer;
@@ -153,7 +161,7 @@ class MNIST extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { dataPreprocessed, onWaiting, dataChunks, saveModels } = this.state;
+        const { dataPreprocessed, onWaiting, dataChunks, saveModels, inputText } = this.state;
         let handlers = { fetchChunkHandler: this.fetchChunks, 
                          splitDataHandler: this.splitData, 
                          trainHandler: this.train, 
@@ -166,7 +174,7 @@ class MNIST extends React.Component {
             <Grid container spacing={16} justify="center" className={classes.layout}>
               <Grid item sm={12} className={classes.card}>
                 <p>
-                  This is ensemble demo for training digit recognition model with MNIST image dataset.
+                  This is ensemble demo for training text label with 20 news group dataset.
                 </p>
               </Grid>
               <Grid item sm={6} className={classes.card}>
@@ -175,8 +183,14 @@ class MNIST extends React.Component {
                   dataChunks={dataChunks} 
                   saveModels={saveModels}
                   handlers={handlers} />
-                <Parameters/>
-                <textarea dataEmit={this.dataEmit}/>
+                <TextField
+                  id="standard-name"
+                  label="input sentence to detect topic"
+                  className={classes.textField}
+                  value={inputText}
+                  onKeyDown={this.keyPress} 
+                  onChange={this.dataEmit}
+                />
               </Grid>
               <Grid item sm={6} className={classes.card}>
                 <Logger className={classes.logger}/>
@@ -187,5 +201,5 @@ class MNIST extends React.Component {
     }
 }
 
-const MNISTDemo = withStyles(styles)(MNIST);
-ReactDOM.render(<MNISTDemo/>, document.getElementById("content"));
+const News20GroupDemo = withStyles(styles)(News20Group);
+ReactDOM.render(<News20GroupDemo/>, document.getElementById("content"));

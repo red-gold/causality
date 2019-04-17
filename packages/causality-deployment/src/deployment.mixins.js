@@ -28,7 +28,9 @@ const DeploymentMixins = (BasePipelineClass)=> class extends BasePipelineClass {
             let infer = {};
             const Model = ModelLenses();
             if(Predict){
+                console.log(Predict);
                 let inputTensor = T.tensor(Predict).asType('float32').reshape([1, -1]);
+                inputTensor.print();
                 let predictTensor = Model.Predict(inputTensor);
                 infer.Predict = await predictTensor.data();
             }

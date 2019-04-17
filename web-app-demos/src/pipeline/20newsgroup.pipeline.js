@@ -1,50 +1,60 @@
-import { causalNetSGDOptimizer } from 'causal-net.optimizers';
-import { causalNetModels } from 'causal-net.models';
-import { causalNetParameters, causalNetLayers } from 'causal-net.layer';
-import { causalNetDataSource } from 'causal-net.datasets';
-const DummyData = (batchSize)=>{
-        let samples = [ [0,1,2,3], 
-                        [0,1,2,3], 
-                        [0,1,2,3] ];
-        let labels  = [ [1,0], 
-                        [1,0], 
-                        [1,0] ];
-        return [{samples, labels}];
-    };
-    let emitCounter = 0;
+// import { causalNetSGDOptimizer } from 'causal-net.optimizers';
+// import { causalNetModels } from 'causal-net.models';
+// import { causalNetParameters, causalNetLayers } from 'causal-net.layer';
+// import { causalNetDataSource } from 'causal-net.datasets';
+let promiseEmitter = {};
+let adam = {};//causalNetSGDOptimizer.adam({learningRate: 0.01});
+import { universalEmbedding } from 'causal-net.representation';
 const PipeLineConfigure = {
-        Dataset: {
-            TrainDataGenerator: DummyData,
-            TestDataGenerator: DummyData
+        Dataset: { 
+            Source: ()=>{},
+            Preprocessing:{
+                SampleTransformer: (data)=>{
+                    data = imagePreprocessing.oneBitTransform(data);
+                    return data;
+                },
+                LabelTransformer: (data)=>{
+                    return data;
+                }
+            } 
         },
         Net: { 
-                Parameters: causalNetParameters.InitParameters(),
+                Parameters: ()=>{},
                 Layers: { 
-                    Predict: [  causalNetLayers.dense(28*28*4,10) ]
+                    Predict: [  ()=>{} ]
                 },
-                Model: causalNetModels.classification(2),
-                Optimizer: causalNetSGDOptimizer.adam({learningRate: 0.1})
+                Model: ()=>{},
+                Optimizer: adam
         },
         Deployment: {
-            Emitter: async ()=>{
-                return new Promise((resolve, reject)=>{
-                    setTimeout(()=>{
-                        let data = (emitCounter < 3)
-                                        ?{Predict: [0,1,2,3], EnsemblePredict: [0,1,2,3]}
-                                        :null;
-                        emitCounter += 1;
-                        console.log({ emitter: data});
-                        resolve(data);
-                    }, 1000);
-                });
+            Emitter: async ()=> {
+                let sentence = await new Promise((resolve, reject)=>{
+                                            promiseEmitter.resolve = resolve;
+                                            promiseEmitter.reject = reject;
+                                        });
+                console.log(sentence);
+                let sentVec = await universalEmbedding.sentenceEncode([ sentence ]);
+                sentVec.print();
+                let data = await sentVec.data();
+                return {Predict: Array.from(data)};
             },
-            Listener: async (infer)=>{
-                console.log({ Listener: infer});
-            }
+            Listener: null
         }
     };
-const Connector = async ({sourceLink})=>{
-    let description = await causalNetDataSource.connect(sourceLink);
-    return {sourceLink: description};
+
+const Connector = async ({sourceLink, listener})=>{
+    console.log('20 newsgroup pipeline is call');
+    var tf = require('@tensorflow/tfjs');
+    console.log(tf);
+    await universalEmbedding.connect();
+    let sentVec = await universalEmbedding.sentenceEncode([ 'this is' ]);
+    sentVec.print();
+    console.log(tf);
+    await causalNetDataSource.connect(sourceLink);
+    let dataChunks = causalNetDataSource.DataChunks;
+    PipeLineConfigure.Deployment.Listener = listener;
+    return {dataChunks, promiseEmitter};
 };
+Connector({});
+// let PipeLineConfigure = {};
 export { PipeLineConfigure, Connector };

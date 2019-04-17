@@ -17,9 +17,9 @@
     "build:prod": "webpack --config webpack.prod.babel.js"
   },
   "dependencies": {
-    "@tensorflow/tfjs": "^0.14.1",
-    "@tensorflow/tfjs-node": "^0.2.3",
-    "@tensorflow/tfjs-node-gpu": "^0.2.3",
+    "@tensorflow/tfjs": "latest",
+    "@tensorflow/tfjs-node": "latest",
+    "@tensorflow/tfjs-node-gpu": "latest",
     "ramda": "^0.26.1"
   },
   "devDependencies": {

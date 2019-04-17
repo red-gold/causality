@@ -2,7 +2,7 @@ import { resolve } from 'path';
 import Bundle from './bundle.json';
 import merge from 'webpack-merge';
 import common from './webpack.common.babel';
-
+//TODO: implement GPU load
 const WebConfig = merge(common, {
   output: {
     path: resolve(__dirname, 'dist'),

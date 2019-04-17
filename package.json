@@ -2,6 +2,7 @@
     "workspaces": [
         "packages/*",
         "notebooks/",
+        "causal-doc/",
         "web-app-demos/"
     ], 
     "name": "causal-net", 

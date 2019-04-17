@@ -18,27 +18,32 @@ class CanvasInput extends React.Component {
       this.draw = this.draw.bind(this);
     }
 
+
     componentDidMount() {
         let canvas = this.canvasRef.current;
-        const {left, top, x, y} = canvas.getBoundingClientRect();
-        console.log({left, top, x, y});
+        const {left, top, x, y, offsetTop, offsetLeft } = canvas.getBoundingClientRect();
+        
         this.canvasLeft = x;
         this.canvasTop = y;
     }
 
     draw(event, begin, end, onDraw){
-        var context = canvas.getContext('2d');
-        const Coodinator = (event)=>{
-            return { x: event.clientX - this.canvasLeft, 
-                     y: event.clientY - this.canvasTop };
+        
+        const Coodinator = (evt)=>{
+            let canvas = this.canvasRef.current;
+            var rect = canvas.getBoundingClientRect();
+            return {
+                x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+                y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+            };
         };
         var start = function(coors) {
-            console.log({coors});
+            let context = canvas.getContext('2d');
             context.beginPath();
             context.moveTo(coors.x, coors.y);
         };
         var move = function(coors) {
-            console.log({coors});
+            let context = canvas.getContext('2d');
             context.strokeStyle = "#fff";
             context.lineJoin = "round";
             context.lineWidth = 3;
@@ -51,11 +56,21 @@ class CanvasInput extends React.Component {
         }
         if(end && onDraw){
             this.setState({onDraw:false});
-            let data = context.getImageData(0, 0, 150, 150).data;
-            context = canvas.getContext('2d');
-            context.clearRect(0, 0, 150, 150);
+            let canvas = this.canvasRef.current;
+            let context = canvas.getContext('2d');
+            var rect = canvas.getBoundingClientRect();
+            console.log([canvas.width, canvas.height, rect.right, rect.left, rect.bottom, rect.top]);
+            var sX = canvas.width;
+            var sY = canvas.height;
+            let data = Array.from(context.getImageData(0, 0, sX, sY).data);
+            context.clearRect(0, 0, sX, sY);
+            context.beginPath();
+            context.fillStyle = "rgba(0, 0, 0, 0)";
+            context.fillRect(0, 0, sX, sY);
+            context.stroke();
+
             if(this.props.dataEmit){
-                this.props.dataEmit(data);
+                this.props.dataEmit({data, size:[sX, sY]});
             }
         }
         if(onDraw){
