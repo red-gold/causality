@@ -1,13 +1,14 @@
-// import { causalNetSGDOptimizer } from 'causal-net.optimizers';
-// import { causalNetModels } from 'causal-net.models';
-// import { causalNetParameters, causalNetLayers } from 'causal-net.layer';
-// import { causalNetDataSource } from 'causal-net.datasets';
-let promiseEmitter = {};
-let adam = {};//causalNetSGDOptimizer.adam({learningRate: 0.01});
+import { causalNetSGDOptimizer } from 'causal-net.optimizers';
+import { causalNetModels } from 'causal-net.models';
+import { causalNetParameters, causalNetLayers } from 'causal-net.layer';
+import { causalNetDataSource } from 'causal-net.datasets';
+import { tokenizer } from 'causal-net.preprocessing';
 import { universalEmbedding } from 'causal-net.representation';
+import { indexDBStorage } from 'causal-net.storage'; 
+let promiseEmitter = {};
 const PipeLineConfigure = {
         Dataset: { 
-            Source: ()=>{},
+            Source: causalNetDataSource,
             Preprocessing:{
                 SampleTransformer: (data)=>{
                     data = imagePreprocessing.oneBitTransform(data);
@@ -19,12 +20,12 @@ const PipeLineConfigure = {
             } 
         },
         Net: { 
-                Parameters: ()=>{},
+                Parameters: causalNetParameters.InitParameters({}),
                 Layers: { 
-                    Predict: [  ()=>{} ]
+                    Predict: [ causalNetLayers.dense(512,10) ]
                 },
-                Model: ()=>{},
-                Optimizer: adam
+                Model: causalNetModels.classification(10),
+                Optimizer: causalNetSGDOptimizer.adam({learningRate: 0.01})
         },
         Deployment: {
             Emitter: async ()=> {
@@ -32,29 +33,23 @@ const PipeLineConfigure = {
                                             promiseEmitter.resolve = resolve;
                                             promiseEmitter.reject = reject;
                                         });
-                console.log(sentence);
-                let sentVec = await universalEmbedding.sentenceEncode([ sentence ]);
-                sentVec.print();
-                let data = await sentVec.data();
-                return {Predict: Array.from(data)};
+                const asEncode = true;
+                let tokens = tokenizer.tokenize(sentence, asEncode);
+                let sentVec = await universalEmbedding.transform(tokens);
+                return {Predict: sentVec};
             },
             Listener: null
         }
     };
 
 const Connector = async ({sourceLink, listener})=>{
-    console.log('20 newsgroup pipeline is call');
-    var tf = require('@tensorflow/tfjs');
-    console.log(tf);
-    await universalEmbedding.connect();
-    let sentVec = await universalEmbedding.sentenceEncode([ 'this is' ]);
-    sentVec.print();
-    console.log(tf);
+    console.log('20 newsgroup pipeline is call', sourceLink);
+    await tokenizer.connect('http://0.0.0.0:5050/use/vocab.json');
+    await indexDBStorage.connect('20newsgroup');
+    await universalEmbedding.connect('http://0.0.0.0:5050/use/tensorflowjs_model.json');
     await causalNetDataSource.connect(sourceLink);
     let dataChunks = causalNetDataSource.DataChunks;
     PipeLineConfigure.Deployment.Listener = listener;
     return {dataChunks, promiseEmitter};
 };
-Connector({});
-// let PipeLineConfigure = {};
 export { PipeLineConfigure, Connector };

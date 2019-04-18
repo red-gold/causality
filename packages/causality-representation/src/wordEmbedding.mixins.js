@@ -18,7 +18,7 @@ const WordEmbeddingMixins = (BaseEmbeddingClass)=> class extends BaseEmbeddingCl
      * @param { Array } tokens - array of string tokens of sentence
      * @returns { Tensor } encoded sentences
      */
-    async sentenceEncode(sentences){
+    async sentenceEncode(sentences, asTensor=true){
         const T = this.T;
         let encodedSentences = [];
         for(let tokens of sentences){
@@ -26,7 +26,15 @@ const WordEmbeddingMixins = (BaseEmbeddingClass)=> class extends BaseEmbeddingCl
             let encode = await T.tensor(vecs).mean(0);
             encodedSentences.push(encode);
         }
-        return T.stack(encodedSentences);
+        let sentTensor = T.stack(encodedSentences);
+        if(asTensor){
+            return sentTensor;
+        }
+        else{
+            let vecs = await sentTensor.data();
+            return this.R.splitEvery(this.VecSize, vecs);
+        }
+        
     }
     /**
      * Transform tokenized sentences into tensor vectors

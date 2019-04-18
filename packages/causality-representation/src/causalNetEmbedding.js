@@ -34,6 +34,7 @@ class CausalNetEmbedding extends platform.mixWith(BaseTensor,
         this.Storage = storage;   //store configure
         this.MemCache = cache;    //store chunks
         this.F = functor;
+        this.R = this.F.CoreFunctor;
         this.embeddingSavePath = '/embedding/';
         this.embeddingDescriptionPath = this.embeddingSavePath + 'description.json';
     }

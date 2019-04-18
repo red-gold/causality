@@ -9,11 +9,12 @@ import { termLogger, LoggerMixins } from 'causal-net.log';
  * { mixWith: [ SamplingMixins, PNGReaderMixins, BufferReaderMixins ]}
  * @class CausalNetDataSource
  * @extends Event
+ * @experiment
  * @example
  * [EXAMPLE ../examples/causalNetDataSource.js]
  */
 class CausalNetDataSource extends platform.mixWith( Event, [
-    SamplingMixins, PNGReaderMixins, LoggerMixins, BufferReaderMixins ] ){
+    SamplingMixins, PNGReaderMixins, CSVReaderMixins, LoggerMixins, BufferReaderMixins ] ){
     /**
      *Creates an instance of CausalNetDataSource.
      * @param {Functor} functor
@@ -41,6 +42,7 @@ class CausalNetDataSource extends platform.mixWith( Event, [
         this.description.BaseLink = baseLink;
         this.setChunks(this.description);
         this.setDataReader(this.description);
+        this.setSampleSize(this.description);
         this.Logger.groupEnd();
         return this.description;
     }
@@ -78,6 +80,27 @@ class CausalNetDataSource extends platform.mixWith( Event, [
         return this.dataReader;
     }
 
+    get SampleSize(){
+        if(!this.sampleSize){
+            throw Error('SampleSize is not set');
+        }
+        return this.sampleSize;
+    }
+
+    setSampleSize(description){
+        let { SampleSize } = description;
+        if(!SampleSize){
+            throw Error(`expect { SampleSize }  get ${JSON.stringify(description, null, 4)}`);
+        }
+        if(Array.isArray(SampleSize)){
+            this.sampleSize = SampleSize.reduce((s,d)=>s*d);
+        }
+        else{
+            this.sampleSize = SampleSize;
+        }
+        
+    }
+
     setChunks(description){
         const { SampleChunkName, LabelChunkName, ChunkList } = description;
         if(!SampleChunkName || !LabelChunkName || !ChunkList ){
@@ -101,24 +124,22 @@ class CausalNetDataSource extends platform.mixWith( Event, [
         if(LabelType === 'Buffer/OneHot'){
             this.labelReader = this.makeBufferReader(BaseLink);
         }
+        const SampleAttributes = description.SampleAttributes;
+        const LabelAttributes = description.LabelAttributes;
         if(SampleType === 'Text/CSV'){
-            const SampleAttributes = description.DataLabel;
             this.sampleReader = this.makeCSVReader(BaseLink, SampleAttributes, null);
         }
         if(LabelType === 'Text/CSV'){
             this.labelReader = this.makeCSVReader(BaseLink, null, LabelAttributes);
         }
         if(DataType === 'Text/CSV'){
-            const SampleAttributes = description.DataLabel;
-            const LabelAttributes = description.DataLabel;
             this.dataReader = this.makeCSVReader(BaseLink, SampleAttributes, LabelAttributes);
         }
     }
 
     splitSample(data){
-        const SamplePerChunk = this.description.SamplePerChunk;
-        const sampleSize = data.length / SamplePerChunk;
-        return this.R.splitEvery(sampleSize, data);
+        const SampleSize = this.SampleSize;
+        return this.R.splitEvery(SampleSize, data);
     }
 
     chunkSelect(numChunks){

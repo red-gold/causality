@@ -1,15 +1,18 @@
-// import { universalEmbedding } from 'causal-net.representation';
+import { universalEmbedding } from 'causal-net.representation';
 import { termLogger } from 'causal-net.log';
-import { causalNetCore } from 'causal-net.core';
+import { tokenizer } from 'causal-net.preprocessing';
 (async ()=>{
     termLogger.groupBegin('load model');
-    const T = causalNetCore.CoreTensor;
-    var model = await T.loadGraphModel('http://0.0.0.0:5050/use/'+'tensorflowjs_model.json');
-    // let model = await T.loadGraphModel('http://0.0.0.0:5050/use/'+'tensorflowjs_model.json');
+    await tokenizer.connect('http://0.0.0.0:5050/use/vocab.json');
+    await universalEmbedding.connect('http://0.0.0.0:5050/use/'+'tensorflowjs_model.json');
     termLogger.log('load finish');
-    let predict = await model.executeAsync({indices: T.tensor([[0,0]]).asType('int32'), values: T.tensor([8]).asType('int32')});
-    predict.print();
+    const asEncode = true;
+    let tokens = [tokenizer.tokenize('dog', asEncode),
+                  tokenizer.tokenize('cat', asEncode)]; 
+    termLogger.log({tokens});
+    let sentVec = await universalEmbedding.sentenceEncode(tokens);
+    sentVec.print();
+    let score = await universalEmbedding.encodeMatching(tokens[0], tokens[1]);
+    score.print();
     termLogger.groupEnd();
-    // let sentVec = await universalEmbedding.sentenceEncode([ 'this is test' ]);
-    // sentVec.print();
 })().catch(console.err);        

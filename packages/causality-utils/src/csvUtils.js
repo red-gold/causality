@@ -35,11 +35,12 @@ class CSVUtils{
             let csv = CSV();
             let csvHeaders = [];
             csv.on('headers', (headers) => csvHeaders=headers);
-            csv.on('end', ()=>{
-                resolve(data);
-            });
+            csv.on('end', ()=>{resolve(data);});
             csv.on('data',(row)=>{
-                data.push(row);
+                data.push(csvHeaders.reduce((s,h)=>{
+                    s[h]=row[h];
+                    return s;
+                },{}));
             });
             reader.pipe(csv);
         });
@@ -58,7 +59,13 @@ class CSVUtils{
             let strHeader = header.join(',');
             reader.push(strHeader);
             data.forEach(row=>{ 
-                let strRow = '\n'+header.map(h=>row[h]).join(',');
+                let strRow = '\n'+header.map(h=>{
+                    let col = row[h];
+                    if(/[\n\t,]/gm.test(col)){
+                        col = `"${col}"`;
+                    }
+                    return col;
+                }).join(',');
                 reader.push(strRow);
             });
             reader.push(null);

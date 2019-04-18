@@ -16,9 +16,14 @@ class Tokenizer{
         this.vocab = await jsonUtils.queryJSON(link);
         this.model = new SentencePieceModel(this.vocab);
     }
-    tokenize(text){
+    tokenize(text, asEncode=true){
         let wids =  this.encode(text);
-        return wids.map(id=>this.vocab[id][0]);
+        if(asEncode){
+            return wids;
+        }
+        else{
+            return wids.map(id=>this.vocab[id][0]);
+        }
     }
     encode(text){
         if(!this.model){

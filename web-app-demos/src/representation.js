@@ -56,9 +56,9 @@ class MNIST extends React.Component {
     componentDidMount() {
         this.setState({onWaiting: true}); 
         const init = async()=>{
-          termLogger.connect('#log');
+          termLogger.connect('#logger');
           termLogger.groupBegin('compare sentences');
-          await universalEmbedding.connect();
+          await universalEmbedding.connect('http://0.0.0.0:5050/use/tensorflowjs_model.json');
           let sentenceA = 'this is';
           let sentenceB = 'this is';
           console.log({ sentenceA, sentenceB});
@@ -68,7 +68,7 @@ class MNIST extends React.Component {
         //   let matchScore = await resultScore.data();
         //   console.log({'matching score': matchScore[0], sentenceA, sentenceB});
           termLogger.groupEnd();
-        //   this.setState({ onWaiting: false});
+          // this.setState({ onWaiting: false});
         };
         init();
     }

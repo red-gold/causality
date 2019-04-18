@@ -1,17 +1,46 @@
 import { csvUtils } from 'causal-net.utils';
 const CSVReaderMixins = ( BaseDataSource ) => class extends BaseDataSource {
-    makeCSVReader(baseLink){
-        
+    extractingAttribute(rows, sampleAttributes=[], labelAttributes=[]){
+        let samples = [], labels = [];
+        let i = 0;
+        for(let row of rows){
+            
+            if(sampleAttributes.length){
+                samples.push(sampleAttributes.map(k=>row[k]));
+            }
+            if(labelAttributes.length){
+                labels.push(labelAttributes.map(k=>row[k]));
+            }
+            if(i===0){
+                i += 1;
+                console.log({row, samples, labels});
+            }
+            
+        }
+        if(samples.length>0 && labels>0){
+            return [samples, labels];
+        }
+        else if(samples.length>0){
+            return samples;
+        }
+        else if(labels.length>0){
+            return labels;
+        }
+        else{
+            throw Error(`${JSON.stringify(rows)} do not match ${sampleAttributes} and ${labelAttributes}`);
+        }
+    }
+    makeCSVReader(baseLink, sampleAttributes=[], labelAttributes=[]){
         if( baseLink.startsWith('http') ){
             return async (fileName) => {
-                let data = await csvUtils.fetchBuffer(baseLink + fileName);
-                return this.splitSample(data);
+                let rows = await csvUtils.fetchCSV(baseLink + fileName);
+                return this.extractingAttribute(rows, sampleAttributes, labelAttributes);
             };
         }
         else{
             return async (fileName) => { 
-                let data = await csvUtils.readBuffer(baseLink + fileName);
-                return this.splitSample(data); 
+                let rows = await csvUtils.readCSV(baseLink + fileName);
+                return this.extractingAttribute(rows, sampleAttributes, labelAttributes);
             };
         }
     }

@@ -1,5 +1,6 @@
 import { platform, fetch } from 'causal-net.utils';
 import { Tensor } from 'causal-net.core';
+import { default as functor } from './functor';
 import { default as VectorMetricMixins } from './vectorMetrics.mixins';
 
 /**
@@ -15,30 +16,48 @@ import { default as VectorMetricMixins } from './vectorMetrics.mixins';
 class UniversalEmbedding extends platform.mixWith(Tensor, 
     [ VectorMetricMixins ]){
     
-    constructor(){
+    constructor(functor){
         super();
         /**
          * @private { TensorModel } 
          */
-        this.use = require('tfjs-models.use-embedding');
         this.model = null;
+        this.f = functor;
+        this.R = this.f.CoreFunctor;
+        this.vecSize = 512;
     }
     
     async connect(link){
-        if(global){
-            //TODO: make better with platform
-            global.fetch = fetch.fetch;
-        }
-        this.model = await this.use.load(link);
+        this.model = await this.T.loadGraphModel(link);
         return this;
     }
 
-    async sentenceEncode(sentences){
+    async sentenceEncode(sentences, asTensor=true){
         if(!this.model){
             throw Error(`model is not connect`);
         }
-        let embeddings = await this.model.embed(sentences);
-        return embeddings;
+        const T = this.T;
+        //only one sentence
+        let embeddings = [];
+        for(let tokenIdxs of sentences){
+            let idxs = tokenIdxs.map((t,i)=>[0,i]);
+            let indices = T.tensor(idxs, [tokenIdxs.length, 2], 'int32');
+            let values = T.tensor(tokenIdxs, [tokenIdxs.length], 'int32');
+            embeddings.push( await this.model.executeAsync({indices, values}) );
+        }
+        let sentTensor = T.stack(embeddings);
+        if(asTensor){
+            return sentTensor;
+        }
+        else{
+            let vec = await sentTensor.data();
+            sentTensor.dispose();
+            return this.R.splitEvery(this.vecSize, vec);
+        }
+    }
+
+    async transform(tokenIdxs){
+        return this.sentenceEncode([tokenIdxs], false);
     }
 }
-export default new UniversalEmbedding();
+export default new UniversalEmbedding(functor);
