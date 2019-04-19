@@ -26,11 +26,11 @@ const WebStreamMixins = (FetchClass)=> class extends FetchClass{
                 streamReader.read().then(({ value, done })=>{
                     if (done) {
                         reader.push(null);
-                        resolve(0);
+                        resolve(false);
                     }
                     else{
-                        reader.push(value);
-                        resolve(1);
+                        reader.push(Buffer.from(value));
+                        resolve(true);
                     }
                 });
             });

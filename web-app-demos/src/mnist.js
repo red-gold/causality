@@ -59,7 +59,8 @@ class MNIST extends React.Component {
     }
     componentDidMount() {
         this.setState({onWaiting: true});
-        const init = async()=>{
+        const init = async ()=>{
+            console.log(document.getElementById('logger'));
             termLogger.connect('#logger');
             const sourceLink = 'http://0.0.0.0:5000/MNIST_dataset/';
             let {dataChunks, promiseEmitter} = 

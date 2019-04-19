@@ -10,18 +10,6 @@
   "dependencies": {
     "@material-ui/core": "^3.9.3",
     "@material-ui/lab": "^3.0.0-alpha.30",
-    "causal-net": "*",
-    "causal-net.core": "*",
-    "causal-net.datasets": "*",
-    "causal-net.deployment": "*",
-    "causal-net.layer": "*",
-    "causal-net.log": "*",
-    "causal-net.memcache": "*",
-    "causal-net.optimizers": "*",
-    "causal-net.preprocessing": "*",
-    "causal-net.sampling": "*",
-    "causal-net.storage": "*",
-    "causal-net.utils": "*",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },

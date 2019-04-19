@@ -9,6 +9,7 @@ export default class Logger extends React.Component {
     }
 
     componentDidMount() {
+      console.log('logger mount');
     }
     
     render() {

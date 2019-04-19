@@ -3,9 +3,11 @@ const LogWebMixins = (LogClass)=> class extends LogClass{
     connect(target=null){
         let documentEl = target?document.getElementById(target.replace('#','')):document.body;
         this.target = target;
+        
         let node = document.createElement("ul");
         node.style.cssText = "list-style-type: none;";
         documentEl.appendChild(node);
+        console.log({documentEl, node});
         this.frameEl = documentEl;
         this.loggerEl = documentEl.getElementsByTagName("ul")[0];
         this.colorCode = { debug: '#f1f1f1',
@@ -50,8 +52,11 @@ const LogWebMixins = (LogClass)=> class extends LogClass{
     }
 
     progressBegin(range){
+        this.progressRange = range;
+        this.progressCounter = 0;
     }
     progressUpdate(processMessage){
+        this.progressCounter += 1;
         // let node = this.loggerEl.getElementsByTagName("li:nth-last-of-type(1)");
         let LINodes = this.loggerEl.getElementsByTagName("li");
         let node = LINodes[LINodes.length-1];
@@ -63,7 +68,8 @@ const LogWebMixins = (LogClass)=> class extends LogClass{
         }
         let jsonNode = JsonView.JSONDisplay(processMessage);
         var date = new Date();
-        node.innerHTML = `<p style="font-size: 12px; text-align:right">${date}</p>`;
+        node.innerHTML = `<p style="font-size: 12px; text-align:right">
+                    ${this.progressCounter}/${this.progressRange} ${date}</p>`;
         node.appendChild(jsonNode);
         this.scrollBottom();
     }

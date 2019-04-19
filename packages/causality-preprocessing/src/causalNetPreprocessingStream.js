@@ -1,14 +1,14 @@
 import { Event, Functor } from 'causal-net.core';
 import { platform } from 'causal-net.utils';
 import { indexDBStorage, StorageMixins } from 'causal-net.storage';
-import { termLogger } from 'causal-net.log';
+import { termLogger, LoggerMixins } from 'causal-net.log';
 class CausalNetPreprocessingStream extends platform.mixWith(Event, 
-    [ StorageMixins ]){
+    [ StorageMixins, LoggerMixins ]){
     constructor(preprocessingStorage, functor, logger){
         super();
         this.Storage = preprocessingStorage;
         this.F = functor;
-        this.logger = logger;
+        this.Logger = logger;
         this.preprocessingData = { samples: [], labels: [], finished: false, trainSet: [], testSet: [] };  
     }
     get PreprocessingData(){
@@ -52,6 +52,18 @@ class CausalNetPreprocessingStream extends platform.mixWith(Event,
         const SampleTransformer = this.SampleTransformer;
         const LabelTransformer = this.LabelTransformer;
         const Storage = this.Storage;
+        const ProgressLenses = ({idx, range, message})=>{ 
+            if(idx === 0){
+                this.Logger.progressBegin(range);
+                return;
+            }
+            if(idx + 1 === range){
+                this.Logger.progressEnd();
+                return;
+            }
+            this.Logger.progressUpdate(message);
+        };
+            
         this.dataHandler = (data)=>{
             return new Promise(async (resolve, reject)=>{
                 let chunkName = data.ChunkName;
@@ -60,7 +72,9 @@ class CausalNetPreprocessingStream extends platform.mixWith(Event,
                 }
                 if(data.Sample){
                     let identity = '';
+                    
                     for(let [idx, sample] of this.F.enumerate(data.Sample)){
+                        ProgressLenses({idx, range: data.Sample.length, message: 'preprocessing Sample: ' + idx });
                         sample = await SampleTransformer(sample);
                         identity = chunkName + '/' + idx;
                         await Storage.setItem('preprocessing/sample/' + identity, JSON.stringify(sample));
@@ -71,6 +85,7 @@ class CausalNetPreprocessingStream extends platform.mixWith(Event,
                 if(data.Label){
                     let identity = '';
                     for(let [idx, label] of this.F.enumerate(data.Label)){
+                        ProgressLenses({idx, range: data.Label.length, message: 'preprocessing Label: ' + idx });
                         label = await LabelTransformer(label);
                         identity = chunkName + '/' + idx;
                         await Storage.setItem('preprocessing/label/' + identity, JSON.stringify(label));

@@ -61,8 +61,8 @@ class CSVUtils{
             data.forEach(row=>{ 
                 let strRow = '\n'+header.map(h=>{
                     let col = row[h];
-                    if(/[\n\t,]/gm.test(col)){
-                        col = `"${col}"`;
+                    if(col.match(/[\s,"]/)){
+                        return '"' + col.replace(/"/g, '""') + '"';
                     }
                     return col;
                 }).join(',');

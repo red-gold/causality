@@ -89,6 +89,14 @@ class Functor {
         const R = this.R;
         return R.addIndex(R.map)((v,i)=>([i,v]))(array);
     }    
+    zeros(range){
+        const R = this.R;
+        return R.compose(R.map(()=>0), R.range(0))(range);
+    }
+    ones(range){
+        const R = this.R;
+        return R.compose(R.map(()=>1), R.range(0))(range);
+    }
 }
 
 export default Functor;

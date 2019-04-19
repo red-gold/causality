@@ -4,21 +4,15 @@ const CSVReaderMixins = ( BaseDataSource ) => class extends BaseDataSource {
         let samples = [], labels = [];
         let i = 0;
         for(let row of rows){
-            
             if(sampleAttributes.length){
                 samples.push(sampleAttributes.map(k=>row[k]));
             }
             if(labelAttributes.length){
                 labels.push(labelAttributes.map(k=>row[k]));
             }
-            if(i===0){
-                i += 1;
-                console.log({row, samples, labels});
-            }
-            
         }
-        if(samples.length>0 && labels>0){
-            return [samples, labels];
+        if(samples.length>0 && labels.length>0){
+            return {samples, labels};
         }
         else if(samples.length>0){
             return samples;

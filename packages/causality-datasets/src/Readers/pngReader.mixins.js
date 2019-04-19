@@ -1,18 +1,16 @@
 import { pngUtils } from 'causal-net.utils';
 const PNGReaderMixins = ( BaseDataSource ) => class extends BaseDataSource {
-    makePNGReader(baseLink){
-        if( baseLink.startsWith('http') ){
-            return async (fileName) => { 
-                let data = await pngUtils.fetchPNG(baseLink + fileName); 
-                return this.splitSample(data);
-            };
-        }
-        else{
-            return async (fileName) => { 
-                let data = await pngUtils.readPNG(baseLink + fileName);
-                return this.splitSample(data); 
-            };
-        }
+    makePNGReader(baseLink, SplitFnLense=(d)=>(d)){
+        return async (fileName) => { 
+            let chunkData = [];
+            if( baseLink.startsWith('http') ){
+                chunkData = await pngUtils.fetchPNG(baseLink + fileName); 
+            }
+            else{
+                chunkData = await pngUtils.readPNG(baseLink + fileName);
+            }
+            return SplitFnLense(chunkData);
+        };
     }
 };
 

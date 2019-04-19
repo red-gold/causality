@@ -57,7 +57,8 @@ class UniversalEmbedding extends platform.mixWith(Tensor,
     }
 
     async transform(tokenIdxs){
-        return this.sentenceEncode([tokenIdxs], false);
+        let [vec] = await this.sentenceEncode([tokenIdxs], false);
+        return Array.from(vec);
     }
 }
 export default new UniversalEmbedding(functor);

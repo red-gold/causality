@@ -41,8 +41,9 @@ class CausalNetDataSource extends platform.mixWith( Event, [
         this.description = await this.query(descriptionLink);
         this.description.BaseLink = baseLink;
         this.setChunks(this.description);
-        this.setDataReader(this.description);
         this.setSampleSize(this.description);
+        this.setLabelSize(this.description);
+        this.setDataReader(this.description);
         this.Logger.groupEnd();
         return this.description;
     }
@@ -50,7 +51,6 @@ class CausalNetDataSource extends platform.mixWith( Event, [
 
     /**
      * fetch or read configure depends on provied link format
-     * @private
      * @param {*} link
      * @returns
      * @memberof CausalNetEmbedding
@@ -87,6 +87,13 @@ class CausalNetDataSource extends platform.mixWith( Event, [
         return this.sampleSize;
     }
 
+    get LabelSize(){
+        if(!this.labelSize){
+            throw Error('labelSize is not set');
+        }
+        return this.labelSize;
+    }
+
     setSampleSize(description){
         let { SampleSize } = description;
         if(!SampleSize){
@@ -98,7 +105,19 @@ class CausalNetDataSource extends platform.mixWith( Event, [
         else{
             this.sampleSize = SampleSize;
         }
-        
+    }
+
+    setLabelSize(description){
+        let { LabelSize } = description;
+        if(!LabelSize){
+            throw Error(`expect { LabelSize }  get ${JSON.stringify(description, null, 4)}`);
+        }
+        if(Array.isArray(LabelSize)){
+            this.labelSize = LabelSize.reduce((s,d)=>s*d);
+        }
+        else{
+            this.labelSize = LabelSize;
+        }
     }
 
     setChunks(description){
@@ -119,10 +138,12 @@ class CausalNetDataSource extends platform.mixWith( Event, [
         const DataType = description.DataType;
         const BaseLink = description.BaseLink;
         if(SampleType === 'Image/PNG'){
-            this.sampleReader = this.makePNGReader(BaseLink);
+            const SplitFnLenses = (d)=>(this.splitSample(d));
+            this.sampleReader = this.makePNGReader(BaseLink, SplitFnLenses);
         }
         if(LabelType === 'Buffer/OneHot'){
-            this.labelReader = this.makeBufferReader(BaseLink);
+            const SplitFnLenses = (d)=>(this.splitLabel(d));
+            this.labelReader = this.makeBufferReader(BaseLink, SplitFnLenses);
         }
         const SampleAttributes = description.SampleAttributes;
         const LabelAttributes = description.LabelAttributes;
@@ -142,6 +163,11 @@ class CausalNetDataSource extends platform.mixWith( Event, [
         return this.R.splitEvery(SampleSize, data);
     }
 
+    splitLabel(data){
+        const LabelSize = this.LabelSize;
+        return this.R.splitEvery(LabelSize, data);
+    }
+
     chunkSelect(numChunks){
         let chunkList = this.DataChunks;
         this.selectedChunks = this.Sampling.subSampling(numChunks, chunkList, false);
@@ -157,19 +183,21 @@ class CausalNetDataSource extends platform.mixWith( Event, [
         const LabelReader = this.LabelReader;
         const DataReader = this.DataReader;
         return new Promise(async (resolve, reject)=>{
+            let sampleData = [], labelData = [];
             for(let { Sample, Label, ChunkName } of selectedChunks ){
                 if(Sample === Label){
-                    var [sampleData, labelData] = await DataReader(Sample);
+                    let data = await DataReader(Sample);
+                    sampleData = data.samples;
+                    labelData = data.labels;
                 }
                 else{
-                    var sampleData = await SampleReader(Sample);
-                    var labelData = await LabelReader(Label);
+                    sampleData = await SampleReader(Sample);
+                    labelData = await LabelReader(Label);
                 }
-                
                 if(sampleData.length !== labelData.length){
                     reject('lengths of sample and label are not the same');
                 }
-                console.log({'read': [sampleData.length, labelData.length]});
+                this.Logger.log({'read': [sampleData.length, labelData.length]});
                 await this.emit('data', { 'Sample': sampleData, 'Label': labelData,  ChunkName });
             }
             resolve(selectedChunks.length);

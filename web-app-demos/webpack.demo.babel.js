@@ -36,7 +36,7 @@ const DemoConfig = {
             cacheGroups: {
                 vendors: {
                     test: /node_modules/,//still fail to make this it as seperated chunks
-                    reuseExistingChunk: true,
+                    reuseExistingChunk: false,
                     chunks: 'all',
                     name: 'vendors'
                 }

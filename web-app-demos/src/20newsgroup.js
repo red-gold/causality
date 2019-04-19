@@ -61,13 +61,14 @@ class News20Group extends React.Component {
     }
     componentDidMount() {
         this.setState({onWaiting: true});
-        const init = async()=>{
-          termLogger.connect('#logger');
-            const sourceLink = 'http://0.0.0.0:5000/MNIST_dataset/';
-            let {dataChunks, promiseEmitter} = 
+        const init = async ()=>{
+            termLogger.connect('#logger');
+            const sourceLink = 'http://0.0.0.0:5000/20newsgroups/';
+            let {dataChunks, promiseEmitter, className } = 
               await Connector({ sourceLink, listener: this.modelListener });
             causalNet.setByConfig(PipeLineConfigure);
             this.promiseEmitter = promiseEmitter;
+            this.className = className;
             causalNet.deploy();            
             this.setState({ dataChunks: dataChunks.length, 
                             onWaiting: false});
@@ -154,8 +155,7 @@ class News20Group extends React.Component {
     modelListener(infer){
       const { Predict } = infer;
       if(Predict){
-        termLogger.log({Predict: Predict[0]});
-        this.setState({Predict: Predict[0]});
+        termLogger.log({ PredictLabel: this.className[Predict[0]], Predict: Predict[0] });
       }
     }
 
