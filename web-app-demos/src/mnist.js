@@ -10,6 +10,7 @@ import { causalNet } from 'causal-net';
 import { termLogger } from 'causal-net.log'; 
 import { indexDBStorage } from 'causal-net.storage'; 
 import { PipeLineConfigure, Connector } from './pipeline/mnist.pipeline';
+import { default as Config } from './config'; 
 const styles = theme => ({
   logger:{
     height: 600,
@@ -62,14 +63,13 @@ class MNIST extends React.Component {
         const init = async ()=>{
             console.log(document.getElementById('logger'));
             termLogger.connect('#logger');
-            const sourceLink = 'http://0.0.0.0:5000/MNIST_dataset/';
+            const sourceLink = Config.MNISTServer;
             let {dataChunks, promiseEmitter} = 
               await Connector({ sourceLink, listener: this.modelListener });
             causalNet.setByConfig(PipeLineConfigure);
             this.promiseEmitter = promiseEmitter;
             causalNet.deploy();            
-            this.setState({ dataChunks: dataChunks.length, 
-                            onWaiting: false});
+            this.setState({ dataChunks: dataChunks.length, onWaiting: false});
             
         };
         init().then(()=>this.getSaveList());

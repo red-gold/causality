@@ -8,7 +8,7 @@ import { causalNet } from 'causal-net';
 import { indexDBStorage } from 'causal-net.storage'; 
 import TextField from '@material-ui/core/TextField';
 import { PipeLineConfigure, Connector } from './pipeline/20newsgroup.pipeline';
-
+import { default as Config } from './config'; 
 import { default as Model } from './components/model';
 const styles = theme => ({
   logger:{
@@ -63,7 +63,7 @@ class News20Group extends React.Component {
         this.setState({onWaiting: true});
         const init = async ()=>{
             termLogger.connect('#logger');
-            const sourceLink = 'http://0.0.0.0:5000/20newsgroups/';
+            const sourceLink = Config.NewsGroupsServer;
             let {dataChunks, promiseEmitter, className } = 
               await Connector({ sourceLink, listener: this.modelListener });
             causalNet.setByConfig(PipeLineConfigure);

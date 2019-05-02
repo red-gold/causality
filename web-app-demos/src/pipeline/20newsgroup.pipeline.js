@@ -6,6 +6,7 @@ import { tokenizer } from 'causal-net.preprocessing';
 import { universalEmbedding } from 'causal-net.representation';
 import { indexDBStorage } from 'causal-net.storage'; 
 import { tabularPreprocessing } from 'causal-net.preprocessing';
+import { default as Config } from '../config'; 
 let promiseEmitter = {};
 let className = [];
 const PipeLineConfigure = {
@@ -51,10 +52,9 @@ const PipeLineConfigure = {
     };
 
 const Connector = async ({sourceLink, listener})=>{
-    console.log('20 newsgroup pipeline is call', sourceLink);
-    await tokenizer.connect('http://0.0.0.0:5050/use/vocab.json');
+    await tokenizer.connect(Config.TokenServer);
     await indexDBStorage.connect('20newsgroup');
-    await universalEmbedding.connect('http://0.0.0.0:5050/use/tensorflowjs_model.json');
+    await universalEmbedding.connect(Config.USEServer);
     let { ClassName } = await causalNetDataSource.connect(sourceLink);
     className = ClassName;
     let dataChunks = causalNetDataSource.DataChunks;

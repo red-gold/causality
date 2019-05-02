@@ -1,19 +1,15 @@
 import ReactDOM from "react-dom";
 import React from "react";
 import { default as Logger } from './components/logger';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { termLogger } from 'causal-net.log'; 
-import { causalNetSGDOptimizer } from 'causal-net.optimizers';
-import { causalNetModels } from 'causal-net.models';
-import { causalNetParameters, causalNetLayers } from 'causal-net.layer';
-import { causalNetDataSource } from 'causal-net.datasets';
+import Button from '@material-ui/core/Button';
+import { tokenizer } from 'causal-net.preprocessing';
 import { universalEmbedding } from 'causal-net.representation';
-import { causalNet } from 'causal-net'; 
-import { indexDBStorage } from 'causal-net.storage'; 
 import TextField from '@material-ui/core/TextField';
-
 import { default as Model } from './components/model';
+import { default as Config } from './config'; 
 const styles = theme => ({
   logger:{
     height: 600,
@@ -38,13 +34,33 @@ const styles = theme => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-  }
-  
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    marginBottom: theme.spacing.unit*4,
+  },
+  notchedOutline: {
+    borderWidth: "1px",
+    borderColor: "white !important",
+  },
+  inputText: {
+    color: "white"
+  },
+  label: {
+    color: "white",
+    '&$focused': {
+      color: "white"
+    }
+  },
+  labelFocused:{}
 });
-class MNIST extends React.Component {
+
+class Representation extends React.Component {
     state = {
       onWaiting: false,
-      inputText: ''
+      sentenceA: 'dog',
+      sentenceB: 'cat'
     }
     constructor(props) {
         super(props);
@@ -52,32 +68,36 @@ class MNIST extends React.Component {
         this.modelListener = this.modelListener.bind(this);
         this.keyPress = this.keyPress.bind(this);
         this.dataEmit = this.dataEmit.bind(this);
+        this.compareSentence = this.compareSentence.bind(this);
     }
     componentDidMount() {
+        
         this.setState({onWaiting: true}); 
         const init = async()=>{
           termLogger.connect('#logger');
           termLogger.groupBegin('compare sentences');
-          await universalEmbedding.connect('http://0.0.0.0:5050/use/tensorflowjs_model.json');
-          let sentenceA = 'this is';
-          let sentenceB = 'this is';
-          console.log({ sentenceA, sentenceB});
-        //   let vecs = await universalEmbedding.sentenceEncode([sentenceA]);
-        //   vecs.print();
-        //   let resultScore = await universalEmbedding.encodeMatching( sentenceA , sentenceB );
-        //   let matchScore = await resultScore.data();
-        //   console.log({'matching score': matchScore[0], sentenceA, sentenceB});
+          await tokenizer.connect(Config.TokenServer);
+          await universalEmbedding.connect(Config.USEServer);
           termLogger.groupEnd();
-          // this.setState({ onWaiting: false});
+          this.setState({ onWaiting: false});
         };
         init();
     }
 
-
+    async compareSentence(sentenceA, sentenceB){
+      let sentenceATokens = tokenizer.tokenize(sentenceA, false);
+      termLogger.log({'first setence tokens': sentenceATokens });
+      let sentenceBTokens = tokenizer.tokenize(sentenceB, false);
+      termLogger.log({'second setence tokens': sentenceBTokens });
+      let sentenceATokenIds = tokenizer.tokenize(sentenceA, true);
+      let sentenceBTokenIds = tokenizer.tokenize(sentenceB, true);
+      let resultScore = await universalEmbedding.encodeMatching( sentenceATokenIds , sentenceBTokenIds );
+      let matchScore = await resultScore.data();
+      termLogger.log({'matching score': matchScore[0], sentenceA, sentenceB});
+    }
     
-    dataEmit(e){
-        this.setState({ inputText: e.target.value });
-        
+    dataEmit(e, sentenceName){
+        this.setState({ [sentenceName]: e.target.value });
     }
 
     keyPress(e){
@@ -97,24 +117,39 @@ class MNIST extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { onWaiting, inputText } = this.state;
+        const { onWaiting, sentenceA, sentenceB } = this.state;
         return (
           <div>
             <Grid container spacing={16} justify="center" className={classes.layout}>
               <Grid item sm={12} className={classes.card}>
                 <p>
-                  This is ensemble demo for training text label with 20 news group dataset.
+                  This is demo for text reprsentation based on universal word embedding model.
                 </p>
               </Grid>
               <Grid item sm={6} className={classes.card}>
                 <TextField
-                  id="standard-name"
-                  label="input sentence to detect topic"
-                  className={classes.textField}
-                  value={inputText}
-                  onKeyDown={this.keyPress} 
-                  onChange={this.dataEmit}
+                  id="sentenceA" multiline rows="4"
+                  label="first sentence" variant="outlined"
+                  className={classes.textField} value={sentenceA}
+                  InputLabelProps={{ classes: { root: classes.label } }}
+                  InputProps={{ classes: 
+                    { notchedOutline: classes.notchedOutline, input: classes.inputText } }}
+                  onChange={(e)=>this.dataEmit(e,'sentenceA')}
                 />
+                <TextField
+                  id="sentenceB" multiline rows="4"
+                  label="second sentence" variant="outlined"
+                  className={classes.textField} value={sentenceB}
+                  InputLabelProps={{ classes: { root: classes.label } }}
+                  InputProps={{ classes: 
+                    { notchedOutline: classes.notchedOutline, input: classes.inputText } }}
+                  onChange={(e)=>this.dataEmit(e,'sentenceB')} />
+                <Button onClick={()=>this.compareSentence(sentenceA, sentenceB)} variant="contained" 
+                    className={classes.button}
+                    color="primary" 
+                    align="right">
+                    Compare
+                </Button>
               </Grid>
               <Grid item sm={6} className={classes.card}>
                 <Logger className={classes.logger}/>
@@ -125,5 +160,5 @@ class MNIST extends React.Component {
     }
 }
 
-const MNISTDemo = withStyles(styles)(MNIST);
-ReactDOM.render(<MNISTDemo/>, document.getElementById("content"));
+const RepresentationDemo = withStyles(styles)(Representation);
+ReactDOM.render(<RepresentationDemo/>, document.getElementById("content"));
