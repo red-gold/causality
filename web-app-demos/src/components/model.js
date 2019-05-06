@@ -20,15 +20,20 @@ const styles = theme => ({
         margin: theme.spacing.unit,
     },
     button:{
-        margin: theme.spacing.unit,
-        
+        margin: theme.spacing.unit,   
+    },
+    saveModels:{
+        color: 'white'
+    },
+    saveModelSelected:{
+        color: 'yellow'
     }
 });
 
 class Model extends React.Component {
     state = {
         numChunks: 1,
-        trainRatio: 0.5,
+        trainRatio: 0.9,
         numEpochs: 50,
         batchSize: 50,
         dataPreprocessed: false, 
@@ -113,24 +118,22 @@ class Model extends React.Component {
                     className={classes.slider}  
                     min={1} max={100} step={1} onChange={this.setBatchSizeHandler} />
                 <Button onClick={()=>trainHandler(trainRatio, numEpochs, batchSize)} 
-                    className={classes.button}
-                    variant="contained" color="primary" align="left">
+                    className={classes.button} variant="contained" color="primary" align="left">
                     Train
                 </Button>
                 <Button onClick={()=>ensembleTrainHandler(trainRatio, numEpochs, batchSize)} 
-                    className={classes.button}
-                    variant="contained" color="primary" align="left">
+                    className={classes.button} variant="contained" color="primary" align="left">
                     Ensemble Train
                 </Button>
                 <Button onClick={()=>testHandler(batchSize)} 
-                    className={classes.button}
-                    variant="contained" color="primary" align="left">
+                    className={classes.button} variant="contained" color="primary" align="left">
                     Test
                 </Button>
-                <List className={classes.list}>
+                <List>
                     {saveModels.map(({name, selected}, idx)=>{
                         return (<ListItem button
                                     selected={selected} 
+                                    classes={{ root: classes.saveModels, selected: classes.saveModelSelected }}
                                     key={name} 
                                     onClick={event => setEnsembleModels(saveModels, idx, !selected)}>
                                     {name}</ListItem>);    

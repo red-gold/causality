@@ -142,7 +142,6 @@ class News20Group extends React.Component {
 
     dataEmit(e){
         this.setState({ inputText: e.target.value });
-        
     }
 
     keyPress(e){
@@ -153,9 +152,14 @@ class News20Group extends React.Component {
    }
 
     modelListener(infer){
-      const { Predict } = infer;
+      const { Predict, EnsemblePredict } = infer;
       if(Predict){
-        termLogger.log({ PredictLabel: this.className[Predict[0]], Predict: Predict[0] });
+        termLogger.log({Predict: Predict[0]});
+        this.setState({Predict: Predict[0]});
+      }
+      if(EnsemblePredict){
+        termLogger.log({EnsemblePredict: EnsemblePredict[0]});
+        this.setState({EnsemblePredict: EnsemblePredict[0]});
       }
     }
 

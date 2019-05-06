@@ -8,7 +8,6 @@
     "name": "causal-net", 
     "license": "MIT", 
     "author": "nguyenhuynh200188@gmail.com", 
-    "module": "dist/@causalNet/pipeline.node.js", 
     "version": "0.1.0", 
     "private": true, 
     "dependencies": {
@@ -27,12 +26,10 @@
     }, 
     "scripts": {
         "build:prod": "webpack --config webpack.prod.babel.js", 
-        "start:doc": "rimraf ./doc_dist/; esdoc -c esdoc.config.json;build:demos;cp -r ./demo_dist ./doc_dist/prebuilt-demos; cd doc_dist/; xdg-open http://127.0.0.1:8080/index.html; simple_server;", 
-        "build:doc": "rimraf ./doc_dist/; esdoc -c esdoc.config.json;build:demos;cp -r ./demo_dist ./doc_dist/prebuilt-demos", 
-        "build:examples": "webpack --config webpack.examples.babel.js", 
-        "start:node": "webpack --watch --info-verbosity verbose --config webpack.node.babel.js", 
+        "build:demos": "cd web-app-demos;build:demos;cp -r ./demo_dist ../doc_dist/prebuilt-demos;",
+        "start:doc": "rimraf ./doc_dist/; esdoc -c esdoc.config.json; cd doc_dist/; xdg-open http://127.0.0.1:8080/index.html; simple_server;", 
+        "build:doc": "rimraf ./doc_dist/; esdoc -c esdoc.config.json;", 
         "build:clean": "rimraf dist", 
-        "start:web": "webpack --watch --info-verbosity verbose --config webpack.web.babel.js", 
         "test": "jest", 
         "test:report": "jest --coverage", 
         "build:dev": "webpack --config webpack.dev.babel.js"
@@ -54,7 +51,5 @@
         "webpack-dev-server": "^3.1.13", 
         "@babel/plugin-transform-runtime": "^7.2.0", 
         "@babel/core": "^7.2.2"
-    }, 
-    "main": "dist/@causalNet/pipeline.node.js", 
-    "browser": "dist/@causalNet/pipeline.web.js"
+    }
 }

@@ -37,7 +37,7 @@ const server = http.createServer((req, res) => {
                     console.log(`404 NOT FOUND ${currentLocation}`);
                 }
             } else {
-                if (stats.isFile()) {
+                if (stats.isFile() || true) {
                     fs.readFile(currentLocation, (err, data) => {
                         if (err) {
                             console.log(`ERROR: ${err}`);

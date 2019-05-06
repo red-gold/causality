@@ -101,6 +101,7 @@ class MNIST extends React.Component {
     }
     train(trainRatio, numEpochs=10, batchSize=50){
       this.setState({onWaiting: true});
+      console.log({trainRatio});
       let [train, test] = causalNet.splitDataset(trainRatio);
       termLogger.log({train: train.length, test: test.length});
       causalNet.train(numEpochs, batchSize).then((trainResult)=>{
@@ -110,12 +111,13 @@ class MNIST extends React.Component {
           this.setState({onWaiting: false});
       });
     }
-    ensembleTrain(trainRatio, numEpochs=10, batchSize=50){
+    ensembleTrain(model_name, trainRatio, numEpochs=10, batchSize=50){
       this.setState({onWaiting: true});
       let [train, test] = causalNet.splitDataset(trainRatio);
       termLogger.log({train: train.length, test: test.length});
-      this.c = this.c?this.c+1:0;
-      causalNet.ensembleTrain(numEpochs, batchSize, 'model_'+this.c).then((trainResult)=>{
+
+      causalNet.ensembleTrain(numEpochs, batchSize, 'model_'+model_name).then((trainResult)=>{
+        this.getSaveList();
         termLogger.plot({ type:'line', data: trainResult, 
                           xLabel: 'epoch', yLabel: 'loss' });
         this.setState({onWaiting: false});
@@ -134,6 +136,7 @@ class MNIST extends React.Component {
       let selectModels = modelList
             .filter(({selected})=>selected)
             .map(({name})=>name);
+      console.log({selectModels});
       causalNet.EnsembleModels = selectModels;
       this.setState({saveModels: modelList});
     }
@@ -144,10 +147,14 @@ class MNIST extends React.Component {
     }
 
     modelListener(infer){
-      const { Predict } = infer;
+      const { Predict, EnsemblePredict } = infer;
       if(Predict){
         termLogger.log({Predict: Predict[0]});
         this.setState({Predict: Predict[0]});
+      }
+      if(EnsemblePredict){
+        termLogger.log({EnsemblePredict: EnsemblePredict[0]});
+        this.setState({EnsemblePredict: EnsemblePredict[0]});
       }
     }
 
@@ -157,7 +164,7 @@ class MNIST extends React.Component {
         let handlers = { fetchChunkHandler: this.fetchChunks, 
                          splitDataHandler: this.splitData, 
                          trainHandler: this.train, 
-                         ensembleTrainHandler: this.ensembleTrain,
+                         ensembleTrainHandler: (...args)=>this.ensembleTrain(saveModels.length, ...args),
                          setEnsembleModels: this.setEnsembleModels,
                          resetStorageHandler: this.resetStorage,
                          testHandler: this.test };

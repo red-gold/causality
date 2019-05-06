@@ -35,13 +35,12 @@ const PipeLineConfigure = {
                                         });
                 let rescaledImage = imagePreprocessing.imageResize(data, size, [28, 28]);
                 let sdata = imagePreprocessing.oneBitTransform(rescaledImage);
-                return {Predict: sdata};
+                return {Predict: sdata, EnsemblePredict: sdata};
             },
             Listener: null
         }
     };
 const Connector = async ({sourceLink, listener})=>{
-    console.log('connector is call');
     await causalNetDataSource.connect(sourceLink);
     let dataChunks = causalNetDataSource.DataChunks;
     PipeLineConfigure.Deployment.Listener = listener;

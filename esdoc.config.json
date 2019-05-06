@@ -1,9 +1,7 @@
 {
-  "source": "./",
+  "source": "./packages/",
   "destination": "./doc_dist",
-  "includes": [ "^(src\\/).*\\.js$", 
-                "^(packages\\/).*?(src\\/).*\\.js"
-               ],
+  "includes": [ ".*?(src\\/).*\\.js" ],
   "excludes": [ ".*?(node_modules).*?", "(test\\/).*\\.js$", ".*?(examples\\/).*\\.js$" ],
   "index": "./README.md",
   "plugins": [
@@ -18,13 +16,12 @@
                 "./causal-doc/overview/packages.md",
                 "./causal-doc/tutorials/streamProcessingText8.babel.node.js.md"
               ]
-            }
-            ,
+            },
             "test": {
-                "source": "./",
+                "source": "./packages/",
                 "interfaces": ["test"],
-                "excludes": [ ".*?(node_modules).*?" ],
-                "includes": ["^(packages\\/).*?(test\\/).*?(spec|test)\\.js$"]
+                "excludes": [".*?(node_modules).*?"],
+                "includes": [".*?(test\\/).*?(spec|test)\\.js$"]
             }
           }
         },
@@ -44,6 +41,9 @@
             "scripts": 
                [
                   "./causal-doc/scripts/jquery-3.3.1.min.js",
+                  "./causal-doc/scripts/vendors.js",
+                  "./causal-doc/scripts/transpiler.js",
+                  "./causal-doc/scripts/require.js",
                   "./causal-doc/scripts/run_examples.js"]
             }
         },

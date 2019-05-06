@@ -30,7 +30,6 @@ const EnsembleModelMixins = (BasePipelineClass)=> class extends BasePipelineClas
         if(!this.ensembleModels){
             throw Error('EnsembleModels is not set');
         }
-        
         return this.ensembleModels;
     }
 };

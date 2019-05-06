@@ -104,7 +104,7 @@ class CausalNetPreprocessingStream extends platform.mixWith(Event,
         let { samples, labels } = this.preprocessingData;
         let data = this.F.zip(samples, labels);
         if(trainSize < 1){
-            trainSize = parseInt(data.length*0.9);
+            trainSize = parseInt(data.length*trainSize);
         }    
         const [ trainSet, testSet ] = R.splitAt(trainSize, data);
         this.preprocessingData.trainSet = trainSet;

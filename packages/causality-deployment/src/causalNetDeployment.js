@@ -63,7 +63,6 @@ class CausalNetDeployment extends platform.mixWith( Event, [] ){
     }
 
     set EnsembleInferencer(ensembleInferencer){
-        
         this.deployEnsembleInferencer = ensembleInferencer;
         this.on('emitter', async (emitValue)=>{
             let inferValue = await this.deployEnsembleInferencer(emitValue);
