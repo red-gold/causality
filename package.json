@@ -3,7 +3,7 @@
         "packages/*",
         "notebooks/",
         "causal-doc/",
-        "web-app-demos/*"
+        "web-app-demos/"
     ], 
     "name": "causal-net", 
     "license": "MIT", 

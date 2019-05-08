@@ -262,7 +262,7 @@ const LogWebMixins = (LogClass)=&gt; class extends LogClass{
             throw Error(`cannot print log`);
         }
         let node = document.createElement(&quot;li&quot;);
-        node.style.cssText = &apos;border-bottom: 1px solid #dedede;&apos;;       
+        node.style.cssText = &apos;border-bottom: 1px solid #dedede;list-style-type: none;&apos;; 
         let jsonNode = JsonView.JSONDisplay(message);
         var date = new Date();
         node.innerHTML = `&lt;p style=&quot;font-size: 12px; text-align:right&quot;&gt;${date}&lt;/p&gt;`;

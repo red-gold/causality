@@ -87,7 +87,7 @@ module.exports = {
         const fencesFormatter = code => `\`\`\`\n${code}\n\`\`\``;
         if (doc.longname.match(/\.md$/)) {
           //import example
-          doc.content = inject(doc.content, doc.longname, fencesFormatter);
+          doc.content = inject(doc.content, doc.longname, fencesFormatter, true);
           //import sub doc
           doc.content = mdInject(doc.content, doc.longname);
         }

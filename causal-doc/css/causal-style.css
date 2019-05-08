@@ -12,3 +12,15 @@ ul.demo li{
     margin-left: 120px; 
     border-left: 1px solid #dfdfdf;
 }
+.term-logger{
+    max-height: 400px;
+    background: #efefef;
+    overflow-y: scroll;
+}
+.term-logger > ul {
+    padding-left: 0px !important;
+}
+.term-logger > ul > li {
+    font-size: 12px !important;
+    list-style-type: none;
+}
