@@ -26,9 +26,9 @@
     }, 
     "scripts": {
         "build:prod": "webpack --config webpack.prod.babel.js", 
-        "build:demos": "cd web-app-demos;build:demos;cp -r ./demo_dist ../doc_dist/prebuilt-demos;",
-        "start:doc": "rimraf ./doc_dist/; esdoc -c esdoc.config.json; cd doc_dist/; xdg-open http://127.0.0.1:8080/index.html; simple_server;", 
-        "build:doc": "rimraf ./doc_dist/; esdoc -c esdoc.config.json;", 
+        "build:demos": "cd web-app-demos; yarn build:demos; cp -r ./demo_dist ../doc_dist/prebuilt-demos;",
+        "start:doc": "rimraf ./doc_dist/; esdoc -c esdoc.config.json; yarn build:demos; cd doc_dist/; xdg-open http://127.0.0.1:8080/index.html; simple_server;", 
+        "build:doc": "rimraf ./doc_dist/; esdoc -c esdoc.config.json; yarn build:demos", 
         "build:clean": "rimraf dist", 
         "test": "jest", 
         "test:report": "jest --coverage", 

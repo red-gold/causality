@@ -18,9 +18,22 @@
   <a href="source.html">Source</a>
   <a href="test.html" data-ice="testLink">Test</a>
   <div class="v-seperate"></div>
-  <ul class="demo">
-    <li>
-        <a href="prebuilt-demos/representation.html">Sentence representation demo</a>
+  <ul>
+    <li style="list-style-type: none;margin: 0px;">
+      <button style="border: none;padding: 0 5px 0 5px;" onclick="document.getElementById(&apos;web-demo&apos;).classList.toggle(&apos;show&apos;)"> Try demo </button>
+    </li>
+    <li style="list-style-type: none;margin: 0px;">
+      <ul id="web-demo" class="demo">
+        <li>
+          <a href="prebuilt-demos/representation.html">Sentence representation demo</a>
+        </li>
+        <li>
+          <a href="prebuilt-demos/mnist.html">Hand writing service building demo</a>
+        </li>
+        <li>
+          <a href="prebuilt-demos/20newsgroup.html">Text classification service building demo</a>
+        </li>
+      </ul>    
     </li>
   </ul>
   
@@ -53,6 +66,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-causalNetDeployment">causalNetDeployment</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#causality-layer-src">causality-layer/src</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/packages/causality-layer/src/layerRunner.mixins.js~LayerRunnerMixins.html">LayerRunnerMixins</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#causality-layer-src-causalnetlayers">causality-layer/src/CausalNetLayers</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/packages/causality-layer/src/CausalNetLayers/causalNetLayers.js~CausalNetLayers.html">CausalNetLayers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/packages/causality-layer/src/CausalNetLayers/convolution.mixins.js~ConvolutionMixins.html">ConvolutionMixins</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/packages/causality-layer/src/CausalNetLayers/dense.mixins.js~DenseLayerMixins.html">DenseLayerMixins</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-causalNetLayers">causalNetLayers</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#causality-layer-src-causalnetparameters">causality-layer/src/CausalNetParameters</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/packages/causality-layer/src/CausalNetParameters/causalNetParameters.js~CausalNetParameters.html">CausalNetParameters</a></span></span></li>
@@ -388,7 +402,7 @@ with <a href="https://www.npmjs.com/package/leveldown">leveldown</a> storage on 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/packages/causality-storage/src/indexDBStorage.mixins.node.js.html#lineNumber18">source</a></span></span>
+      <span data-ice="source"><span><a href="file/packages/causality-storage/src/indexDBStorage.mixins.node.js.html#lineNumber24">source</a></span></span>
     </span>
   </h3>
 
@@ -434,7 +448,7 @@ with <a href="https://www.npmjs.com/package/leveldown">leveldown</a> storage on 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/packages/causality-storage/src/indexDBStorage.mixins.node.js.html#lineNumber16">source</a></span></span>
+      <span data-ice="source"><span><a href="file/packages/causality-storage/src/indexDBStorage.mixins.node.js.html#lineNumber22">source</a></span></span>
     </span>
   </h3>
 

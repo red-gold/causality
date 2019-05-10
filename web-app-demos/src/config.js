@@ -1,4 +1,5 @@
-const ServerLink = 'http://95.46.199.169:8080/';
+// const ServerLink = 'https://jsaidemo.ml/';
+const ServerLink = 'http://0.0.0.0:8080/';
 const Config = {
     TokenServer: ServerLink + 'models/tokenizer/vocab.json',
     USEServer: ServerLink + 'models/use/tensorflowjs_model.json',

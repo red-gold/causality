@@ -7,19 +7,20 @@ const DenseLayerMixins = (PipelineClass)=> class extends PipelineClass{
      * @param {String} name - layer name, default by null
      * @returns { Object } layer
      */
-    dense(inputSize, outputSize, activator='sigmoid',name=null){
+    dense({inputSize, outputSize, activator='sigmoid', name=null}){
         if(!name){
             name = this.nameGenerator('dense');
         }
         return { 
             Name: name, Type: 'Layer',
+            Config: {inputSize, outputSize, activator, name},
             Parameters: { Weight: [inputSize, outputSize], Bias: [outputSize] },
             Net: (value, params)=>{
                     let trace = {};
                     let {Weight, Bias} = params;
                     let result = value.dot(Weight).add(Bias);
                     
-                    if(typeof "activator" === "string"){
+                    if(typeof activator === "string"){
                         result = result[activator]();
                     }
                     else{

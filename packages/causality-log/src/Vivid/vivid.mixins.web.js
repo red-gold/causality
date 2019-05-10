@@ -37,11 +37,11 @@ const VividWebMixins = (BaseVividClass)=> class extends BaseVividClass{
         return cssString;
     }
 
-    async show(option={}){
+    async show(option={plotId:'new plot'}){
         let {plotId} = option;
         //TODO: remove if not need
         return new Promise((resolve, reject)=>{
-            resolve(title);
+            resolve(plotId);
         });
     }
 };

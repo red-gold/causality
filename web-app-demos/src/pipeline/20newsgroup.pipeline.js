@@ -45,7 +45,7 @@ const PipeLineConfigure = {
                 const asEncode = true;
                 let tokens = tokenizer.tokenize(sentence, asEncode);
                 let sentVec = await universalEmbedding.transform(tokens);
-                return {Predict: sentVec};
+                return {Predict: sentVec, EnsemblePredict: sentVec};
             },
             Listener: null
         }

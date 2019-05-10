@@ -14,7 +14,8 @@ const styles = theme => ({
   logger:{
     height: 600,
     'overflow-y': 'scroll',
-    'overflow-x': 'hidden'
+    'overflow-x': 'hidden',
+    'background': '#9a9a9a'
   },
   icon: {
     marginRight: theme.spacing.unit * 2,
@@ -34,8 +35,30 @@ const styles = theme => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
+  },
+  'freeze':{
+    '& *':{
+      'pointer-events': 'none',
+      'opacity': 0.5
+    }
+  },
+  inputText: {
+    color: "white"
+  },
+  label: {
+    color: "white",
+    '&focused': {
+      color: "white"
+    },
+    focused: {
+      "&$focused": {
+        color: "white"
+      },
+      focused:{
+        color: "white"
+      }
+    }
   }
-  
 });
 class News20Group extends React.Component {
     state = {
@@ -81,8 +104,9 @@ class News20Group extends React.Component {
       console.log('reset storage');
       this.setState({onWaiting: true});
       indexDBStorage.deleteFileByPrefix('/').then((deletedFiles)=>{
-        console.log({deletedFiles});
-        this.setState({onWaiting: true});
+        termLogger.log({deletedFiles});
+        this.getSaveList();
+        this.setState({onWaiting: false});
       });
     }
 
@@ -112,19 +136,21 @@ class News20Group extends React.Component {
           this.setState({onWaiting: false});
       });
     }
-    ensembleTrain(trainRatio, numEpochs=10, batchSize=50){
+    ensembleTrain(model_name, trainRatio, numEpochs=10, batchSize=50){
       this.setState({onWaiting: true});
       let [train, test] = causalNet.splitDataset(trainRatio);
       termLogger.log({train: train.length, test: test.length});
-      this.c = this.c?this.c+1:0;
-      causalNet.ensembleTrain(numEpochs, batchSize, 'model_'+this.c).then((trainResult)=>{
+      causalNet.ensembleTrain(numEpochs, batchSize, 'model_'+model_name).then((trainResult)=>{
+        this.getSaveList();
         termLogger.plot({ type:'line', data: trainResult, 
                           xLabel: 'epoch', yLabel: 'loss' });
         this.setState({onWaiting: false});
       });
     }
-    test(batchSize=10){
+    test(trainRatio, batchSize=10){
       this.setState({onWaiting: true});
+      let [train, test] = causalNet.splitDataset(trainRatio);
+      termLogger.log({train: train.length, test: test.length});
       causalNet.test(batchSize).then(testResult=>{
         termLogger.log(testResult);
         this.setState({onWaiting: true});
@@ -154,11 +180,12 @@ class News20Group extends React.Component {
     modelListener(infer){
       const { Predict, EnsemblePredict } = infer;
       if(Predict){
-        termLogger.log({Predict: Predict[0]});
+        termLogger.log({Predict: Predict[0], 'Topic name': this.className[Predict[0]]});
         this.setState({Predict: Predict[0]});
       }
       if(EnsemblePredict){
-        termLogger.log({EnsemblePredict: EnsemblePredict[0]});
+        termLogger.log({EnsemblePredict: EnsemblePredict[0], 
+                  'Topic name': this.className[EnsemblePredict[0]]});
         this.setState({EnsemblePredict: EnsemblePredict[0]});
       }
     }
@@ -169,7 +196,7 @@ class News20Group extends React.Component {
         let handlers = { fetchChunkHandler: this.fetchChunks, 
                          splitDataHandler: this.splitData, 
                          trainHandler: this.train, 
-                         ensembleTrainHandler: this.ensembleTrain,
+                         ensembleTrainHandler: (...args)=>this.ensembleTrain(saveModels.length, ...args),
                          setEnsembleModels: this.setEnsembleModels,
                          resetStorageHandler: this.resetStorage,
                          testHandler: this.test };
@@ -178,19 +205,25 @@ class News20Group extends React.Component {
             <Grid container spacing={16} justify="center" className={classes.layout}>
               <Grid item sm={12} className={classes.card}>
                 <p>
-                  This is ensemble demo for training text label with 20 news group dataset.
+                  This is ensemble demo for training text label with 20 news group dataset. 
+                  It would take several minutes for loading word vec model. 
+                  Preprocessing could take a minute for infering vector of each sentence.
                 </p>
               </Grid>
-              <Grid item sm={6} className={classes.card}>
+              <Grid item sm={6} className={classes.card +` ${onWaiting?classes.freeze:''}`}>
                 <Model BaseLink={this.BaseLink}
                   pipelineState={{onWaiting, dataPreprocessed}}
                   dataChunks={dataChunks} 
                   saveModels={saveModels}
+                  className={classes.freez}
                   handlers={handlers} />
                 <TextField
                   id="standard-name"
                   label="input sentence to detect topic"
                   className={classes.textField}
+                  InputLabelProps={{ classes: { root: classes.label } }}
+                  InputProps={{ classes: 
+                    { notchedOutline: classes.notchedOutline, input: classes.inputText } }}
                   value={inputText}
                   onKeyDown={this.keyPress} 
                   onChange={this.dataEmit}

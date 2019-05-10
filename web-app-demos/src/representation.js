@@ -14,7 +14,8 @@ const styles = theme => ({
   logger:{
     height: 600,
     'overflow-y': 'scroll',
-    'overflow-x': 'hidden'
+    'overflow-x': 'hidden',
+    'background': '#9a9a9a'
   },
   icon: {
     marginRight: theme.spacing.unit * 2,
@@ -49,11 +50,25 @@ const styles = theme => ({
   },
   label: {
     color: "white",
-    '&$focused': {
+    '&focused': {
       color: "white"
+    },
+    focused: {
+      "&$focused": {
+        color: "white"
+      },
+      focused:{
+        color: "white"
+      }
     }
   },
-  labelFocused:{}
+  
+  'freeze':{
+    '& *':{
+      'pointer-events': 'none',
+      'opacity': 0.5
+    }
+  }
 });
 
 class Representation extends React.Component {
@@ -124,9 +139,11 @@ class Representation extends React.Component {
               <Grid item sm={12} className={classes.card}>
                 <p>
                   This is demo for text reprsentation based on universal word embedding model.
+                  It would take several minutes for loading word vec model.
                 </p>
               </Grid>
-              <Grid item sm={6} className={classes.card}>
+              <Grid item sm={6} className={classes.card +` ${onWaiting?classes.freeze:''}`}>
+                
                 <TextField
                   id="sentenceA" multiline rows="4"
                   label="first sentence" variant="outlined"

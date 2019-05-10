@@ -7,7 +7,13 @@
 const LevelDownMixins = (StorageClass)=> class extends StorageClass{ 
     constructor(){
         super();
-        this.connect('data');
+        try{
+            this.connect('data');
+        }
+        catch(err){
+            this.logger.log('indexDB fails to auto connect with storageName=\'data\', please call connect(\'storageName\') manually');
+        }
+        
     }
     /**
      * This method must be called to connect with leveldown storage once instance create

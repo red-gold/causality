@@ -5,17 +5,6 @@
     "module": "dist/@causalNet/pipeline.node.js", 
     "version": "0.1.0", 
     "dependencies": {
-        "causal-net.deployment": "*", 
-        "causal-net.storage": "*", 
-        "causal-net.layer": "*", 
-        "causal-net.core": "*", 
-        "causal-net.datasets": "*", 
-        "causal-net.memcache": "*", 
-        "causal-net.preprocessing": "*", 
-        "causal-net.optimizers": "*", 
-        "causal-net.utils": "*", 
-        "causal-net.sampling": "*", 
-        "causal-net.log": "*"
     }, 
     "scripts": {
         "start:examples": "webpack-dev-server --open --config webpack.examples.babel.js", 

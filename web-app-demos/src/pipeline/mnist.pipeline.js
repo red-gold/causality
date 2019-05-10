@@ -3,7 +3,7 @@ import { causalNetModels } from 'causal-net.models';
 import { causalNetParameters, causalNetLayers } from 'causal-net.layer';
 import { causalNetDataSource } from 'causal-net.datasets';
 import { imagePreprocessing } from 'causal-net.preprocessing';
-import { termLogger } from 'causal-net.log';
+import { indexDBStorage } from 'causal-net.storage'; 
 let promiseEmitter = {};
 
 const PipeLineConfigure = {
@@ -41,6 +41,7 @@ const PipeLineConfigure = {
         }
     };
 const Connector = async ({sourceLink, listener})=>{
+    await indexDBStorage.connect('mnist');
     await causalNetDataSource.connect(sourceLink);
     let dataChunks = causalNetDataSource.DataChunks;
     PipeLineConfigure.Deployment.Listener = listener;

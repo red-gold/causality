@@ -41,6 +41,7 @@ class Model extends React.Component {
         chunksFetched: false,
         chunksFetched: false,
     }
+    
     constructor(props) {
       super(props);     
       this.setChunkHandler = this.setChunkHandler.bind(this);
@@ -75,8 +76,8 @@ class Model extends React.Component {
         const { dataPreprocessed, onWaiting } = pipelineState;
         const { trainRatio, numChunks, numEpochs, batchSize } = this.state;
         return (
-            <div className={classes.model} >
-                <pre>{JSON.stringify(pipelineState, null, 2) }</pre>
+            <div classes={{[classes.overlay]:dataPreprocessed}}>
+            <div className={classes.model}>
                 <Typography  className={classes.info} >
                     reset storage to deleted cache items from previous training including save models
                 </Typography>
@@ -118,14 +119,17 @@ class Model extends React.Component {
                     className={classes.slider}  
                     min={1} max={100} step={1} onChange={this.setBatchSizeHandler} />
                 <Button onClick={()=>trainHandler(trainRatio, numEpochs, batchSize)} 
+                    disabled={!dataPreprocessed}
                     className={classes.button} variant="contained" color="primary" align="left">
                     Train
                 </Button>
                 <Button onClick={()=>ensembleTrainHandler(trainRatio, numEpochs, batchSize)} 
+                    disabled={!dataPreprocessed}
                     className={classes.button} variant="contained" color="primary" align="left">
                     Ensemble Train
                 </Button>
-                <Button onClick={()=>testHandler(batchSize)} 
+                <Button onClick={()=>testHandler(trainRatio, batchSize)} 
+                    disabled={!dataPreprocessed}
                     className={classes.button} variant="contained" color="primary" align="left">
                     Test
                 </Button>
@@ -139,6 +143,7 @@ class Model extends React.Component {
                                     {name}</ListItem>);    
                     })}
                 </List>
+            </div>
             </div>
         );
     }

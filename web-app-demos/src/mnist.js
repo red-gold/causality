@@ -15,7 +15,8 @@ const styles = theme => ({
   logger:{
     height: 600,
     'overflow-y': 'scroll',
-    'overflow-x': 'hidden'
+    'overflow-x': 'hidden',
+    'background': '#9a9a9a'
   },
   icon: {
     marginRight: theme.spacing.unit * 2,
@@ -35,6 +36,12 @@ const styles = theme => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
+  },
+  'freeze':{
+    '& *':{
+      'pointer-events': 'none',
+      'opacity': 0.5
+    }
   }
   
 });
@@ -79,7 +86,8 @@ class MNIST extends React.Component {
       console.log('reset storage');
       this.setState({onWaiting: true});
       indexDBStorage.deleteFileByPrefix('/').then((deletedFiles)=>{
-        console.log({deletedFiles});
+        termLogger.log({deletedFiles});
+        this.getSaveList();
         this.setState({onWaiting: true});
       });
     }
@@ -123,8 +131,10 @@ class MNIST extends React.Component {
         this.setState({onWaiting: false});
       });
     }
-    test(batchSize=10){
+    test(trainRatio, batchSize=10){
       this.setState({onWaiting: true});
+      let [train, test] = causalNet.splitDataset(trainRatio);
+      termLogger.log({train: train.length, test: test.length});
       causalNet.test(batchSize).then(testResult=>{
         termLogger.log(testResult);
         this.setState({onWaiting: true});
@@ -176,7 +186,7 @@ class MNIST extends React.Component {
                   This is ensemble demo for training digit recognition model with MNIST image dataset.
                 </p>
               </Grid>
-              <Grid item sm={6} className={classes.card}>
+              <Grid item sm={6} className={classes.card +` ${onWaiting?classes.freeze:''}`}>
                 <Model BaseLink={this.BaseLink}
                   pipelineState={{onWaiting, dataPreprocessed}}
                   dataChunks={dataChunks} 

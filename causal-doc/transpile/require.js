@@ -20,7 +20,14 @@ const CausalityLib = {
     'causal-net.deployment': Deployment,
     'causal-net.log': Log
 };
+var old_require = require;
 const require = (name)=>{
-    return CausalityLib[name];
+    let lib = CausalityLib[name];
+    if(lib){
+        return lib;
+    }
+    else{
+        return old_require(name);
+    }
 };
 export default require;
