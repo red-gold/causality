@@ -21,11 +21,19 @@ class BaseModel extends Tensor{
         throw Error('implement required');
     }
 
-    predict(){
-        throw Error('implement required');
+    get Predict(){
+        throw Error('model not support');
     }
-    oneHotPredict(){
-        throw Error('implement required');
+    get OneHotPredict(){
+        throw Error('model not support');
+    }
+
+    get Encode(){
+        throw Error('model not support');
+    }
+
+    get Reconstruct(){
+        throw Error('model not support');
     }
 }
 

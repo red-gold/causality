@@ -4,7 +4,7 @@ let model = new SingleLabelClassification(2);
 let T = causalNetCore.CoreTensor;
 let inputs = T.tensor([[0.1, 0.2]], [1, 2], 'float32');
 let labels = T.tensor([[0, 1]], [1, 2], 'float32');
-model.LayerRunner = { Predictor: (input)=>input};
+model.LayerRunner = { Predict: (input)=>input};
 model.Fit(inputs).print();
 model.Loss(inputs, labels).print();
 model.Predict(inputs).print();

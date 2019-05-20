@@ -27,21 +27,6 @@ const ModelMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         return this.netModel.Predict;
     }
 
-    get EncodeModel(){
-        if(!this.netModel){
-            throw Error('netModel is not set');
-        }
-        return this.netModel.Encode;
-    }
-
-    get DecodeModel(){
-        if(!this.netModel){
-            throw Error('netModel is not set');
-        }
-        return this.netModel.Decode;
-    }
-
-
     get Model(){
         if(!this.netModel){
             throw Error('netModel is not set');

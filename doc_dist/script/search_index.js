@@ -426,6 +426,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "causal-net/packages/causality-layer/src/causalnetlayers/recurrent.mixins.js~recurrentmixins",
+    "class/packages/causality-layer/src/CausalNetLayers/recurrent.mixins.js~RecurrentMixins.html",
+    "<span>RecurrentMixins</span> <span class=\"search-result-import-path\">causal-net/packages/causality-layer/src/CausalNetLayers/recurrent.mixins.js</span>",
+    "class"
+  ],
+  [
     "causal-net/packages/causality-representation/src/representation.mixins.js~representationmixins",
     "class/packages/causality-representation/src/representation.mixins.js~RepresentationMixins.html",
     "<span>RepresentationMixins</span> <span class=\"search-result-import-path\">causal-net/packages/causality-representation/src/representation.mixins.js</span>",
@@ -1746,6 +1752,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "packages/causality-layer/src/causalnetlayers/causalnetlayers.js~causalnetlayers#custom",
+    "class/packages/causality-layer/src/CausalNetLayers/causalNetLayers.js~CausalNetLayers.html#instance-method-custom",
+    "packages/causality-layer/src/CausalNetLayers/causalNetLayers.js~CausalNetLayers#custom",
+    "method"
+  ],
+  [
     "packages/causality-layer/src/causalnetlayers/causalnetlayers.js~causalnetlayers#layernames",
     "class/packages/causality-layer/src/CausalNetLayers/causalNetLayers.js~CausalNetLayers.html#instance-member-layerNames",
     "packages/causality-layer/src/CausalNetLayers/causalNetLayers.js~CausalNetLayers#layerNames",
@@ -1792,6 +1804,12 @@ window.esdocSearchIndex = [
     "file/packages/causality-layer/src/CausalNetLayers/recurrent.mixins.js.html",
     "packages/causality-layer/src/CausalNetLayers/recurrent.mixins.js",
     "file"
+  ],
+  [
+    "packages/causality-layer/src/causalnetlayers/recurrent.mixins.js~recurrentmixins#lstm",
+    "class/packages/causality-layer/src/CausalNetLayers/recurrent.mixins.js~RecurrentMixins.html#instance-method-lstm",
+    "packages/causality-layer/src/CausalNetLayers/recurrent.mixins.js~RecurrentMixins#lstm",
+    "method"
   ],
   [
     "packages/causality-layer/src/causalnetparameters/causalnetparameters.js",
@@ -2085,24 +2103,6 @@ window.esdocSearchIndex = [
     "packages/causality-layer/src/causalnetrunner/runner.mixins.js~runnermixins#runlayer",
     "class/packages/causality-layer/src/CausalNetRunner/runner.mixins.js~RunnerMixins.html#instance-method-runLayer",
     "packages/causality-layer/src/CausalNetRunner/runner.mixins.js~RunnerMixins#runLayer",
-    "method"
-  ],
-  [
-    "packages/causality-layer/src/causalnetrunner/runner.mixins.js~runnermixins#runopflow",
-    "class/packages/causality-layer/src/CausalNetRunner/runner.mixins.js~RunnerMixins.html#instance-method-runOpFlow",
-    "packages/causality-layer/src/CausalNetRunner/runner.mixins.js~RunnerMixins#runOpFlow",
-    "method"
-  ],
-  [
-    "packages/causality-layer/src/causalnetrunner/runner.mixins.js~runnermixins#runoplayer",
-    "class/packages/causality-layer/src/CausalNetRunner/runner.mixins.js~RunnerMixins.html#instance-method-runOpLayer",
-    "packages/causality-layer/src/CausalNetRunner/runner.mixins.js~RunnerMixins#runOpLayer",
-    "method"
-  ],
-  [
-    "packages/causality-layer/src/causalnetrunner/runner.mixins.js~runnermixins#tracing",
-    "class/packages/causality-layer/src/CausalNetRunner/runner.mixins.js~RunnerMixins.html#instance-method-tracing",
-    "packages/causality-layer/src/CausalNetRunner/runner.mixins.js~RunnerMixins#tracing",
     "method"
   ],
   [
@@ -3315,6 +3315,12 @@ window.esdocSearchIndex = [
     "packages/causality-optimizers/src/index.js",
     "file/packages/causality-optimizers/src/index.js.html",
     "packages/causality-optimizers/src/index.js",
+    "file"
+  ],
+  [
+    "packages/causality-optimizers/src/metrics/causalnetmetrics.js",
+    "file/packages/causality-optimizers/src/metrics/causalNetMetrics.js.html",
+    "packages/causality-optimizers/src/metrics/causalNetMetrics.js",
     "file"
   ],
   [

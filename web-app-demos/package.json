@@ -11,13 +11,7 @@
     "@material-ui/core": "^3.9.3",
     "@material-ui/lab": "^3.0.0-alpha.30",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "@babel/core": "^7.4.4",
-    "@babel/plugin-transform-modules-amd": "^7.2.0",
-    "@babel/plugin-transform-modules-commonjs": "^7.4.4",
-    "@babel/preset-env": "^7.4.4",
-    "@babel/register": "^7.4.4",
-    "@babel/standalone": "^7.4.4"
+    "react-dom": "^16.8.6"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.4.0",

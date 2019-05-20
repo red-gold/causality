@@ -6,6 +6,7 @@ import { imagePreprocessing } from 'causal-net.preprocessing';
 import { indexDBStorage } from 'causal-net.storage'; 
 let promiseEmitter = {};
 
+let denseLayer = causalNetLayers.dense({inputSize:24,outputSize:12});
 const PipeLineConfigure = {
         Dataset: { 
             Source: causalNetDataSource,
@@ -22,7 +23,13 @@ const PipeLineConfigure = {
         Net: { 
                 Parameters: causalNetParameters.InitParameters({}),
                 Layers: { 
-                    Predict: [  causalNetLayers.dense(28*28,10) ]
+                    Predict: [ 
+                        causalNetLayers.custom({ Net: (input)=>{
+                            // const [B, ...Sh] = input.shape;
+                            return input.reshape([B,28,28,1]); 
+                        } }),
+                        causalNetLayers.convolution({ kernelSize:[3,3], filters:[1,2], flatten:true }), 
+                        causalNetLayers.dense({inputSize:28*28*2,outputSize:10} ) ]
                 },
                 Model: causalNetModels.classification(10),
                 Optimizer: causalNetSGDOptimizer.adam({learningRate: 0.01})

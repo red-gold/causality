@@ -12,12 +12,11 @@ const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
     
     get Trainer(){
         const T = this.T;
-        const Loss=this.LossModel, Optimizer=this.Optimizer;
-        return (sampleTensor, labelTensor)=>{
+        const ModelLossFn=this.Model.Loss, Optimizer=this.Optimizer;
+        return (sampleTensor, labelTensor, contexts)=>{
             const LossFn = ()=>{
                 return T.tidy( ()=>{ 
-                    Loss(sampleTensor, labelTensor);
-                    return Loss(sampleTensor, labelTensor); 
+                    return ModelLossFn(sampleTensor, labelTensor, contexts); 
                 } );
             };
             return Optimizer.fit(LossFn);
@@ -46,8 +45,8 @@ const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
         this.trainDataGenerator = TrainDataGenerator;
     }
 
-    async train(numEpochs, batchSize){
-        
+    async train({ numEpochs=10, batchSize=1, ...trainContexts }={}){
+        let contexts = { batchSize, ...trainContexts };
         const F = this.F, R = this.F.CoreFunctor, T = this.T;
         const TrainDataGenerator = this.TrainDataGenerator, Trainer = this.Trainer;
         let losses = [], logger = this.Logger;
@@ -57,9 +56,10 @@ const TrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
                 const TrainData = TrainDataGenerator(batchSize);
                 let iterLosses = [];
                 for await (let { samples, labels } of TrainData){
+                    contexts['batchSize'] = samples.length;
                     let sampleTensor = T.tensor(samples).asType('float32');
                     let labelTensor = T.tensor(labels).asType('float32');
-                    let loss = Trainer(sampleTensor, labelTensor);
+                    let loss = Trainer(sampleTensor, labelTensor, contexts);
                     iterLosses.push(await loss.data());
                 }
                 losses.push(R.mean(iterLosses));

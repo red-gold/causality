@@ -46,8 +46,7 @@ import { termLogger } from 'causal-net.log';
         }
     };
     causalNet.setByConfig(PipeLineConfigure);
-    const numEpochs=10, batchSize=3;
-    let loss = await causalNet.train(numEpochs, batchSize);
+    let loss = await causalNet.train({numEpochs:10, batchSize:3});
     let plotId = termLogger.plot({ type:'line', data: loss, 
                       xLabel: '# of iter', 
                       yLabel: 'loss'});

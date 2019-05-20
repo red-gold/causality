@@ -1,39 +1,16 @@
 const ParameterMixins = (BaseParameterClass)=> class extends BaseParameterClass{ 
     
-    get PredictParameters(){
-        if(!this.parameters || !this.parameters.Predict){
+    
+    
+    get Parameters(){
+        if(!this.parameters){
             throw Error('parameters is not set');
         }
-        return this.parameters.Predict;
+        return this.parameters;
     }
     
-    get EncodeParameters(){
-        if(!this.parameters || !this.parameters.Encode){
-            throw Error('parameters is not set');
-        }
-        return this.parameters.Encode;
-    }
-    
-    get DecodeParameters(){
-        if(!this.parameters || !this.parameters.Decode){
-            throw Error('parameters is not set');
-        }
-        return this.parameters.Decode;
-    }
-    
-    set PredictParameters(predictParameters){
-        this.parameters = (this.parameters)? this.parameters: {};
-        this.parameters.Predict = predictParameters;
-    }
-    
-    set EncodeParameters(encodeParameters){
-        this.parameters = (this.parameters)? this.parameters: {};
-        this.parameters.Encode = encodeParameters;
-    }
-    
-    set DecodeParameters(decodeParameters){
-        this.parameters = (this.parameters)? this.parameters: {};
-        this.parameters.Decode = decodeParameters;
+    set Parameters(parameters){
+        this.parameters = parameters;
     }
 
     set ParameterSizes(parameterSizes){
@@ -90,20 +67,14 @@ const ParameterMixins = (BaseParameterClass)=> class extends BaseParameterClass{
     }
     
     initParamSizesByLayers(layers){
-        const R = this.R, T = this.T, F = this.F;
-        const GetParamSize = R.compose(R.fromPairs, R.map(p=>[p.Name, p.Parameters]));
-        const PredictSize = GetParamSize(F.getIn(['Predict'], layers, []));
-        const EncodeSize  = GetParamSize(F.getIn(['Encode'], layers, []));
-        const DecodeSize  = GetParamSize(F.getIn(['Decode'], layers, [])); 
-        this.ParameterSizes = {PredictSize, EncodeSize, DecodeSize};
+        const { compose, fromPairs, map, values, concat, reduce, filter } = this.R;
+        const GetParamSize = compose(fromPairs, map(p=>[p.Name, p.Parameters]), filter(p=>p.Parameters));
+        let flattenLayers = compose(reduce((s,v)=>concat(s,v),[]), values)(layers);
+        this.ParameterSizes = GetParamSize(flattenLayers);
     }
 
     importParameters(paramObject){
         const T = this.T, F = this.F;
-        let predictParamObject = F.getIn(['Predict'], paramObject, {});
-        let encodeParamObject  = F.getIn(['Encode'], paramObject, {});
-        let decodeParamObject  = F.getIn(['Decode'], paramObject, {});
-        const { PredictSize, EncodeSize, DecodeSize } = this.ParameterSizes;
         const SetOrInit = ( initPredict, paramObject )=>{
                     return F.parameterMapWithKey((keys, paramSize)=>{
                         let paramValue = this.F.getIn(keys, paramObject, null);
@@ -115,9 +86,7 @@ const ParameterMixins = (BaseParameterClass)=> class extends BaseParameterClass{
                         }                        
                     }, initPredict);
                 };
-        this.PredictParameters = SetOrInit( PredictSize, predictParamObject );
-        this.EncodeParameters  = SetOrInit( EncodeSize, encodeParamObject );
-        this.DecodeParameters  = SetOrInit( DecodeSize, decodeParamObject ); 
+        this.Parameters = SetOrInit( this.ParameterSizes, paramObject );
     }
 
     InitParameters(paramObject={}){

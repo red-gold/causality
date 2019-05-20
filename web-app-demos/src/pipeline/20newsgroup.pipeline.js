@@ -15,15 +15,12 @@ const PipeLineConfigure = {
             Preprocessing:{
                 SampleTransformer: async (data)=>{
                     const asEncode = true;
-                    console.log({s: data});
-                    let tokens = tokenizer.tokenize(data[0], asEncode);
+                    let tokens = tokenizer.tokenize( data[0], asEncode);
                     let sentVec = await universalEmbedding.transform(tokens);
-                    console.log({'done':sentVec});
                     return Array.from(sentVec);
                 },
-                LabelTransformer: (data)=>{
-                    let oneHotCode = tabularPreprocessing.oneHotEncode(data[0], className );
-                    console.log({l: data, className});
+                LabelTransformer: (data, className)=>{
+                    let oneHotCode = tabularPreprocessing.oneHotEncode( data[0], className );
                     return oneHotCode;
                 }
             } 
@@ -31,10 +28,11 @@ const PipeLineConfigure = {
         Net: { 
                 Parameters: causalNetParameters.InitParameters({}),
                 Layers: { 
-                    Predict: [ causalNetLayers.dense(512,20) ]
+                    Predict: [ causalNetLayers.dense({ inputSize:512, 
+                                                       outputSize:20}) ]
                 },
                 Model: causalNetModels.classification(20),
-                Optimizer: causalNetSGDOptimizer.adam({learningRate: 0.01})
+                Optimizer: causalNetSGDOptimizer.adam({ learningRate: 0.01 })
         },
         Deployment: {
             Emitter: async ()=> {

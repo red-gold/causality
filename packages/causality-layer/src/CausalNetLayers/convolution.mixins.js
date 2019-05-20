@@ -11,17 +11,21 @@ const ConvolutionMixins = (PipelineClass)=> class extends PipelineClass{
                   strides=1, padding='same',
                   dilations=[1,1], flatten=false, 
                   activator='sigmoid', name=null}){
-        if(!name){
-            name = this.nameGenerator('convolution');
+        const { Name, Reused } = this.checkName(name, 'convolution');
+        if(Reused){
+            Parameters = null;
+        }
+        else{
+            Parameters = { Kernel: [...kernelSize, ...filters] };
         }
         const FConv = this.T.conv2d;
         const shapeType = 'NHWC';
         return { 
-            Name: name, Type: 'Layer',
-            Config: {kernelSize, filters, strides, padding, dilations, flatten, activator, name, shapeType},
-            Parameters: { Kernel: [...kernelSize, ...filters] },
-            Net: (value, params)=>{
-                    let trace = {};
+            Name, Type: 'Layer',
+            Config: { kernelSize, filters, strides, padding, dilations, 
+                      flatten, activator, shapeType },
+            Parameters,
+            Net: (value, params, contexts)=>{
                     let { Kernel } = params;
                     let result = FConv(value, Kernel, strides, padding, shapeType, dilations);
                     if(typeof activator === "string"){
@@ -31,10 +35,10 @@ const ConvolutionMixins = (PipelineClass)=> class extends PipelineClass{
                         result = activator(result);
                     }  
                     if(flatten){
-                        const [B, W, H, C] = result.shape;
-                        result = result.reshape([B, -1]);
+                        const { batchSize } = contexts;
+                        result = result.reshape([batchSize, -1]);
                     }
-                    return { result, trace };
+                    return result;
                 }
             };
     }

@@ -8,6 +8,7 @@ class CausalNetPreprocessingStream extends platform.mixWith(Event,
         super();
         this.Storage = preprocessingStorage;
         this.F = functor;
+        this.R = this.F.CoreFunctor;
         this.Logger = logger;
         this.preprocessingData = { samples: [], labels: [], finished: false, trainSet: [], testSet: [] };  
     }
@@ -144,19 +145,18 @@ class CausalNetPreprocessingStream extends platform.mixWith(Event,
         return batchGenerator;
     }
     makeTrainDataGenerator(){
-        return (batchSize)=>{
-            const TrainSet = this.TrainSet;
-            const R = this.F.CoreFunctor;
-            //TODO: perform permutate
+        const R = this.R;
+        const TrainSet = this.TrainSet;
+        return (batchSize=TrainSet.length)=>{
             let batchData = R.splitEvery(batchSize, TrainSet);
             return this.makeBatchGenerator(batchData);
         };
         
     }
     makeTestDataGenerator(){
-        return (batchSize)=>{
-            const TestSet = this.TestSet;
-            const R = this.F.CoreFunctor;
+        const R = this.R;
+        const TestSet = this.TestSet;
+        return (batchSize=TestSet.length)=>{
             //TODO: perform permutate
             let batchData = R.splitEvery(batchSize, TestSet);
             return this.makeBatchGenerator(batchData);

@@ -1,4 +1,4 @@
-import { causalNetSGDOptimizer, TrainerMixins, EvaluatorMixins } from 'causal-net.optimizers';
+import { causalNetSGDOptimizer, TrainerMixins, EvaluatorMixins, causalityMetrics } from 'causal-net.optimizers';
 import { causalNetModels, ModelMixins } from 'causal-net.models';
 import { causalNetParameters, causalNetLayers, causalNetRunner, LayerRunnerMixins } from 'causal-net.layer';
 import { causalNetCore, Functor } from 'causal-net.core';
@@ -50,8 +50,7 @@ console.log(DummyData(1));
 
     let pipeline = new SimplePipeline( causalNetRunner, F, termLogger);
     pipeline.setByConfig(PipeLineConfigure);
-    const NumEpochs = 10, BatchSize = 1;
-    console.log(await pipeline.train(NumEpochs, BatchSize));
+    console.log(await pipeline.train({numEpochs:10, batchSize:1}));
     console.log(await pipeline.test());
 })();
 

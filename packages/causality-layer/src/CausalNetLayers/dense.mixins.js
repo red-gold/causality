@@ -7,28 +7,34 @@ const DenseLayerMixins = (PipelineClass)=> class extends PipelineClass{
      * @param {String} name - layer name, default by null
      * @returns { Object } layer
      */
-    dense({inputSize, outputSize, activator='sigmoid', name=null}){
-        if(!name){
-            name = this.nameGenerator('dense');
-        }
+    dense({inputSize, outputSize, activator='sigmoid', withBias=true, transpose=false, name=null}){
+        const { Name, Reused } = this.checkName(name, 'convolution');
+        let BiasParams = (withBias)?{Bias: [outputSize]}:{};
+        const Parameters = (Reused)?null: { Weight: [inputSize, outputSize], ... BiasParams };
         return { 
-            Name: name, Type: 'Layer',
-            Config: {inputSize, outputSize, activator, name},
-            Parameters: { Weight: [inputSize, outputSize], Bias: [outputSize] },
-            Net: (value, params)=>{
-                    let trace = {};
+            Name, Type: 'Layer',
+            Config: { inputSize, outputSize, activator }, Parameters,
+            Net: (value, params, contexts)=>{
                     let {Weight, Bias} = params;
-                    let result = value.dot(Weight).add(Bias);
-                    
-                    if(typeof activator === "string"){
-                        result = result[activator]();
+                    let result = (transpose)?value.dot(Weight.transpose()):value.dot(Weight);
+                    if(Bias){
+                        result = result.add(Bias);
+                    }
+                    if(activator === null){
+                        return result;
                     }
                     else{
-                        result = activator(result);
-                    }   
-                    return { result, trace };
+                        if(typeof activator === "string"){
+                            return result[activator]();
+                        }
+                        else{
+                            return activator(result);
+                        }   
+                    } 
                 }
             };
     }
+
+    
 };
 export default DenseLayerMixins;

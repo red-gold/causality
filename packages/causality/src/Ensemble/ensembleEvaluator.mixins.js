@@ -1,5 +1,5 @@
 const EnsembleEvaluatorMixins = (BasePipelineClass)=> class extends BasePipelineClass{ 
-    async ensembleTest(batchSize, method='accuracy'){
+    async ensembleTest({method='accuracy'}){
         throw Error('implement require'); 
     }
 };

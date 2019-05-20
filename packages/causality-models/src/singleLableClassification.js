@@ -12,8 +12,8 @@ class SingleLabelClassification extends BaseModel{
     }
 
     set LayerRunner(layerRunner){
-        let { Predictor } = layerRunner;
-        this.runner = { Predictor };
+        let { LayerPredict } = layerRunner;
+        this.runner = { LayerPredict };
     }
 
     get LayerRunner(){
@@ -24,9 +24,9 @@ class SingleLabelClassification extends BaseModel{
     }
     
     get Fit(){
-        const { Predictor } = this.LayerRunner;
-        return (inputTensor)=>{
-            let outPutTensor = Predictor(inputTensor);
+        const { LayerPredict } = this.LayerRunner;
+        return (inputTensor, contexts)=>{
+            let outPutTensor = LayerPredict(inputTensor, contexts);
             let logProb = outPutTensor.sub(outPutTensor.logSumExp(1, true));
             return logProb;
         };
@@ -34,8 +34,8 @@ class SingleLabelClassification extends BaseModel{
     
     get Predict(){
         const Fit = this.Fit;
-        return (inputTensor)=>{
-            let logProb = Fit(inputTensor);
+        return (inputTensor, contexts)=>{
+            let logProb = Fit(inputTensor, contexts);
             let predictedClass = logProb.argMax(1);
             return predictedClass;
         };
@@ -43,16 +43,16 @@ class SingleLabelClassification extends BaseModel{
 
     get OneHotPredict(){
         const Predict = this.Predict;
-        return (inputTensor)=>{
-            let predictedClass = Predict(inputTensor);
+        return (inputTensor, contexts)=>{
+            let predictedClass = Predict(inputTensor, contexts);
             let oneHotPredict = this.T.oneHot(predictedClass, this.numClass);
             return oneHotPredict;
         };
     }
     get Loss(){
         const Fit = this.Fit;
-        return (inputTensor, labelTensor)=>{
-            let logProb = Fit(inputTensor);
+        return (inputTensor, labelTensor, contexts)=>{
+            let logProb = Fit(inputTensor, contexts);
             let likelihood = logProb.neg().mul(labelTensor);
             let loss = likelihood.sum(1).mean();
             return loss;

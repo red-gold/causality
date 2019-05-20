@@ -50,7 +50,7 @@ import { termLogger } from 'causal-net.log';
     let losses = {};
     const numEpochs=10, batchSize=3;
     for(let model of models){
-        let result = await causalNet.ensembleTrain(numEpochs, batchSize, model);
+        let result = await causalNet.ensembleTrain({numEpochs, batchSize, model});
         losses = {...losses, ...result};
     }
     let plotId = termLogger.plot({ type:'line', data: losses, 

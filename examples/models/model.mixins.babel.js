@@ -22,7 +22,7 @@ const T = causalNetCore.CoreTensor;
         Net: { 
                 Parameters: causalNetParameters.InitParameters(),
                 Layers: { 
-                    Predict: [  convLayer, denseLayer], 
+                    Predict: [  convLayer, denseLayer ], 
                     Encode: [ causalNetLayers.dense({inputSize:24,outputSize:2}) ], 
                     Decode: [ causalNetLayers.dense({inputSize:24,outputSize:2}) ] 
                 },

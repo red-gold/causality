@@ -11,9 +11,10 @@ const EnsembleTrainerMixins = (BasePipelineClass)=> class extends BasePipelineCl
      * @param { String } saveFileName
      * @returns { Promise } Training losses
      */
-    async ensembleTrain(numEpochs, batchSize, saveFileName){
+    async ensembleTrain({numEpochs=10, batchSize=20, saveFileName='model', ...trainContexts}={}){
+        let contexts = { batchSize, ...trainContexts };
         this.LayerRunner.NetParameters = this.ParameterInitializer(this.LayerRunner.NetLayers);
-        let {losses} = await this.train(numEpochs, batchSize);
+        let {losses} = await this.train(numEpochs, batchSize, contexts);
         await this.saveParams(saveFileName);
         return {[saveFileName]: losses};
     }
