@@ -7,3 +7,4 @@ export { default as AutoEncoder } from './autoEncoder';
 export { default as RBM } from './restrictedBoztmanMachine';
 
 export { default as EvaluatorMixins } from './evaluator.mixins';
+export { causalNetMetrics } from './Metrics/index';

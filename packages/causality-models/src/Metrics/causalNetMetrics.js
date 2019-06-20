@@ -1,5 +1,6 @@
 import { Tensor as BaseTensor } from 'causal-net.core';
 import { platform } from 'causal-net.utils';
+import { underline } from 'ansi-colors';
 /**
  * This class provides evaluation metrics methods which can be accessed via **causalNetMetrics** instance.
  *
@@ -35,7 +36,10 @@ class CausalNetMetrics extends platform.mixWith(BaseTensor, []){
         }
         return labelScores.mean();
     }
-
+    
+    KLpq(p, q, maskingLabels=null){
+        return p.mul( log( p.div(q) ).log() ).sum();
+    }
 }
 
 export default new CausalNetMetrics();

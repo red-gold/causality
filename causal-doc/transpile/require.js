@@ -8,6 +8,9 @@ import * as Layer from 'causal-net.layer';
 import * as Utils from 'causal-net.utils';
 import * as Deployment from 'causal-net.deployment';
 import * as Log from 'causal-net.log';
+import * as TransformRuntime from '@babel/plugin-transform-runtime';
+import * as DynamicImport from '@babel/plugin-syntax-dynamic-import';
+import * as RestSpread from '@babel/plugin-proposal-object-rest-spread';
 const CausalityLib = {
     'causal-net': Causality,
     'causal-net.core': Core,
@@ -18,16 +21,12 @@ const CausalityLib = {
     'causal-net.layer': Layer,
     'causal-net.utils': Utils,
     'causal-net.deployment': Deployment,
-    'causal-net.log': Log
+    'causal-net.log': Log,
+    '@babel/plugin-transform-runtime': TransformRuntime,
+    '@babel/plugin-syntax-dynamic-import': DynamicImport,
+    '@babel/plugin-proposal-object-rest-spread': RestSpread
 };
-var old_require = require;
 const require = (name)=>{
-    let lib = CausalityLib[name];
-    if(lib){
-        return lib;
-    }
-    else{
-        return old_require(name);
-    }
+    return CausalityLib[name];
 };
 export default require;

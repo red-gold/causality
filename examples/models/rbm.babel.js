@@ -32,7 +32,7 @@ const T = causalNetCore.CoreTensor;
     let pipeline = new SimplePipeline( causalNetRunner, termLogger);
     pipeline.setByConfig(PipeLineConfigure);
     console.log(pipeline.LayerRunner.NetParameters);
-    let inputTensor = T.tensor([[0,1,0,1]]).reshape([1, 4]);
+    let inputTensor = T.tensor([[0, 1, 0, 1]]).reshape([1, 4]);
     let encodeFn = pipeline.Model.Encode(inputTensor);
     encodeFn.print();
     let fitFn = pipeline.Model.Fit(inputTensor);

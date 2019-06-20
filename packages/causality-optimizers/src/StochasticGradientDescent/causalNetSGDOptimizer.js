@@ -1,4 +1,4 @@
-import {default as AdamOptimizer} from './adamOptimizer';
+import { default as AdamOptimizer } from './adamOptimizer';
 import { Tensor as BaseTensor } from 'causal-net.core';
 import { platform } from 'causal-net.utils';
 import { default as SGDFitParamsMixins } from './SGDFitParams.mixins';
