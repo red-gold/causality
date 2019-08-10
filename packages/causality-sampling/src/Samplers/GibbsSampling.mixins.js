@@ -10,7 +10,13 @@ import { platform } from 'causal-net.utils';
  */
 
 export class GibbsSampler extends platform.mixWith( BaseTensor, []){
-    constructor(){
+    constructor(p,q){
         super();
+        this.p = p;
+        this.q = q;
+    }
+
+    step(n=1){
+        
     }
 }

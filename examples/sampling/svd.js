@@ -1,0 +1,1 @@
+https://stats.stackexchange.com/questions/20643/finding-matrix-eigenvectors-using-qr-decomposition
