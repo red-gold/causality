@@ -1,9 +1,9 @@
 /**
- * The EnsembleModelMixins class is the mixis class for ensemble model caller
- * @class EnsembleModelMixins
+ * The EnsembleModelMixin class is the mixis class for ensemble model caller
+ * @class EnsembleModelMixin
  * @extends {BasePipelineClass}
  */
-const EnsembleModelMixins = (BasePipelineClass)=> class extends BasePipelineClass{ 
+const EnsembleModelMixin = (BasePipelineClass)=> class extends BasePipelineClass{ 
 
     get EnsembleModelPredict(){
         const FitModel = this.FitModel;
@@ -33,4 +33,4 @@ const EnsembleModelMixins = (BasePipelineClass)=> class extends BasePipelineClas
         return this.ensembleModels;
     }
 };
-export default EnsembleModelMixins;
+export default EnsembleModelMixin;

@@ -1,11 +1,11 @@
-import { default as  fetch } from './fetch';
+import { default as  fetch } from './isoFetch';
 import { PNG } from 'pngjs3';
 /**
- * This PNGUtils class use [pngjs3](https://www.npmjs.com/package/pngjs3)
+ * This PNGData class use [pngjs3](https://www.npmjs.com/package/pngjs3)
  * for png parsing and transform png data from fetch.
- * @class pngUtils
+ * @class pngData
  */
-class PNGUtils{
+class PNGData{
     constructor(PNG){
         this.png = PNG;
         this.fs = require('fs');
@@ -13,7 +13,7 @@ class PNGUtils{
     /**
      * get pngjs3 instance
      * @readonly
-     * @memberof PNGUtils
+     * @memberof PNGData
      */
     get CorePNG(){
         return this.png;
@@ -22,7 +22,7 @@ class PNGUtils{
      * fetch and tranform png file to raw array from url
      * @param { URL } url - url for PNG file
      * @returns { Promise } data promise - return Array if success or reject with error message
-     * @memberof PNGUtils
+     * @memberof PNGData
      */
     async fetchPNG(url){
         return new Promise(async (resolve, reject)=>{
@@ -42,7 +42,7 @@ class PNGUtils{
      * write and tranform png file to raw array from filepath
      * @param { URL } url - url for PNG file
      * @returns { Promise } data promise - return Array if success or reject with error message
-     * @memberof PNGUtils
+     * @memberof PNGData
      */
     async writePNG(data, size, filePath){
         const fs = this.fs;
@@ -62,7 +62,7 @@ class PNGUtils{
      * read and tranform png file to raw array from filepath
      * @param { String } filePath - url for PNG file
      * @returns { Promise } data promise - return Array if success or reject with error message
-     * @memberof PNGUtils
+     * @memberof PNGData
      */
     async readPNG(filePath){
         const fs = this.fs;
@@ -81,4 +81,4 @@ class PNGUtils{
         });
     }
 }
-export default new PNGUtils(PNG);
+export default new PNGData(PNG);

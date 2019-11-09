@@ -6,9 +6,8 @@ import stream from 'readable-stream';
  * @example
  * [EXAMPLE ../examples/stream.babel.js]
  */
-class Stream{
+class IsoStream{
     constructor(stream){
-    
         /** @private { readable-stream } */
         this.stream = stream;
     }
@@ -87,5 +86,5 @@ class Stream{
     }
 };
 
-const streamUtils = new Stream(stream);
-export default streamUtils;
+let isoStream = new IsoStream(stream);
+export default isoStream;

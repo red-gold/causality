@@ -1,9 +1,9 @@
 /**
- * The EnsembleTrainerMixins class is the mixins class for training ensamblable models
- * @class EnsembleTrainerMixins
+ * The EnsembleTrainerMixin class is the mixins class for training ensamblable models
+ * @class EnsembleTrainerMixin
  * @extends {BasePipelineClass}
  */
-const EnsembleTrainerMixins = (BasePipelineClass)=> class extends BasePipelineClass{
+const EnsembleTrainerMixin = (BasePipelineClass)=> class extends BasePipelineClass{
     /**
      * Train model and save to storage under the given filename. parameters is reinited for each training
      * @param { Number } numEpochs
@@ -20,4 +20,4 @@ const EnsembleTrainerMixins = (BasePipelineClass)=> class extends BasePipelineCl
     }
 };
 
-export default EnsembleTrainerMixins;
+export default EnsembleTrainerMixin;

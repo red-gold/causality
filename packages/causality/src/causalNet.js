@@ -1,47 +1,58 @@
-import { DataSourceMixins } from 'causal-net.datasets';
-import { PreprocessingMixins, causalNetPreprocessingStream } from 'causal-net.preprocessing';
-import { TrainerMixins, EvaluatorMixins } from 'causal-net.optimizers';
-import { ModelMixins } from 'causal-net.models';
-import { causalNetRunner, LayerRunnerMixins } from 'causal-net.layer';
+import { DataSourceMixin } from 'causal-net.datasets';
+import { PreprocessingMixin, causalNetPreprocessingStream } from 'causal-net.preprocessing';
+import { TrainerMixin, EvaluatorMixin } from 'causal-net.optimizers';
+import { ModelMixin } from 'causal-net.models';
+import { causalNetRunner, LayerRunnerMixin } from 'causal-net.layer';
 import { Tensor } from 'causal-net.core';
 import { platform } from 'causal-net.utils';
-import { causalNetDeployment, DeploymentMixins } from 'causal-net.deployment';
-import { termLogger, LoggerMixins } from 'causal-net.log';
+import { causalNetDeployment, DeploymentMixin } from 'causal-net.deployment';
+import { termLogger, LoggerMixin } from 'causal-net.log';
 import { default as functor } from './functor';
-import { EnsembleTrainerMixins, EnsembleModelMixins, EnsembleDeploymentMixins } from './Ensemble/index';
+import { EnsembleTrainerMixin, EnsembleModelMixin, EnsembleDeploymentMixin } from './Ensemble/index';
 
 /**
  * The CausalNet class is the prebuilt pipeline with methods for 
  * processing data/train/evaluate/deploy/ensemble deploy
  * { mixWith: [ 
- *         DataSourceMixins,
- *         PreprocessingMixins,
- *         LayerRunnerMixins, 
- *         ModelMixins, 
- *         EvaluatorMixins,
- *         TrainerMixins, 
- *         LoggerMixins,
- *         DeploymentMixins,
- *         EnsembleTrainerMixins,
- *         EnsembleModelMixins, 
- *         EnsembleDeploymentMixins ] }
+ *         DataSourceMixin,
+ *         PreprocessingMixin,
+ *         LayerRunnerMixin, 
+ *         ModelMixin, 
+ *         EvaluatorMixin,
+ *         TrainerMixin, 
+ *         LoggerMixin,
+ *         DeploymentMixin,
+ *         EnsembleTrainerMixin,
+ *         EnsembleModelMixin, 
+ *         EnsembleDeploymentMixin ] }
  * @class CausalNet
  * @extends {Tensor}
  * @example
  * [EXAMPLE ../examples/causalNet/ensemble.logisticRegression.babel.js]
  */
+console.log({DataSourceMixin,
+    PreprocessingMixin,
+    LayerRunnerMixin, 
+    ModelMixin, 
+    EvaluatorMixin,
+    TrainerMixin, 
+    LoggerMixin,
+    DeploymentMixin,
+    EnsembleTrainerMixin,
+    EnsembleModelMixin, 
+    EnsembleDeploymentMixin});
 class CausalNet extends platform.mixWith(Tensor, [ 
-        DataSourceMixins,
-        PreprocessingMixins,
-        LayerRunnerMixins, 
-        ModelMixins, 
-        EvaluatorMixins,
-        TrainerMixins, 
-        LoggerMixins,
-        DeploymentMixins,
-        EnsembleTrainerMixins,
-        EnsembleModelMixins, 
-        EnsembleDeploymentMixins ]){
+        DataSourceMixin,
+        PreprocessingMixin,
+        LayerRunnerMixin, 
+        ModelMixin, 
+        EvaluatorMixin,
+        TrainerMixin, 
+        LoggerMixin,
+        DeploymentMixin,
+        EnsembleTrainerMixin,
+        EnsembleModelMixin, 
+        EnsembleDeploymentMixin ], className='CausalNet'){
     /**
      *Creates an instance of CausalNet.
      * @param { Functor } functor
@@ -63,8 +74,9 @@ class CausalNet extends platform.mixWith(Tensor, [
     }
 }
 
-export default new  CausalNet(  functor, 
+let causalNet = new  CausalNet( functor, 
                                 termLogger, 
                                 causalNetPreprocessingStream, 
                                 causalNetRunner, 
                                 causalNetDeployment );
+export default causalNet;

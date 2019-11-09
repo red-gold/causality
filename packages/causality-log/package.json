@@ -22,6 +22,7 @@
     "causal-net.utils": "*",
     "cli-progress": "^2.1.1",
     "d3": "^5.9.2",
+    "jp-babel-7": "^1.0.0",
     "jsdom": "^13.2.0",
     "svg2png": "^4.1.1",
     "vivid.d3-node": "^0.0.2"

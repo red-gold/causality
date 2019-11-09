@@ -1,51 +1,43 @@
 import { default as  fetch } from './fetch';
-import { default as json5 } from 'json5';
 /**
- * This JSONUtils class provide wrapper for 
- * [json5](https://www.npmjs.com/package/json5)
- * for fetch/write/read json
+ * This BufferData class provide methods
+ * for fetch/write/read buffer
  * @todo: verify on web environment
- * @class JSONUtils
+ * @class BufferData
  */
-class JSONUtils{
-    constructor(json5, fetch){
-        this.json = json5;
+class BufferData{
+    
+    constructor(fetch){
         this.fetch = fetch;
         this.fs = require('fs');
     }
+    
     /**
-     * return json5 instance
-     * @readonly
-     * @memberof JSONUtils
-     */
-    get CoreJSON(){
-        return this.json;
-    }
-    /**
-     * fetch json content from given url
+     * fetch buffer content from given url
      * @todo enhance reject case
      * @param { URL } url - url for csv content
      * @returns { Promise } - data promise with data if success
-     * @memberof JSONUtils
+     * @memberof BufferData
      */
-    async fetchJSON(url){
-        return await fetch.fetchJson(url);
+    async fetchBuffer(url){
+        let data = await fetch.fetchData(url);
+        return await new Buffer.from(data);
     }
 
     /**
-     * write json content from given content
+     * write buffer content from given content
      * @todo enhance reject case
      * @param { URL } url - url for csv content
      * @returns { Promise } - data promise with data if success
-     * @memberof JSONUtils
+     * @memberof BufferData
      */
-    async writeJSON(data, filePath){
-        const fs = this.fs, json = this.json;
+    async writeBuffer(data, filePath){
+        const fs = this.fs;
         if(!fs.writeFile){
             throw Error('method is not supported');
         }
         return new Promise(async (resolve, reject)=>{
-            fs.writeFile(filePath, json.stringify(data), (err)=>{
+            fs.writeFile(filePath, data, (err)=>{
                 if(err){
                     reject(err);
                 }
@@ -57,14 +49,14 @@ class JSONUtils{
     }
 
     /**
-     * fetch json content from given url
+     * fetch buffer content from given url
      * @todo enhance reject case
      * @param { URL } url - url for csv content
      * @returns { Promise } - data promise with data if success
-     * @memberof JSONUtils
+     * @memberof BufferData
      */
-    async readJSON(filePath){
-        const fs = this.fs, json = this.json;
+    readBuffer(filePath){
+        const fs = this.fs;
         if(!fs.readFile){
             throw Error('method is not supported');
         }
@@ -74,21 +66,10 @@ class JSONUtils{
                     reject(err);
                 }
                 else{
-                    resolve(json.parse(data));
+                    resolve(Buffer.from(data));
                 }
             });
         });
     }
-
-    async queryJSON(link){
-        if(link.startsWith('http')){
-            return await this.fetchJSON(link);
-        }
-        else{
-            return await this.readJSON(link);
-        }
-    }
 }
-
-const jsonUtils = new JSONUtils(json5, fetch);
-export default jsonUtils;
+export default new BufferData();

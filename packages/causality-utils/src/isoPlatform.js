@@ -1,7 +1,7 @@
 import platform from 'platform';
 import process from 'process';
 
-const platformMapping = (name)=>{
+const PlatformMapping = (name)=>{
     if(name === 'Node.js'){
         return 'node';
     }
@@ -17,7 +17,7 @@ const platformMapping = (name)=>{
  * @example
  * [EXAMPLE ../examples/platform.babel.js]
  */
-class Platform{
+class IsoPlatform{
     /**
      *Creates an instance of platform.
      * @memberof Platform
@@ -45,12 +45,12 @@ class Platform{
     }
     /**
      * Enhanced mixins for based class and list of mixins
-     * @param { Class } BaseClass - base class
+     * @param { Class } baseClass - base class
      * @param { List } mixins - list of mixins function
      * @returns { Class } 
      * @memberof Platform
      */
-    mixWith(BaseClass, mixins){
+    mixWith(baseClass, mixins, className=null){
         var mixinsList = [];
         if(Array.isArray(mixins)){
             mixinsList = mixins;
@@ -63,14 +63,15 @@ class Platform{
             throw Error(`${PfName} not found in mixins`);
         }
         return mixinsList.reduce((c, mixin) => {
-            if(typeof c === "function"){
+            if(typeof mixin === "function"){
                 return mixin(c);
             }
             else{
-                throw Error(`${JSON.stringify(c)} is not support mixins with ${BaseClass.name}`);
+                throw Error(`${JSON.stringify(c)} is not support mixins with ${baseClass.name}`);
             }
-        }, BaseClass);
+        }, baseClass);
     }
 };
 
-export default new Platform(platform);
+let isoPlatform = new IsoPlatform(platform);
+export default isoPlatform;

@@ -1,9 +1,9 @@
 /**
- * The EnsembleDeploymentMixins class is the mixis class for deploying ensemble model
+ * The EnsembleDeploymentMixin class is the mixis class for deploying ensemble model
  * @class CausalNet
  * @extends { BasePipelineClass }
  */
-const EnsembleDeploymentMixins = (BasePipelineClass)=> class extends BasePipelineClass {
+const EnsembleDeploymentMixin = (BasePipelineClass)=> class extends BasePipelineClass {
     /**
      * Provide EnsembleInferencer caller, EnsembleModelPredict must be set in prior
      * @readonly
@@ -45,4 +45,4 @@ const EnsembleDeploymentMixins = (BasePipelineClass)=> class extends BasePipelin
     }
 };
 
-export default EnsembleDeploymentMixins;
+export default EnsembleDeploymentMixin;

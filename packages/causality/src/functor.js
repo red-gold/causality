@@ -10,5 +10,5 @@ class Functor extends platform.mixWith(BaseFunctor, [] ){
         super();
     }
 }
-
-export default new Functor();
+const pipelineFunctor = new Functor();
+export default pipelineFunctor;

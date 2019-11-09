@@ -1,5 +1,5 @@
-import {Platform} from 'causal-net.utils';
-console.log(Platform.currentPlatform());
+import {platform} from 'causal-net.utils';
+console.log(platform.currentPlatform());
 class A{
     constructor(){
     }
@@ -21,7 +21,7 @@ const AMixinsWeb = (Base)=>class extends Base{
         console.log('say A with mixins on web');
     }
 }
-class AExtends extends Platform.mixWith(A, 
+class AExtends extends platform.mixWith(A, 
     {'node': [AMixinsNode], 'web': [AMixinsWeb]}){
         constructor(){
             super();

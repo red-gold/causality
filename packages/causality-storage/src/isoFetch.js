@@ -16,7 +16,7 @@ class Basefetch{
  * @class Fetch
  * @extends Basefetch
  */
-class Fetch extends platform.mixWith(Basefetch, {'node': [NodeStreamMixins], 'web':[WebStreamMixins]}){
+class IsoFetch extends platform.mixWith(Basefetch, {'node': [NodeStreamMixins], 'web':[WebStreamMixins]}){
     constructor(fetch){
         super(fetch);
     }
@@ -54,4 +54,5 @@ class Fetch extends platform.mixWith(Basefetch, {'node': [NodeStreamMixins], 'we
     }
 }
 
-export default new Fetch(fetch);
+let isoFetch = new IsoFetch(fetch);
+export default isoFetch;

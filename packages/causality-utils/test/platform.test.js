@@ -1,4 +1,4 @@
-import {default as platform} from '../src/platform';
+import { default as platform } from '../src/isoPlatform';
 /** @test {Platform} */
 test('platform must return', ()=>{
     let machine = platform.currentPlatform();
